@@ -15,6 +15,7 @@ base antes de agotar la batería**, sin caer en la grieta ni volcar.
 | API (FastAPI, HTTPS) | `https://robot-expedition-api.onrender.com` (ver [Despliegue](#despliegue)) |
 | Ficha del ambiente y niveles | [docs/ambiente-v1.md](docs/ambiente-v1.md) |
 | Experimentos y decisiones | [docs/experimentos.md](docs/experimentos.md) |
+| Escenarios variados y generalización | [docs/escenarios-variados.md](docs/escenarios-variados.md) |
 | Incidente y rollback | [docs/incidente.md](docs/incidente.md) · [docs/evidencia/rollback.md](docs/evidencia/rollback.md) |
 | Informe y guion de defensa | [docs/informe.md](docs/informe.md) · [docs/guion-defensa.md](docs/guion-defensa.md) |
 | Contratos (observación, manifiesto, catálogo y API) | [docs/contratos.md](docs/contratos.md) |
@@ -116,6 +117,7 @@ Ahí están los runs, los parámetros, las métricas `training/*` y
 ```bash
 python pipelines/train.py --config configs/experiments/exp-002.yaml            # semillas del YAML
 python pipelines/train.py --config configs/experiments/exp-002.yaml --seed 2
+python pipelines/train.py --config configs/experiments/exp-006.yaml --seed 1    # objetivos y obstáculos variables
 ```
 
 Cada run deja estas piezas:

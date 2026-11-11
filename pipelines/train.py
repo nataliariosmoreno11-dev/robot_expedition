@@ -34,7 +34,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from robot_expedition.envs.beacon_expedition import (  # noqa: E402
-    ENVIRONMENT_VERSION, BeaconExpeditionEnv, environment_hash, load_level_config,
+    ENVIRONMENT_VERSION, BeaconExpeditionEnv, environment_hash, load_level_config, load_scenario_set,
 )
 from pipelines.evaluate import evaluate  # noqa: E402
 from pipelines.policies import PPOPolicy, QTablePolicy  # noqa: E402
@@ -42,9 +42,9 @@ from pipelines.policies import PPOPolicy, QTablePolicy  # noqa: E402
 N_ENVS = 4
 
 
-def evaluation_suite(level_id: str) -> str:
+def evaluation_suite(level_id: str, configured: str | None = None) -> str:
     """Suite fija del paso 2 para el nivel (configs/suites)."""
-    return f"suite-{level_id}-v1"
+    return configured or f"suite-{level_id}-v1"
 
 
 def sha256_file(path: Path) -> str:
@@ -105,6 +105,8 @@ def read_config(path: Path) -> dict[str, Any]:
         "rock_jitter": 0.0,
         **config["environment"],
     }
+    if config["environment"].get("scenario_set") is not None:
+        load_scenario_set(config["environment"]["scenario_set"])
     return config
 
 
@@ -332,7 +334,8 @@ def _evaluate(
         policy = QTablePolicy(model_path)
     else:
         policy = PPOPolicy(model_path, normalization_path)
-    return evaluate(policy, config["level_id"], evaluation_suite(config["level_id"]), episodes=episodes)
+    suite_id = evaluation_suite(config["level_id"], config.get("evaluation_suite_id"))
+    return evaluate(policy, config["level_id"], suite_id, episodes=episodes)
 
 
 def _register_dvc_model(model_dir: Path, run_id: str) -> str:
@@ -402,11 +405,11 @@ def _manifest(
         "model_uri": model_uri,
         "model_sha256": model_hash,
         "normalization_uri": normalization_uri,
-        "environment_hash": environment_hash(config["level_id"]),
+        "environment_hash": environment_hash(config["level_id"], config.get("environment")),
         "obs_spec": "20 floats, ver docs/contratos.md",
         "action_spec": "Discrete(5)",
         "runtime_ref": f"requirements.txt + python {platform.python_version()}",
-        "evaluation_suite_id": evaluation_suite(config["level_id"]),
+        "evaluation_suite_id": evaluation_suite(config["level_id"], config.get("evaluation_suite_id")),
         "seed": seed,
         "budget_timesteps": budget,
         "effective_budget_timesteps": effective_budget,

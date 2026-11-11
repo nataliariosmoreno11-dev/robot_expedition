@@ -1,0 +1,20 @@
+experiment_id: exp-006
+hypothesis: "PPO entrenado con objetivos y obstáculos variables generaliza mejor que exp-002 sin memorizar un único mapa"
+change: "domain randomization: seis escenarios fáciles, medios y difíciles con balizas, rocas y bloqueo variables"
+reference: exp-002
+level_id: n2
+algorithm: ppo
+budget_timesteps: 300000
+seeds: [1, 2, 3]
+evaluation_suite_id: suite-n2-generalization-v1
+hyperparams:
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  gamma: 0.99
+  ent_coef: 0.01
+normalize_obs: true
+parent_run_id: null
+environment:
+  max_steps: 400
+  scenario_set: varied-v1
