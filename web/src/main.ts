@@ -192,9 +192,13 @@ const connectApi = async () => {
     return
   }
 
-  hud.setConnection('loading', 'Conectando')
+  hud.setConnection('loading', 'Activando API')
+  hud.showNotice(
+    'Activando la API',
+    'El servicio gratuito puede estar dormido. La primera conexión puede tardar hasta 75 segundos.',
+  )
   try {
-    await api.health()
+    await api.health(75_000)
     const [catalogResult, versionResult] = await Promise.allSettled([api.catalog(), api.version()])
     if (catalogResult.status === 'rejected') throw catalogResult.reason
     const normalizedCatalog = normalizeCatalog(catalogResult.value)
