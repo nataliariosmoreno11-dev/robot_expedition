@@ -13,8 +13,13 @@ corredor al visitar B1, ruido de rayos σ=0.08 m y el rayo central muerto.
 Cada YAML contiene `level_id`, `beacons`, `active_rocks`, `dunes`, `blocking`,
 `ray_noise` y `dead_ray`. Todos los niveles conservan observación de 20
 `float32` y `Discrete(5)`. La versión del ambiente es
-`robot-expedition-3d/1.0.0`; el hash SHA-256 de código y configuración se
-obtiene con `environment_hash(config)`.
+`robot-expedition-3d/1.1.0`; el hash SHA-256 de código, nivel y opciones se
+obtiene con `environment_hash(config, environment)`.
+
+Un experimento puede declarar `environment.scenario_set: varied-v1`. En ese
+caso cada reset selecciona un escenario reproducible con balizas, rocas y
+dificultad propias. `map_spec()` añade `scenario_id` y `difficulty`; no cambia
+los campos existentes ni el contrato `Box(20)`/`Discrete(5)`.
 
 **Etapa** (one-hot de la observación, índices 15–17, y campo `etapa` de los
 cuadros): 1 = ir a B1, 2 = ir a B2, 3 = volver a la base. La etapa 3 significa
@@ -103,6 +108,9 @@ Cada cuadro mantiene el formato consumido por la vista 3D:
     `collisions_per_episode`, `final_battery_success`, `steps_mean`,
     `return_mean`/`return_std` y `latency_ms_mean`/`p95`.
   - `cases`: un registro por episodio.
+  - En suites variadas, cada caso incluye `scenario_id`, `difficulty`,
+    `beacons` y `active_rocks`; las métricas separan cobertura y éxito por
+    dificultad.
 - **Políticas** (`pipelines/policies.py`): `RandomPolicy`, `RulePolicy`,
   `QTablePolicy(.npz)` y `PPOPolicy(model.zip, vecnormalize.pkl)`. La API y el
   pipeline usan estas mismas clases para que la evaluación sea idéntica.

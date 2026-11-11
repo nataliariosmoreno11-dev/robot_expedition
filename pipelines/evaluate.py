@@ -108,6 +108,7 @@ def run_case(env: BeaconExpeditionEnv, policy, seed: int, frames: list | None = 
     if hasattr(policy, "reset"):
         policy.reset(seed)
     obs, info = env.reset(seed=seed)
+    reference_route_m = env.reference_route()
     if frames is not None:
         frames.append(frame(env, -1, 0.0, False))
     total, latencies = 0.0, []
@@ -123,10 +124,13 @@ def run_case(env: BeaconExpeditionEnv, policy, seed: int, frames: list | None = 
             break
     return {
         "seed": seed, "success": bool(info["success"]), "end": info["end"],
+        "scenario_id": info["scenario_id"], "difficulty": info["difficulty"],
+        "beacons": [list(point) for point in env.beacons], "active_rocks": len(env.rocks),
         "terminated": bool(terminated), "truncated": bool(truncated),
         "steps": env.steps, "visited": int(sum(info["visited"])),
         "battery": round(float(info["battery"]), 2), "collisions": int(info["collisions"]),
-        "path_length": round(float(info["path_length"]), 3), "return": round(total, 4),
+        "path_length": round(float(info["path_length"]), 3),
+        "reference_route_m": round(reference_route_m, 3), "return": round(total, 4),
         "latency_ms_mean": round(float(np.mean(latencies)), 4),
         "latency_ms_max": round(float(np.max(latencies)), 4),
     }
@@ -137,13 +141,25 @@ def summarize(cases: list[dict], beacon_count: int) -> dict:
     ref = reference_route(beacon_count)
     mean = lambda vals: round(float(np.mean(vals)), 4) if vals else None
     latencies = [c["latency_ms_mean"] for c in cases]
+    difficulties = Counter(c.get("difficulty", "fixed") for c in cases)
     return {
         "episodes": len(cases),
         "success_rate": round(len(ok) / len(cases), 4),
         "failures_by_cause": {k: v for k, v in Counter(c["end"] for c in cases).items() if k != "exito"},
         "end_counts": {cause: sum(c["end"] == cause for c in cases) for cause in END_CAUSES},
-        "route_efficiency": mean([ref / c["path_length"] for c in ok if c["path_length"] > 0]),
-        "reference_route_m": round(ref, 2),
+        "route_efficiency": mean([
+            c.get("reference_route_m", ref) / c["path_length"] for c in ok if c["path_length"] > 0
+        ]),
+        "reference_route_m": mean([c.get("reference_route_m", ref) for c in cases]),
+        "episodes_by_difficulty": dict(sorted(difficulties.items())),
+        "success_rate_by_difficulty": {
+            difficulty: round(
+                sum(c["success"] for c in cases if c.get("difficulty", "fixed") == difficulty)
+                / count,
+                4,
+            )
+            for difficulty, count in sorted(difficulties.items())
+        },
         "collisions_per_episode": mean([c["collisions"] for c in cases]),
         "final_battery_success": mean([c["battery"] for c in ok]),
         "beacons_visited_mean": mean([c["visited"] for c in cases]),
@@ -168,7 +184,9 @@ def evaluate(policy, level_id: str, suite_id: str | None = None, *,
         raise ValueError(f"la suite {suite_id} es del nivel {suite['level_id']}, no de {level_id}")
     seeds = suite["seeds"][:episodes] if episodes else suite["seeds"]
     level = load_level_config(level_id)
-    env = BeaconExpeditionEnv(level=level_id, max_steps=int(suite.get("max_steps", 400)))
+    environment = dict(suite.get("environment") or {})
+    environment.setdefault("max_steps", int(suite.get("max_steps", 400)))
+    env = BeaconExpeditionEnv(level=level_id, **environment)
     started = time.perf_counter()
     cases = [run_case(env, policy, seed) for seed in seeds]
     env.close()
@@ -177,7 +195,8 @@ def evaluate(policy, level_id: str, suite_id: str | None = None, *,
         "suite_id": suite_id, "suite_version": suite.get("version"), "suite_sha256": suite["suite_sha256"],
         "partial": len(seeds) < len(suite["seeds"]),
         "level_id": level_id, "environment_version": ENVIRONMENT_VERSION,
-        "environment_hash": environment_hash(level_id),
+        "environment_hash": environment_hash(level_id, environment),
+        "environment": environment,
         "git_commit": _git_commit(), "git_dirty": _git_dirty(),
         "policy": policy_info or (policy.describe() if hasattr(policy, "describe") else {"policy": str(policy)}),
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),

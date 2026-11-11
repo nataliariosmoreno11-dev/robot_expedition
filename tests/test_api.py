@@ -27,7 +27,7 @@ def test_root_points_to_docs_and_routes():
 def test_health_version_and_monitor():
     assert client.get("/health").json()["status"] == "ok"
     version = client.get("/version").json()
-    assert version["environment_version"] == "robot-expedition-3d/1.0.0"
+    assert version["environment_version"] == "robot-expedition-3d/1.1.0"
     assert set(version["environment_hashes"]) == {"n1", "n2", "n3"}
     routes = client.get("/monitor").json()["routes"]
     assert "GET /health" in routes and routes["GET /health"]["requests"] >= 1
@@ -51,6 +51,15 @@ def test_evaluate_rule_returns_episode_frames_and_metrics():
     for frame in episode["frames"][:3]:
         assert_frame(frame)
     assert len(body["map"]["beacons"]) == 1 and body["map"]["terrain"]["n"] == 121
+
+
+def test_generalization_suite_exposes_the_first_scenario_map():
+    body = client.post("/evaluate", json={"run_id": "baseline-rule", "level_id": "n2",
+                                          "suite_id": "suite-n2-generalization-v1", "episodes": 2}).json()
+    assert body["environment"] == {"scenario_set": "varied-v1", "max_steps": 400}
+    assert body["episode"]["scenario_id"] == body["cases"][0]["scenario_id"]
+    assert body["map"]["beacons"] == body["cases"][0]["beacons"]
+    assert body["metrics"]["episodes_by_difficulty"] == {"easy": 2}
 
 
 def test_evaluate_matches_the_offline_suite():

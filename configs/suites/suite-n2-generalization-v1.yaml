@@ -1,0 +1,9 @@
+suite_id: suite-n2-generalization-v1
+version: 1
+level_id: n2
+description: "Generalización N2: 60 episodios equilibrados entre seis escenarios no memorizables"
+episodes: 60
+seed_start: 400002
+max_steps: 400
+environment:
+  scenario_set: varied-v1

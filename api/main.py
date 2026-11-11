@@ -191,6 +191,7 @@ def evaluate(req: EvaluateRequest):
     run = run_detail(req.run_id)
     if run.get("environment_version", ENVIRONMENT_VERSION).split("/")[0] != ENVIRONMENT_VERSION.split("/")[0]:
         fail(409, f"el run usa {run.get('environment_version')}, incompatible con {ENVIRONMENT_VERSION}")
+    environment = {}
     if req.seeds:
         seeds, suite_id = list(dict.fromkeys(req.seeds)), None
         if len(seeds) > MAX_SEEDS:
@@ -206,18 +207,25 @@ def evaluate(req: EvaluateRequest):
         if suite.get("level_id") not in (None, req.level_id):
             fail(422, f"la suite {suite_id} es del nivel {suite['level_id']}")
         seeds = suite["seeds"][:req.episodes] if req.episodes else suite["seeds"]
+        environment = dict(suite.get("environment") or {})
+        environment.setdefault("max_steps", int(suite.get("max_steps", 400)))
     policy = policy_for(req.run_id)
 
-    env = BeaconExpeditionEnv(level=req.level_id)
+    env = BeaconExpeditionEnv(level=req.level_id, **environment)
     started = time.perf_counter()
     frames: list = []
-    cases = [run_case(env, policy, seed, frames if i == 0 else None) for i, seed in enumerate(seeds)]
+    cases = [run_case(env, policy, seeds[0], frames)]
+    first_map = env.map_spec()
+    first_rocks = [list(r) for r in env.rocks]
+    first_blocking = env.episode_blocking
+    cases.extend(run_case(env, policy, seed) for seed in seeds[1:])
     first = cases[0]
     episode = {
         "episode": first["seed"], "mode": "evaluación", "run_id": req.run_id,
         "algorithm": run.get("algorithm"), "model_name": run.get("model_name") or run.get("algorithm"),
         "environment_version": ENVIRONMENT_VERSION, "level_id": req.level_id,
-        "frames": frames, "rocks": [list(r) for r in env.rocks], "block": env.perturbation,
+        "scenario_id": first["scenario_id"], "difficulty": first["difficulty"],
+        "frames": frames, "rocks": first_rocks, "block": first_blocking,
         "success": first["success"], "end": first["end"], "reward": first["return"],
         "steps": first["steps"], "visited": first["visited"], "battery": first["battery"],
         "path_length": first["path_length"], "latency_ms": first["latency_ms_mean"],
@@ -225,10 +233,11 @@ def evaluate(req: EvaluateRequest):
     result = {
         "run_id": req.run_id, "level_id": req.level_id, "algorithm": run.get("algorithm"),
         "trained_level_id": run.get("level_id"), "model_sha256": run.get("model_sha256"),
-        "environment_version": ENVIRONMENT_VERSION, "environment_hash": environment_hash(req.level_id),
+        "environment_version": ENVIRONMENT_VERSION,
+        "environment_hash": environment_hash(req.level_id, environment), "environment": environment,
         "suite_id": suite_id, "seeds": seeds, "deterministic": True,
         "wall_time_s": round(time.perf_counter() - started, 3),
-        "map": env.map_spec(), "metrics": summarize(cases, env.beacon_count),
+        "map": first_map, "metrics": summarize(cases, env.beacon_count),
         "cases": cases, "episode": episode,
     }
     env.close()

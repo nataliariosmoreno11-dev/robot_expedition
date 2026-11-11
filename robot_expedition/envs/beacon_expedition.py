@@ -22,7 +22,8 @@ import mujoco
 import yaml
 
 
-ENVIRONMENT_VERSION = "robot-expedition-3d/1.0.0"
+ENVIRONMENT_VERSION = "robot-expedition-3d/1.1.0"
+SCENARIOS_DIR = Path(__file__).parents[2] / "configs" / "scenarios"
 
 
 # --- Mapa (metros). Rectangulos como (cx, cy, medio_ancho_x, medio_ancho_y, alto).
@@ -188,10 +189,79 @@ def load_level_config(level_config=None):
     return result
 
 
-def environment_hash(config=None):
+def load_scenario_set(scenario_set=None):
+    """Carga y valida un conjunto versionado de escenarios por episodio."""
+    if scenario_set is None:
+        return None
+    if isinstance(scenario_set, str):
+        path = Path(scenario_set)
+        if not path.exists():
+            path = SCENARIOS_DIR / f"{scenario_set}.yaml"
+        if not path.exists():
+            raise FileNotFoundError(f"no existe el conjunto de escenarios {scenario_set}")
+        with path.open(encoding="utf-8") as fh:
+            scenario_set = yaml.safe_load(fh) or {}
+    if not isinstance(scenario_set, dict):
+        raise TypeError("scenario_set debe ser un id, una ruta YAML o un mapa")
+
+    result = dict(scenario_set)
+    scenarios = result.get("scenarios")
+    if not result.get("scenario_set_id") or not isinstance(scenarios, list) or not scenarios:
+        raise ValueError("scenario_set requiere scenario_set_id y una lista no vacía de scenarios")
+
+    normalized, known = [], set()
+    for raw in scenarios:
+        if not isinstance(raw, dict):
+            raise TypeError("cada escenario debe ser un mapa")
+        scenario = dict(raw)
+        scenario_id = str(scenario.get("scenario_id", "")).strip()
+        if not scenario_id or scenario_id in known:
+            raise ValueError(f"scenario_id vacío o repetido: {scenario_id!r}")
+        known.add(scenario_id)
+        difficulty = scenario.get("difficulty")
+        if difficulty not in ("easy", "medium", "hard"):
+            raise ValueError(f"{scenario_id}: difficulty debe ser easy, medium o hard")
+        beacons = scenario.get("beacons")
+        if not isinstance(beacons, list) or len(beacons) < 2:
+            raise ValueError(f"{scenario_id}: se requieren al menos dos balizas")
+        points = []
+        for point in beacons:
+            if not isinstance(point, (list, tuple)) or len(point) != 2:
+                raise ValueError(f"{scenario_id}: cada baliza debe ser [x, y]")
+            x, y = map(float, point)
+            if not (VISIT_RADIUS <= x <= MAP_W - VISIT_RADIUS
+                    and -MAP_H / 2 + VISIT_RADIUS <= y <= MAP_H / 2 - VISIT_RADIUS):
+                raise ValueError(f"{scenario_id}: baliza {(x, y)} fuera del área segura")
+            if _circle_hits_rect(x, y, VISIT_RADIUS, BASE) or _circle_hits_rect(x, y, VISIT_RADIUS, CRACK):
+                raise ValueError(f"{scenario_id}: baliza {(x, y)} invade la base o la grieta")
+            points.append((x, y))
+        active_rocks = int(scenario.get("active_rocks", len(ROCKS)))
+        rock_jitter = float(scenario.get("rock_jitter", 0.0))
+        if not 0 <= active_rocks <= len(ROCKS):
+            raise ValueError(f"{scenario_id}: active_rocks fuera de rango")
+        if not 0 <= rock_jitter <= 2.0:
+            raise ValueError(f"{scenario_id}: rock_jitter debe estar entre 0 y 2 m")
+        normalized.append({
+            **scenario,
+            "scenario_id": scenario_id,
+            "difficulty": difficulty,
+            "beacons": points,
+            "active_rocks": active_rocks,
+            "rock_jitter": rock_jitter,
+            "blocking": bool(scenario.get("blocking", False)),
+        })
+    result["scenarios"] = normalized
+    return result
+
+
+def environment_hash(config=None, environment=None):
     """SHA-256 reproducible del código del ambiente y configuración resuelta."""
     payload = inspect.getsource(inspect.getmodule(BeaconExpeditionEnv))
-    payload += json.dumps(load_level_config(config), sort_keys=True, separators=(",", ":"))
+    options = dict(environment or {})
+    if options.get("scenario_set") is not None:
+        options["scenario_set"] = load_scenario_set(options["scenario_set"])
+    resolved = {"level": load_level_config(config), "environment": options}
+    payload += json.dumps(resolved, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -202,9 +272,10 @@ class BeaconExpeditionEnv(gym.Env):
 
     def __init__(self, max_steps=400, ray_noise=None, rock_jitter=0.0,
                  perturbation=False, render_mode=None, level_config=None,
-                 level=None, config=None):
+                 level=None, config=None, scenario_set=None):
         super().__init__()
         self.level_config = load_level_config(level_config or config or level)
+        self.scenario_set = load_scenario_set(scenario_set)
         self.beacon_count = int(self.level_config["beacons"])
         self.active_rocks = int(self.level_config["active_rocks"])
         self.dunes_enabled = bool(self.level_config["dunes"])
@@ -235,7 +306,13 @@ class BeaconExpeditionEnv(gym.Env):
         low = np.array([0] * N_RAYS + [0, -1, -1, -1, -1, 0, 0, 0, 0, -math.pi, -math.pi], dtype=np.float32)
         high = np.array([RAY_RANGE] * N_RAYS + [17, 1, 1, 1, 1, 1, 1, 1, 1, math.pi, math.pi], dtype=np.float32)
         self.observation_space = spaces.Box(low, high, dtype=np.float32)
+        self._rock_names = [r[0] for r in self._level_rocks]
+        self.beacons = list(BEACONS[:self.beacon_count])
         self.rocks = [r[1:] for r in self._level_rocks]
+        self.scenario_id = "fixed"
+        self.scenario_difficulty = "fixed"
+        self.episode_blocking = self.perturbation
+        self.episode_rock_jitter = self.rock_jitter
         self.block_active = False
 
     # ------------------------------------------------------------- consultas
@@ -278,7 +355,7 @@ class BeaconExpeditionEnv(gym.Env):
         return rocks
 
     def target(self):
-        return BEACONS[self.stage - 1] if self.stage <= self.beacon_count else BASE[:2]
+        return self.beacons[self.stage - 1] if self.stage <= self.beacon_count else BASE[:2]
 
     def _distance_to_target(self):
         tx, ty = self.target()
@@ -317,26 +394,55 @@ class BeaconExpeditionEnv(gym.Env):
             for a, b in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
                 if 0 <= a < nx and 0 <= b < ny and grid[a, b] and (a, b) not in seen:
                     seen.add((a, b)); queue.append((a, b))
-        return all(idx(b) in seen for b in BEACONS[:self.beacon_count])
+        return all(idx(b) in seen for b in self.beacons)
 
     def _place_rocks(self, rocks):
-        self.rocks = rocks
-        for gid, (cx, cy, *_), z in zip(self._rock_ids, rocks, self._rock_pos0[:, 2]):
-            self.model.geom_pos[gid] = [cx, cy, z]
+        self.rocks = list(rocks)
+        for gid in self._rock_ids:
+            self.model.geom_pos[gid][2] = -5.0
+        for index, (gid, (cx, cy, *_)) in enumerate(zip(self._rock_ids, self.rocks)):
+            self.model.geom_pos[gid] = [cx, cy, self._rock_pos0[index, 2]]
 
-    def _jitter_rocks(self):
-        """Mueve las rocas hasta +-rock_jitter m sin tapar base, balizas ni grieta."""
-        keep_clear = [BASE[:2], *BEACONS, CRACK[:2]]
+    def _jitter_rocks(self, base_rocks, jitter):
+        """Mueve rocas sin tapar base, balizas, grieta ni la ruta completa."""
+        keep_clear = [BASE[:2], *self.beacons, CRACK[:2]]
         for _ in range(50):
-            rocks = [(cx + self.np_random.uniform(-1, 1) * self.rock_jitter,
-                      cy + self.np_random.uniform(-1, 1) * self.rock_jitter, hx, hy, h)
-                     for _, cx, cy, hx, hy, h in self._level_rocks]
+            rocks = [(cx + self.np_random.uniform(-1, 1) * jitter,
+                      cy + self.np_random.uniform(-1, 1) * jitter, hx, hy, h)
+                     for cx, cy, hx, hy, h in base_rocks]
             if all(not _circle_hits_rect(px, py, 1.0, r) for r in rocks for px, py in keep_clear):
-                self.rocks = rocks
+                self._place_rocks(rocks)
                 if self._route_exists():
-                    self._place_rocks(rocks)
                     return
-        self._place_rocks([r[1:] for r in self._level_rocks])
+        self._place_rocks(base_rocks)
+
+    def _select_scenario(self, seed=None, options=None):
+        requested = (options or {}).get("scenario_id")
+        if self.scenario_set is None:
+            if requested is not None:
+                raise ValueError("scenario_id requiere configurar scenario_set")
+            self.scenario_id = "fixed"
+            self.scenario_difficulty = "fixed"
+            self.beacons = list(BEACONS[:self.beacon_count])
+            self.episode_blocking = self.perturbation
+            self.episode_rock_jitter = self.rock_jitter
+            return list(self._level_rocks)
+
+        scenarios = self.scenario_set["scenarios"]
+        if requested is None:
+            index = int(seed) % len(scenarios) if seed is not None else int(self.np_random.integers(len(scenarios)))
+            scenario = scenarios[index]
+        else:
+            scenario = next((item for item in scenarios if item["scenario_id"] == requested), None)
+            if scenario is None:
+                raise ValueError(f"no existe el escenario {requested!r} en {self.scenario_set['scenario_set_id']}")
+        self.scenario_id = scenario["scenario_id"]
+        self.scenario_difficulty = scenario["difficulty"]
+        self.beacons = list(scenario["beacons"][:self.beacon_count])
+        self.episode_blocking = self.perturbation or bool(scenario["blocking"])
+        self.episode_rock_jitter = max(self.rock_jitter, float(scenario["rock_jitter"]))
+        active = min(self.active_rocks, int(scenario["active_rocks"]))
+        return list(self._level_rocks[:active])
 
     def _set_block(self, active):
         self.block_active = active
@@ -355,9 +461,10 @@ class BeaconExpeditionEnv(gym.Env):
         super().reset(seed=seed)
         mujoco.mj_resetData(self.model, self.data)
         self._set_block(False)
-        self._place_rocks([r[1:] for r in self._level_rocks])
-        if self.rock_jitter > 0:
-            self._jitter_rocks()
+        episode_rocks = [r[1:] for r in self._select_scenario(seed, options)]
+        self._place_rocks(episode_rocks)
+        if self.episode_rock_jitter > 0:
+            self._jitter_rocks(episode_rocks, self.episode_rock_jitter)
         self.set_pose(*START)
         for _ in range(30):                              # el rover se asienta
             mujoco.mj_step(self.model, self.data)
@@ -400,7 +507,7 @@ class BeaconExpeditionEnv(gym.Env):
         reward = 1.0 * progress - 0.01 - 0.02 * energy - 0.5 * collision
         event = None
         if self.stage <= self.beacon_count:
-            bx, by = BEACONS[self.stage - 1]
+            bx, by = self.beacons[self.stage - 1]
             if math.hypot(bx - self.x, by - self.y) < VISIT_RADIUS:
                 self.visited[self.stage - 1] = True
                 event = f"visita B{self.stage}"
@@ -408,7 +515,7 @@ class BeaconExpeditionEnv(gym.Env):
                 # La etapa 3 siempre significa "volver a la base", en todos los niveles:
                 # asi la observacion (one-hot) y los cuadros tienen el mismo significado.
                 self.stage = self.stage + 1 if self.stage < self.beacon_count else 3
-                if self.stage == 2 and self.perturbation:
+                if self.stage == 2 and self.episode_blocking:
                     self._set_block(True)
 
         success = self.stage == 3 and _in_rect(self.x, self.y, BASE) and self.battery > 0
@@ -446,16 +553,23 @@ class BeaconExpeditionEnv(gym.Env):
                 "visited": list(self.visited), "battery": self.battery,
                 "collisions": self.collisions, "path_length": self.path_length,
                 "success": end == "exito", "end": end,
+                "scenario_id": self.scenario_id, "difficulty": self.scenario_difficulty,
                 "mission_progress": (sum(self.visited) + (end == "exito")) / (self.beacon_count + 1)}
+
+    def reference_route(self):
+        """Distancia recta base -> balizas del episodio -> base."""
+        points = [BASE[:2], *self.beacons, BASE[:2]]
+        return float(sum(math.dist(a, b) for a, b in zip(points, points[1:])))
 
     def map_spec(self):
         """Descripcion del mundo 3D para la visualizacion con Three.js."""
         return {
-            "size": [MAP_W, MAP_H], "base": BASE, "beacons": BEACONS[:self.beacon_count],
+            "size": [MAP_W, MAP_H], "base": BASE, "beacons": self.beacons,
             "visit_radius": VISIT_RADIUS, "crack": CRACK, "crack_depth": CRACK_DEPTH, "sand": SAND,
-            "rocks": [[name, *rect] for (name, *_), rect in zip(ROCKS, self.rocks)],
+            "rocks": [[name, *rect] for name, rect in zip(self._rock_names, self.rocks)],
             "block": list(BLOCK), "wheel_radius": WHEEL_R, "wheel_base": WHEEL_BASE,
             "sensor_height": SENSOR_HEIGHT, "gravity": GRAVITY,
+            "scenario_id": self.scenario_id, "difficulty": self.scenario_difficulty,
             "terrain": {"n": TERRAIN_N, "heights": np.round(self.heights, 3).ravel().tolist()},
             "ray_angles": RAY_ANGLES.round(4).tolist(), "ray_range": RAY_RANGE,
             "actions": [a[0] for a in ACTIONS], "dt": DT,
