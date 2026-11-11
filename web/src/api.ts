@@ -1,5 +1,7 @@
 import type { CatalogData, ExpeditionMap, ReplayFrame } from './types'
 
+const DEFAULT_TIMEOUT_MS = 12_000
+
 export class ApiError extends Error {
   status?: number
 
@@ -47,8 +49,8 @@ export class ExpeditionApi {
     this.baseUrl = parsed.toString().replace(/\/$/, '')
   }
 
-  async health(): Promise<unknown> {
-    return this.request('/health')
+  async health(timeoutMs = DEFAULT_TIMEOUT_MS): Promise<unknown> {
+    return this.request('/health', {}, timeoutMs)
   }
 
   async catalog(): Promise<CatalogData | unknown> {
@@ -84,9 +86,13 @@ export class ExpeditionApi {
     }) as Promise<SimulationResponse>
   }
 
-  private async request(path: string, init: RequestInit = {}): Promise<unknown> {
+  private async request(
+    path: string,
+    init: RequestInit = {},
+    timeoutMs = DEFAULT_TIMEOUT_MS,
+  ): Promise<unknown> {
     const controller = new AbortController()
-    const timeout = window.setTimeout(() => controller.abort(), 12_000)
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
 
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
@@ -113,7 +119,7 @@ export class ExpeditionApi {
     } catch (error) {
       if (error instanceof ApiError) throw error
       if (error instanceof DOMException && error.name === 'AbortError') {
-        throw new ApiError(`La solicitud a ${path} superó 12 segundos.`)
+        throw new ApiError(`La solicitud a ${path} superó ${Math.round(timeoutMs / 1000)} segundos.`)
       }
       throw new ApiError(error instanceof Error ? error.message : `Error de red en ${path}.`)
     } finally {
