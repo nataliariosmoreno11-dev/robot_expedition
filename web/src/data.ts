@@ -7,6 +7,8 @@ import type {
   ReplayBundle,
   ReplayFrame,
   RunOption,
+  SampleSpec,
+  MissionState,
 } from './types'
 
 type UnknownRecord = Record<string, unknown>
@@ -33,6 +35,34 @@ const numberArray = (value: unknown): number[] =>
 const tuple = <T extends number[]>(value: unknown, fallback: T): T => {
   if (!Array.isArray(value) || value.length < fallback.length) return fallback
   return value.slice(0, fallback.length).map((item) => asNumber(item)) as T
+}
+
+const normalizeSamples = (value: unknown): SampleSpec[] | undefined => {
+  if (!Array.isArray(value)) return undefined
+  return value.filter(isRecord).map((item, index) => ({
+    sample_id: asString(item.sample_id, `S${index + 1}`),
+    sample_type: asString(item.sample_type, 'desconocida'),
+    x: asNumber(item.x),
+    y: asNumber(item.y),
+    target: asBoolean(item.target),
+    collected: item.collected === undefined ? undefined : asBoolean(item.collected),
+  }))
+}
+
+const normalizeMissionTimeline = (value: unknown): MissionState[] | undefined => {
+  if (!Array.isArray(value)) return undefined
+  return value.map((entry) => {
+    const item = asRecord(entry)
+    return {
+      target_type: asString(item.target_type) || undefined,
+      requested: item.requested === undefined ? undefined : asNumber(item.requested),
+      collected: item.collected === undefined ? undefined : asNumber(item.collected),
+      inventory: Array.isArray(item.inventory) ? item.inventory.map((id) => asString(id)).filter(Boolean) : undefined,
+      samples: normalizeSamples(item.samples),
+      event: typeof item.event === 'string' ? item.event : null,
+      status: asString(item.status) || undefined,
+    }
+  })
 }
 
 export const isReplayFrame = (value: unknown): value is ReplayFrame =>
@@ -122,6 +152,10 @@ export const normalizeMap = (value: unknown): ExpeditionMap => {
         ] as ExpeditionMap['rocks'][number])
     : fallback.rocks
 
+  const mission = asRecord(record.mission)
+  const environment = asRecord(record.environment)
+  const planet = asRecord(environment.planet)
+
   return {
     size: tuple(record.size, fallback.size),
     base: tuple(record.base, fallback.base),
@@ -149,6 +183,39 @@ export const normalizeMap = (value: unknown): ExpeditionMap => {
       n: terrainHeights.length === expectedHeights ? terrainN : fallback.terrain.n,
       heights: terrainHeights.length === expectedHeights ? terrainHeights : fallback.terrain.heights,
     },
+    environment_version: asString(record.environment_version) || undefined,
+    scenario_id: asString(record.scenario_id) || undefined,
+    difficulty: asString(record.difficulty) || undefined,
+    difficulty_level: record.difficulty_level === undefined ? undefined : asNumber(record.difficulty_level),
+    active_extent: Array.isArray(record.active_extent)
+      ? tuple(record.active_extent, fallback.size)
+      : undefined,
+    samples: normalizeSamples(record.samples),
+    mission: Object.keys(mission).length ? {
+      target_type: asString(mission.target_type, 'desconocida'),
+      requested_samples: asNumber(mission.requested_samples),
+      capacity: asNumber(mission.capacity),
+    } : undefined,
+    environment: Object.keys(environment).length ? {
+      planet: Object.keys(planet).length ? {
+        planet_id: asString(planet.planet_id) || undefined,
+        gravity_m_s2: planet.gravity_m_s2 === undefined ? undefined : asNumber(planet.gravity_m_s2),
+        atmosphere_density_kg_m3: planet.atmosphere_density_kg_m3 === undefined
+          ? undefined
+          : asNumber(planet.atmosphere_density_kg_m3),
+      } : undefined,
+      traction: environment.traction === undefined ? undefined : asNumber(environment.traction),
+      wind_speed_m_s: environment.wind_speed_m_s === undefined ? undefined : asNumber(environment.wind_speed_m_s),
+      wind_direction_rad: environment.wind_direction_rad === undefined ? undefined : asNumber(environment.wind_direction_rad),
+      dust_opacity: environment.dust_opacity === undefined ? undefined : asNumber(environment.dust_opacity),
+      temperature_c: environment.temperature_c === undefined ? undefined : asNumber(environment.temperature_c),
+      visibility_m: environment.visibility_m === undefined ? undefined : asNumber(environment.visibility_m),
+      dunes: Array.isArray(environment.dunes) ? environment.dunes.map(numberArray) : undefined,
+      craters: Array.isArray(environment.craters) ? environment.craters.map(numberArray) : undefined,
+      traction_zones: Array.isArray(environment.traction_zones)
+        ? environment.traction_zones.map(numberArray)
+        : undefined,
+    } : undefined,
   }
 }
 
@@ -220,6 +287,16 @@ export const normalizeEpisode = (
         : asNumber(merged.mean_inference_latency_ms)
       : asNumber(merged.latency_ms),
     history: normalizeHistory(merged.history ?? merged.history_tail),
+    scenarioId: asString(merged.scenario_id) || undefined,
+    difficulty: asString(merged.difficulty) || undefined,
+    planet: asString(merged.planet) || undefined,
+    objective: asString(merged.objective) || undefined,
+    requestedSamples: merged.requested_samples === undefined ? undefined : asNumber(merged.requested_samples),
+    samplesCollected: merged.samples_collected === undefined ? undefined : asNumber(merged.samples_collected),
+    missionTimeline: normalizeMissionTimeline(merged.mission_timeline),
+    actionsTimeline: Array.isArray(merged.actions_timeline)
+      ? merged.actions_timeline.map((action) => asString(action)).filter(Boolean)
+      : undefined,
   }
 }
 
@@ -270,19 +347,25 @@ export const normalizeCatalog = (value: unknown): CatalogData => {
 
 export const normalizeReplayBundle = (value: unknown): ReplayBundle => {
   const root = asRecord(value)
-  if (!Array.isArray(root.episodes) || !root.episodes.length) {
-    throw new Error('El archivo debe incluir una lista no vacía en episodes.')
+  const rawEpisodes = Array.isArray(root.episodes) && root.episodes.length
+    ? root.episodes
+    : isRecord(root.episode)
+      ? [root.episode]
+      : []
+  if (!rawEpisodes.length) {
+    throw new Error('El archivo debe incluir episode o una lista no vacía en episodes.')
   }
   const history = normalizeHistory(root.history)
-  const episodes = root.episodes.map((episode) => {
+  const map = normalizeMap(root.map)
+  const episodes = rawEpisodes.map((episode) => {
     const normalized = normalizeEpisode(episode, {
       mode: 'entrenamiento-replay',
       runId: 'archivo-local',
       modelName: 'replay',
-      environmentVersion: asString(root.environment_version, 'archivo'),
-      levelId: asString(root.level_id, 'n2'),
+      environmentVersion: asString(root.environment_version, map.environment_version ?? 'archivo'),
+      levelId: asString(root.level_id, map.difficulty ?? 'n2'),
     })
     return { ...normalized, mode: 'entrenamiento-replay', history: normalized.history.length ? normalized.history : history }
   })
-  return { map: normalizeMap(root.map), episodes, history }
+  return { map, episodes, history }
 }

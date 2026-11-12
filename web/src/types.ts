@@ -22,6 +22,44 @@ export interface TerrainSpec {
   heights: number[]
 }
 
+export interface SampleSpec {
+  sample_id: string
+  sample_type: string
+  x: number
+  y: number
+  target: boolean
+  collected?: boolean
+}
+
+export interface MissionSpec {
+  target_type: string
+  requested_samples: number
+  capacity: number
+}
+
+export interface EnvironmentSpec {
+  planet?: { planet_id?: string; gravity_m_s2?: number; atmosphere_density_kg_m3?: number }
+  traction?: number
+  wind_speed_m_s?: number
+  wind_direction_rad?: number
+  dust_opacity?: number
+  temperature_c?: number
+  visibility_m?: number
+  dunes?: number[][]
+  craters?: number[][]
+  traction_zones?: number[][]
+}
+
+export interface MissionState {
+  target_type?: string
+  requested?: number
+  collected?: number
+  inventory?: string[]
+  samples?: SampleSpec[]
+  event?: string | null
+  status?: string
+}
+
 export interface ExpeditionMap {
   size: [number, number]
   base: [number, number, number, number]
@@ -37,6 +75,14 @@ export interface ExpeditionMap {
   actions: string[]
   dt: number
   terrain: TerrainSpec
+  environment_version?: string
+  scenario_id?: string
+  difficulty?: string
+  difficulty_level?: number
+  active_extent?: [number, number]
+  samples?: SampleSpec[]
+  mission?: MissionSpec
+  environment?: EnvironmentSpec
 }
 
 export interface HistoryPoint {
@@ -44,6 +90,20 @@ export interface HistoryPoint {
   reward: number
   success: number
   epsilon?: number
+}
+
+export interface EpisodeSummary {
+  episode_number: number
+  scenario_id: string
+  difficulty_level: number
+  requested_samples: number
+  samples_collected: number
+  success: boolean | null
+  reward: number
+  collisions: number
+  path_length: number
+  duration_s: number
+  end: string
 }
 
 export interface EpisodeData {
@@ -65,6 +125,14 @@ export interface EpisodeData {
   pathLength?: number
   latencyMs?: number
   history: HistoryPoint[]
+  scenarioId?: string
+  difficulty?: string
+  planet?: string
+  objective?: string
+  requestedSamples?: number
+  samplesCollected?: number
+  missionTimeline?: MissionState[]
+  actionsTimeline?: string[]
 }
 
 export interface RunOption {
@@ -119,6 +187,10 @@ export const END_LABELS: Record<string, string> = {
   bateria: 'Batería agotada',
   tiempo: 'Tiempo agotado',
   collision: 'Colisión',
+  roca: 'Colisión con roca',
+  fuera_area: 'Fuera del área operativa',
+  reinicio: 'Episodio reiniciado',
+  interrumpido: 'Episodio interrumpido',
   running: 'En curso',
 }
 

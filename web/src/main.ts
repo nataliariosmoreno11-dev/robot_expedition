@@ -9,11 +9,12 @@ import {
   normalizeReplayBundle,
 } from './data'
 import { ExpeditionScene } from './scene/expedition-scene'
-import type { CatalogData, CatalogRun, EpisodeData, ExpeditionMap, MonitorData, ReplayFrame, RunOption } from './types'
+import type { CatalogData, CatalogRun, EpisodeData, EpisodeSummary, ExpeditionMap, MonitorData, ReplayFrame, RunOption } from './types'
 import { FRAME_INDEX } from './types'
 import { LearningCurve } from './ui/curve'
 import { MissionHud, required } from './ui/hud'
 import { RegistryView } from './ui/registry'
+import { TrainingDashboard } from './ui/training-dashboard'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -30,7 +31,14 @@ const levelSelect = required<HTMLSelectElement>('#levelSelect')
 const seedsInput = required<HTMLInputElement>('#seedsInput')
 const evaluateButton = required<HTMLButtonElement>('#evaluateButton')
 const manualButton = required<HTMLButtonElement>('#manualButton')
+const manualEnvironment = required<HTMLSelectElement>('#manualEnvironment')
+const difficultySelect = required<HTMLSelectElement>('#difficultySelect')
 const demoReplayButton = required<HTMLButtonElement>('#demoReplayButton')
+const refreshEpisodesButton = required<HTMLButtonElement>('#refreshEpisodesButton')
+const loadEpisodeButton = required<HTMLButtonElement>('#loadEpisodeButton')
+const episodeNumberInput = required<HTMLInputElement>('#episodeNumberInput')
+const episodeList = required<HTMLElement>('#episodeList')
+const learningMeta = required<HTMLElement>('#learningMeta')
 const keypadButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-action]'))
 const trainedValue = required<HTMLElement>('#trainedValue')
 const configValue = required<HTMLElement>('#configValue')
@@ -57,6 +65,7 @@ const registry = new RegistryView({
   onEvaluate: (run, levelId) => { void evaluateFromRegistry(run, levelId) },
   onRefreshMonitor: () => { void refreshMonitor() },
 })
+const trainingDashboard = new TrainingDashboard(required<HTMLCanvasElement>('#trainingDashboardCanvas'))
 
 const setProvenance = (trained: string, config: string) => {
   trainedValue.textContent = trained
@@ -124,7 +133,7 @@ const loadEpisode = (
   currentMap = map
   scene.setMap(map)
   scene.setEpisode(episode)
-  hud.setEpisode(episode, source)
+  hud.setEpisode(episode, source, map)
   if (sourceLabel) hud.setSource(source, sourceLabel)
   curve.setData(episode.history, episode)
   timeline.max = String(Math.max(0, episode.frames.length - 1))
@@ -209,13 +218,98 @@ const connectApi = async () => {
     hud.setConnection('online', 'API disponible')
     apiOnline = true
     manualButton.disabled = false
+    refreshEpisodesButton.disabled = false
+    loadEpisodeButton.disabled = false
     if (normalizedCatalog.runs.length) hud.hideNotice()
     else hud.showNotice('Catálogo vacío', 'La API responde, pero /catalog todavía no contiene modelos recuperables.')
     void refreshMonitor()
+    void refreshEpisodes()
   } catch (error) {
     apiOnline = false
     hud.setConnection('offline', 'API sin respuesta')
     hud.showNotice('No fue posible conectar con la API', errorMessage(error))
+  }
+}
+
+const loadStoredEpisode = async (episodeNumber: number) => {
+  if (!api || !Number.isInteger(episodeNumber) || episodeNumber < 1) {
+    hud.showNotice('Número de episodio inválido', 'Escribe un entero mayor que cero.')
+    return
+  }
+  loadEpisodeButton.disabled = true
+  try {
+    const bundle = normalizeReplayBundle(await api.episodeReplay(episodeNumber))
+    loadEpisode(bundle.episodes[0], bundle.map, 'replay', `REPLAY · EPISODIO ${episodeNumber}`)
+    setProvenance('episodio persistido', `SQLite · #${episodeNumber}`)
+    scene.setPlaying(true)
+    hud.hideNotice()
+  } catch (error) {
+    hud.showNotice('No se pudo cargar el episodio', errorMessage(error))
+  } finally {
+    loadEpisodeButton.disabled = !apiOnline
+  }
+}
+
+async function refreshEpisodes() {
+  if (!api) return
+  refreshEpisodesButton.disabled = true
+  try {
+    const payload = await api.episodes(100)
+    const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []
+    const summaries: EpisodeSummary[] = episodes.map((item) => ({
+      episode_number: Number(item.episode_number ?? 0),
+      scenario_id: String(item.scenario_id ?? 'sin escenario'),
+      difficulty_level: Number(item.difficulty_level ?? 1),
+      requested_samples: Number(item.requested_samples ?? 0),
+      samples_collected: Number(item.samples_collected ?? 0),
+      success: typeof item.success === 'boolean' ? item.success : null,
+      reward: Number(item.reward ?? 0),
+      collisions: Number(item.collisions ?? 0),
+      path_length: Number(item.path_length ?? 0),
+      duration_s: Number(item.duration_s ?? 0),
+      end: String(item.end ?? 'en progreso'),
+    })).filter((item) => Number.isInteger(item.episode_number) && item.episode_number > 0)
+    const finished = summaries.filter((episode) => episode.success !== null)
+    trainingDashboard.setEpisodes(finished)
+    const successCount = finished.filter((episode) => episode.success).length
+    learningMeta.textContent = summaries.length
+      ? `${summaries.length} episodios recientes · ${finished.length ? ((successCount / finished.length) * 100).toFixed(1) : '0.0'}% de misiones completadas`
+      : 'Sin episodios registrados.'
+    episodeList.replaceChildren()
+    if (!episodes.length) {
+      const empty = document.createElement('p')
+      empty.className = 'section-copy'
+      empty.textContent = 'Aún no hay intentos planetarios guardados. Inicia un control manual para crear el primero.'
+      episodeList.append(empty)
+      return
+    }
+    for (const item of episodes.slice(0, 30)) {
+      const number = Number(item.episode_number)
+      if (!Number.isInteger(number)) continue
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'episode-item'
+      const numberLabel = document.createElement('b')
+      numberLabel.textContent = `#${number}`
+      const description = document.createElement('span')
+      description.textContent = `${String(item.scenario_id ?? 'sin escenario')} · ${Number(item.samples_collected ?? 0)}/${Number(item.requested_samples ?? 0)} muestras`
+      const status = document.createElement('small')
+      status.textContent = `${String(item.end ?? 'en progreso')} · L${Number(item.difficulty_level ?? 1)}`
+      button.append(numberLabel, description, status)
+      button.addEventListener('click', () => {
+        episodeNumberInput.value = String(number)
+        void loadStoredEpisode(number)
+      })
+      episodeList.append(button)
+    }
+  } catch (error) {
+    episodeList.replaceChildren()
+    const message = document.createElement('p')
+    message.className = 'section-copy'
+    message.textContent = errorMessage(error)
+    episodeList.append(message)
+  } finally {
+    refreshEpisodesButton.disabled = !apiOnline
   }
 }
 
@@ -297,23 +391,43 @@ const startManualMode = async () => {
   manualButton.disabled = true
   manualButton.textContent = 'Iniciando…'
   try {
-    const response = await api.reset(levelSelect.value)
+    const environment = manualEnvironment.value === 'planetary' ? 'planetary' : 'beacon'
+    const difficulty = Number(difficultySelect.value)
+    const response = await api.reset(levelSelect.value, environment, difficulty)
     const frame = frameFromResponse(response)
     if (!response.session_id) throw new Error('/sim/reset no devolvió session_id.')
     if (!frame) throw new Error('/sim/reset no devolvió un cuadro compatible.')
     manualSessionId = response.session_id
-    manualEpisode = normalizeEpisode(
+    const map = response.map ? normalizeMap(response.map) : currentMap
+    const initial = normalizeEpisode(
       { ...response, frames: [frame], episode: 'manual', end: 'running' },
       {
         mode: 'manual',
         runId: 'control-manual',
         modelName: 'sin-modelo',
         environmentVersion: environmentVersionFrom(response) ?? apiEnvironmentVersion,
-        levelId: levelSelect.value,
+        levelId: environment === 'planetary' ? `L${difficulty}` : levelSelect.value,
       },
     )
-    loadEpisode(manualEpisode, response.map ? normalizeMap(response.map) : currentMap, 'api', 'API · MANUAL')
-    setProvenance('sin modelo', 'control manual')
+    manualEpisode = environment === 'planetary' ? {
+      ...initial,
+      scenarioId: map.scenario_id,
+      difficulty: map.difficulty,
+      planet: map.environment?.planet?.planet_id ?? 'mars',
+      objective: `Recolectar ${map.mission?.requested_samples ?? 0} × ${map.mission?.target_type ?? 'muestra'}`,
+      requestedSamples: map.mission?.requested_samples,
+      samplesCollected: 0,
+      missionTimeline: [{
+        target_type: map.mission?.target_type,
+        requested: map.mission?.requested_samples,
+        collected: 0,
+        inventory: [],
+        samples: map.samples,
+        status: 'recolectando',
+      }],
+    } : initial
+    loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
+    setProvenance('sin modelo', environment === 'planetary' ? `escenario procedural · L${difficulty}` : 'control manual heredado')
     setManualControls(true)
     hud.hideNotice()
   } catch (error) {
@@ -349,12 +463,34 @@ async function sendManualAction(action: number) {
       visited: Math.max(manualEpisode.visited, visitedNow),
       success: response.end === 'exito' || manualEpisode.success,
       end: typeof response.end === 'string' ? response.end : finished ? 'finished' : 'running',
+      samplesCollected: typeof response.samples_collected === 'number'
+        ? response.samples_collected
+        : manualEpisode.samplesCollected,
+      requestedSamples: typeof response.requested_samples === 'number'
+        ? response.requested_samples
+        : manualEpisode.requestedSamples,
+      missionTimeline: manualEpisode.requestedSamples === undefined ? manualEpisode.missionTimeline : [
+        ...(manualEpisode.missionTimeline ?? []),
+        {
+          target_type: typeof response.target_type === 'string' ? response.target_type : map.mission?.target_type,
+          requested: typeof response.requested_samples === 'number' ? response.requested_samples : map.mission?.requested_samples,
+          collected: typeof response.samples_collected === 'number' ? response.samples_collected : 0,
+          inventory: Array.isArray(response.inventory) ? response.inventory.filter((item): item is string => typeof item === 'string') : [],
+          samples: (map.samples ?? []).map((sample) => ({
+            ...sample,
+            collected: Array.isArray(response.inventory) && response.inventory.includes(sample.sample_id),
+          })),
+          event: typeof response.event === 'string' ? response.event : null,
+          status: finished ? 'finalizada' : 'recolectando',
+        },
+      ],
     }
     loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
     scene.seek(frames.length - 1)
     if (finished) {
       manualSessionId = undefined
       hud.showNotice('Episodio finalizado', `Causa de fin: ${manualEpisode.end}. Pulsa Reiniciar para conducir de nuevo.`)
+      void refreshEpisodes()
     }
   } catch (error) {
     hud.showNotice('Falló la orden manual', errorMessage(error))
@@ -365,7 +501,9 @@ async function sendManualAction(action: number) {
 }
 
 function setManualControls(enabled: boolean) {
-  keypadButtons.forEach((button) => { button.disabled = !enabled })
+  keypadButtons.forEach((button) => {
+    button.disabled = !enabled || (Number(button.dataset.action) === 5 && manualEnvironment.value !== 'planetary')
+  })
 }
 
 playButton.addEventListener('click', () => scene.togglePlayback())
@@ -401,6 +539,15 @@ levelSelect.addEventListener('change', () => {
 })
 evaluateButton.addEventListener('click', () => { void evaluateSelectedRun() })
 manualButton.addEventListener('click', () => { void startManualMode() })
+manualEnvironment.addEventListener('change', () => {
+  difficultySelect.disabled = manualEnvironment.value !== 'planetary'
+  setManualControls(Boolean(manualSessionId))
+})
+refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
+loadEpisodeButton.addEventListener('click', () => { void loadStoredEpisode(Number(episodeNumberInput.value)) })
+episodeNumberInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') void loadStoredEpisode(Number(episodeNumberInput.value))
+})
 
 keypadButtons.forEach((button) => {
   button.addEventListener('click', () => { void sendManualAction(Number(button.dataset.action)) })
@@ -408,7 +555,7 @@ keypadButtons.forEach((button) => {
 
 window.addEventListener('keydown', (event) => {
   if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) return
-  const actions: Partial<Record<string, number>> = { ArrowUp: 0, ArrowLeft: 3, ArrowRight: 4 }
+  const actions: Partial<Record<string, number>> = { ArrowUp: 0, ArrowLeft: 3, ArrowRight: 4, r: 5, R: 5 }
   const action = actions[event.key]
   if (action === undefined || !manualSessionId) return
   event.preventDefault()

@@ -48,7 +48,9 @@ export class ExpeditionApi {
   }
 
   async health(): Promise<unknown> {
-    return this.request('/health')
+    // Render gratuito puede estar dormido. Solo el despertar recibe un margen amplio;
+    // una vez saludable, las operaciones normales conservan el límite corto.
+    return this.request('/health', {}, 75_000)
   }
 
   async catalog(): Promise<CatalogData | unknown> {
@@ -70,10 +72,10 @@ export class ExpeditionApi {
     })
   }
 
-  async reset(levelId: string): Promise<SimulationResponse> {
+  async reset(levelId: string, environment: 'beacon' | 'planetary' = 'beacon', difficultyLevel = 1): Promise<SimulationResponse> {
     return this.request('/sim/reset', {
       method: 'POST',
-      body: JSON.stringify({ level_id: levelId }),
+      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel }),
     }) as Promise<SimulationResponse>
   }
 
@@ -84,9 +86,24 @@ export class ExpeditionApi {
     }) as Promise<SimulationResponse>
   }
 
-  private async request(path: string, init: RequestInit = {}): Promise<unknown> {
+  async episodes(limit = 30): Promise<unknown> {
+    return this.request(`/episodes?limit=${Math.max(1, Math.min(100, limit))}`)
+  }
+
+  async episodeReplay(episodeNumber: number): Promise<unknown> {
+    return this.request(`/episodes/${episodeNumber}/replay`)
+  }
+
+  async compareEpisodes(episodeNumbers: number[]): Promise<unknown> {
+    return this.request('/episodes/compare', {
+      method: 'POST',
+      body: JSON.stringify({ episode_numbers: episodeNumbers }),
+    })
+  }
+
+  private async request(path: string, init: RequestInit = {}, timeoutMs = 12_000): Promise<unknown> {
     const controller = new AbortController()
-    const timeout = window.setTimeout(() => controller.abort(), 12_000)
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs)
 
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
@@ -113,7 +130,7 @@ export class ExpeditionApi {
     } catch (error) {
       if (error instanceof ApiError) throw error
       if (error instanceof DOMException && error.name === 'AbortError') {
-        throw new ApiError(`La solicitud a ${path} superó 12 segundos.`)
+        throw new ApiError(`La solicitud a ${path} superó ${Math.round(timeoutMs / 1000)} segundos.`)
       }
       throw new ApiError(error instanceof Error ? error.message : `Error de red en ${path}.`)
     } finally {

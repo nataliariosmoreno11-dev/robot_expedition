@@ -25,6 +25,7 @@
           <a href="#catalogo">Catálogo</a>
           <a href="#comparar">Comparar</a>
           <a href="#monitoreo">Monitoreo</a>
+          <a href="#aprendizaje">Aprendizaje</a>
         </nav>
         <div class="topbar-status">
           <span class="eyebrow">Estado de enlace</span>
@@ -58,6 +59,7 @@
             <div class="telemetry-secondary">
               <span>Acción <b id="actionValue">—</b></span>
               <span>Choques <b id="collisionsValue">—</b></span>
+              <span>Evento <b id="eventValue">—</b></span>
               <span>Fin <b id="endValue">—</b></span>
             </div>
           </section>
@@ -107,6 +109,10 @@
               <div><dt>Nivel</dt><dd id="levelValue">—</dd></div>
               <div><dt>Entrenado en</dt><dd id="trainedValue">—</dd></div>
               <div><dt>Configuración</dt><dd id="configValue">—</dd></div>
+              <div><dt>Planeta</dt><dd id="planetValue">—</dd></div>
+              <div><dt>Escenario</dt><dd id="scenarioValue">—</dd></div>
+              <div><dt>Misión</dt><dd id="missionValue">—</dd></div>
+              <div><dt>Condiciones</dt><dd id="conditionsValue">—</dd></div>
             </dl>
           </section>
 
@@ -142,7 +148,7 @@
             <div class="result-grid">
               <article><span>Éxito</span><strong id="successValue">—</strong></article>
               <article><span>Recorrido</span><strong id="pathValue">—</strong></article>
-              <article><span>Balizas</span><strong id="visitedValue">—</strong></article>
+              <article><span>Objetivos</span><strong id="visitedValue">—</strong></article>
               <article><span>Latencia</span><strong id="latencyValue">—</strong></article>
             </div>
             <canvas id="curve" class="curve" aria-label="Curva de recompensa y éxito"></canvas>
@@ -158,7 +164,29 @@
               <div><span class="eyebrow">Control manual</span><h2>Conducir el rover</h2></div>
               <button id="manualButton" class="secondary-button" type="button" disabled>Iniciar</button>
             </div>
-            <p class="section-copy">Usa las flechas del teclado o los controles. Cada orden se envía a <code>/sim/step</code>.</p>
+            <div class="field-row">
+              <label class="field">
+                <span>Ambiente</span>
+                <select id="manualEnvironment">
+                  <option value="planetary" selected>Planetario procedural</option>
+                  <option value="beacon">Balizas heredado</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Dificultad</span>
+                <select id="difficultySelect">
+                  <option value="1">L1 · Introducción</option>
+                  <option value="2">L2 · Rocas</option>
+                  <option value="3">L3 · Relieve</option>
+                  <option value="4">L4 · Distractores</option>
+                  <option value="5">L5 · Viento</option>
+                  <option value="6">L6 · Polvo</option>
+                  <option value="7">L7 · Energía</option>
+                  <option value="8">L8 · Expedición</option>
+                </select>
+              </label>
+            </div>
+            <p class="section-copy">Usa las flechas o los controles. En el ambiente planetario, acércate a la muestra correcta y pulsa <b>Recolectar</b>.</p>
             <div class="keypad" aria-label="Controles del rover">
               <button type="button" data-action="1" aria-label="Avanzar y girar a la izquierda">↖</button>
               <button type="button" data-action="0" aria-label="Avanzar">↑</button>
@@ -167,6 +195,20 @@
               <span class="keypad-core">ROVER</span>
               <button type="button" data-action="4" aria-label="Girar a la derecha">→</button>
             </div>
+            <button type="button" data-action="5" class="collect-button" aria-label="Recolectar muestra">◇ Recolectar muestra</button>
+          </section>
+
+          <section class="panel-section episode-section">
+            <div class="section-heading">
+              <div><span class="eyebrow">Historial permanente</span><h2>Explorar episodios</h2></div>
+              <button id="refreshEpisodesButton" class="secondary-button" type="button" disabled>Actualizar</button>
+            </div>
+            <p class="section-copy">Carga exactamente los estados guardados. El replay no vuelve a ejecutar la política.</p>
+            <div class="episode-loader">
+              <label class="field"><span>Número de episodio</span><input id="episodeNumberInput" type="number" min="1" placeholder="Ej. 12" /></label>
+              <button id="loadEpisodeButton" class="secondary-button" type="button" disabled>Cargar REPLAY</button>
+            </div>
+            <div id="episodeList" class="episode-list"><p class="section-copy">Conecta la API para consultar el historial.</p></div>
           </section>
 
           <section class="panel-section replay-section">
@@ -271,6 +313,17 @@
           <button id="refreshMonitor" class="secondary-button" type="button">Actualizar</button>
         </div>
         <div id="monitorView"><p class="section-copy">Conecta la API para ver el monitoreo.</p></div>
+      </section>
+
+      <section id="aprendizaje" class="registry" aria-labelledby="learningTitle">
+        <div class="registry-head">
+          <div>
+            <span class="eyebrow">Episodios persistidos</span>
+            <h2 id="learningTitle">Evolución del aprendizaje</h2>
+            <p id="learningMeta" class="section-copy">Sin episodios registrados.</p>
+          </div>
+        </div>
+        <canvas id="trainingDashboardCanvas" class="training-dashboard" aria-label="Ocho gráficas de entrenamiento"></canvas>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>

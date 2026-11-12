@@ -85,6 +85,9 @@ export class ExpeditionScene {
   setMap(map: ExpeditionMap) {
     this.map = map
     this.terrain.build(map)
+    const dust = map.environment?.dust_opacity ?? 0
+    this.scene.fog = new THREE.FogExp2(0x1a0e09, 0.025 + dust * 0.045)
+    this.scene.background = new THREE.Color(dust > 0.55 ? 0x29120b : 0x1a0e09)
     this.controls.target.copy(this.terrain.position(map.size[0] / 2, 0, 0))
     this.controls.update()
   }
@@ -184,6 +187,8 @@ export class ExpeditionScene {
     )
     this.updateTrail(index, current)
     this.terrain.updateMission(current[FRAME_INDEX.stage], Boolean(this.episode.block))
+    const mission = this.episode.missionTimeline?.[Math.min(index, this.episode.missionTimeline.length - 1)]
+    this.terrain.updateSamples(mission)
 
     if (index !== this.lastFrameIndex) {
       const previous = frames[Math.max(0, index - 1)]
@@ -191,7 +196,13 @@ export class ExpeditionScene {
       const collisions = frames.slice(0, index + 1).reduce((total, frame) => total + frame[FRAME_INDEX.collision], 0)
       const action = current[FRAME_INDEX.action] >= 0 ? current[FRAME_INDEX.action] : next[FRAME_INDEX.action]
       const stage = current[FRAME_INDEX.stage]
-      const objective = stage <= this.map.beacons.length ? STAGE_NAMES[Math.max(0, stage - 1)] : 'Base'
+      const collected = mission?.collected ?? this.episode.samplesCollected ?? 0
+      const requested = mission?.requested ?? this.episode.requestedSamples
+      const objective = requested === undefined
+        ? (stage <= this.map.beacons.length ? STAGE_NAMES[Math.max(0, stage - 1)] : 'Base')
+        : collected >= requested
+          ? 'Regresar a la base'
+          : `Recolectar ${collected}/${requested} · ${mission?.target_type ?? this.map.mission?.target_type ?? 'muestras'}`
       this.callbacks.onFrame({
         frame: current,
         index,

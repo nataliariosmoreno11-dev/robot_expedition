@@ -69,7 +69,8 @@ def test_evaluate_matches_the_offline_suite():
     online = client.post("/evaluate", json={"run_id": "baseline-rule", "level_id": "n2",
                                             "suite_id": "suite-n2-v1", "episodes": 2}).json()
     offline = evaluate(RulePolicy(), "n2", "suite-n2-v1", episodes=2)
-    strip = lambda cases: [{k: v for k, v in c.items() if not k.startswith("latency")} for c in cases]
+    def strip(cases):
+        return [{k: v for k, v in case.items() if not k.startswith("latency")} for case in cases]
     assert strip(online["cases"]) == strip(offline["cases"])
 
 
@@ -91,6 +92,46 @@ def test_manual_session_flow():
     assert client.post("/sim/step", json={"session_id": sid}).status_code == 422      # manual sin accion
     assert client.post("/sim/step", json={"session_id": sid, "action": 9}).status_code == 422
     assert client.post("/sim/step", json={"session_id": "nope", "action": 0}).status_code == 404
+
+
+def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
+    database = tmp_path / "api-episodes.sqlite"
+    monkeypatch.setattr(api_main, "EPISODE_DB", database)
+    reset = client.post(
+        "/sim/reset",
+        json={"environment": "planetary", "difficulty_level": 4, "seed": 404},
+    )
+    assert reset.status_code == 200, reset.text
+    body = reset.json()
+    assert body["environment"] == "planetary"
+    assert body["map"]["difficulty_level"] == 4
+    assert len(body["map"]["samples"]) > body["map"]["mission"]["requested_samples"]
+    assert body["actions"][-1] == "recolectar"
+
+    stepped = client.post("/sim/step", json={"session_id": body["session_id"], "action": 5})
+    assert stepped.status_code == 200, stepped.text
+    assert stepped.json()["requested_samples"] >= 1
+
+    summaries = client.get("/episodes").json()["episodes"]
+    assert len(summaries) == 1 and summaries[0]["difficulty_level"] == 4
+    replay = client.get(f"/episodes/{summaries[0]['episode_number']}/replay").json()
+    assert replay["episode"]["objective"].startswith("Recolectar")
+    assert len(replay["episode"]["frames"]) == 2
+    assert len(replay["episode"]["mission_timeline"]) == 2
+
+    second = client.post(
+        "/sim/reset",
+        json={"environment": "planetary", "difficulty_level": 2, "seed": 405},
+    ).json()
+    numbers = [item["episode_number"] for item in client.get("/episodes").json()["episodes"]]
+    compared = client.post("/episodes/compare", json={"episode_numbers": numbers}).json()
+    assert len(compared["episodes"]) == 2
+
+    with api_main.sessions_lock:
+        session = api_main.sessions.pop(body["session_id"])
+        second_session = api_main.sessions.pop(second["session_id"])
+    session.env.close()
+    second_session.env.close()
 
 
 def test_policy_session_runs_to_the_end():

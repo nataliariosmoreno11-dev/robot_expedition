@@ -1,0 +1,32 @@
+experiment_id: exp-007-planetary
+hypothesis: "PPO con recolección explícita y currículo por desempeño aprende misiones sin memorizar mapas"
+change: "escenarios marcianos procedurales, muestras, clima físico, historial SQLite y currículo de ocho niveles"
+reference: exp-006
+level_id: n2
+algorithm: ppo
+budget_timesteps: 500000
+seeds: [1]
+evaluation_max_level: 8
+periodic_evaluation_freq: 100000
+periodic_evaluation_episodes: 8
+periodic_evaluation_seed_start: 910000
+hyperparams:
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  gamma: 0.99
+  gae_lambda: 0.95
+  ent_coef: 0.015
+normalize_obs: true
+parent_run_id: null
+environment:
+  kind: planetary
+  planet: mars
+  difficulty_level: 1
+  curriculum: true
+  curriculum_state: logs/planetary_curriculum.json
+  episode_db: logs/planetary_episodes.sqlite
+  record_episodes: true
+  run_id: exp-007-planetary
+  policy_version: ppo-exp-007
+  mode: entrenamiento

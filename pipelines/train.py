@@ -17,17 +17,27 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-import mlflow
 import numpy as np
-import torch
 import yaml
-from dotenv import load_dotenv
-from mlflow.tracking import MlflowClient
-from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import BaseCallback
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.utils import set_random_seed
-from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
+
+try:  # Las utilidades de config/manifiesto siguen disponibles sin la pila pesada.
+    import mlflow
+    import torch
+    from mlflow.tracking import MlflowClient
+    from stable_baselines3 import PPO
+    from stable_baselines3.common.callbacks import BaseCallback
+    from stable_baselines3.common.monitor import Monitor
+    from stable_baselines3.common.utils import set_random_seed
+    from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
+except ModuleNotFoundError:  # pragma: no cover - la ruta se comprueba antes de entrenar
+    mlflow = torch = MlflowClient = PPO = Monitor = DummyVecEnv = VecNormalize = None
+    set_random_seed = None
+
+    class BaseCallback:  # type: ignore[no-redef]
+        def __init__(self, *args, **kwargs):
+            del args, kwargs
+            self.model = None
+            self.locals = {}
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -36,15 +46,38 @@ if str(ROOT) not in sys.path:
 from robot_expedition.envs.beacon_expedition import (  # noqa: E402
     ENVIRONMENT_VERSION, BeaconExpeditionEnv, environment_hash, load_level_config, load_scenario_set,
 )
+from robot_expedition.envs.planetary_exploration import (  # noqa: E402
+    OBSERVATION_SIZE,
+    PLANETARY_ENVIRONMENT_VERSION,
+    PlanetaryExplorationEnv,
+    planetary_environment_hash,
+)
 from pipelines.evaluate import evaluate  # noqa: E402
+from pipelines.planetary_evaluate import evaluate_planetary  # noqa: E402
 from pipelines.policies import PPOPolicy, QTablePolicy  # noqa: E402
 
 N_ENVS = 4
 
 
+def _require_training_stack() -> None:
+    if any(item is None for item in (mlflow, torch, PPO, Monitor, DummyVecEnv, VecNormalize)):
+        raise RuntimeError(
+            "Falta la pila de entrenamiento. Usa Python 3.12 e instala requirements.txt "
+            "antes de ejecutar pipelines/train.py."
+        )
+
+
 def evaluation_suite(level_id: str, configured: str | None = None) -> str:
     """Suite fija del paso 2 para el nivel (configs/suites)."""
     return configured or f"suite-{level_id}-v1"
+
+
+def is_planetary(config: dict[str, Any]) -> bool:
+    return config.get("environment", {}).get("kind") == "planetary"
+
+
+def config_environment_version(config: dict[str, Any]) -> str:
+    return PLANETARY_ENVIRONMENT_VERSION if is_planetary(config) else ENVIRONMENT_VERSION
 
 
 def sha256_file(path: Path) -> str:
@@ -98,20 +131,31 @@ def read_config(path: Path) -> dict[str, Any]:
     config.setdefault("environment", {})
     if not isinstance(config["environment"], dict):
         raise TypeError("environment debe ser un mapa")
-    # El ruido de rayos, rocas, dunas y bloqueo salen del nivel (configs/levels/<nivel>.yaml);
-    # environment solo puede sobrescribirlos de forma explicita.
-    config["environment"] = {
-        "max_steps": 400,
-        "rock_jitter": 0.0,
-        **config["environment"],
-    }
-    if config["environment"].get("scenario_set") is not None:
-        load_scenario_set(config["environment"]["scenario_set"])
+    if config["environment"].get("kind") == "planetary":
+        if config["algorithm"] != "ppo":
+            raise ValueError("el ambiente planetario usa PPO; Q-learning conserva el contrato Box(20)/Discrete(5)")
+        level = int(config["environment"].get("difficulty_level", 1))
+        if not 1 <= level <= 8:
+            raise ValueError("environment.difficulty_level debe estar entre 1 y 8")
+    else:
+        # El ruido de rayos, rocas, dunas y bloqueo salen del nivel; environment
+        # solo puede sobrescribirlos de forma explícita.
+        config["environment"] = {
+            "max_steps": 400,
+            "rock_jitter": 0.0,
+            **config["environment"],
+        }
+        if config["environment"].get("scenario_set") is not None:
+            load_scenario_set(config["environment"]["scenario_set"])
     return config
 
 
-def build_env(config: dict[str, Any]) -> BeaconExpeditionEnv:
-    return BeaconExpeditionEnv(level=config["level_id"], **config["environment"])
+def build_env(config: dict[str, Any]):
+    options = dict(config["environment"])
+    kind = options.pop("kind", "beacon")
+    if kind == "planetary":
+        return PlanetaryExplorationEnv(**options)
+    return BeaconExpeditionEnv(level=config["level_id"], **options)
 
 
 def _git_value(*args: str) -> str:
@@ -119,6 +163,9 @@ def _git_value(*args: str) -> str:
 
 
 def configure_tracking() -> tuple[str, str]:
+    _require_training_stack()
+    from dotenv import load_dotenv
+
     load_dotenv(ROOT / ".env")
     tracking_uri = os.environ.get(
         "MLFLOW_TRACKING_URI",
@@ -162,10 +209,12 @@ def _flatten_params(value: dict[str, Any], prefix: str = "") -> dict[str, str]:
 
 
 def _make_env(config: dict[str, Any], seed: int | None = None) -> Monitor:
+    _require_training_stack()
     env = build_env(config)
     if seed is not None:
         env.reset(seed=seed)
-    return Monitor(env, info_keywords=("success",))
+    info_keywords = ("success", "samples_collected", "difficulty_level") if is_planetary(config) else ("success",)
+    return Monitor(env, info_keywords=info_keywords)
 
 
 class TrainingMetricsCallback(BaseCallback):
@@ -184,6 +233,81 @@ class TrainingMetricsCallback(BaseCallback):
                     float(bool(episode.get("success", False))),
                     step=step,
                 )
+                if "samples_collected" in episode:
+                    mlflow.log_metric(
+                        "training/samples_collected", float(episode["samples_collected"]), step=step
+                    )
+                if "difficulty_level" in episode:
+                    mlflow.log_metric(
+                        "training/difficulty_level", float(episode["difficulty_level"]), step=step
+                    )
+        return True
+
+
+class _LivePPOPolicy:
+    """Vista determinista de la política actual con la normalización congelada."""
+
+    def __init__(self, model, normalizer):
+        self.model = model
+        self.normalizer = normalizer
+
+    def __call__(self, observation) -> int:
+        observation = np.asarray(observation, dtype=np.float32)
+        if self.normalizer is not None:
+            observation = self.normalizer.normalize_obs(observation)
+        action, _ = self.model.predict(observation, deterministic=True)
+        return int(np.asarray(action).item())
+
+
+class PeriodicPlanetaryEvaluationCallback(BaseCallback):
+    """Evalúa snapshots en un holdout fijo sin modificar entorno ni currículo de training."""
+
+    def __init__(
+        self,
+        config: dict[str, Any],
+        model_dir: Path,
+        *,
+        frequency: int,
+        episodes: int,
+        seed_start: int,
+        step_offset: int = 0,
+    ):
+        super().__init__()
+        self.config = config
+        self.model_dir = model_dir
+        self.frequency = max(1, int(frequency))
+        self.episodes = max(1, int(episodes))
+        self.seed_start = int(seed_start)
+        self.next_step = int(step_offset) + self.frequency
+
+    def _on_step(self) -> bool:
+        step = int(self.model.num_timesteps)
+        if step < self.next_step:
+            return True
+        training_env = self.model.get_env()
+        policy = _LivePPOPolicy(self.model, training_env)
+        result = evaluate_planetary(
+            policy,
+            self.config["environment"],
+            episodes=self.episodes,
+            seed_start=self.seed_start,
+            max_level=int(self.config.get("evaluation_max_level", 8)),
+        )
+        result["suite_id"] = "planetary-periodic-holdout-v1"
+        result["training_step"] = step
+        save_json(self.model_dir / f"periodic-evaluation-{step}.json", result)
+        for key in (
+            "success_rate",
+            "return_mean",
+            "collisions_per_episode",
+            "samples_collected_mean",
+            "mission_completion",
+        ):
+            value = result["metrics"].get(key)
+            if value is not None:
+                mlflow.log_metric(f"periodic_evaluation/{key}", float(value), step=step)
+        while self.next_step <= step:
+            self.next_step += self.frequency
         return True
 
 
@@ -256,6 +380,19 @@ def _download_checkpoint(parent_run_id: str) -> Path:
     return checkpoint_dir
 
 
+def _restore_curriculum_checkpoint(parent_checkpoint: Path, config: dict[str, Any]) -> Path | None:
+    if not is_planetary(config):
+        return None
+    saved = parent_checkpoint / "curriculum_state.json"
+    target_value = config["environment"].get("curriculum_state")
+    if not saved.is_file() or not target_value:
+        return None
+    target = Path(target_value)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(saved, target)
+    return target
+
+
 def _train_ppo(
     config: dict[str, Any],
     seed: int,
@@ -265,9 +402,13 @@ def _train_ppo(
     n_steps_override: int | None,
     batch_size_override: int | None,
 ) -> tuple[Path, int, Path]:
+    _require_training_stack()
     if not config["normalize_obs"]:
         raise ValueError("PPO requiere normalize_obs: true")
     set_random_seed(seed)
+    parent_checkpoint = _download_checkpoint(parent_run_id) if parent_run_id else None
+    if parent_checkpoint:
+        _restore_curriculum_checkpoint(parent_checkpoint, config)
     factories = [
         lambda cfg=config: _make_env(cfg)
         for _ in range(N_ENVS)
@@ -276,7 +417,6 @@ def _train_ppo(
     base_env.seed(seed)
 
     parent_steps = 0
-    parent_checkpoint = _download_checkpoint(parent_run_id) if parent_run_id else None
     if parent_checkpoint:
         parent_steps = int(
             json.loads((parent_checkpoint / "checkpoint_state.json").read_text())["total_timesteps"]
@@ -306,9 +446,22 @@ def _train_ppo(
             **hyperparams,
         )
 
+    callbacks = [TrainingMetricsCallback(parent_steps)]
+    periodic_frequency = int(config.get("periodic_evaluation_freq", 0))
+    if is_planetary(config) and periodic_frequency > 0:
+        callbacks.append(
+            PeriodicPlanetaryEvaluationCallback(
+                config,
+                model_dir,
+                frequency=periodic_frequency,
+                episodes=int(config.get("periodic_evaluation_episodes", 8)),
+                seed_start=int(config.get("periodic_evaluation_seed_start", 910_000)),
+                step_offset=parent_steps,
+            )
+        )
     model.learn(
         total_timesteps=budget,
-        callback=TrainingMetricsCallback(parent_steps),
+        callback=callbacks,
         reset_num_timesteps=parent_run_id is None,
         progress_bar=False,
     )
@@ -334,6 +487,13 @@ def _evaluate(
         policy = QTablePolicy(model_path)
     else:
         policy = PPOPolicy(model_path, normalization_path)
+    if is_planetary(config):
+        return evaluate_planetary(
+            policy,
+            config["environment"],
+            episodes=episodes or 24,
+            max_level=int(config.get("evaluation_max_level", 8)),
+        )
     suite_id = evaluation_suite(config["level_id"], config.get("evaluation_suite_id"))
     return evaluate(policy, config["level_id"], suite_id, episodes=episodes)
 
@@ -386,12 +546,19 @@ def _manifest(
     metrics: dict[str, float],
     checkpoint_uri: str | None,
 ) -> dict[str, Any]:
+    planetary = is_planetary(config)
+    env_hash = (
+        planetary_environment_hash(config.get("environment"))
+        if planetary
+        else environment_hash(config["level_id"], config.get("environment"))
+    )
     return {
         "run_id": run_id,
         "experiment_id": config["experiment_id"],
         "level_id": config["level_id"],
         "algorithm": config["algorithm"],
-        "environment_version": ENVIRONMENT_VERSION,
+        "environment_version": config_environment_version(config),
+        "environment_kind": "planetary" if planetary else "beacon",
         "git_commit": git_commit,
         "origin": {
             "type": "experiment_config",
@@ -405,11 +572,19 @@ def _manifest(
         "model_uri": model_uri,
         "model_sha256": model_hash,
         "normalization_uri": normalization_uri,
-        "environment_hash": environment_hash(config["level_id"], config.get("environment")),
-        "obs_spec": "20 floats, ver docs/contratos.md",
-        "action_spec": "Discrete(5)",
+        "environment_hash": env_hash,
+        "obs_spec": (
+            f"{OBSERVATION_SIZE} floats, ver docs/contratos-planetario.md"
+            if planetary
+            else "20 floats, ver docs/contratos.md"
+        ),
+        "action_spec": "Discrete(6)" if planetary else "Discrete(5)",
         "runtime_ref": f"requirements.txt + python {platform.python_version()}",
-        "evaluation_suite_id": evaluation_suite(config["level_id"], config.get("evaluation_suite_id")),
+        "evaluation_suite_id": (
+            "planetary-holdout-v1"
+            if planetary
+            else evaluation_suite(config["level_id"], config.get("evaluation_suite_id"))
+        ),
         "seed": seed,
         "budget_timesteps": budget,
         "effective_budget_timesteps": effective_budget,
@@ -462,7 +637,7 @@ def train_seed(
 
     tags = {
         "git_commit": _git_value("rev-parse", "HEAD"),
-        "environment_version": ENVIRONMENT_VERSION,
+        "environment_version": config_environment_version(config),
         "level_id": str(config["level_id"]),
         "experiment_id": str(config["experiment_id"]),
         "hypothesis": str(config["hypothesis"]),
@@ -507,6 +682,18 @@ def train_seed(
             raise
         run_id = run.info.run_id
         model_dir = ROOT / "models" / run_id
+        runtime_config = config
+        if is_planetary(config):
+            # Cada intento persistido identifica el run que realmente produjo sus
+            # acciones, aunque el YAML use un nombre descriptivo estable.
+            runtime_config = {
+                **config,
+                "environment": {
+                    **config["environment"],
+                    "run_id": run_id,
+                    "policy_version": run_id,
+                },
+            }
 
         def handle_interrupt(received: int, _frame: Any) -> None:
             raise KeyboardInterrupt(f"Señal {received} recibida")
@@ -528,7 +715,7 @@ def train_seed(
                     pickle.dump(None, stream)
             else:
                 model_path, effective_budget, normalization_path = _train_ppo(
-                    config,
+                    runtime_config,
                     seed,
                     budget,
                     model_dir,
@@ -538,7 +725,7 @@ def train_seed(
                 )
 
             evaluation = _evaluate(
-                config,
+                runtime_config,
                 model_path,
                 normalization_path if config["algorithm"] == "ppo" else None,
                 eval_episodes,
@@ -559,6 +746,11 @@ def train_seed(
                 if suite_metrics.get(key) is not None:
                     mlflow.log_metric(f"evaluation/{key}", float(suite_metrics[key]), step=effective_budget)
             model_hash = sha256_file(model_path)
+            curriculum_value = config.get("environment", {}).get("curriculum_state")
+            if is_planetary(config) and curriculum_value:
+                curriculum_path = Path(curriculum_value)
+                if curriculum_path.exists():
+                    shutil.copy2(curriculum_path, model_dir / "curriculum_state.json")
             normalization_uri = (
                 f"runs:/{run_id}/vecnormalize.pkl"
                 if config["algorithm"] == "ppo"
@@ -578,7 +770,7 @@ def train_seed(
                     "config": str(model_dir / "config.json"),
                 },
                 code_paths=[str(ROOT / "robot_expedition")],
-                input_example=[[0.0] * 20],
+                input_example=[[0.0] * (OBSERVATION_SIZE if is_planetary(config) else 20)],
             )
             model_uri = _register_dvc_model(model_dir, run_id)
             mlflow.register_model(

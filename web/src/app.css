@@ -289,6 +289,15 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
 .keypad button,
 .keypad-core { height: 44px; display: grid; place-items: center; border-radius: 7px; }
 .keypad button { border: 1px solid var(--line); color: #ddd3c9; background: var(--panel-raised); font: 500 18px var(--mono); cursor: pointer; }
+.collect-button { width: 100%; margin-top: 10px; min-height: 42px; border: 1px solid rgba(97, 213, 210, 0.45); border-radius: 6px; color: var(--cyan); background: rgba(97, 213, 210, 0.08); font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; }
+.episode-loader { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.episode-list { display: grid; gap: 7px; margin-top: 14px; max-height: 250px; overflow: auto; }
+.episode-item { width: 100%; display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 6px; color: var(--text); background: var(--panel-soft); text-align: left; cursor: pointer; }
+.episode-item:hover { border-color: var(--line-strong); background: var(--panel-raised); }
+.episode-item b { color: var(--rust); font: 500 11px var(--mono); }
+.episode-item span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.episode-item small { color: var(--muted); font: 400 9px var(--mono); text-transform: uppercase; }
+.training-dashboard { display: block; width: 100%; height: 720px; margin-top: 18px; }
 .keypad button:hover:not(:disabled),
 .keypad button:active { color: #211008; border-color: var(--rust); background: var(--rust); }
 .keypad button:disabled { opacity: 0.32; }

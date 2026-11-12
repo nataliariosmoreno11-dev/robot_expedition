@@ -34,12 +34,19 @@ from pipelines.evaluate import frame, load_suite, run_case, summarize  # noqa: E
 from robot_expedition.envs.beacon_expedition import (  # noqa: E402
     ACTIONS, ENVIRONMENT_VERSION, BeaconExpeditionEnv, environment_hash,
 )
+from robot_expedition.envs.planetary_exploration import (  # noqa: E402
+    PLANETARY_ACTIONS,
+    PLANETARY_ENVIRONMENT_VERSION,
+    PlanetaryExplorationEnv,
+)
+from robot_expedition.planetary.episode_store import EpisodeStore  # noqa: E402
 
-API_VERSION = "1.0.0"
+API_VERSION = "1.1.0"
 MAX_SEEDS = 20                 # la web corta las solicitudes a los 12 s
 MAX_SESSIONS = 50
 SESSION_TTL_S = 15 * 60
 STARTED = time.time()
+EPISODE_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", ROOT / "logs" / "planetary_episodes.sqlite"))
 
 store = Store(ROOT)
 app = FastAPI(title="Robot Expedition API", version=API_VERSION,
@@ -132,7 +139,9 @@ def root():
         "web": "https://web-five-gules-83.vercel.app",
         "docs": "/docs",
         "routes": ["/health", "/version", "/catalog", "/runs/{run_id}", "/evaluate",
-                   "/sim/reset", "/sim/step", "/monitor"],
+                   "/sim/reset", "/sim/step", "/episodes", "/episodes/{number}",
+                   "/episodes/{number}/replay", "/episodes/{number}/scenario",
+                   "/episodes/compare", "/monitor"],
         "repository": "https://github.com/nataliariosmoreno11-dev/robot_expedition",
     }
 
@@ -150,6 +159,7 @@ def version():
         "git_commit": os.environ.get("GIT_COMMIT") or os.environ.get("RENDER_GIT_COMMIT") or _git("rev-parse", "HEAD"),
         "release": os.environ.get("RELEASE") or _git("describe", "--tags", "--always"),
         "environment_version": ENVIRONMENT_VERSION,
+        "planetary_environment_version": PLANETARY_ENVIRONMENT_VERSION,
         "environment_hashes": {level: environment_hash(level) for level in LEVELS},
         "served_version": catalog.get("served_version"),
         "recommended_run_id": catalog.get("recommended_run_id"),
@@ -246,9 +256,25 @@ def evaluate(req: EvaluateRequest):
 
 # ------------------------------------------------------- control manual
 class Session:
-    def __init__(self, level_id: str, policy, policy_id: str, seed: int):
-        self.env = BeaconExpeditionEnv(level=level_id)
+    def __init__(self, level_id: str, policy, policy_id: str, seed: int,
+                 environment_kind: str = "beacon", difficulty_level: int = 1):
+        if environment_kind == "planetary":
+            self.env = PlanetaryExplorationEnv(
+                difficulty_level=difficulty_level,
+                curriculum=False,
+                episode_db=EPISODE_DB,
+                record_episodes=True,
+                run_id="api-manual" if policy is None else policy_id,
+                policy_version=policy_id,
+                mode="manual" if policy is None else "evaluación",
+                update_curriculum=False,
+            )
+            self.action_names = [item[0] for item in PLANETARY_ACTIONS]
+        else:
+            self.env = BeaconExpeditionEnv(level=level_id)
+            self.action_names = [item[0] for item in ACTIONS]
         self.policy, self.policy_id, self.level_id = policy, policy_id, level_id
+        self.environment_kind = environment_kind
         self.obs, _ = self.env.reset(seed=seed)
         self.done, self.total, self.touched = False, 0.0, time.time()
 
@@ -269,26 +295,40 @@ class ResetRequest(BaseModel):
     level_id: Literal["n1", "n2", "n3"] = "n2"
     seed: int = 0
     policy: str = Field(default="manual", description="manual, baseline-rule, baseline-random o un run_id")
+    environment: Literal["beacon", "planetary"] = "beacon"
+    difficulty_level: int = Field(default=1, ge=1, le=8)
 
 
 class StepRequest(BaseModel):
     session_id: str
-    action: int | None = Field(default=None, ge=0, le=len(ACTIONS) - 1,
+    action: int | None = Field(default=None, ge=0, le=len(PLANETARY_ACTIONS) - 1,
                                description="acción manual; vacía = decide la política de la sesión")
 
 
 @app.post("/sim/reset")
 def sim_reset(req: ResetRequest):
+    if req.environment == "planetary" and req.policy != "manual":
+        fail(422, "los modelos publicados usan el contrato anterior; usa manual o entrena exp-007-planetary")
     policy = None if req.policy == "manual" else policy_for(req.policy)
-    session = Session(req.level_id, policy, req.policy, req.seed)
+    session = Session(
+        req.level_id,
+        policy,
+        req.policy,
+        req.seed,
+        req.environment,
+        req.difficulty_level,
+    )
     sid = uuid.uuid4().hex
     with sessions_lock:
         _prune_sessions()
         sessions[sid] = session
     env = session.env
     return {"session_id": sid, "mode": "manual" if policy is None else "política", "policy": req.policy,
-            "level_id": req.level_id, "seed": req.seed, "environment_version": ENVIRONMENT_VERSION,
-            "map": env.map_spec(), "frame": frame(env, -1, 0.0, False), "actions": [a[0] for a in ACTIONS],
+            "level_id": req.level_id, "seed": req.seed,
+            "environment": req.environment,
+            "environment_version": (PLANETARY_ENVIRONMENT_VERSION if req.environment == "planetary"
+                                    else ENVIRONMENT_VERSION),
+            "map": env.map_spec(), "frame": frame(env, -1, 0.0, False), "actions": session.action_names,
             "terminated": False, "truncated": False, "end": "running"}
 
 
@@ -303,15 +343,81 @@ def sim_step(req: StepRequest):
     if session.done:
         fail(409, "el episodio de esta sesión ya terminó; inicia otro con /sim/reset")
     if req.action is None and session.policy is None:
-        fail(422, "sesión manual: envía action (0-4)")
+        fail(422, f"sesión manual: envía action (0-{len(session.action_names) - 1})")
     action = req.action if req.action is not None else int(session.policy(session.obs))
+    if not session.env.action_space.contains(action):
+        fail(422, f"acción inválida para {session.environment_kind}: {action}")
     session.obs, reward, terminated, truncated, info = session.env.step(action)
     session.total += reward
     session.done = terminated or truncated
     session.touched = time.time()
     return {"session_id": req.session_id, "frame": frame(session.env, action, reward, info["collision"]),
-            "action": action, "action_name": ACTIONS[action][0], "reward": round(float(reward), 4),
+            "action": action, "action_name": session.action_names[action], "reward": round(float(reward), 4),
             "return": round(session.total, 4), "terminated": terminated, "truncated": truncated,
             "end": info["end"] or "running", "event": info["event"], "stage": info["stage"],
             "battery": round(info["battery"], 2), "collisions": info["collisions"],
-            "success": info["success"], "steps": session.env.steps}
+            "success": info["success"], "steps": session.env.steps,
+            "target_type": info.get("target_type"),
+            "requested_samples": info.get("requested_samples"),
+            "samples_collected": info.get("samples_collected"),
+            "inventory": info.get("inventory")}
+
+
+# ------------------------------------------------------- historial planetario
+def _with_episode_store(callback):
+    store = EpisodeStore(EPISODE_DB)
+    try:
+        return callback(store)
+    finally:
+        store.close()
+
+
+@app.get("/episodes")
+def episodes(limit: int = 100, offset: int = 0, run_id: str | None = None):
+    return {
+        "schema_version": 1,
+        "database": EPISODE_DB.name,
+        "episodes": _with_episode_store(
+            lambda episode_store: episode_store.list_episodes(limit=limit, offset=offset, run_id=run_id)
+        ),
+    }
+
+
+@app.get("/episodes/{episode_number}")
+def episode_data(episode_number: int):
+    try:
+        return _with_episode_store(lambda episode_store: episode_store.get_episode(episode_number))
+    except KeyError as exc:
+        fail(404, str(exc))
+
+
+@app.get("/episodes/{episode_number}/replay")
+def episode_replay(episode_number: int):
+    try:
+        return _with_episode_store(lambda episode_store: episode_store.replay_episode(episode_number))
+    except KeyError as exc:
+        fail(404, str(exc))
+
+
+@app.get("/episodes/{episode_number}/scenario")
+def episode_scenario(episode_number: int):
+    try:
+        return _with_episode_store(lambda episode_store: episode_store.load_scenario(episode_number))
+    except KeyError as exc:
+        fail(404, str(exc))
+
+
+class CompareEpisodesRequest(BaseModel):
+    episode_numbers: list[int] = Field(min_length=2, max_length=20)
+
+
+@app.post("/episodes/compare")
+def compare_episode_data(req: CompareEpisodesRequest):
+    try:
+        return _with_episode_store(
+            lambda episode_store: episode_store.compare_episodes(*req.episode_numbers)
+        )
+    except KeyError as exc:
+        fail(404, str(exc))
+    except ValueError as exc:
+        fail(422, str(exc))

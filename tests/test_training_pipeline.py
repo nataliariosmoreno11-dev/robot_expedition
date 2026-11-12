@@ -104,3 +104,109 @@ def test_final_evaluation_uses_the_fixed_suite(tmp_path):
     result = _evaluate(config, model, None, episodes=2)
     assert result["suite_id"] == "suite-n1-v1" and result["partial"]
     assert result["policy"]["model_sha256"] and len(result["cases"]) == 2
+
+
+def test_planetary_config_contract_and_curriculum_checkpoint_resume(tmp_path):
+    import json
+
+    from pipelines.train import _restore_curriculum_checkpoint, build_env
+
+    curriculum = tmp_path / "state" / "curriculum.json"
+    config_path = tmp_path / "planetary.yaml"
+    config_path.write_text(
+        "experiment_id: exp-planetary-test\n"
+        "hypothesis: curriculum\n"
+        "level_id: n2\n"
+        "algorithm: ppo\n"
+        "budget_timesteps: 8\n"
+        "seeds: [1]\n"
+        "environment:\n"
+        "  kind: planetary\n"
+        "  difficulty_level: 1\n"
+        "  curriculum: true\n"
+        f"  curriculum_state: {curriculum.as_posix()}\n"
+        "  record_episodes: false\n",
+        encoding="utf-8",
+    )
+    config = read_config(config_path)
+    env = build_env(config)
+    observation, _ = env.reset(seed=7)
+    assert observation.shape == (33,)
+    assert env.action_space.n == 6
+    env.close()
+
+    checkpoint = tmp_path / "checkpoint"
+    checkpoint.mkdir()
+    payload = {
+        "schema_version": 1,
+        "current_level": 4,
+        "total_episodes": 30,
+        "outcomes": [True, False],
+    }
+    (checkpoint / "curriculum_state.json").write_text(json.dumps(payload), encoding="utf-8")
+    assert _restore_curriculum_checkpoint(checkpoint, config) == curriculum
+    assert json.loads(curriculum.read_text())["current_level"] == 4
+
+
+def test_periodic_planetary_evaluation_uses_a_frozen_holdout(tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+
+    import numpy as np
+
+    import pipelines.train as train
+
+    calls = []
+    logged = []
+
+    class FakeNormalizer:
+        def normalize_obs(self, observation):
+            return observation + 2.0
+
+    class FakeModel:
+        num_timesteps = 9
+
+        def get_env(self):
+            return FakeNormalizer()
+
+        def predict(self, observation, deterministic):
+            assert deterministic and np.all(observation == 2.0)
+            return np.asarray(3), None
+
+    def fake_evaluate(policy, environment, **options):
+        assert policy(np.zeros(33, dtype=np.float32)) == 3
+        calls.append((environment, options))
+        return {
+            "suite_id": "placeholder",
+            "metrics": {
+                "success_rate": 0.5,
+                "return_mean": 10.0,
+                "collisions_per_episode": 1.0,
+                "samples_collected_mean": 2.0,
+                "mission_completion": 0.75,
+            },
+        }
+
+    monkeypatch.setattr(train, "evaluate_planetary", fake_evaluate)
+    monkeypatch.setattr(
+        train,
+        "mlflow",
+        SimpleNamespace(log_metric=lambda *args, **kwargs: logged.append((args, kwargs))),
+    )
+    callback = train.PeriodicPlanetaryEvaluationCallback(
+        {"environment": {"kind": "planetary"}, "evaluation_max_level": 8},
+        tmp_path,
+        frequency=10,
+        episodes=4,
+        seed_start=910_000,
+    )
+    model = FakeModel()
+    callback.model = model
+    assert callback._on_step() and not calls
+    model.num_timesteps = 10
+    assert callback._on_step() and len(calls) == 1
+    assert calls[0][1] == {"episodes": 4, "seed_start": 910_000, "max_level": 8}
+    payload = json.loads((tmp_path / "periodic-evaluation-10.json").read_text())
+    assert payload["suite_id"] == "planetary-periodic-holdout-v1"
+    assert payload["training_step"] == 10
+    assert len(logged) == 5
