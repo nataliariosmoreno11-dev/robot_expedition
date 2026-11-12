@@ -72,10 +72,15 @@ export class ExpeditionApi {
     })
   }
 
-  async reset(levelId: string, environment: 'beacon' | 'planetary' = 'beacon', difficultyLevel = 1): Promise<SimulationResponse> {
+  async reset(
+    levelId: string,
+    environment: 'beacon' | 'planetary' = 'beacon',
+    difficultyLevel = 1,
+    seed = 0,
+  ): Promise<SimulationResponse> {
     return this.request('/sim/reset', {
       method: 'POST',
-      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel }),
+      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed }),
     }) as Promise<SimulationResponse>
   }
 

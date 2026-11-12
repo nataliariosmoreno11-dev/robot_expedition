@@ -22,6 +22,7 @@
         </a>
         <nav class="topnav" aria-label="Secciones">
           <a href="#mission">Simulación</a>
+          <a href="#planetaryMission">Exploración</a>
           <a href="#catalogo">Catálogo</a>
           <a href="#comparar">Comparar</a>
           <a href="#monitoreo">Monitoreo</a>
@@ -97,6 +98,70 @@
         </section>
 
         <aside class="control-panel">
+          <section id="planetaryMission" class="panel-section planetary-launcher">
+            <div class="section-heading">
+              <div><span class="eyebrow">Misiones procedurales</span><h2>Exploración planetaria L1–L8</h2></div>
+              <span class="planet-chip">MARTE</span>
+            </div>
+            <p class="section-copy">Cada misión crea otro mapa, objetivo, posición de muestras, relieve, obstáculos y clima.</p>
+
+            <div class="planet-level-grid" role="list" aria-label="Niveles planetarios">
+              <button type="button" data-planet-level="1" class="selected"><b>L1</b><span>Llanura</span></button>
+              <button type="button" data-planet-level="2"><b>L2</b><span>Rocas</span></button>
+              <button type="button" data-planet-level="3"><b>L3</b><span>Pendientes</span></button>
+              <button type="button" data-planet-level="4"><b>L4</b><span>Cráteres</span></button>
+              <button type="button" data-planet-level="5"><b>L5</b><span>Dunas</span></button>
+              <button type="button" data-planet-level="6"><b>L6</b><span>Rutas</span></button>
+              <button type="button" data-planet-level="7"><b>L7</b><span>Clima</span></button>
+              <button type="button" data-planet-level="8"><b>L8</b><span>Expedición</span></button>
+            </div>
+
+            <div class="level-preview" aria-live="polite">
+              <strong id="difficultyTitle">L1 · Llanura inicial</strong>
+              <p id="difficultyDescription">Mapa pequeño, una muestra objetivo, una roca y clima suave.</p>
+              <div class="level-facts" id="difficultyFacts"></div>
+            </div>
+
+            <select id="difficultySelect" class="sr-only" aria-label="Dificultad planetaria">
+              <option value="1">L1 · Llanura inicial</option>
+              <option value="2">L2 · Rocas dispersas</option>
+              <option value="3">L3 · Pendientes y fricción</option>
+              <option value="4">L4 · Cráteres y viento</option>
+              <option value="5">L5 · Dunas y polvo</option>
+              <option value="6">L6 · Rutas extensas</option>
+              <option value="7">L7 · Meteorología variable</option>
+              <option value="8">L8 · Expedición marciana</option>
+            </select>
+            <button id="manualButton" class="mission-start-button" type="button" disabled>Generar misión L1</button>
+            <p class="mission-seed">Escenario: <b id="missionSeedValue">se genera al iniciar</b></p>
+
+            <div class="sample-legend" aria-label="Leyenda de muestras">
+              <span><i class="sample-target"></i>Muestra objetivo</span>
+              <span><i class="sample-distractor"></i>Distractor</span>
+            </div>
+            <p class="section-copy mission-instruction">Conduce con las flechas, acércate a la muestra correcta y pulsa <b>Recolectar muestra</b>. Después vuelve a BASE.</p>
+            <div class="keypad" aria-label="Controles del rover">
+              <button type="button" data-action="1" aria-label="Avanzar y girar a la izquierda">↖</button>
+              <button type="button" data-action="0" aria-label="Avanzar">↑</button>
+              <button type="button" data-action="2" aria-label="Avanzar y girar a la derecha">↗</button>
+              <button type="button" data-action="3" aria-label="Girar a la izquierda">←</button>
+              <span class="keypad-core">ROVER</span>
+              <button type="button" data-action="4" aria-label="Girar a la derecha">→</button>
+            </div>
+            <button type="button" data-action="5" class="collect-button" aria-label="Recolectar muestra">◇ Recolectar muestra</button>
+
+            <details class="legacy-mode">
+              <summary>Simulación anterior de balizas</summary>
+              <label class="field">
+                <span>Ambiente</span>
+                <select id="manualEnvironment">
+                  <option value="planetary" selected>Exploración planetaria</option>
+                  <option value="beacon">Balizas heredado</option>
+                </select>
+              </label>
+            </details>
+          </section>
+
           <section class="identity-card">
             <div class="section-heading">
               <div><span class="eyebrow">Identidad activa</span><h2>Modelo y ambiente</h2></div>
@@ -157,45 +222,6 @@
               <span><i class="legend-success"></i> éxito</span>
               <span><i class="legend-current"></i> episodio actual</span>
             </div>
-          </section>
-
-          <section class="panel-section manual-section">
-            <div class="section-heading">
-              <div><span class="eyebrow">Control manual</span><h2>Conducir el rover</h2></div>
-              <button id="manualButton" class="secondary-button" type="button" disabled>Iniciar</button>
-            </div>
-            <div class="field-row">
-              <label class="field">
-                <span>Ambiente</span>
-                <select id="manualEnvironment">
-                  <option value="planetary" selected>Planetario procedural</option>
-                  <option value="beacon">Balizas heredado</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Dificultad</span>
-                <select id="difficultySelect">
-                  <option value="1">L1 · Introducción</option>
-                  <option value="2">L2 · Rocas</option>
-                  <option value="3">L3 · Relieve</option>
-                  <option value="4">L4 · Distractores</option>
-                  <option value="5">L5 · Viento</option>
-                  <option value="6">L6 · Polvo</option>
-                  <option value="7">L7 · Energía</option>
-                  <option value="8">L8 · Expedición</option>
-                </select>
-              </label>
-            </div>
-            <p class="section-copy">Usa las flechas o los controles. En el ambiente planetario, acércate a la muestra correcta y pulsa <b>Recolectar</b>.</p>
-            <div class="keypad" aria-label="Controles del rover">
-              <button type="button" data-action="1" aria-label="Avanzar y girar a la izquierda">↖</button>
-              <button type="button" data-action="0" aria-label="Avanzar">↑</button>
-              <button type="button" data-action="2" aria-label="Avanzar y girar a la derecha">↗</button>
-              <button type="button" data-action="3" aria-label="Girar a la izquierda">←</button>
-              <span class="keypad-core">ROVER</span>
-              <button type="button" data-action="4" aria-label="Girar a la derecha">→</button>
-            </div>
-            <button type="button" data-action="5" class="collect-button" aria-label="Recolectar muestra">◇ Recolectar muestra</button>
           </section>
 
           <section class="panel-section episode-section">

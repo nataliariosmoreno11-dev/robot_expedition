@@ -33,6 +33,11 @@ const evaluateButton = required<HTMLButtonElement>('#evaluateButton')
 const manualButton = required<HTMLButtonElement>('#manualButton')
 const manualEnvironment = required<HTMLSelectElement>('#manualEnvironment')
 const difficultySelect = required<HTMLSelectElement>('#difficultySelect')
+const difficultyTitle = required<HTMLElement>('#difficultyTitle')
+const difficultyDescription = required<HTMLElement>('#difficultyDescription')
+const difficultyFacts = required<HTMLElement>('#difficultyFacts')
+const missionSeedValue = required<HTMLElement>('#missionSeedValue')
+const planetLevelButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-planet-level]'))
 const demoReplayButton = required<HTMLButtonElement>('#demoReplayButton')
 const refreshEpisodesButton = required<HTMLButtonElement>('#refreshEpisodesButton')
 const loadEpisodeButton = required<HTMLButtonElement>('#loadEpisodeButton')
@@ -60,6 +65,49 @@ let manualSessionId: string | undefined
 let manualEpisode: EpisodeData | undefined
 let manualBusy = false
 let lastVersion: Record<string, unknown> | undefined
+
+const PLANETARY_LEVELS: Record<number, { title: string; description: string; facts: string[] }> = {
+  1: {
+    title: 'L1 · Llanura inicial',
+    description: 'Mapa pequeño y casi plano para aprender navegación, recolección y regreso a base.',
+    facts: ['1 muestra', '1 roca', 'sin cráteres', 'viento ≤ 2 m/s'],
+  },
+  2: {
+    title: 'L2 · Rocas dispersas',
+    description: 'El área crece y aparecen más rutas, rocas, una duna y muestras distractoras.',
+    facts: ['1–2 muestras', '2 rocas', '1 duna', 'viento ≤ 4 m/s'],
+  },
+  3: {
+    title: 'L3 · Pendientes y fricción',
+    description: 'Dos muestras objetivo, relieve más marcado y zonas donde las ruedas pierden tracción.',
+    facts: ['2 muestras', '3 rocas', '2 dunas', 'tracción variable'],
+  },
+  4: {
+    title: 'L4 · Cráteres y viento',
+    description: 'Rutas más largas con cráteres, viento variable y hasta tres muestras requeridas.',
+    facts: ['2–3 muestras', '1 cráter', 'viento ≤ 10 m/s', 'mapa 8 × 8 m'],
+  },
+  5: {
+    title: 'L5 · Dunas y polvo',
+    description: 'Más dunas y distractores; el polvo reduce la distancia a la que el rover detecta muestras.',
+    facts: ['2–3 muestras', '3 dunas', '2 distractores', 'visibilidad reducida'],
+  },
+  6: {
+    title: 'L6 · Rutas extensas',
+    description: 'Mapa amplio, tres o cuatro muestras, varios cráteres y presupuesto de batería menor.',
+    facts: ['3–4 muestras', '5 rocas', '2 cráteres', 'batería 88%'],
+  },
+  7: {
+    title: 'L7 · Meteorología variable',
+    description: 'Polvo intenso, viento fuerte, regiones peligrosas y poca tracción exigen rutas seguras.',
+    facts: ['3–4 muestras', '3 distractores', 'viento ≤ 22 m/s', 'batería 84%'],
+  },
+  8: {
+    title: 'L8 · Expedición marciana',
+    description: 'La misión completa combina el mapa mayor, cuatro muestras, dunas, cráteres, polvo y energía limitada.',
+    facts: ['4 muestras', '3 cráteres', 'polvo máximo', 'batería 80%'],
+  },
+}
 
 const registry = new RegistryView({
   onEvaluate: (run, levelId) => { void evaluateFromRegistry(run, levelId) },
@@ -117,6 +165,30 @@ const parseSeeds = () => {
     .filter((value) => Number.isInteger(value))
   if (!seeds.length) throw new Error('Escribe al menos una semilla entera para evaluar.')
   return [...new Set(seeds)]
+}
+
+const updatePlanetaryLevel = () => {
+  const level = Number(difficultySelect.value)
+  const presentation = PLANETARY_LEVELS[level] ?? PLANETARY_LEVELS[1]
+  difficultyTitle.textContent = presentation.title
+  difficultyDescription.textContent = presentation.description
+  difficultyFacts.replaceChildren(...presentation.facts.map((fact) => {
+    const chip = document.createElement('span')
+    chip.textContent = fact
+    return chip
+  }))
+  for (const button of planetLevelButtons) {
+    const selected = Number(button.dataset.planetLevel) === level
+    button.classList.toggle('selected', selected)
+    button.setAttribute('aria-pressed', String(selected))
+  }
+  if (!manualSessionId) manualButton.textContent = `Generar misión L${level}`
+}
+
+const randomScenarioSeed = () => {
+  const values = new Uint32Array(1)
+  crypto.getRandomValues(values)
+  return values[0] & 0x7fffffff
 }
 
 const setBusy = (button: HTMLButtonElement, busy: boolean, idleLabel: string, busyLabel: string) => {
@@ -393,12 +465,16 @@ const startManualMode = async () => {
   try {
     const environment = manualEnvironment.value === 'planetary' ? 'planetary' : 'beacon'
     const difficulty = Number(difficultySelect.value)
-    const response = await api.reset(levelSelect.value, environment, difficulty)
+    const seed = environment === 'planetary' ? randomScenarioSeed() : 0
+    const response = await api.reset(levelSelect.value, environment, difficulty, seed)
     const frame = frameFromResponse(response)
     if (!response.session_id) throw new Error('/sim/reset no devolvió session_id.')
     if (!frame) throw new Error('/sim/reset no devolvió un cuadro compatible.')
     manualSessionId = response.session_id
     const map = response.map ? normalizeMap(response.map) : currentMap
+    missionSeedValue.textContent = environment === 'planetary'
+      ? `semilla ${String(response.seed ?? seed)} · ${map.scenario_id ?? 'escenario procedural'}`
+      : 'modo de balizas'
     const initial = normalizeEpisode(
       { ...response, frames: [frame], episode: 'manual', end: 'running' },
       {
@@ -437,7 +513,9 @@ const startManualMode = async () => {
     hud.showNotice('No se pudo iniciar el control manual', errorMessage(error))
   } finally {
     manualButton.disabled = false
-    manualButton.textContent = manualSessionId ? 'Reiniciar' : 'Iniciar'
+    manualButton.textContent = manualEnvironment.value === 'planetary'
+      ? `${manualSessionId ? 'Nueva' : 'Generar'} misión L${difficultySelect.value}`
+      : `${manualSessionId ? 'Reiniciar' : 'Iniciar'} balizas`
   }
 }
 
@@ -539,9 +617,21 @@ levelSelect.addEventListener('change', () => {
 })
 evaluateButton.addEventListener('click', () => { void evaluateSelectedRun() })
 manualButton.addEventListener('click', () => { void startManualMode() })
+for (const button of planetLevelButtons) {
+  button.addEventListener('click', () => {
+    difficultySelect.value = button.dataset.planetLevel ?? '1'
+    manualEnvironment.value = 'planetary'
+    updatePlanetaryLevel()
+    document.querySelector('#planetaryMission')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+}
+difficultySelect.addEventListener('change', updatePlanetaryLevel)
 manualEnvironment.addEventListener('change', () => {
   difficultySelect.disabled = manualEnvironment.value !== 'planetary'
   setManualControls(Boolean(manualSessionId))
+  manualButton.textContent = manualEnvironment.value === 'planetary'
+    ? `Generar misión L${difficultySelect.value}`
+    : 'Iniciar balizas'
 })
 refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
 loadEpisodeButton.addEventListener('click', () => { void loadStoredEpisode(Number(episodeNumberInput.value)) })
@@ -589,3 +679,4 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
 })
 
 void connectApi()
+updatePlanetaryLevel()
