@@ -256,6 +256,63 @@ def evaluate(req: EvaluateRequest):
 
 
 # ------------------------------------------------------- control manual
+class PlanetaryRulePolicy:
+    """Política reactiva autónoma que navega solo con la observación pública."""
+
+    def __init__(self):
+        self.steps = 0
+        self.search_direction = 1
+
+    def __call__(self, observation) -> int:
+        self.steps += 1
+        rays = observation[:9]
+        relative_sin = float(observation[10])
+        relative_cos = float(observation[11])
+        collected_fraction = float(observation[15])
+        visible_distance = float(observation[22])
+        target_type = max(range(3), key=lambda index: float(observation[18 + index]))
+        visible_type = max(range(3), key=lambda index: float(observation[23 + index]))
+        correct_sample_visible = bool(observation[21] > 0.5 and target_type == visible_type)
+        returning_to_base = collected_fraction >= 0.999
+
+        if correct_sample_visible and visible_distance <= 0.62:
+            return 5
+
+        # La dirección de una muestra visible o de la base está codificada en
+        # sin/cos relativos. El controlador corrige rumbo antes de avanzar.
+        has_navigation_target = returning_to_base or correct_sample_visible
+        if has_navigation_target:
+            if relative_cos < -0.2:
+                return 3 if relative_sin >= 0 else 4
+            if relative_sin > 0.22:
+                return 1
+            if relative_sin < -0.22:
+                return 2
+
+        # Los nueve rayos van de izquierda a derecha. Si el frente está
+        # bloqueado, gira hacia el lado con más espacio medido por el LIDAR.
+        front = min(float(value) for value in rays[3:6])
+        left_clearance = sum(float(value) for value in rays[:4])
+        right_clearance = sum(float(value) for value in rays[5:])
+        if front < 0.72:
+            self.search_direction = 1 if left_clearance >= right_clearance else -1
+            return 3 if self.search_direction > 0 else 4
+
+        if has_navigation_target:
+            return 0
+
+        # Exploración sin mapa privilegiado: arcos largos alternados barren el
+        # terreno hasta que cámara/sensores detectan la muestra correcta.
+        phase = self.steps % 72
+        if phase == 0:
+            self.search_direction *= -1
+        if phase < 12:
+            return 1 if self.search_direction > 0 else 2
+        if phase in range(46, 52):
+            return 3 if self.search_direction > 0 else 4
+        return 0
+
+
 class Session:
     def __init__(self, level_id: str, policy, policy_id: str, seed: int,
                  environment_kind: str = "beacon", difficulty_level: int = 1):
@@ -308,9 +365,14 @@ class StepRequest(BaseModel):
 
 @app.post("/sim/reset")
 def sim_reset(req: ResetRequest):
-    if req.environment == "planetary" and req.policy != "manual":
+    if req.environment == "planetary" and req.policy not in {"manual", "planetary-rule"}:
         fail(422, "los modelos publicados usan el contrato anterior; usa manual o entrena exp-007-planetary")
-    policy = None if req.policy == "manual" else policy_for(req.policy)
+    if req.policy == "manual":
+        policy = None
+    elif req.policy == "planetary-rule":
+        policy = PlanetaryRulePolicy()
+    else:
+        policy = policy_for(req.policy)
     session = Session(
         req.level_id,
         policy,
@@ -361,6 +423,7 @@ def sim_step(req: StepRequest):
             "target_type": info.get("target_type"),
             "requested_samples": info.get("requested_samples"),
             "samples_collected": info.get("samples_collected"),
+            "storm_intensity": info.get("storm_intensity", 0.0),
             "inventory": info.get("inventory")}
 
 

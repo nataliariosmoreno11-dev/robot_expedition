@@ -145,6 +145,33 @@ def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
     second_session.env.close()
 
 
+def test_planetary_rule_session_advances_without_manual_actions(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "automatic-episodes.sqlite")
+    reset = client.post(
+        "/sim/reset",
+        json={
+            "environment": "planetary",
+            "difficulty_level": 3,
+            "seed": 303,
+            "policy": "planetary-rule",
+        },
+    )
+    assert reset.status_code == 200, reset.text
+    body = reset.json()
+    assert body["mode"] == "política"
+    assert body["policy"] == "planetary-rule"
+
+    step = client.post("/sim/step", json={"session_id": body["session_id"]})
+    assert step.status_code == 200, step.text
+    payload = step.json()
+    assert 0 <= payload["action"] < len(body["actions"])
+    assert payload["steps"] == 1
+
+    with api_main.sessions_lock:
+        session = api_main.sessions.pop(body["session_id"])
+    session.env.close()
+
+
 def test_policy_session_runs_to_the_end():
     sid = client.post("/sim/reset", json={"level_id": "n1", "seed": 100000, "policy": "baseline-rule"}).json()["session_id"]
     for _ in range(400):

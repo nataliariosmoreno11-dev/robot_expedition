@@ -38,6 +38,13 @@ ROCKS = [
     ("R3", 8.0, 0.0, 0.4, 1.0, 1.0),
     ("R4", 3.0, -4.5, 0.5, 0.5, 0.5),
     ("R5", 10.5, 5.0, 0.4, 0.4, 0.7),
+    ("R6", 6.4, 4.7, 0.45, 0.55, 0.7),
+    ("R7", 7.2, 2.2, 0.55, 0.42, 0.8),
+    ("R8", 9.1, -4.7, 0.48, 0.62, 0.65),
+    ("R9", 4.0, -3.3, 0.38, 0.70, 0.75),
+    ("R10", 10.2, 2.1, 0.62, 0.45, 0.9),
+    ("R11", 6.8, -0.8, 0.42, 0.52, 0.6),
+    ("R12", 8.7, 4.5, 0.52, 0.50, 0.85),
 ]
 BLOCK = ("bloqueo", 9.7, 0.0, 1.1, 0.3, 0.8)   # perturbacion: corredor bloqueado
 CRACK = (3.5, 3.5, 0.5, 0.2)                    # hueco de 0.5 m de profundidad
@@ -92,7 +99,7 @@ def _circle_hits_rect(x, y, r, rect):
     return dx * dx + dy * dy < r * r
 
 
-def terrain_heights(n=TERRAIN_N, dunes=None):
+def terrain_heights(n=TERRAIN_N, dunes=None, rocks=None):
     """Altura del suelo (m) en una rejilla n x n; fila = y, columna = x."""
     xs, ys = np.linspace(0, MAP_W, n), np.linspace(-MAP_H / 2, MAP_H / 2, n)
     X, Y = np.meshgrid(xs, ys)
@@ -101,7 +108,7 @@ def terrain_heights(n=TERRAIN_N, dunes=None):
         H += amp * np.exp(-((X - cx) ** 2 + (Y - cy) ** 2) / (2 * sigma ** 2))
     for px, py, r in [(BASE[0], BASE[1], 1.5), (*BEACONS[0], 0.9), (*BEACONS[1], 0.9)]:
         H *= np.clip((np.hypot(X - px, Y - py) - r) / 0.8, 0, 1)
-    for _, cx, cy, hx, hy, _ in ROCKS:                 # rocas sobre suelo plano
+    for _, cx, cy, hx, hy, _ in (ROCKS if rocks is None else rocks):
         H *= np.clip((np.maximum(abs(X - cx) - hx, abs(Y - cy) - hy)) / 0.5, 0, 1)
     cx, cy, hx, hy = CRACK
     H[(abs(X - cx) <= hx) & (abs(Y - cy) <= hy)] = -CRACK_DEPTH
@@ -111,7 +118,7 @@ def terrain_heights(n=TERRAIN_N, dunes=None):
 def _build_xml(rocks=None, dunes=None):
     rocks = ROCKS if rocks is None else rocks
     lo = -CRACK_DEPTH
-    heights = terrain_heights(dunes=dunes)
+    heights = terrain_heights(dunes=dunes, rocks=rocks)
     elevation = float(heights.max() - lo)
     walls = []
     for name, x, y, sx, sy in [("wall_n", MAP_W / 2, MAP_H / 2 + .075, MAP_W / 2 + .15, .075),

@@ -77,17 +77,18 @@ export class ExpeditionApi {
     environment: 'beacon' | 'planetary' = 'beacon',
     difficultyLevel = 1,
     seed = 0,
+    policy = 'manual',
   ): Promise<SimulationResponse> {
     return this.request('/sim/reset', {
       method: 'POST',
-      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed }),
+      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed, policy }),
     }) as Promise<SimulationResponse>
   }
 
-  async step(sessionId: string, action: number): Promise<SimulationResponse> {
+  async step(sessionId: string, action?: number): Promise<SimulationResponse> {
     return this.request('/sim/step', {
       method: 'POST',
-      body: JSON.stringify({ session_id: sessionId, action }),
+      body: JSON.stringify(action === undefined ? { session_id: sessionId } : { session_id: sessionId, action }),
     }) as Promise<SimulationResponse>
   }
 

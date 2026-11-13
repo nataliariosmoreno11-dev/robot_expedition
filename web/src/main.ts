@@ -47,9 +47,14 @@ const learningMeta = required<HTMLElement>('#learningMeta')
 const keypadButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-action]'))
 const trainedValue = required<HTMLElement>('#trainedValue')
 const configValue = required<HTMLElement>('#configValue')
+const missionMinimap = required<HTMLCanvasElement>('#missionMinimap')
+const elevationMap = required<HTMLCanvasElement>('#elevationMap')
 
 const scene = new ExpeditionScene(required<HTMLElement>('#scene'), {
-  onFrame: (snapshot) => hud.updateFrame(snapshot),
+  onFrame: (snapshot) => {
+    hud.updateFrame(snapshot)
+    updateReferenceOverlay(snapshot.frame)
+  },
   onPlaybackChange: (playing) => {
     playIcon.textContent = playing ? 'Ⅱ' : '▶'
     playButton.setAttribute('aria-label', playing ? 'Pausar' : 'Reproducir')
@@ -64,7 +69,83 @@ let apiOnline = false
 let manualSessionId: string | undefined
 let manualEpisode: EpisodeData | undefined
 let manualBusy = false
+let automaticRunning = false
+let automaticTimer: number | undefined
+let automaticEpisodeCount = 0
 let lastVersion: Record<string, unknown> | undefined
+
+function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
+  const width = map.active_extent?.[0] ?? map.size[0]
+  const height = map.active_extent?.[1] ?? map.size[1]
+  return [8 + (x / width) * (canvas.width - 16), 8 + ((height / 2 - y) / height) * (canvas.height - 16)]
+}
+
+function drawElevation(map: ExpeditionMap) {
+  const context = elevationMap.getContext('2d')
+  if (!context) return
+  const n = Math.max(1, map.terrain.n)
+  const values = map.terrain.heights
+  const maximum = Math.max(...values, 0.001)
+  const minimum = Math.min(...values, 0)
+  const range = Math.max(0.001, maximum - minimum)
+  context.clearRect(0, 0, elevationMap.width, elevationMap.height)
+  for (let row = 0; row < n; row += 1) {
+    for (let column = 0; column < n; column += 1) {
+      const normalized = ((values[row * n + column] ?? 0) - minimum) / range
+      const hue = 220 - normalized * 200
+      context.fillStyle = `hsl(${hue} 78% ${32 + normalized * 28}%)`
+      context.fillRect(column * elevationMap.width / n, row * elevationMap.height / n,
+        Math.ceil(elevationMap.width / n), Math.ceil(elevationMap.height / n))
+    }
+  }
+}
+
+function drawMinimap(map: ExpeditionMap, frame?: ReplayFrame) {
+  const context = missionMinimap.getContext('2d')
+  if (!context) return
+  context.clearRect(0, 0, missionMinimap.width, missionMinimap.height)
+  context.fillStyle = '#552316'
+  context.fillRect(0, 0, missionMinimap.width, missionMinimap.height)
+  context.strokeStyle = 'rgba(255,215,170,.12)'
+  context.lineWidth = 1
+  for (let index = 1; index < 6; index += 1) {
+    context.beginPath(); context.moveTo(index * missionMinimap.width / 6, 0); context.lineTo(index * missionMinimap.width / 6, missionMinimap.height); context.stroke()
+    context.beginPath(); context.moveTo(0, index * missionMinimap.height / 6); context.lineTo(missionMinimap.width, index * missionMinimap.height / 6); context.stroke()
+  }
+  context.fillStyle = '#80614b'
+  for (const rock of map.rocks) {
+    const [x, y] = mapPoint(map, missionMinimap, rock[1], rock[2])
+    context.beginPath(); context.arc(x, y, 2.5, 0, Math.PI * 2); context.fill()
+  }
+  for (const sample of map.samples ?? []) {
+    const [x, y] = mapPoint(map, missionMinimap, sample.x, sample.y)
+    context.fillStyle = sample.target ? '#59d9ef' : '#ffc058'
+    context.beginPath(); context.arc(x, y, sample.collected ? 2 : 4, 0, Math.PI * 2); context.fill()
+  }
+  const [baseX, baseY] = mapPoint(map, missionMinimap, map.base[0], map.base[1])
+  context.fillStyle = '#8adb6f'; context.fillRect(baseX - 4, baseY - 4, 8, 8)
+  if (frame) {
+    const [x, y] = mapPoint(map, missionMinimap, frame[0], frame[1])
+    context.fillStyle = '#fff'; context.beginPath(); context.arc(x, y, 4, 0, Math.PI * 2); context.fill()
+  }
+}
+
+function updateReferenceOverlay(frame: ReplayFrame) {
+  required<HTMLElement>('#autoEnergy').textContent = `${Math.max(0, frame[FRAME_INDEX.battery]).toFixed(0)}%`
+  required<HTMLElement>('#autoCargo').textContent = `${manualEpisode?.samplesCollected ?? 0}/${manualEpisode?.requestedSamples ?? currentMap.mission?.requested_samples ?? 0}`
+  const collisions = manualEpisode?.frames.reduce((total, item) => total + item[FRAME_INDEX.collision], 0) ?? 0
+  required<HTMLElement>('#autoHealth').textContent = `${Math.max(0, 100 - collisions * 8)}%`
+  drawMinimap(currentMap, frame)
+}
+
+function updateReferenceMap(map: ExpeditionMap) {
+  drawElevation(map)
+  drawMinimap(map)
+  required<HTMLElement>('#obstacleCount').textContent = `${map.rocks.length} rocas`
+  required<HTMLElement>('#terrainKind').textContent = Number(map.difficulty_level ?? 1) >= 5 ? 'cráteres y dunas' : 'rocoso marciano'
+  const dust = Number(map.environment?.dust_opacity ?? 0)
+  required<HTMLElement>('#weatherCondition').textContent = dust > 0.45 ? 'tormenta de polvo' : dust > 0.2 ? 'polvo variable' : 'estable'
+}
 
 const PLANETARY_LEVELS: Record<number, { title: string; description: string; facts: string[] }> = {
   1: {
@@ -182,7 +263,7 @@ const updatePlanetaryLevel = () => {
     button.classList.toggle('selected', selected)
     button.setAttribute('aria-pressed', String(selected))
   }
-  if (!manualSessionId) manualButton.textContent = `Generar misión L${level}`
+  if (!manualSessionId) manualButton.textContent = `Iniciar agente automático L${level}`
 }
 
 const randomScenarioSeed = () => {
@@ -203,6 +284,7 @@ const loadEpisode = (
   sourceLabel?: string,
 ) => {
   currentMap = map
+  updateReferenceMap(map)
   scene.setMap(map)
   scene.setEpisode(episode)
   hud.setEpisode(episode, source, map)
@@ -356,7 +438,7 @@ async function refreshEpisodes() {
     if (!episodes.length) {
       const empty = document.createElement('p')
       empty.className = 'section-copy'
-      empty.textContent = 'Aún no hay intentos planetarios guardados. Inicia un control manual para crear el primero.'
+      empty.textContent = 'Aún no hay episodios planetarios guardados. Inicia el agente automático para crear el primero.'
       episodeList.append(empty)
       return
     }
@@ -488,15 +570,25 @@ async function refreshMonitor() {
   }
 }
 
+const scheduleAutomaticStep = (delay = 150) => {
+  window.clearTimeout(automaticTimer)
+  if (automaticRunning && manualSessionId) {
+    automaticTimer = window.setTimeout(() => { void sendAutomaticAction() }, delay)
+  }
+}
+
 const startManualMode = async () => {
   if (!api) return
+  window.clearTimeout(automaticTimer)
+  automaticRunning = false
   manualButton.disabled = true
-  manualButton.textContent = 'Iniciando…'
+  manualButton.textContent = 'Preparando agente…'
   try {
     const environment = manualEnvironment.value === 'planetary' ? 'planetary' : 'beacon'
     const difficulty = Number(difficultySelect.value)
     const seed = environment === 'planetary' ? randomScenarioSeed() : 0
-    const response = await api.reset(levelSelect.value, environment, difficulty, seed)
+    const policy = environment === 'planetary' ? 'planetary-rule' : 'baseline-rule'
+    const response = await api.reset(levelSelect.value, environment, difficulty, seed, policy)
     const frame = frameFromResponse(response)
     if (!response.session_id) throw new Error('/sim/reset no devolvió session_id.')
     if (!frame) throw new Error('/sim/reset no devolvió un cuadro compatible.')
@@ -506,11 +598,11 @@ const startManualMode = async () => {
       ? `semilla ${String(response.seed ?? seed)} · ${map.scenario_id ?? 'escenario procedural'}`
       : 'modo de balizas'
     const initial = normalizeEpisode(
-      { ...response, frames: [frame], episode: 'manual', end: 'running' },
+      { ...response, frames: [frame], episode: `auto-${automaticEpisodeCount + 1}`, end: 'running' },
       {
-        mode: 'manual',
-        runId: 'control-manual',
-        modelName: 'sin-modelo',
+        mode: 'entrenamiento-replay',
+        runId: 'planetary-rule',
+        modelName: 'agente autónomo reactivo',
         environmentVersion: environmentVersionFrom(response) ?? apiEnvironmentVersion,
         levelId: environment === 'planetary' ? `L${difficulty}` : levelSelect.value,
       },
@@ -532,40 +624,48 @@ const startManualMode = async () => {
         status: 'recolectando',
       }],
     } : initial
-    loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
+    automaticEpisodeCount += 1
+    loadEpisode(manualEpisode, map, 'api', 'API · AGENTE AUTOMÁTICO')
     const conditions = map.environment
     required<HTMLElement>('#planetReadoutTitle').textContent = `${String(conditions?.planet?.planet_id ?? 'MARTE').toUpperCase()} · ${map.difficulty ?? `L${difficulty}`}`
     required<HTMLElement>('#readoutGravity').textContent = `${Number(conditions?.planet?.gravity_m_s2 ?? 3.71).toFixed(2)} m/s²`
     required<HTMLElement>('#readoutWind').textContent = `${Number(conditions?.wind_speed_m_s ?? 0).toFixed(1)} m/s`
     required<HTMLElement>('#readoutTemperature').textContent = `${Number(conditions?.temperature_c ?? -55).toFixed(0)} °C`
     required<HTMLElement>('#readoutVisibility').textContent = `${Number(conditions?.visibility_m ?? 0).toFixed(1)} m`
+    required<HTMLElement>('#readoutStorm').textContent = difficulty >= 3 ? 'ciclos dinámicos' : 'sin tormenta'
     required<HTMLElement>('#readoutTraction').textContent = Number(conditions?.traction ?? 0).toFixed(2)
     required<HTMLElement>('#readoutSamples').textContent = `${map.mission?.requested_samples ?? 0} × ${map.mission?.target_type ?? '—'}`
-    setProvenance('sin modelo', environment === 'planetary' ? `escenario procedural · L${difficulty}` : 'control manual heredado')
-    setManualControls(true)
+    setProvenance('planetary-rule', environment === 'planetary' ? `agente autónomo · escenario procedural · L${difficulty}` : 'baseline autónomo')
+    automaticRunning = true
+    setManualControls(false)
+    manualButton.textContent = 'Pausar agente'
     hud.hideNotice()
+    scheduleAutomaticStep(400)
   } catch (error) {
     manualSessionId = undefined
     manualEpisode = undefined
     setManualControls(false)
-    hud.showNotice('No se pudo iniciar el control manual', errorMessage(error))
+    hud.showNotice('No se pudo iniciar el agente automático', errorMessage(error))
   } finally {
     manualButton.disabled = false
-    manualButton.textContent = manualEnvironment.value === 'planetary'
-      ? `${manualSessionId ? 'Nueva' : 'Generar'} misión L${difficultySelect.value}`
-      : `${manualSessionId ? 'Reiniciar' : 'Iniciar'} balizas`
+    if (!manualSessionId) manualButton.textContent = `Iniciar agente automático L${difficultySelect.value}`
   }
 }
 
-async function sendManualAction(action: number) {
+async function sendAutomaticAction() {
   if (!api || !manualSessionId || !manualEpisode || manualBusy) return
   manualBusy = true
   setManualControls(false)
   try {
-    const response = await api.step(manualSessionId, action)
+    const response = await api.step(manualSessionId)
     const frame = frameFromResponse(response)
     if (!frame) throw new Error('/sim/step no devolvió un cuadro compatible.')
     const frames = [...manualEpisode.frames, frame]
+    if (typeof response.storm_intensity === 'number') {
+      required<HTMLElement>('#readoutStorm').textContent = response.storm_intensity > 0.05
+        ? `${Math.round(response.storm_intensity * 100)}% · ACTIVA`
+        : 'en calma'
+    }
     const finished = Boolean(response.terminated || response.truncated)
     const map = response.map ? normalizeMap(response.map) : currentMap
     // La etapa 3 es siempre "volver a la base": en N1 se pasa de 1 a 3, con una sola baliza.
@@ -601,18 +701,21 @@ async function sendManualAction(action: number) {
         },
       ],
     }
-    loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
+    loadEpisode(manualEpisode, map, 'api', 'API · AGENTE AUTOMÁTICO')
     scene.seek(frames.length - 1)
     if (finished) {
       manualSessionId = undefined
-      hud.showNotice('Episodio finalizado', `Causa de fin: ${manualEpisode.end}. Pulsa Reiniciar para conducir de nuevo.`)
+      hud.showNotice('Episodio automático finalizado', `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`)
       void refreshEpisodes()
+      if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, 1200)
     }
   } catch (error) {
-    hud.showNotice('Falló la orden manual', errorMessage(error))
+    automaticRunning = false
+    hud.showNotice('El agente automático se detuvo', errorMessage(error))
   } finally {
     manualBusy = false
-    setManualControls(Boolean(manualSessionId))
+    setManualControls(false)
+    if (manualSessionId) scheduleAutomaticStep()
   }
 }
 
@@ -654,7 +757,16 @@ levelSelect.addEventListener('change', () => {
   if (recommended && [...runSelect.options].some((option) => option.value === recommended)) runSelect.value = recommended
 })
 evaluateButton.addEventListener('click', () => { void evaluateSelectedRun() })
-manualButton.addEventListener('click', () => { void startManualMode() })
+manualButton.addEventListener('click', () => {
+  if (!manualSessionId) {
+    void startManualMode()
+    return
+  }
+  automaticRunning = !automaticRunning
+  manualButton.textContent = automaticRunning ? 'Pausar agente' : 'Reanudar agente'
+  if (automaticRunning) scheduleAutomaticStep(0)
+  else window.clearTimeout(automaticTimer)
+})
 for (const button of planetLevelButtons) {
   button.addEventListener('click', () => {
     difficultySelect.value = button.dataset.planetLevel ?? '1'
@@ -670,10 +782,8 @@ difficultySelect.addEventListener('change', () => {
 })
 manualEnvironment.addEventListener('change', () => {
   difficultySelect.disabled = manualEnvironment.value !== 'planetary'
-  setManualControls(Boolean(manualSessionId))
-  manualButton.textContent = manualEnvironment.value === 'planetary'
-    ? `Generar misión L${difficultySelect.value}`
-    : 'Iniciar balizas'
+  setManualControls(false)
+  manualButton.textContent = `Iniciar agente automático L${difficultySelect.value}`
 })
 refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
 loadEpisodeButton.addEventListener('click', () => { void loadStoredEpisode(Number(episodeNumberInput.value)) })
@@ -681,18 +791,6 @@ episodeNumberInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') void loadStoredEpisode(Number(episodeNumberInput.value))
 })
 
-keypadButtons.forEach((button) => {
-  button.addEventListener('click', () => { void sendManualAction(Number(button.dataset.action)) })
-})
-
-window.addEventListener('keydown', (event) => {
-  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) return
-  const actions: Partial<Record<string, number>> = { ArrowUp: 0, ArrowLeft: 3, ArrowRight: 4, r: 5, R: 5 }
-  const action = actions[event.key]
-  if (action === undefined || !manualSessionId) return
-  event.preventDefault()
-  void sendManualAction(action)
-})
 
 demoReplayButton.addEventListener('click', async () => {
   setBusy(demoReplayButton, true, 'Ver demo REPLAY', 'Cargando…')

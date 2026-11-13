@@ -35,11 +35,11 @@ LEVELS = (
     CurriculumLevel(1, "llanura inicial", 5.0, 2.5, 1, 1, 0, 1, 0, 0, 0.02, 2.0, 0.02, 0.95, 100.0, 220),
     CurriculumLevel(2, "rocas dispersas", 6.0, 3.0, 1, 2, 1, 2, 1, 0, 0.05, 4.0, 0.05, 0.90, 100.0, 260),
     CurriculumLevel(3, "pendientes y fricción", 7.0, 3.5, 2, 2, 1, 3, 2, 0, 0.10, 6.0, 0.10, 0.78, 98.0, 300),
-    CurriculumLevel(4, "cráteres y viento", 8.0, 4.0, 2, 3, 1, 3, 2, 1, 0.15, 10.0, 0.18, 0.72, 96.0, 340),
-    CurriculumLevel(5, "dunas y polvo", 9.0, 4.5, 2, 3, 2, 4, 3, 1, 0.20, 14.0, 0.30, 0.66, 92.0, 380),
-    CurriculumLevel(6, "rutas extensas", 10.0, 5.0, 3, 4, 2, 5, 3, 2, 0.24, 18.0, 0.38, 0.62, 88.0, 430),
-    CurriculumLevel(7, "meteorología variable", 11.0, 5.3, 3, 4, 3, 5, 4, 2, 0.27, 22.0, 0.48, 0.58, 84.0, 480),
-    CurriculumLevel(8, "expedición marciana", 11.4, 5.4, 4, 4, 3, 5, 4, 3, 0.30, 26.0, 0.58, 0.54, 80.0, 540),
+    CurriculumLevel(4, "cráteres y viento", 8.0, 4.0, 2, 3, 1, 4, 2, 1, 0.15, 10.0, 0.18, 0.72, 96.0, 340),
+    CurriculumLevel(5, "dunas y polvo", 9.0, 4.5, 2, 3, 2, 6, 3, 1, 0.20, 14.0, 0.30, 0.66, 92.0, 380),
+    CurriculumLevel(6, "rutas extensas", 10.0, 5.0, 3, 4, 2, 8, 3, 2, 0.24, 18.0, 0.38, 0.62, 88.0, 430),
+    CurriculumLevel(7, "meteorología variable", 11.0, 5.3, 3, 4, 3, 10, 4, 2, 0.27, 22.0, 0.48, 0.58, 84.0, 480),
+    CurriculumLevel(8, "expedición marciana", 11.4, 5.4, 4, 4, 3, 12, 4, 3, 0.30, 26.0, 0.58, 0.54, 80.0, 540),
 )
 
 

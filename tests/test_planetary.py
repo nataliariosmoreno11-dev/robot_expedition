@@ -38,8 +38,11 @@ def test_collection_is_explicit_not_repeatable_and_wrong_type_does_not_complete(
     env.reset(seed=91)
     wrong = next(sample for sample in env.samples if sample["sample_type"] != env.target_type)
     env.set_pose(wrong["x"], wrong["y"])
+    battery_before = env.battery
     _, reward, terminated, _, info = env.step(COLLECT_ACTION)
-    assert reward < 0 and not terminated
+    assert reward <= -10 and not terminated
+    assert env.battery <= battery_before - 6
+    assert wrong["collected"] is True
     assert info["samples_collected"] == 0 and not info["success"]
 
     correct = next(sample for sample in env.samples if sample["sample_type"] == env.target_type)
@@ -48,6 +51,28 @@ def test_collection_is_explicit_not_repeatable_and_wrong_type_does_not_complete(
     assert reward > 0 and info["samples_collected"] == 1
     _, duplicate_reward, _, _, duplicate = env.step(COLLECT_ACTION)
     assert duplicate_reward < 0 and duplicate["samples_collected"] == 1
+    env.close()
+
+
+def test_sandstorm_changes_visibility_wind_and_energy_deterministically():
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=8)
+    env.reset(seed=808)
+    base_visibility = env.visibility_range
+    intensities = []
+    visibilities = []
+    for _ in range(80):
+        env._update_storm()
+        intensities.append(env.storm_intensity)
+        visibilities.append(env.visibility_range)
+        env.steps += 1
+    assert max(intensities) > 0.8
+    assert min(visibilities) < base_visibility
+    env.steps = intensities.index(max(intensities))
+    env._update_storm()
+    storm_force = np.linalg.norm(env._wind_force())
+    env.storm_intensity = 0.0
+    calm_force = np.linalg.norm(env._wind_force())
+    assert storm_force > calm_force
     env.close()
 
 

@@ -149,6 +149,9 @@ select:disabled { cursor: not-allowed; opacity: 0.48; }
 
 .scene-heading h1 { margin: 4px 0 0; max-width: 560px; font-size: clamp(20px, 2.2vw, 34px); font-weight: 500; letter-spacing: -0.04em; line-height: 1.06; }
 
+.mission-compass { position: absolute; z-index: 3; top: 22px; left: 50%; width: 300px; height: 34px; display: flex; align-items: center; justify-content: space-around; transform: translateX(-50%); border: 1px solid rgba(255,255,255,.25); border-radius: 0 0 16px 16px; color: #d8c8bc; background: rgba(10,8,7,.74); backdrop-filter: blur(10px); font: 500 10px var(--mono); }
+.mission-compass b { color: #ffd35a; font-size: 13px; }
+
 .planet-readout { position: absolute; z-index: 3; top: 112px; left: 28px; width: 208px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.24); border-radius: 7px; background: rgba(10,8,7,.72); backdrop-filter: blur(10px); box-shadow: 0 16px 36px rgba(0,0,0,.25); }
 .planet-readout > strong { display: block; padding-bottom: 8px; border-bottom: 1px solid var(--line); color: #fff2e8; font: 500 10px var(--mono); letter-spacing: .08em; }
 .planet-readout dl { display: grid; gap: 5px; margin: 9px 0 0; }
@@ -156,6 +159,23 @@ select:disabled { cursor: not-allowed; opacity: 0.48; }
 .planet-readout dt, .planet-readout dd { margin: 0; font: 400 9px var(--mono); }
 .planet-readout dt { color: var(--muted); }
 .planet-readout dd { color: #f8e5d7; text-align: right; }
+
+.rover-readout { position: absolute; z-index: 3; top: 72px; right: 24px; width: 190px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.24); border-radius: 9px; color: #f8e5d7; background: rgba(10,8,7,.76); backdrop-filter: blur(10px); }
+.rover-readout > strong { display: block; padding-bottom: 8px; border-bottom: 1px solid var(--line); font: 600 10px var(--mono); letter-spacing: .08em; }
+.rover-readout dl { display: grid; gap: 6px; margin: 9px 0 0; }
+.rover-readout dl div { display: flex; justify-content: space-between; gap: 12px; }
+.rover-readout dt, .rover-readout dd { margin: 0; font: 500 9px var(--mono); }
+.rover-readout dt { color: var(--muted); }
+.rover-readout .sensor-ok { color: var(--green); }
+
+.terrain-map-card { position: absolute; z-index: 3; margin: 0; padding: 10px; border: 1px solid rgba(255,255,255,.24); border-radius: 9px; background: rgba(10,8,7,.76); backdrop-filter: blur(10px); }
+.terrain-map-card figcaption { margin-bottom: 7px; color: #f8e5d7; font: 600 10px var(--mono); text-transform: uppercase; }
+.terrain-map-card canvas { display: block; border-radius: 5px; background: #31120b; }
+.minimap-card { left: 28px; bottom: 208px; }
+.elevation-card { right: 24px; bottom: 206px; }
+.terrain-facts { position: absolute; z-index: 3; left: 50%; bottom: 102px; display: flex; gap: 8px; transform: translateX(-50%); }
+.terrain-facts span { min-width: 120px; padding: 8px 11px; border: 1px solid rgba(255,255,255,.2); border-radius: 7px; color: var(--muted); background: rgba(10,8,7,.76); font: 500 8px var(--mono); text-transform: uppercase; }
+.terrain-facts b { display: block; margin-top: 3px; color: #f5e4d7; font-size: 10px; text-transform: none; }
 
 .mode-badge,
 .source-badge,
@@ -360,6 +380,7 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
   .dock-button { font-size: 0; width: 35px; padding: 0; }
   .dock-button::before { content: '◎'; font-size: 14px; }
   #lightModeButton::before { content: '◐'; }
+  .terrain-map-card, .terrain-facts { display: none; }
 }
 
 @media (max-width: 820px) {
@@ -369,6 +390,7 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
   .viewport-panel { position: relative; height: 74vh; min-height: 560px; }
   .control-panel { border-top: 1px solid var(--line); border-left: 0; }
   .scene-heading { top: 20px; left: 18px; }
+  .mission-compass, .rover-readout { display: none; }
   .notice { top: 90px; right: 18px; width: calc(100% - 36px); }
   .telemetry { left: 18px; bottom: 92px; width: calc(100% - 36px); }
   .playback-dock { left: 18px; right: 18px; bottom: 18px; }

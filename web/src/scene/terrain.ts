@@ -86,6 +86,7 @@ export class TerrainWorld {
   private beacons: BeaconVisual[] = []
   private samples = new Map<string, SampleVisual>()
   private block?: THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>
+  private dust?: THREE.Points<THREE.BufferGeometry, THREE.PointsMaterial>
 
   constructor(scene: THREE.Scene) {
     scene.add(this.group, this.rocks)
@@ -100,6 +101,7 @@ export class TerrainWorld {
     this.rocks.clear()
     this.beacons = []
     this.samples.clear()
+    this.dust = undefined
 
     const outside = new THREE.Mesh(new THREE.PlaneGeometry(90, 90, 24, 24), material(0x7a3b25))
     outside.rotation.x = -Math.PI / 2
@@ -123,6 +125,7 @@ export class TerrainWorld {
     }
 
     this.addGeology(map)
+    this.addAtmosphere(map)
 
     if (map.active_extent) {
       const [activeX, activeHeight] = map.active_extent
@@ -287,6 +290,48 @@ export class TerrainWorld {
       rim.castShadow = true
       this.group.add(rim)
     }
+  }
+
+  private addAtmosphere(map: ExpeditionMap) {
+    const opacity = map.environment?.dust_opacity ?? 0
+    if (opacity < 0.04) return
+    const count = 180 + Math.round(opacity * 820)
+    const positions = new Float32Array(count * 3)
+    let seed = [...(map.scenario_id ?? 'dust')].reduce((value, char) => value * 31 + char.charCodeAt(0), 17) >>> 0
+    const random = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0
+      return seed / 4294967296
+    }
+    const spanX = this.width * this.worldScale * 1.35
+    const spanZ = this.height * this.worldScale * 1.35
+    for (let index = 0; index < count; index += 1) {
+      positions[index * 3] = (random() - 0.5) * spanX
+      positions[index * 3 + 1] = 0.08 + random() * (1.4 + opacity * 4.5)
+      positions[index * 3 + 2] = (random() - 0.5) * spanZ
+    }
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    this.dust = new THREE.Points(
+      geometry,
+      new THREE.PointsMaterial({
+        color: 0xe09a69,
+        size: 0.035 + opacity * 0.075,
+        transparent: true,
+        opacity: 0.16 + opacity * 0.42,
+        depthWrite: false,
+        sizeAttenuation: true,
+      }),
+    )
+    this.dust.frustumCulled = false
+    this.group.add(this.dust)
+  }
+
+  tickWeather(delta: number) {
+    if (!this.dust || !this.map) return
+    const speed = 0.25 + (this.map.environment?.wind_speed_m_s ?? 0) * 0.035
+    this.dust.position.x += delta * speed
+    const limit = this.width * this.worldScale * 0.28
+    if (this.dust.position.x > limit) this.dust.position.x = -limit
   }
 
   updateMission(stage: number, blockActive: boolean) {

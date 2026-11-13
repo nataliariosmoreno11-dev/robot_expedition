@@ -269,7 +269,7 @@ class ScenarioGenerator:
         samples: list[SampleSpec],
         base_traction: float,
     ) -> list[tuple[float, float, float, float, float]]:
-        count = 0 if spec.level < 3 else 1 if spec.level < 6 else 2
+        count = 0 if spec.level < 3 else 1 if spec.level < 5 else 2 if spec.level < 7 else 3
         occupied = [(rock[0], rock[1]) for rock in rocks]
         occupied.extend((sample.x, sample.y) for sample in samples)
         zones = []

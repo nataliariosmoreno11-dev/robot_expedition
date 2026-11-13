@@ -41,6 +41,10 @@
         <section class="viewport-panel" aria-label="Simulación tridimensional">
           <div id="scene" class="scene"></div>
 
+          <div class="mission-compass" aria-label="Brújula del rover">
+            <span>O</span><span>NO</span><b>N</b><span>NE</span><span>E</span>
+          </div>
+
           <div class="scene-heading">
             <span id="modeBadge" class="mode-badge">SIN DATOS</span>
             <div>
@@ -56,10 +60,38 @@
               <div><dt>Viento</dt><dd id="readoutWind">—</dd></div>
               <div><dt>Temperatura</dt><dd id="readoutTemperature">—</dd></div>
               <div><dt>Visibilidad</dt><dd id="readoutVisibility">—</dd></div>
+              <div><dt>Tormenta</dt><dd id="readoutStorm">—</dd></div>
               <div><dt>Fricción</dt><dd id="readoutTraction">—</dd></div>
               <div><dt>Muestras</dt><dd id="readoutSamples">—</dd></div>
             </dl>
           </aside>
+
+          <aside class="rover-readout" aria-label="Estado autónomo del rover">
+            <strong>AGENTE AUTÓNOMO</strong>
+            <dl>
+              <div><dt>Energía</dt><dd id="autoEnergy">—</dd></div>
+              <div><dt>Carga</dt><dd id="autoCargo">—</dd></div>
+              <div><dt>Integridad</dt><dd id="autoHealth">—</dd></div>
+              <div><dt>Cámara</dt><dd class="sensor-ok">ACTIVA</dd></div>
+              <div><dt>LIDAR</dt><dd class="sensor-ok">ACTIVO</dd></div>
+            </dl>
+          </aside>
+
+          <figure class="terrain-map-card minimap-card">
+            <figcaption>Mapa del terreno</figcaption>
+            <canvas id="missionMinimap" width="220" height="150"></canvas>
+          </figure>
+
+          <figure class="terrain-map-card elevation-card">
+            <figcaption>Elevación del terreno</figcaption>
+            <canvas id="elevationMap" width="150" height="120"></canvas>
+          </figure>
+
+          <div class="terrain-facts" aria-label="Condiciones de navegación">
+            <span>Terreno <b id="terrainKind">planetario</b></span>
+            <span>Obstáculos <b id="obstacleCount">—</b></span>
+            <span>Condición <b id="weatherCondition">—</b></span>
+          </div>
 
           <section class="telemetry" aria-label="Telemetría del episodio">
             <div class="telemetry-primary">
@@ -144,15 +176,15 @@
               <option value="7">L7 · Meteorología variable</option>
               <option value="8">L8 · Expedición marciana</option>
             </select>
-            <button id="manualButton" class="mission-start-button" type="button" disabled>Generar misión L1</button>
+            <button id="manualButton" class="mission-start-button" type="button" disabled>Iniciar agente automático L1</button>
             <p class="mission-seed">Escenario: <b id="missionSeedValue">se genera al iniciar</b></p>
 
             <div class="sample-legend" aria-label="Leyenda de muestras">
               <span><i class="sample-target"></i>Muestra objetivo</span>
               <span><i class="sample-distractor"></i>Distractor</span>
             </div>
-            <p class="section-copy mission-instruction">Conduce con las flechas, acércate a la muestra correcta y pulsa <b>Recolectar muestra</b>. Después vuelve a BASE.</p>
-            <div class="keypad" aria-label="Controles del rover">
+            <p class="section-copy mission-instruction"><b>Modo autónomo:</b> el agente explora, evita obstáculos, recolecta la muestra correcta y regresa a BASE. Al terminar genera otro episodio automáticamente.</p>
+            <div class="keypad" aria-label="Controles manuales desactivados" hidden>
               <button type="button" data-action="1" aria-label="Avanzar y girar a la izquierda">↖</button>
               <button type="button" data-action="0" aria-label="Avanzar">↑</button>
               <button type="button" data-action="2" aria-label="Avanzar y girar a la derecha">↗</button>
@@ -160,7 +192,7 @@
               <span class="keypad-core">ROVER</span>
               <button type="button" data-action="4" aria-label="Girar a la derecha">→</button>
             </div>
-            <button type="button" data-action="5" class="collect-button" aria-label="Recolectar muestra">◇ Recolectar muestra</button>
+            <button type="button" data-action="5" class="collect-button" aria-label="Recolectar muestra" hidden>◇ Recolectar muestra</button>
 
             <details class="legacy-mode">
               <summary>Simulación anterior de balizas</summary>
