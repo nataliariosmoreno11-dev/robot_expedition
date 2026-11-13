@@ -748,6 +748,22 @@ required<HTMLButtonElement>('#lightModeButton').addEventListener('click', (event
   scene.setLightMode(active)
 })
 
+const fullscreenButton = required<HTMLButtonElement>('#fullscreenButton')
+const viewportPanel = required<HTMLElement>('.viewport-panel')
+fullscreenButton.addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen()
+    else await viewportPanel.requestFullscreen()
+  } catch (error) {
+    hud.showNotice('No fue posible cambiar la pantalla', errorMessage(error))
+  }
+})
+document.addEventListener('fullscreenchange', () => {
+  const active = document.fullscreenElement === viewportPanel
+  fullscreenButton.setAttribute('aria-pressed', String(active))
+  fullscreenButton.textContent = active ? 'Salir de pantalla completa' : 'Pantalla completa'
+})
+
 runSelect.addEventListener('change', () => {
   const run = selectedRun()
   if (run && hasLevel(run.levelId)) levelSelect.value = run.levelId

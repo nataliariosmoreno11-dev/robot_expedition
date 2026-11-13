@@ -160,6 +160,8 @@ def test_planetary_rule_session_advances_without_manual_actions(tmp_path, monkey
     body = reset.json()
     assert body["mode"] == "política"
     assert body["policy"] == "planetary-rule"
+    with api_main.sessions_lock:
+        assert api_main.sessions[body["session_id"]].env.max_steps == 230
 
     step = client.post("/sim/step", json={"session_id": body["session_id"]})
     assert step.status_code == 200, step.text
@@ -170,6 +172,16 @@ def test_planetary_rule_session_advances_without_manual_actions(tmp_path, monkey
     with api_main.sessions_lock:
         session = api_main.sessions.pop(body["session_id"])
     session.env.close()
+
+
+def test_planetary_rule_escapes_when_rover_stays_stalled():
+    policy = api_main.PlanetaryRulePolicy()
+    observation = np.ones(33, dtype=np.float32)
+    observation[12] = 0.0
+    observation[21] = 0.0
+    actions = [policy(observation) for _ in range(12)]
+    assert any(action in {3, 4} for action in actions)
+    assert policy.recovery_steps > 0
 
 
 def test_policy_session_runs_to_the_end():

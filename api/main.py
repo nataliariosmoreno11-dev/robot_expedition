@@ -263,6 +263,8 @@ class PlanetaryRulePolicy:
     def __init__(self):
         self.steps = 0
         self.search_direction = 1
+        self.stalled_steps = 0
+        self.recovery_steps = 0
 
     def __call__(self, observation) -> int:
         self.steps += 1
@@ -275,6 +277,25 @@ class PlanetaryRulePolicy:
         visible_type = max(range(3), key=lambda index: float(observation[23 + index]))
         correct_sample_visible = bool(observation[21] > 0.5 and target_type == visible_type)
         returning_to_base = collected_fraction >= 0.999
+
+        speed = abs(float(observation[12]))
+        if speed < 0.045:
+            self.stalled_steps += 1
+        else:
+            self.stalled_steps = max(0, self.stalled_steps - 2)
+        if self.stalled_steps >= 7 and self.recovery_steps == 0:
+            self.recovery_steps = 18
+            self.stalled_steps = 0
+            self.search_direction *= -1
+
+        # Maniobra finita de escape: gira para salir de la cara del obstáculo y
+        # después avanza en arco. Evita repetir eternamente la misma decisión.
+        if self.recovery_steps > 0:
+            phase = self.recovery_steps
+            self.recovery_steps -= 1
+            if phase > 9:
+                return 3 if self.search_direction > 0 else 4
+            return 1 if self.search_direction > 0 else 2
 
         if correct_sample_visible and visible_distance <= 0.62:
             return 5
@@ -335,6 +356,10 @@ class Session:
         self.policy, self.policy_id, self.level_id = policy, policy_id, level_id
         self.environment_kind = environment_kind
         self.obs, _ = self.env.reset(seed=seed)
+        if environment_kind == "planetary" and policy_id == "planetary-rule":
+            # El episodio automático siempre termina. La dificultad conserva
+            # más tiempo en mapas grandes, pero nunca queda en un bucle sin fin.
+            self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
         self.done, self.total, self.touched = False, 0.0, time.time()
 
 
