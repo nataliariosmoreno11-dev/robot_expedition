@@ -149,6 +149,14 @@ select:disabled { cursor: not-allowed; opacity: 0.48; }
 
 .scene-heading h1 { margin: 4px 0 0; max-width: 560px; font-size: clamp(20px, 2.2vw, 34px); font-weight: 500; letter-spacing: -0.04em; line-height: 1.06; }
 
+.planet-readout { position: absolute; z-index: 3; top: 112px; left: 28px; width: 208px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.24); border-radius: 7px; background: rgba(10,8,7,.72); backdrop-filter: blur(10px); box-shadow: 0 16px 36px rgba(0,0,0,.25); }
+.planet-readout > strong { display: block; padding-bottom: 8px; border-bottom: 1px solid var(--line); color: #fff2e8; font: 500 10px var(--mono); letter-spacing: .08em; }
+.planet-readout dl { display: grid; gap: 5px; margin: 9px 0 0; }
+.planet-readout dl div { display: flex; justify-content: space-between; gap: 10px; }
+.planet-readout dt, .planet-readout dd { margin: 0; font: 400 9px var(--mono); }
+.planet-readout dt { color: var(--muted); }
+.planet-readout dd { color: #f8e5d7; text-align: right; }
+
 .mode-badge,
 .source-badge,
 .count-chip {

@@ -23,7 +23,7 @@ export class ExpeditionScene {
   private callbacks: SceneCallbacks
   private renderer: THREE.WebGLRenderer
   private scene = new THREE.Scene()
-  private camera = new THREE.PerspectiveCamera(43, 1, 0.1, 200)
+  private camera = new THREE.PerspectiveCamera(56, 1, 0.1, 240)
   private controls: OrbitControls
   private sun = new THREE.DirectionalLight(0xffc08b, 3.4)
   private terrain: TerrainWorld
@@ -47,23 +47,23 @@ export class ExpeditionScene {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
     this.renderer.outputColorSpace = THREE.SRGBColorSpace
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 1.08
+    this.renderer.toneMappingExposure = 1.32
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
     this.container.prepend(this.renderer.domElement)
 
-    this.scene.background = new THREE.Color(0x1a0e09)
-    this.scene.fog = new THREE.FogExp2(0x1a0e09, 0.025)
-    this.camera.position.set(-3, 9, 11)
+    this.scene.background = new THREE.Color(0x7c3e28)
+    this.scene.fog = new THREE.FogExp2(0x8a472e, 0.014)
+    this.camera.position.set(-8.5, 3.8, 9.5)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.enableDamping = true
-    this.controls.maxPolarAngle = Math.PI * 0.48
-    this.controls.minDistance = 4
-    this.controls.maxDistance = 28
+    this.controls.maxPolarAngle = Math.PI * 0.495
+    this.controls.minDistance = 2.2
+    this.controls.maxDistance = 34
 
-    this.scene.add(new THREE.HemisphereLight(0xffd4ae, 0x211116, 1.05))
-    this.sun.position.set(-12, 7, 5)
+    this.scene.add(new THREE.HemisphereLight(0xffd7b0, 0x2b1610, 1.55))
+    this.sun.position.set(-14, 10, 7)
     this.sun.castShadow = true
     this.sun.shadow.mapSize.set(2048, 2048)
     Object.assign(this.sun.shadow.camera, { left: -11, right: 11, top: 11, bottom: -11, near: 1, far: 40 })
@@ -86,9 +86,23 @@ export class ExpeditionScene {
     this.map = map
     this.terrain.build(map)
     const dust = map.environment?.dust_opacity ?? 0
-    this.scene.fog = new THREE.FogExp2(0x1a0e09, 0.025 + dust * 0.045)
-    this.scene.background = new THREE.Color(dust > 0.55 ? 0x29120b : 0x1a0e09)
-    this.controls.target.copy(this.terrain.position(map.size[0] / 2, 0, 0))
+    this.scene.fog = new THREE.FogExp2(dust > 0.55 ? 0x9a5538 : 0x7c3e28, 0.012 + dust * 0.032)
+    this.scene.background = new THREE.Color(dust > 0.55 ? 0x9a5538 : 0x713520)
+    const level = THREE.MathUtils.clamp(map.difficulty_level ?? 1, 1, 8)
+    const extentX = map.active_extent?.[0] ?? map.size[0]
+    const extentY = map.active_extent?.[1] ?? map.size[1]
+    const center = this.terrain.position(extentX * 0.52, 0, 0.18 + level * 0.035)
+    const visualExtent = Math.max(extentX, extentY) * this.terrain.worldScale
+    const horizontalDistance = visualExtent * 0.82
+    const cameraHeight = 2.7 + visualExtent * 0.18
+    this.controls.target.copy(center)
+    this.camera.position.set(
+      center.x - horizontalDistance * 0.72,
+      cameraHeight,
+      center.z + horizontalDistance * 0.72,
+    )
+    this.controls.minDistance = Math.max(2.2, horizontalDistance * 0.28)
+    this.controls.maxDistance = horizontalDistance * 2.5
     this.controls.update()
   }
 

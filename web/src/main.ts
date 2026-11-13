@@ -70,42 +70,42 @@ const PLANETARY_LEVELS: Record<number, { title: string; description: string; fac
   1: {
     title: 'L1 · Llanura inicial',
     description: 'Mapa pequeño y casi plano para aprender navegación, recolección y regreso a base.',
-    facts: ['1 muestra', '1 roca', 'sin cráteres', 'viento ≤ 2 m/s'],
+    facts: ['área 5 × 5 m', '1 muestra', '1 roca', 'sin cráteres'],
   },
   2: {
     title: 'L2 · Rocas dispersas',
     description: 'El área crece y aparecen más rutas, rocas, una duna y muestras distractoras.',
-    facts: ['1–2 muestras', '2 rocas', '1 duna', 'viento ≤ 4 m/s'],
+    facts: ['área 6 × 6 m', '1–2 muestras', '2 rocas', '1 duna'],
   },
   3: {
     title: 'L3 · Pendientes y fricción',
     description: 'Dos muestras objetivo, relieve más marcado y zonas donde las ruedas pierden tracción.',
-    facts: ['2 muestras', '3 rocas', '2 dunas', 'tracción variable'],
+    facts: ['área 7 × 7 m', '2 muestras', '3 rocas', 'tracción variable'],
   },
   4: {
     title: 'L4 · Cráteres y viento',
     description: 'Rutas más largas con cráteres, viento variable y hasta tres muestras requeridas.',
-    facts: ['2–3 muestras', '1 cráter', 'viento ≤ 10 m/s', 'mapa 8 × 8 m'],
+    facts: ['área 8 × 8 m', '2–3 muestras', '1 cráter', 'viento ≤ 10 m/s'],
   },
   5: {
     title: 'L5 · Dunas y polvo',
     description: 'Más dunas y distractores; el polvo reduce la distancia a la que el rover detecta muestras.',
-    facts: ['2–3 muestras', '3 dunas', '2 distractores', 'visibilidad reducida'],
+    facts: ['área 9 × 9 m', '2–3 muestras', '3 dunas', '2 distractores'],
   },
   6: {
     title: 'L6 · Rutas extensas',
     description: 'Mapa amplio, tres o cuatro muestras, varios cráteres y presupuesto de batería menor.',
-    facts: ['3–4 muestras', '5 rocas', '2 cráteres', 'batería 88%'],
+    facts: ['área 10 × 10 m', '3–4 muestras', '5 rocas', '2 cráteres'],
   },
   7: {
     title: 'L7 · Meteorología variable',
     description: 'Polvo intenso, viento fuerte, regiones peligrosas y poca tracción exigen rutas seguras.',
-    facts: ['3–4 muestras', '3 distractores', 'viento ≤ 22 m/s', 'batería 84%'],
+    facts: ['área 11 × 10.6 m', '3–4 muestras', '3 distractores', 'viento ≤ 22 m/s'],
   },
   8: {
     title: 'L8 · Expedición marciana',
     description: 'La misión completa combina el mapa mayor, cuatro muestras, dunas, cráteres, polvo y energía limitada.',
-    facts: ['4 muestras', '3 cráteres', 'polvo máximo', 'batería 80%'],
+    facts: ['área 11.4 × 10.8 m', '4 muestras', '3 cráteres', 'polvo máximo'],
   },
 }
 
@@ -533,6 +533,14 @@ const startManualMode = async () => {
       }],
     } : initial
     loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
+    const conditions = map.environment
+    required<HTMLElement>('#planetReadoutTitle').textContent = `${String(conditions?.planet?.planet_id ?? 'MARTE').toUpperCase()} · ${map.difficulty ?? `L${difficulty}`}`
+    required<HTMLElement>('#readoutGravity').textContent = `${Number(conditions?.planet?.gravity_m_s2 ?? 3.71).toFixed(2)} m/s²`
+    required<HTMLElement>('#readoutWind').textContent = `${Number(conditions?.wind_speed_m_s ?? 0).toFixed(1)} m/s`
+    required<HTMLElement>('#readoutTemperature').textContent = `${Number(conditions?.temperature_c ?? -55).toFixed(0)} °C`
+    required<HTMLElement>('#readoutVisibility').textContent = `${Number(conditions?.visibility_m ?? 0).toFixed(1)} m`
+    required<HTMLElement>('#readoutTraction').textContent = Number(conditions?.traction ?? 0).toFixed(2)
+    required<HTMLElement>('#readoutSamples').textContent = `${map.mission?.requested_samples ?? 0} × ${map.mission?.target_type ?? '—'}`
     setProvenance('sin modelo', environment === 'planetary' ? `escenario procedural · L${difficulty}` : 'control manual heredado')
     setManualControls(true)
     hud.hideNotice()
@@ -653,9 +661,13 @@ for (const button of planetLevelButtons) {
     manualEnvironment.value = 'planetary'
     updatePlanetaryLevel()
     document.querySelector('#planetaryMission')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (apiOnline) void startManualMode()
   })
 }
-difficultySelect.addEventListener('change', updatePlanetaryLevel)
+difficultySelect.addEventListener('change', () => {
+  updatePlanetaryLevel()
+  if (apiOnline) void startManualMode()
+})
 manualEnvironment.addEventListener('change', () => {
   difficultySelect.disabled = manualEnvironment.value !== 'planetary'
   setManualControls(Boolean(manualSessionId))
@@ -708,5 +720,8 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
   }
 })
 
-void connectApi()
+difficultySelect.value = '7'
 updatePlanetaryLevel()
+void connectApi().then(() => {
+  if (apiOnline && !manualSessionId) void startManualMode()
+})

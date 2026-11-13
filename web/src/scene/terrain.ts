@@ -49,18 +49,6 @@ const createGroundTexture = () => {
     context.fillRect(random() * 1024, random() * 1024, 2 + random() * 5, 2 + random() * 5)
   }
 
-  context.strokeStyle = 'rgba(25, 11, 6, 0.18)'
-  context.lineWidth = 2
-  for (let index = 0; index <= 12; index += 1) {
-    const coordinate = (index * 1024) / 12
-    context.beginPath()
-    context.moveTo(coordinate, 0)
-    context.lineTo(coordinate, 1024)
-    context.moveTo(0, coordinate)
-    context.lineTo(1024, coordinate)
-    context.stroke()
-  }
-
   const texture = new THREE.CanvasTexture(canvas)
   texture.colorSpace = THREE.SRGBColorSpace
   texture.anisotropy = 4
@@ -93,6 +81,7 @@ export class TerrainWorld {
   readonly rocks = new THREE.Group()
   width = 12
   height = 12
+  worldScale = 1
   private map?: ExpeditionMap
   private beacons: BeaconVisual[] = []
   private samples = new Map<string, SampleVisual>()
@@ -106,12 +95,13 @@ export class TerrainWorld {
     this.map = map
     this.width = map.size[0]
     this.height = map.size[1]
+    this.worldScale = 1.35 + THREE.MathUtils.clamp(map.difficulty_level ?? 1, 1, 8) * 0.22
     this.group.clear()
     this.rocks.clear()
     this.beacons = []
     this.samples.clear()
 
-    const outside = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), material(0x512718))
+    const outside = new THREE.Mesh(new THREE.PlaneGeometry(90, 90, 24, 24), material(0x7a3b25))
     outside.rotation.x = -Math.PI / 2
     outside.position.y = -0.035
     outside.receiveShadow = true
@@ -126,11 +116,13 @@ export class TerrainWorld {
       [-thickness / 2, 0, thickness, this.height],
       [this.width + thickness / 2, 0, thickness, this.height],
     ]
-    for (const [x, y, width, depth] of walls) {
+    for (const [x, y, width, depth] of (map.mission ? [] : walls)) {
       const wall = box(width, wallHeight, depth, wallMaterial)
       wall.position.copy(this.position(x, y, 0.2))
       this.group.add(wall)
     }
+
+    this.addGeology(map)
 
     if (map.active_extent) {
       const [activeX, activeHeight] = map.active_extent
@@ -160,6 +152,7 @@ export class TerrainWorld {
         }),
       )
       patch.rotation.x = -Math.PI / 2
+      patch.scale.set(this.worldScale, this.worldScale, 1)
       patch.position.copy(this.position(x, y, 0.035))
       this.group.add(patch)
     }
@@ -224,7 +217,8 @@ export class TerrainWorld {
       ring.rotation.x = -Math.PI / 2
       ring.position.y = -0.13
       root.add(ring)
-      const label = createLabel(`${sample.sample_id} · ${sample.sample_type}`, sample.target ? '#bfffee' : '#e6b68c', 0.3)
+      const typeLabel: Record<string, string> = { sulfato: 'A', hematita: 'B', basalto: 'C' }
+      const label = createLabel(`${typeLabel[sample.sample_type] ?? sample.sample_id} · ${sample.sample_type}`, sample.target ? '#bfffee' : '#e6b68c', 0.3)
       label.position.y = 0.55
       root.add(label)
       root.visible = !sample.collected
@@ -248,13 +242,50 @@ export class TerrainWorld {
   setRocks(episodeRocks?: EpisodeRock[]) {
     if (!this.map) return
     this.rocks.clear()
-    const rockMaterial = material(0x6f6966, { roughness: 1 })
+    const rockMaterial = material(0x4b3027, { roughness: 1 })
     const rocks = episodeRocks ?? this.map.rocks.map(([, x, y, halfX, halfY, height]) => [x, y, halfX, halfY, height])
     for (const [x, y, halfX, halfY, height] of rocks) {
-      const rock = box(halfX * 2, height + 0.08, halfY * 2, rockMaterial)
+      const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(0.72, 1), rockMaterial)
+      rock.scale.set(halfX * 1.35, (height + 0.08) * 0.85, halfY * 1.35)
+      rock.castShadow = true
+      rock.receiveShadow = true
       rock.position.copy(this.position(x, y, height / 2 - 0.04))
       rock.rotation.y = (x * 0.31 + y * 0.17) % 0.3
       this.rocks.add(rock)
+    }
+  }
+
+  private addGeology(map: ExpeditionMap) {
+    const rock = material(0x512e22, { roughness: 1 })
+    const ridge = new THREE.Group()
+    const seed = [...(map.scenario_id ?? 'mars')].reduce((value, char) => value + char.charCodeAt(0), 0)
+    const level = THREE.MathUtils.clamp(map.difficulty_level ?? 1, 1, 8)
+    const peakCount = 8 + level * 3
+    const worldRadius = 10.5 + level * 1.3
+    for (let index = 0; index < peakCount; index += 1) {
+      const angle = (index / peakCount) * Math.PI * 2
+      const radius = worldRadius + ((seed * (index + 7)) % 11) * 0.36
+      const peakHeight = 2.2 + level * 0.38 + (index % 6) * 0.62
+      const peak = new THREE.Mesh(new THREE.ConeGeometry(2.1 + level * 0.22 + (index % 4), peakHeight, 7), rock)
+      peak.position.set(Math.cos(angle) * radius, peakHeight * 0.36, Math.sin(angle) * radius)
+      peak.rotation.y = angle * 1.7
+      peak.scale.z = 0.55 + (index % 3) * 0.18
+      peak.castShadow = true
+      peak.receiveShadow = true
+      ridge.add(peak)
+    }
+    this.group.add(ridge)
+
+    for (const [x, y, amplitude, sigma] of map.environment?.craters ?? []) {
+      const rim = new THREE.Mesh(
+        new THREE.TorusGeometry(Math.max(0.35, sigma), 0.12 + Math.abs(amplitude) * 0.16, 8, 40),
+        material(0x633724, { roughness: 1 }),
+      )
+      rim.rotation.x = -Math.PI / 2
+      rim.position.copy(this.position(x, y, 0.02))
+      rim.scale.set(this.worldScale, this.worldScale * 0.7, 1)
+      rim.castShadow = true
+      this.group.add(rim)
     }
   }
 
@@ -282,7 +313,7 @@ export class TerrainWorld {
   }
 
   position(x: number, y: number, elevation = 0) {
-    return new THREE.Vector3(x - this.width / 2, elevation, -y)
+    return new THREE.Vector3((x - this.width / 2) * this.worldScale, elevation, -y * this.worldScale)
   }
 
   setShadows(enabled: boolean) {
@@ -298,7 +329,12 @@ export class TerrainWorld {
 
   private buildTerrain(map: ExpeditionMap) {
     const { n, heights } = map.terrain
-    const geometry = new THREE.PlaneGeometry(this.width, this.height, n - 1, n - 1)
+    const geometry = new THREE.PlaneGeometry(
+      this.width * this.worldScale,
+      this.height * this.worldScale,
+      n - 1,
+      n - 1,
+    )
     const positions = geometry.attributes.position
     const colors = new Float32Array(positions.count * 3)
     const [sandX, sandY, halfX, halfY] = map.sand
