@@ -27,6 +27,7 @@ environment:
   curriculum_state: logs/planetary_curriculum.json
   episode_db: logs/planetary_episodes.sqlite
   record_episodes: true
+  max_experiments: 10
   run_id: exp-007-planetary
   policy_version: ppo-exp-007
   mode: entrenamiento

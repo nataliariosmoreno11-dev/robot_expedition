@@ -35,8 +35,9 @@ curl -X POST http://127.0.0.1:8000/sim/step \
   -d '{"session_id":"...","action":5}'
 ```
 
-La web permite elegir L1–L8, conducir, recolectar, consultar intentos guardados y
-reproducir uno de ellos. Las muestras turquesa son del tipo solicitado y las ocres
+La web permite elegir L1–L8, conducir, recolectar, consultar los 10 experimentos
+representativos, proteger manualmente los elegidos con la estrella y reproducir
+cualquiera de ellos. Las muestras turquesa son del tipo solicitado y las ocres
 son distractoras. Las muestras recogidas desaparecen del mapa durante el replay.
 
 ## Consultar episodios sin abrir la web
@@ -47,6 +48,10 @@ python scripts/episodes.py show 12
 python scripts/episodes.py replay 12 --output /tmp/episode-12.json
 python scripts/episodes.py scenario 12
 python scripts/episodes.py compare 10 11 12
+python scripts/episodes.py status
+python scripts/episodes.py metrics
+python scripts/episodes.py protect 12
+python scripts/episodes.py unprotect 12
 ```
 
 Puede elegirse otra base anteponiendo `--db ruta.sqlite` al subcomando, por ejemplo
@@ -62,7 +67,9 @@ python pipelines/train.py --config configs/experiments/exp-007-planetary.yaml --
 ```
 
 PPO recibe 33 observaciones y seis acciones. El entrenamiento registra dificultad,
-éxito y muestras. Cada 100.000 pasos ejecuta una evaluación determinista sobre el
+éxito y muestras en resúmenes livianos. Genera escenarios nuevos en cada episodio,
+pero solo conserva 10 trayectorias completas diversas. Los checkpoints se guardan
+por separado y no consumen esos cupos. Cada 100.000 pasos ejecuta una evaluación determinista sobre el
 holdout fijo que comienza en la semilla 910.000 y guarda
 `periodic-evaluation-<paso>.json`; la evaluación final usa otro conjunto reservado
 que comienza en 900.000. Ninguna de las dos actualiza el currículo. Se reportan

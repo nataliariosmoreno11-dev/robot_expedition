@@ -99,6 +99,17 @@ export class ExpeditionApi {
     return this.request(`/episodes/${episodeNumber}/replay`)
   }
 
+  async protectEpisode(episodeNumber: number, isProtected: boolean): Promise<unknown> {
+    return this.request(`/episodes/${episodeNumber}/protect`, {
+      method: 'POST',
+      body: JSON.stringify({ protected: isProtected }),
+    })
+  }
+
+  async episodeMetrics(): Promise<unknown> {
+    return this.request('/episodes/metrics/summary')
+  }
+
   async compareEpisodes(episodeNumbers: number[]): Promise<unknown> {
     return this.request('/episodes/compare', {
       method: 'POST',

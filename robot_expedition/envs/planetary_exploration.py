@@ -61,6 +61,7 @@ def planetary_environment_hash(environment: dict | None = None) -> str:
         "policy_version",
         "mode",
         "record_episodes",
+        "max_experiments",
         "update_curriculum",
     ):
         configuration.pop(operational_key, None)
@@ -87,6 +88,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         curriculum_state: str | Path | None = None,
         episode_db: str | Path | None = None,
         record_episodes: bool = False,
+        max_experiments: int = 10,
         run_id: str = "interactive",
         policy_version: str = "unversioned",
         mode: str = "entrenamiento",
@@ -103,7 +105,10 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.run_id = str(run_id)
         self.policy_version = str(policy_version)
         self.mode = str(mode)
-        self.store = EpisodeStore(episode_db) if record_episodes and episode_db else None
+        self.store = (
+            EpisodeStore(episode_db, max_experiments=max_experiments)
+            if record_episodes and episode_db else None
+        )
         self.writer: EpisodeWriter | None = None
         self.episode_started = 0.0
         self.total_reward = 0.0

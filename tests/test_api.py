@@ -123,6 +123,17 @@ def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
         "/sim/reset",
         json={"environment": "planetary", "difficulty_level": 2, "seed": 405},
     ).json()
+    listing = client.get("/episodes").json()
+    assert listing["schema_version"] == 2
+    assert listing["storage"]["max_experiments"] == 10
+    protected = client.post(
+        f"/episodes/{summaries[0]['episode_number']}/protect", json={"protected": True}
+    )
+    assert protected.status_code == 200 and protected.json()["protected"] is True
+    with api_main.sessions_lock:
+        api_main.sessions[body["session_id"]].env._finish_interrupted()
+    metrics = client.get("/episodes/metrics/summary").json()
+    assert metrics["episodes"] >= 1 and metrics["evolution"]
     numbers = [item["episode_number"] for item in client.get("/episodes").json()["episodes"]]
     compared = client.post("/episodes/compare", json={"episode_numbers": numbers}).json()
     assert len(compared["episodes"]) == 2

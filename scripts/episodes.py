@@ -6,6 +6,10 @@ Ejemplos:
   python scripts/episodes.py replay 3427 --output replay-3427.json
   python scripts/episodes.py scenario 3427
   python scripts/episodes.py compare 100 500 1000
+  python scripts/episodes.py status
+  python scripts/episodes.py metrics
+  python scripts/episodes.py protect 3427
+  python scripts/episodes.py unprotect 3427
 """
 
 from __future__ import annotations
@@ -46,6 +50,12 @@ def main() -> None:
 
     compare = commands.add_parser("compare")
     compare.add_argument("episodes", type=int, nargs="+")
+    commands.add_parser("status")
+    metrics = commands.add_parser("metrics")
+    metrics.add_argument("--run-id")
+    for name in ("protect", "unprotect"):
+        command = commands.add_parser(name)
+        command.add_argument("episode", type=int)
 
     args = parser.parse_args()
     store = EpisodeStore(args.db)
@@ -63,6 +73,12 @@ def main() -> None:
                 args.output.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
                 print(args.output)
                 return
+        elif args.command == "status":
+            result = store.storage_status()
+        elif args.command == "metrics":
+            result = store.metrics(run_id=args.run_id)
+        elif args.command in ("protect", "unprotect"):
+            result = store.protect_episode(args.episode, args.command == "protect")
         else:
             result = store.compare_episodes(*args.episodes)
         _print(result)

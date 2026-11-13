@@ -60,9 +60,20 @@ sin rocas; después de completar el inventario, la base sí se usa como destino 
 
 ## Persistencia de episodios
 
-`EpisodeStore` usa SQLite con WAL. Crea un registro al iniciar y confirma cada paso
-de forma incremental; no conserva el episodio completo en memoria. Guarda todos los
-intentos, incluidos fallos, reinicios e interrupciones:
+`EpisodeStore` usa SQLite con WAL. Crea un registro temporal al iniciar y confirma
+cada paso de forma incremental; no conserva el episodio completo en memoria. Al
+cerrar el intento guarda siempre una fila liviana en `training_metrics`, pero solo
+mantiene hasta 10 experimentos nuevos con el detalle completo. El límite se configura
+con `max_experiments` o `EXPEDITION_MAX_EXPERIMENTS` y no limita el entrenamiento:
+pueden ejecutarse miles o millones de episodios.
+
+La selección automática compara nivel, éxito o fallo, rocas, dunas, cráteres,
+zonas de baja tracción, viento y polvo. El replay más redundante se reemplaza cuando
+aparece uno más representativo. Un experimento protegido manualmente nunca se
+sobrescribe. Los registros creados antes de este esquema se marcan como históricos,
+se resumen de forma aditiva y quedan fuera de la poda.
+
+Cada uno de los experimentos completos conserva:
 
 - identidad de run, versión de política, semilla, escenario, planeta y dificultad;
 - mapa y escenario completos comprimidos;
@@ -70,10 +81,14 @@ intentos, incluidos fallos, reinicios e interrupciones:
 - acción, recompensa instantánea y acumulada, evento, choque y señales de fin;
 - resultado, causa, duración, recorrido y muestras recogidas.
 
+Los demás episodios conservan recompensa, éxito, dificultad, muestras, choques,
+pasos, recorrido, causa final y firma de terreno. `metrics()` calcula recompensa
+promedio, tasa de éxito, evolución de dificultad y muestras sin mapas ni trayectorias.
+
 `replay_episode(n)` devuelve los cuadros guardados. Nunca vuelve a ejecutar la
 política, por lo que cambiar un checkpoint posteriormente no altera un episodio.
-El esquema actual es `1`; una versión incompatible se rechaza en lugar de reinterpretar
-datos antiguos.
+El esquema actual es `2`. Los checkpoints del entrenamiento permanecen en el flujo
+de entrenamiento y no cuentan dentro de los 10 experimentos.
 
 ## API planetaria
 
@@ -84,6 +99,8 @@ GET  /episodes
 GET  /episodes/{n}
 GET  /episodes/{n}/replay
 GET  /episodes/{n}/scenario
+POST /episodes/{n}/protect     protected=true|false
+GET  /episodes/metrics/summary
 POST /episodes/compare       episode_numbers=[...]
 ```
 

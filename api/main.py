@@ -141,6 +141,7 @@ def root():
         "routes": ["/health", "/version", "/catalog", "/runs/{run_id}", "/evaluate",
                    "/sim/reset", "/sim/step", "/episodes", "/episodes/{number}",
                    "/episodes/{number}/replay", "/episodes/{number}/scenario",
+                   "/episodes/{number}/protect", "/episodes/metrics/summary",
                    "/episodes/compare", "/monitor"],
         "repository": "https://github.com/nataliariosmoreno11-dev/robot_expedition",
     }
@@ -375,12 +376,34 @@ def _with_episode_store(callback):
 @app.get("/episodes")
 def episodes(limit: int = 100, offset: int = 0, run_id: str | None = None):
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "database": EPISODE_DB.name,
+        "storage": _with_episode_store(lambda episode_store: episode_store.storage_status()),
         "episodes": _with_episode_store(
             lambda episode_store: episode_store.list_episodes(limit=limit, offset=offset, run_id=run_id)
         ),
     }
+
+
+@app.get("/episodes/metrics/summary")
+def episode_metrics(run_id: str | None = None):
+    return _with_episode_store(lambda episode_store: episode_store.metrics(run_id=run_id))
+
+
+class ProtectEpisodeRequest(BaseModel):
+    protected: bool = True
+
+
+@app.post("/episodes/{episode_number}/protect")
+def protect_episode(episode_number: int, req: ProtectEpisodeRequest):
+    try:
+        return _with_episode_store(
+            lambda episode_store: episode_store.protect_episode(episode_number, req.protected)
+        )
+    except KeyError as exc:
+        fail(404, str(exc))
+    except ValueError as exc:
+        fail(409, str(exc))
 
 
 @app.get("/episodes/{episode_number}")

@@ -324,10 +324,15 @@ const loadStoredEpisode = async (episodeNumber: number) => {
 
 async function refreshEpisodes() {
   if (!api) return
+  const activeApi = api
   refreshEpisodesButton.disabled = true
   try {
     const payload = await api.episodes(100)
     const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []
+    const storage = isRecord(payload) && isRecord(payload.storage) ? payload.storage : undefined
+    required<HTMLElement>('#experimentStorageMeta').textContent = storage
+      ? `${Number(storage.retained_experiments ?? 0)}/${Number(storage.max_experiments ?? 10)} replays seleccionados · ${Number(storage.protected_experiments ?? 0)} protegidos · ${Number(storage.summarized_episodes ?? 0)} episodios resumidos${Number(storage.historical_untouched ?? 0) ? ` · ${Number(storage.historical_untouched)} históricos intactos` : ''}`
+      : 'Se conservan hasta 10 replays completos; las métricas resumidas continúan para todo el entrenamiento.'
     const summaries: EpisodeSummary[] = episodes.map((item) => ({
       episode_number: Number(item.episode_number ?? 0),
       scenario_id: String(item.scenario_id ?? 'sin escenario'),
@@ -358,19 +363,44 @@ async function refreshEpisodes() {
     for (const item of episodes.slice(0, 30)) {
       const number = Number(item.episode_number)
       if (!Number.isInteger(number)) continue
-      const button = document.createElement('button')
-      button.type = 'button'
+      const button = document.createElement('div')
       button.className = 'episode-item'
+      button.tabIndex = 0
+      button.setAttribute('role', 'button')
       const numberLabel = document.createElement('b')
       numberLabel.textContent = `#${number}`
       const description = document.createElement('span')
       description.textContent = `${String(item.scenario_id ?? 'sin escenario')} · ${Number(item.samples_collected ?? 0)}/${Number(item.requested_samples ?? 0)} muestras`
       const status = document.createElement('small')
-      status.textContent = `${String(item.end ?? 'en progreso')} · L${Number(item.difficulty_level ?? 1)}`
-      button.append(numberLabel, description, status)
+      status.textContent = `${String(item.end ?? 'en progreso')} · L${Number(item.difficulty_level ?? 1)} · ${String(item.terrain_signature ?? 'terreno legado')}`
+      const protect = document.createElement('button')
+      protect.type = 'button'
+      protect.className = `episode-protect${item.protected ? ' active' : ''}`
+      protect.title = item.protected ? 'Quitar protección manual' : 'Conservar este experimento'
+      protect.setAttribute('aria-label', protect.title)
+      protect.textContent = item.protected ? '★' : '☆'
+      protect.addEventListener('click', async (event) => {
+        event.stopPropagation()
+        protect.disabled = true
+        try {
+          await activeApi.protectEpisode(number, !Boolean(item.protected))
+          await refreshEpisodes()
+        } catch (error) {
+          hud.showNotice('No se pudo cambiar la protección', errorMessage(error))
+          protect.disabled = false
+        }
+      })
+      button.append(numberLabel, description, status, protect)
       button.addEventListener('click', () => {
         episodeNumberInput.value = String(number)
         void loadStoredEpisode(number)
+      })
+      button.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          episodeNumberInput.value = String(number)
+          void loadStoredEpisode(number)
+        }
       })
       episodeList.append(button)
     }
