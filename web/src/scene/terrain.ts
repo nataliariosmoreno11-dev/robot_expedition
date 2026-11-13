@@ -96,7 +96,9 @@ export class TerrainWorld {
     this.map = map
     this.width = map.size[0]
     this.height = map.size[1]
-    this.worldScale = 1.35 + THREE.MathUtils.clamp(map.difficulty_level ?? 1, 1, 8) * 0.22
+    // Una escala física estable hace visible el crecimiento real del mapa:
+    // el rover ocupa mucho más espacio en L1 y se vuelve pequeño frente a L8.
+    this.worldScale = 1.72
     this.group.clear()
     this.rocks.clear()
     this.beacons = []
@@ -279,10 +281,32 @@ export class TerrainWorld {
     }
     this.group.add(ridge)
 
+    // Las dunas tienen una masa visual propia además del heightfield. En los
+    // niveles altos forman corredores evidentes en vez de parecer una textura.
+    for (const [x, y, amplitude, sigma] of map.environment?.dunes ?? []) {
+      const dune = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 28, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+        material(0xc96f3d, { roughness: 1 }),
+      )
+      dune.scale.set(sigma * this.worldScale * 1.25, Math.max(0.10, Math.abs(amplitude) * 1.65), sigma * this.worldScale * 0.72)
+      dune.position.copy(this.position(x, y, -0.01))
+      dune.rotation.y = (x * 0.43 + y * 0.29) % Math.PI
+      dune.receiveShadow = true
+      dune.castShadow = true
+      this.group.add(dune)
+    }
+
     for (const [x, y, amplitude, sigma] of map.environment?.craters ?? []) {
+      const basin = new THREE.Mesh(
+        new THREE.CircleGeometry(Math.max(0.42, sigma) * this.worldScale * 0.82, 48),
+        new THREE.MeshBasicMaterial({ color: 0x2b120d, transparent: true, opacity: 0.82, side: THREE.DoubleSide }),
+      )
+      basin.rotation.x = -Math.PI / 2
+      basin.position.copy(this.position(x, y, -0.012))
+      this.group.add(basin)
       const rim = new THREE.Mesh(
         new THREE.TorusGeometry(Math.max(0.35, sigma), 0.12 + Math.abs(amplitude) * 0.16, 8, 40),
-        material(0x633724, { roughness: 1 }),
+        material(0x713923, { roughness: 1 }),
       )
       rim.rotation.x = -Math.PI / 2
       rim.position.copy(this.position(x, y, 0.02))

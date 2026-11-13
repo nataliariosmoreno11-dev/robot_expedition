@@ -151,42 +151,42 @@ const PLANETARY_LEVELS: Record<number, { title: string; description: string; fac
   1: {
     title: 'L1 · Llanura inicial',
     description: 'Mapa pequeño y casi plano para aprender navegación, recolección y regreso a base.',
-    facts: ['área 5 × 5 m', '1 muestra', '1 roca', 'sin cráteres'],
+    facts: ['área 4.5 × 4.4 m', '1 muestra', '1 roca', 'plano y despejado'],
   },
   2: {
     title: 'L2 · Rocas dispersas',
     description: 'El área crece y aparecen más rutas, rocas, una duna y muestras distractoras.',
-    facts: ['área 6 × 6 m', '1–2 muestras', '2 rocas', '1 duna'],
+    facts: ['área 5.8 × 5.6 m', '1–2 muestras', '3 rocas', '1 duna'],
   },
   3: {
     title: 'L3 · Pendientes y fricción',
     description: 'Dos muestras objetivo, relieve más marcado y zonas donde las ruedas pierden tracción.',
-    facts: ['área 7 × 7 m', '2 muestras', '3 rocas', 'tracción variable'],
+    facts: ['área 7 × 7 m', '2 muestras', '5 rocas', '2 dunas'],
   },
   4: {
     title: 'L4 · Cráteres y viento',
     description: 'Rutas más largas con cráteres, viento variable y hasta tres muestras requeridas.',
-    facts: ['área 8 × 8 m', '2–3 muestras', '1 cráter', 'viento ≤ 10 m/s'],
+    facts: ['área 8.2 × 8.2 m', '7 rocas', '2 cráteres', 'viento ≤ 11 m/s'],
   },
   5: {
     title: 'L5 · Dunas y polvo',
     description: 'Más dunas y distractores; el polvo reduce la distancia a la que el rover detecta muestras.',
-    facts: ['área 9 × 9 m', '2–3 muestras', '3 dunas', '2 distractores'],
+    facts: ['área 9.2 × 9.2 m', '9 rocas', '5 dunas', '3 cráteres'],
   },
   6: {
     title: 'L6 · Rutas extensas',
     description: 'Mapa amplio, tres o cuatro muestras, varios cráteres y presupuesto de batería menor.',
-    facts: ['área 10 × 10 m', '3–4 muestras', '5 rocas', '2 cráteres'],
+    facts: ['área 10.2 × 10.2 m', '12 rocas', '7 dunas', '5 cráteres'],
   },
   7: {
     title: 'L7 · Meteorología variable',
     description: 'Polvo intenso, viento fuerte, regiones peligrosas y poca tracción exigen rutas seguras.',
-    facts: ['área 11 × 10.6 m', '3–4 muestras', '3 distractores', 'viento ≤ 22 m/s'],
+    facts: ['área 11.1 × 10.7 m', '15 rocas', '7 cráteres', 'tormentas fuertes'],
   },
   8: {
     title: 'L8 · Expedición marciana',
     description: 'La misión completa combina el mapa mayor, cuatro muestras, dunas, cráteres, polvo y energía limitada.',
-    facts: ['área 11.4 × 10.8 m', '4 muestras', '3 cráteres', 'polvo máximo'],
+    facts: ['área 11.8 × 11.5 m', '18 rocas', '10 cráteres', '12 dunas · polvo máximo'],
   },
 }
 

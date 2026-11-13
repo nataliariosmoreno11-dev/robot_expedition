@@ -125,7 +125,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self._stuck_steps = 0
         self.storm_intensity = 0.0
         super().__init__(
-            level_config={"active_rocks": 12, "beacons": 2, "dunes": True},
+            level_config={"active_rocks": 18, "beacons": 2, "dunes": True},
             max_steps=max_steps or 540, ray_noise=0.0, render_mode=render_mode,
         )
         self.action_space = spaces.Discrete(len(PLANETARY_ACTIONS))

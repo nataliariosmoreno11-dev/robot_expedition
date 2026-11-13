@@ -230,8 +230,9 @@ class ScenarioGenerator:
     def _place_rocks(self, rng: np.random.Generator, spec: CurriculumLevel) -> list[tuple]:
         rocks: list[tuple] = []
         occupied: list[tuple[float, float]] = []
+        clearance = max(0.46, 0.76 - spec.level * 0.035)
         for _ in range(spec.rocks):
-            x, y = self._point(rng, spec, occupied, clearance=0.72)
+            x, y = self._point(rng, spec, occupied, clearance=clearance)
             occupied.append((x, y))
             hx, hy = rng.uniform(0.30, 0.62, size=2)
             height = float(rng.uniform(0.35, 0.90))
