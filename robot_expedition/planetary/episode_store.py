@@ -14,8 +14,10 @@ from typing import Any
 
 
 SCHEMA_VERSION = 2
-DEFAULT_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", "logs/planetary_episodes.sqlite"))
-DEFAULT_MAX_EXPERIMENTS = int(os.environ.get("EXPEDITION_MAX_EXPERIMENTS", "10"))
+DEFAULT_DB = Path(
+    os.environ.get("EXPEDITION_EPISODE_DB", "logs/planetary_episodes.sqlite")
+)
+DEFAULT_MAX_EXPERIMENTS = None
 
 
 def _now() -> str:
@@ -23,7 +25,9 @@ def _now() -> str:
 
 
 def _pack(value: Any) -> bytes:
-    return zlib.compress(json.dumps(value, separators=(",", ":"), ensure_ascii=False).encode("utf-8"), 6)
+    return zlib.compress(
+        json.dumps(value, separators=(",", ":"), ensure_ascii=False).encode("utf-8"), 6
+    )
 
 
 def _unpack(value: bytes | None) -> Any:
@@ -104,14 +108,21 @@ class EpisodeStore:
     gestionados por retención.
     """
 
-    def __init__(self, path: str | Path = DEFAULT_DB, *, max_experiments: int = DEFAULT_MAX_EXPERIMENTS):
-        if int(max_experiments) < 1:
+    def __init__(
+        self,
+        path: str | Path = DEFAULT_DB,
+        *,
+        max_experiments: int | None = DEFAULT_MAX_EXPERIMENTS,
+    ):
+        if max_experiments is not None and int(max_experiments) < 1:
             raise ValueError("max_experiments debe ser al menos 1")
-        self.max_experiments = int(max_experiments)
+        self.max_experiments = None if max_experiments is None else int(max_experiments)
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._lock = threading.RLock()
-        self._connection = sqlite3.connect(self.path, check_same_thread=False, timeout=30.0)
+        self._connection = sqlite3.connect(
+            self.path, check_same_thread=False, timeout=30.0
+        )
         self._connection.row_factory = sqlite3.Row
         self._connection.execute("PRAGMA journal_mode=WAL")
         self._connection.execute("PRAGMA foreign_keys=ON")
@@ -193,8 +204,12 @@ class EpisodeStore:
                 CREATE INDEX IF NOT EXISTS idx_metrics_level ON training_metrics(difficulty_level);
                 """
             )
-            columns = {row["name"] for row in self._connection.execute("PRAGMA table_info(episodes)")}
+            columns = {
+                row["name"]
+                for row in self._connection.execute("PRAGMA table_info(episodes)")
+            }
             migrations = {
+                "analysis_json": "TEXT NOT NULL DEFAULT '{}'",
                 "retention_managed": "INTEGER NOT NULL DEFAULT 0",
                 "protected": "INTEGER NOT NULL DEFAULT 0",
                 "selection_reason": "TEXT NOT NULL DEFAULT 'histórico'",
@@ -202,7 +217,9 @@ class EpisodeStore:
             }
             for name, declaration in migrations.items():
                 if name not in columns:
-                    self._connection.execute(f"ALTER TABLE episodes ADD COLUMN {name} {declaration}")
+                    self._connection.execute(
+                        f"ALTER TABLE episodes ADD COLUMN {name} {declaration}"
+                    )
             # Resumir históricos es aditivo: conserva intactos sus blobs y pasos.
             self._connection.execute(
                 """
@@ -248,7 +265,7 @@ class EpisodeStore:
                     scenario_id, planet, difficulty_level, difficulty_name,
                     target_type, requested_samples, scenario_blob, map_blob, started_at,
                     retention_managed, protected, selection_reason, terrain_signature
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
                 """,
                 (
                     episode_uid,
@@ -266,7 +283,10 @@ class EpisodeStore:
                     _pack(scenario),
                     _pack(map_spec),
                     _now(),
-                    "candidato en curso",
+                    int(self.max_experiments is not None),
+                    "registro completo"
+                    if self.max_experiments is None
+                    else "candidato en curso",
                     terrain_signature,
                 ),
             )
@@ -309,6 +329,27 @@ class EpisodeStore:
                 ),
             )
 
+            resources = state.get("resources", {})
+            self._connection.execute(
+                "UPDATE episodes SET steps=?, cumulative_reward=?, samples_collected=?, "
+                "collisions=collisions+?, path_length=?, analysis_json=? WHERE episode_number=?",
+                (
+                    max(0, step_index),
+                    float(cumulative_reward),
+                    state.get("mission", {}).get("collected", 0),
+                    int(collision),
+                    resources.get("path_length", 0),
+                    json.dumps(
+                        {
+                            **resources,
+                            "simulation_time_s": max(0, step_index) * 0.5,
+                            "path_efficiency": None,
+                        }
+                    ),
+                    episode_number,
+                ),
+            )
+
     def _finish_episode(self, episode_number: int, **result: Any) -> None:
         with self._lock, self._connection:
             self._connection.execute(
@@ -343,15 +384,139 @@ class EpisodeStore:
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
                 """,
                 (
-                    row["episode_number"], row["episode_uid"], row["run_id"], row["seed"],
-                    row["scenario_id"], row["planet"], row["difficulty_level"],
-                    row["terrain_signature"], int(result["success"]),
-                    float(result["cumulative_reward"]), int(result["samples_collected"]),
-                    row["requested_samples"], int(result["collisions"]), int(result["steps"]),
-                    float(result["path_length"]), result["end"], _now(),
+                    row["episode_number"],
+                    row["episode_uid"],
+                    row["run_id"],
+                    row["seed"],
+                    row["scenario_id"],
+                    row["planet"],
+                    row["difficulty_level"],
+                    row["terrain_signature"],
+                    int(result["success"]),
+                    float(result["cumulative_reward"]),
+                    int(result["samples_collected"]),
+                    row["requested_samples"],
+                    int(result["collisions"]),
+                    int(result["steps"]),
+                    float(result["path_length"]),
+                    result["end"],
+                    _now(),
                 ),
             )
+            self._save_analysis(episode_number)
             self._rebalance_retained()
+
+    def _save_analysis(self, number):
+        row = self._connection.execute(
+            "SELECT * FROM episodes WHERE episode_number=?", (number,)
+        ).fetchone()
+        last = self._connection.execute(
+            "SELECT state_blob FROM episode_steps WHERE episode_number=? ORDER BY step_index DESC LIMIT 1",
+            (number,),
+        ).fetchone()
+        resources = _unpack(last[0]).get("resources", {}) if last else {}
+        analysis = {
+            **resources,
+            "simulation_time_s": row["steps"] * 0.5,
+            "path_efficiency": None,
+        }
+        if row["scenario_id"].startswith("scenario_"):
+            from .reference import campaign_reference
+
+            reference = campaign_reference(row["scenario_id"])
+            analysis.update(
+                reference_path_cost=reference["reference_path_cost"],
+                reference_path=reference["reference_path"],
+            )
+            if (
+                row["success"]
+                and resources.get("route_cost", 0) > 0
+                and resources.get("collection_positions")
+            ):
+                from .campaign import load_scenario
+                from .reference import comparable_reference
+
+                try:
+                    matched = comparable_reference(
+                        load_scenario(row["scenario_id"]),
+                        resources["initial_position"],
+                        resources["collection_positions"],
+                        resources["final_position"],
+                    )
+                except ValueError:
+                    matched = None  # path outside conservative reference grid; do not fabricate a ratio
+                if matched:
+                    analysis.update(matched)
+                    analysis["path_efficiency"] = (
+                        matched["reference_path_cost"] / resources["route_cost"]
+                    )
+        self._connection.execute(
+            "UPDATE episodes SET analysis_json=? WHERE episode_number=?",
+            (json.dumps(analysis), number),
+        )
+
+    def scenario_report(self, scenario_id, *, mode="entrenamiento"):
+        # SQL aggregates and a bounded selection; never read episode step blobs.
+        where = "scenario_id=? AND mode=? AND ended_at IS NOT NULL"
+        params = (scenario_id, mode)
+        totals = dict(
+            self._connection.execute(
+                f"SELECT COUNT(*) episodes, AVG(success) success_rate, AVG(cumulative_reward) reward_mean, AVG(collisions) collisions_mean, AVG(path_length) path_length_mean, AVG(steps)*.5 simulation_time_mean FROM episodes WHERE {where}",
+                params,
+            ).fetchone()
+        )
+        n = totals["episodes"]
+        selected = {}
+        for name, offset in (
+            ("first", 0),
+            ("middle", max(0, n // 2 - 2)),
+            ("recent", max(0, n - 5)),
+        ):
+            selected[name] = [
+                self._summary(row)
+                for row in self._connection.execute(
+                    f"SELECT * FROM episodes WHERE {where} ORDER BY episode_number LIMIT 5 OFFSET ?",
+                    (*params, offset),
+                )
+            ]
+        best = self._connection.execute(
+            f"SELECT * FROM episodes WHERE {where} AND success=1 ORDER BY json_extract(analysis_json,'$.path_efficiency') DESC LIMIT 1",
+            params,
+        ).fetchone()
+        policies = [
+            dict(row)
+            for row in self._connection.execute(
+                "SELECT policy_version,COUNT(*) episodes,AVG(success) success_rate,AVG(collisions) collisions_mean FROM episodes WHERE scenario_id=? AND mode='evaluaci?n' AND ended_at IS NOT NULL GROUP BY policy_version ORDER BY success_rate DESC",
+                (scenario_id,),
+            )
+        ]
+        return dict(
+            scenario_id=scenario_id,
+            mode=mode,
+            **totals,
+            **selected,
+            best=self._summary(best) if best else None,
+            evaluated_policies=policies,
+        )
+
+    def get_scenario_history(self, scenario_id, *, limit=100, offset=0, mode=None):
+        return self.list_episodes(
+            scenario_id=scenario_id, limit=limit, offset=offset, mode=mode
+        )
+
+    def compare_scenario_attempts(self, scenario_id, *attempts):
+        numbers = []
+        for attempt in attempts:
+            if attempt < 1:
+                raise ValueError("attempt numbers start at 1")
+            row = self._connection.execute(
+                "SELECT episode_number FROM episodes WHERE scenario_id=? ORDER BY episode_number LIMIT 1 OFFSET ?",
+                (scenario_id, attempt - 1),
+            ).fetchone()
+            if row is None:
+                raise KeyError(f"attempt {attempt} unavailable for {scenario_id}")
+            numbers.append(row[0])
+        return self.compare_episodes(*numbers)
 
     @staticmethod
     def _terrain_signature(scenario: dict) -> str:
@@ -384,6 +549,8 @@ class EpisodeStore:
 
     def _rebalance_retained(self) -> None:
         """Descarta el replay más redundante; nunca toca históricos ni protegidos."""
+        if self.max_experiments is None:
+            return
         while True:
             rows = self._connection.execute(
                 "SELECT * FROM episodes WHERE retention_managed=1 AND ended_at IS NOT NULL ORDER BY episode_number"
@@ -394,27 +561,46 @@ class EpisodeStore:
             if not removable:
                 break
             features = {row["episode_number"]: self._feature(row) for row in rows}
+
             def redundancy(row: sqlite3.Row) -> tuple[float, int]:
-                others = [other for other in rows if other["episode_number"] != row["episode_number"]]
+                others = [
+                    other
+                    for other in rows
+                    if other["episode_number"] != row["episode_number"]
+                ]
                 nearest = min(
-                    (self._distance(features[row["episode_number"]], features[other["episode_number"]]) for other in others),
+                    (
+                        self._distance(
+                            features[row["episode_number"]],
+                            features[other["episode_number"]],
+                        )
+                        for other in others
+                    ),
                     default=float("inf"),
                 )
                 return nearest, row["episode_number"]
+
             victim = min(removable, key=redundancy)
             number = int(victim["episode_number"])
             self._connection.execute(
-                "UPDATE training_metrics SET replay_retained=0 WHERE episode_number=?", (number,)
+                "UPDATE training_metrics SET replay_retained=0 WHERE episode_number=?",
+                (number,),
             )
-            self._connection.execute("DELETE FROM episodes WHERE episode_number=?", (number,))
+            self._connection.execute(
+                "DELETE FROM episodes WHERE episode_number=?", (number,)
+            )
 
         retained = self._connection.execute(
             "SELECT * FROM episodes WHERE retention_managed=1 AND ended_at IS NOT NULL"
         ).fetchall()
         for row in retained:
-            reason = "protegido manualmente" if row["protected"] else (
-                f"selección diversa · L{row['difficulty_level']} · {row['terrain_signature']} · "
-                f"{'éxito' if row['success'] else 'fallo'}"
+            reason = (
+                "protegido manualmente"
+                if row["protected"]
+                else (
+                    f"selección diversa · L{row['difficulty_level']} · {row['terrain_signature']} · "
+                    f"{'éxito' if row['success'] else 'fallo'}"
+                )
             )
             self._connection.execute(
                 "UPDATE episodes SET selection_reason=? WHERE episode_number=?",
@@ -424,6 +610,7 @@ class EpisodeStore:
     @staticmethod
     def _summary(row: sqlite3.Row) -> dict:
         return {
+            **json.loads(row["analysis_json"]),
             "episode_number": row["episode_number"],
             "episode_uid": row["episode_uid"],
             "run_id": row["run_id"],
@@ -460,7 +647,9 @@ class EpisodeStore:
         historical = self._connection.execute(
             "SELECT COUNT(*) AS total FROM episodes WHERE retention_managed=0"
         ).fetchone()["total"]
-        metric_count = self._connection.execute("SELECT COUNT(*) AS total FROM training_metrics").fetchone()["total"]
+        metric_count = self._connection.execute(
+            "SELECT COUNT(*) AS total FROM training_metrics"
+        ).fetchone()["total"]
         return {
             "max_experiments": self.max_experiments,
             "retained_experiments": managed["total"],
@@ -476,15 +665,25 @@ class EpisodeStore:
             ).fetchone()
             if row is None:
                 raise KeyError(f"no existe el episodio {episode_number}")
-            if protected and row["retention_managed"]:
+            if (
+                protected
+                and row["retention_managed"]
+                and self.max_experiments is not None
+            ):
                 count = self._connection.execute(
                     "SELECT COUNT(*) AS total FROM episodes WHERE retention_managed=1 AND protected=1"
                 ).fetchone()["total"]
                 if count >= self.max_experiments and not row["protected"]:
-                    raise ValueError("no se pueden proteger más experimentos que el límite configurado")
+                    raise ValueError(
+                        "no se pueden proteger más experimentos que el límite configurado"
+                    )
             self._connection.execute(
                 "UPDATE episodes SET protected=?, selection_reason=? WHERE episode_number=?",
-                (int(protected), "protegido manualmente" if protected else "selección automática", int(episode_number)),
+                (
+                    int(protected),
+                    "protegido manualmente" if protected else "selección automática",
+                    int(episode_number),
+                ),
             )
             self._rebalance_retained()
             updated = self._connection.execute(
@@ -498,42 +697,75 @@ class EpisodeStore:
             f"SELECT * FROM training_metrics{where} ORDER BY episode_number", params
         ).fetchall()
         if not rows:
-            return {"episodes": 0, "success_rate": 0.0, "reward_mean": 0.0,
-                    "samples_collected": 0, "by_difficulty": {}, "evolution": []}
+            return {
+                "episodes": 0,
+                "success_rate": 0.0,
+                "reward_mean": 0.0,
+                "samples_collected": 0,
+                "by_difficulty": {},
+                "evolution": [],
+            }
         by_level: dict[str, dict] = {}
         for row in rows:
-            bucket = by_level.setdefault(str(row["difficulty_level"]), {"episodes": 0, "successes": 0, "reward": 0.0, "samples": 0})
+            bucket = by_level.setdefault(
+                str(row["difficulty_level"]),
+                {"episodes": 0, "successes": 0, "reward": 0.0, "samples": 0},
+            )
             bucket["episodes"] += 1
             bucket["successes"] += row["success"]
             bucket["reward"] += row["cumulative_reward"]
             bucket["samples"] += row["samples_collected"]
         for bucket in by_level.values():
-            bucket["success_rate"] = round(bucket.pop("successes") / bucket["episodes"], 4)
+            bucket["success_rate"] = round(
+                bucket.pop("successes") / bucket["episodes"], 4
+            )
             bucket["reward_mean"] = round(bucket.pop("reward") / bucket["episodes"], 4)
         size = max(1, min(100, len(rows) // 20 or 1))
         evolution = []
         for start in range(0, len(rows), size):
-            group = rows[start:start + size]
-            evolution.append({
-                "episode": group[-1]["episode_number"],
-                "reward_mean": round(sum(row["cumulative_reward"] for row in group) / len(group), 4),
-                "success_rate": round(sum(row["success"] for row in group) / len(group), 4),
-                "difficulty_mean": round(sum(row["difficulty_level"] for row in group) / len(group), 3),
-                "samples_collected": sum(row["samples_collected"] for row in group),
-            })
+            group = rows[start : start + size]
+            evolution.append(
+                {
+                    "episode": group[-1]["episode_number"],
+                    "reward_mean": round(
+                        sum(row["cumulative_reward"] for row in group) / len(group), 4
+                    ),
+                    "success_rate": round(
+                        sum(row["success"] for row in group) / len(group), 4
+                    ),
+                    "difficulty_mean": round(
+                        sum(row["difficulty_level"] for row in group) / len(group), 3
+                    ),
+                    "samples_collected": sum(row["samples_collected"] for row in group),
+                }
+            )
         return {
             "episodes": len(rows),
             "success_rate": round(sum(row["success"] for row in rows) / len(rows), 4),
-            "reward_mean": round(sum(row["cumulative_reward"] for row in rows) / len(rows), 4),
+            "reward_mean": round(
+                sum(row["cumulative_reward"] for row in rows) / len(rows), 4
+            ),
             "samples_collected": sum(row["samples_collected"] for row in rows),
             "by_difficulty": by_level,
             "evolution": evolution,
         }
 
-    def list_episodes(self, *, limit: int = 100, offset: int = 0, run_id: str | None = None) -> list[dict]:
+    def list_episodes(
+        self,
+        *,
+        limit: int = 100,
+        offset: int = 0,
+        run_id: str | None = None,
+        scenario_id: str | None = None,
+        mode: str | None = None,
+    ) -> list[dict]:
         where, params = "", []
         if run_id:
             where, params = "WHERE run_id=?", [run_id]
+        for key, value in (("scenario_id", scenario_id), ("mode", mode)):
+            if value:
+                where += (" AND " if where else "WHERE ") + key + "=?"
+                params.append(value)
         rows = self._connection.execute(
             f"SELECT * FROM episodes {where} ORDER BY episode_number DESC LIMIT ? OFFSET ?",
             [*params, min(max(int(limit), 1), 1000), max(int(offset), 0)],
@@ -588,7 +820,9 @@ class EpisodeStore:
                 "episode": episode_number,
                 "run_id": episode["run_id"],
                 "model_name": episode["policy_version"],
-                "environment_version": episode["map"].get("environment_version", "planetary-exploration/1.0.0"),
+                "environment_version": episode["map"].get(
+                    "environment_version", "planetary-exploration/1.0.0"
+                ),
                 "level_id": f"L{episode['difficulty_level']}",
                 "scenario_id": episode["scenario_id"],
                 "difficulty": f"L{episode['difficulty_level']} · {episode['difficulty_name']}",
@@ -603,7 +837,14 @@ class EpisodeStore:
                 "collisions": episode["collisions"],
                 "path_length": episode["path_length"],
                 "frames": [item["state"]["frame"] for item in timeline],
-                "mission_timeline": [item["state"].get("mission", {}) for item in timeline],
+                "reference_path": episode.get("reference_path", []),
+                "path_efficiency": episode.get("path_efficiency"),
+                "resources_timeline": [
+                    item["state"].get("resources", {}) for item in timeline
+                ],
+                "mission_timeline": [
+                    item["state"].get("mission", {}) for item in timeline
+                ],
                 "actions_timeline": [item["action_name"] for item in timeline],
             },
         }
@@ -626,9 +867,13 @@ class EpisodeStore:
         )
         return {
             "episodes": episodes,
-            "best_reward": max(episodes, key=lambda item: item["reward"])["episode_number"],
+            "best_reward": max(episodes, key=lambda item: item["reward"])[
+                "episode_number"
+            ],
             "shortest_success": (
-                shortest_success["episode_number"] if shortest_success is not None else None
+                shortest_success["episode_number"]
+                if shortest_success is not None
+                else None
             ),
         }
 

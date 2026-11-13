@@ -67,46 +67,96 @@ let manualBusy = false
 let lastVersion: Record<string, unknown> | undefined
 
 const PLANETARY_LEVELS: Record<number, { title: string; description: string; facts: string[] }> = {
-  1: {
-    title: 'L1 · Llanura inicial',
-    description: 'Mapa pequeño y casi plano para aprender navegación, recolección y regreso a base.',
-    facts: ['1 muestra', '1 roca', 'sin cráteres', 'viento ≤ 2 m/s'],
+  "1": {
+    "title": "01 · Primeros movimientos",
+    "description": "Orientarse, recoger una muestra y regresar.",
+    "facts": [
+      "scenario_01",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  2: {
-    title: 'L2 · Rocas dispersas',
-    description: 'El área crece y aparecen más rutas, rocas, una duna y muestras distractoras.',
-    facts: ['1–2 muestras', '2 rocas', '1 duna', 'viento ≤ 4 m/s'],
+  "2": {
+    "title": "02 · El primer desvío",
+    "description": "Rodear una barrera; comparar dos rutas.",
+    "facts": [
+      "scenario_02",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  3: {
-    title: 'L3 · Pendientes y fricción',
-    description: 'Dos muestras objetivo, relieve más marcado y zonas donde las ruedas pierden tracción.',
-    facts: ['2 muestras', '3 rocas', '2 dunas', 'tracción variable'],
+  "3": {
+    "title": "03 · El laberinto rocoso",
+    "description": "Intersecciones y pasillos con tres objetivos.",
+    "facts": [
+      "scenario_03",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  4: {
-    title: 'L4 · Cráteres y viento',
-    description: 'Rutas más largas con cráteres, viento variable y hasta tres muestras requeridas.',
-    facts: ['2–3 muestras', '1 cráter', 'viento ≤ 10 m/s', 'mapa 8 × 8 m'],
+  "4": {
+    "title": "04 · El cráter central",
+    "description": "Rodear un cráter protegido por una formación rocosa.",
+    "facts": [
+      "scenario_04",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  5: {
-    title: 'L5 · Dunas y polvo',
-    description: 'Más dunas y distractores; el polvo reduce la distancia a la que el rover detecta muestras.',
-    facts: ['2–3 muestras', '3 dunas', '2 distractores', 'visibilidad reducida'],
+  "5": {
+    "title": "05 · El valle de decisiones",
+    "description": "Elegir entre corredores y costes de tracción.",
+    "facts": [
+      "scenario_05",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  6: {
-    title: 'L6 · Rutas extensas',
-    description: 'Mapa amplio, tres o cuatro muestras, varios cráteres y presupuesto de batería menor.',
-    facts: ['3–4 muestras', '5 rocas', '2 cráteres', 'batería 88%'],
+  "6": {
+    "title": "06 · El laberinto de los cráteres",
+    "description": "Ordenar cuatro muestras de distintos tipos.",
+    "facts": [
+      "scenario_06",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  7: {
-    title: 'L7 · Meteorología variable',
-    description: 'Polvo intenso, viento fuerte, regiones peligrosas y poca tracción exigen rutas seguras.',
-    facts: ['3–4 muestras', '3 distractores', 'viento ≤ 22 m/s', 'batería 84%'],
+  "7": {
+    "title": "07 · La tormenta marciana",
+    "description": "Resolver corredores con ruido, polvo y viento.",
+    "facts": [
+      "scenario_07",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
-  8: {
-    title: 'L8 · Expedición marciana',
-    description: 'La misión completa combina el mapa mayor, cuatro muestras, dunas, cráteres, polvo y energía limitada.',
-    facts: ['4 muestras', '3 cráteres', 'polvo máximo', 'batería 80%'],
+  "8": {
+    "title": "08 · La ruta imposible a simple vista",
+    "description": "Alejarse de objetivos para rodear barreras alternadas.",
+    "facts": [
+      "scenario_08",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
   },
+  "9": {
+    "title": "09 · La expedición crítica",
+    "description": "Seis objetivos, callejones y un presupuesto limitado.",
+    "facts": [
+      "scenario_09",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
+  },
+  "10": {
+    "title": "10 · La gran misión marciana",
+    "description": "Ocho objetivos y más bifurcaciones: integrar navegación y recursos.",
+    "facts": [
+      "scenario_10",
+      "mapa fijo",
+      "semilla de sensores independiente"
+    ]
+  }
 }
 
 const registry = new RegistryView({
@@ -182,7 +232,7 @@ const updatePlanetaryLevel = () => {
     button.classList.toggle('selected', selected)
     button.setAttribute('aria-pressed', String(selected))
   }
-  if (!manualSessionId) manualButton.textContent = `Generar misión L${level}`
+  if (!manualSessionId) manualButton.textContent = `Iniciar escenario L${level}`
 }
 
 const randomScenarioSeed = () => {
@@ -327,12 +377,17 @@ async function refreshEpisodes() {
   const activeApi = api
   refreshEpisodesButton.disabled = true
   try {
-    const payload = await api.episodes(100)
+    const progress=await api.campaignProgress()
+    if (isRecord(progress)) {
+      const mastered=Array.isArray(progress.mastered) ? progress.mastered.length : 0
+      required<HTMLElement>('#campaignProgress').textContent = `Currículo: escenario ${Number(progress.current_level ?? 1)} · ${mastered}/10 superados · ${10-mastered} pendientes${progress.run_id ? '' : ' · sin evaluación registrada'}`
+    }
+    const payload = await api.episodes(100, `scenario_${difficultySelect.value.padStart(2,'0')}`, required<HTMLSelectElement>('#episodeMode').value)
     const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []
     const storage = isRecord(payload) && isRecord(payload.storage) ? payload.storage : undefined
     required<HTMLElement>('#experimentStorageMeta').textContent = storage
-      ? `${Number(storage.retained_experiments ?? 0)}/${Number(storage.max_experiments ?? 10)} replays seleccionados · ${Number(storage.protected_experiments ?? 0)} protegidos · ${Number(storage.summarized_episodes ?? 0)} episodios resumidos${Number(storage.historical_untouched ?? 0) ? ` · ${Number(storage.historical_untouched)} históricos intactos` : ''}`
-      : 'Se conservan hasta 10 replays completos; las métricas resumidas continúan para todo el entrenamiento.'
+      ? `${Number(storage.summarized_episodes ?? 0)} intentos registrados · historial completo, sin poda automática`
+      : 'Se conserva cada intento completo, incluidos los fallidos.'
     const summaries: EpisodeSummary[] = episodes.map((item) => ({
       episode_number: Number(item.episode_number ?? 0),
       scenario_id: String(item.scenario_id ?? 'sin escenario'),
@@ -343,7 +398,9 @@ async function refreshEpisodes() {
       reward: Number(item.reward ?? 0),
       collisions: Number(item.collisions ?? 0),
       path_length: Number(item.path_length ?? 0),
-      duration_s: Number(item.duration_s ?? 0),
+      duration_s: Number(item.simulation_time_s ?? 0),
+      energy_consumed: Number(item.energy_consumed ?? 0),
+      path_efficiency: typeof item.path_efficiency === 'number' ? item.path_efficiency : null,
       end: String(item.end ?? 'en progreso'),
     })).filter((item) => Number.isInteger(item.episode_number) && item.episode_number > 0)
     const finished = summaries.filter((episode) => episode.success !== null)
@@ -496,14 +553,14 @@ const startManualMode = async () => {
     const environment = manualEnvironment.value === 'planetary' ? 'planetary' : 'beacon'
     const difficulty = Number(difficultySelect.value)
     const seed = environment === 'planetary' ? randomScenarioSeed() : 0
-    const response = await api.reset(levelSelect.value, environment, difficulty, seed)
+    const response = await api.reset(levelSelect.value, environment, difficulty, seed, manualSessionId)
     const frame = frameFromResponse(response)
     if (!response.session_id) throw new Error('/sim/reset no devolvió session_id.')
     if (!frame) throw new Error('/sim/reset no devolvió un cuadro compatible.')
     manualSessionId = response.session_id
     const map = response.map ? normalizeMap(response.map) : currentMap
     missionSeedValue.textContent = environment === 'planetary'
-      ? `semilla ${String(response.seed ?? seed)} · ${map.scenario_id ?? 'escenario procedural'}`
+      ? `semilla ${String(response.seed ?? seed)} · ${map.scenario_id ?? 'escenario fijo'}`
       : 'modo de balizas'
     const initial = normalizeEpisode(
       { ...response, frames: [frame], episode: 'manual', end: 'running' },
@@ -533,7 +590,7 @@ const startManualMode = async () => {
       }],
     } : initial
     loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
-    setProvenance('sin modelo', environment === 'planetary' ? `escenario procedural · L${difficulty}` : 'control manual heredado')
+    setProvenance('sin modelo', environment === 'planetary' ? `escenario fijo · L${difficulty}` : 'control manual heredado')
     setManualControls(true)
     hud.hideNotice()
   } catch (error) {
@@ -610,7 +667,7 @@ async function sendManualAction(action: number) {
 
 function setManualControls(enabled: boolean) {
   keypadButtons.forEach((button) => {
-    button.disabled = !enabled || (Number(button.dataset.action) === 5 && manualEnvironment.value !== 'planetary')
+    button.disabled = !enabled || (Number(button.dataset.action) >= 5 && manualEnvironment.value !== 'planetary')
   })
 }
 
@@ -652,15 +709,16 @@ for (const button of planetLevelButtons) {
     difficultySelect.value = button.dataset.planetLevel ?? '1'
     manualEnvironment.value = 'planetary'
     updatePlanetaryLevel()
+    void refreshEpisodes()
     document.querySelector('#planetaryMission')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   })
 }
-difficultySelect.addEventListener('change', updatePlanetaryLevel)
+difficultySelect.addEventListener('change', () => { updatePlanetaryLevel(); void refreshEpisodes() })
 manualEnvironment.addEventListener('change', () => {
   difficultySelect.disabled = manualEnvironment.value !== 'planetary'
   setManualControls(Boolean(manualSessionId))
   manualButton.textContent = manualEnvironment.value === 'planetary'
-    ? `Generar misión L${difficultySelect.value}`
+    ? `Iniciar escenario L${difficultySelect.value}`
     : 'Iniciar balizas'
 })
 refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
@@ -710,3 +768,60 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
 
 void connectApi()
 updatePlanetaryLevel()
+
+required<HTMLInputElement>('#showTrail').addEventListener('change',event => scene.setTrailVisible((event.target as HTMLInputElement).checked))
+required<HTMLInputElement>('#showReference').addEventListener('change',event => scene.setReferenceVisible((event.target as HTMLInputElement).checked))
+required<HTMLSelectElement>('#episodeMode').addEventListener('change',() => { void refreshEpisodes() })
+required<HTMLButtonElement>('#compareAttempts').addEventListener('click',async () => {
+  if (!api) return
+  try {
+    const ids=required<HTMLInputElement>('#compareNumbers').value.split(/[,;\s]+/).filter(Boolean).map(Number)
+    const result=await api.compareEpisodes(ids)
+    renderComparison(result)
+  } catch(error) { required<HTMLElement>('#comparisonResult').textContent=errorMessage(error) }
+})
+required<HTMLButtonElement>('#scenarioProgress').addEventListener('click',async () => {
+  if (!api) return
+  try {
+    const result=await api.scenarioProgress(`scenario_${difficultySelect.value.padStart(2,'0')}`,required<HTMLSelectElement>('#episodeMode').value)
+    renderComparison(result)
+  } catch(error) { required<HTMLElement>('#comparisonResult').textContent=errorMessage(error) }
+})
+
+function renderComparison(payload: unknown) {
+  const output=required<HTMLElement>('#comparisonResult')
+  output.replaceChildren()
+  if (!isRecord(payload)) return
+  const heading=document.createElement('h3')
+  heading.textContent=payload.scenario_id ? `Aprendizaje · ${String(payload.scenario_id)}` : 'Comparación de intentos'
+  output.append(heading)
+  if (typeof payload.episodes==='number') {
+    const summary=document.createElement('p')
+    summary.textContent=`${payload.episodes} intentos · éxito ${(Number(payload.success_rate ?? 0)*100).toFixed(1)}% · recompensa media ${Number(payload.reward_mean ?? 0).toFixed(2)}`
+    output.append(summary)
+  }
+  const groups: [string, unknown][] = Array.isArray(payload.episodes)
+    ? [['Intentos seleccionados',payload.episodes]]
+    : [['Primeros',payload.first],['Intermedios',payload.middle],['Recientes',payload.recent],['Mejor ruta completada',payload.best ? [payload.best] : []]]
+  for (const [label,items] of groups) {
+    if (!Array.isArray(items)) continue
+    const title=document.createElement('h4');title.textContent=label;output.append(title)
+    const table=document.createElement('table');table.style.width='100%'
+    const header=document.createElement('tr')
+    for (const name of ['Intento','Resultado','Recompensa','Choques','Distancia','Energía','Eficiencia']) { const cell=document.createElement('th');cell.textContent=name;header.append(cell) }
+    table.append(header)
+    for (const item of items.filter(isRecord)) {
+      const row=document.createElement('tr')
+      const values=[`#${item.episode_number}`,String(item.end),Number(item.reward).toFixed(1),String(item.collisions),`${Number(item.path_length).toFixed(1)} m`,Number(item.energy_consumed ?? 0).toFixed(1),typeof item.path_efficiency==='number' ? item.path_efficiency.toFixed(3) : '—']
+      for (const value of values) {const cell=document.createElement('td');cell.textContent=value;row.append(cell)}
+      row.style.cursor='pointer';row.title='Reproducir este intento'
+      row.addEventListener('click',()=>{ void loadStoredEpisode(Number(item.episode_number)) })
+      table.append(row)
+    }
+    output.append(table)
+  }
+  const policies=Array.isArray(payload.evaluated_policies) ? payload.evaluated_policies.filter(isRecord) : []
+  const status=document.createElement('p')
+  status.textContent=policies.length ? `Mejor política evaluada: ${String(policies[0].policy_version)} · ${Number(policies[0].episodes)} pruebas · éxito ${(Number(policies[0].success_rate)*100).toFixed(1)}%` : 'Sin evaluación de políticas suficiente para afirmar aprendizaje.'
+  output.append(status)
+}

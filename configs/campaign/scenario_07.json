@@ -1,0 +1,138 @@
+{
+  "scenario_id": "scenario_07",
+  "name": "La tormenta marciana",
+  "start": [
+    1.5,
+    0,
+    0
+  ],
+  "terrain_seed": 41007,
+  "dimensions": [
+    12,
+    12
+  ],
+  "target_type": "mixta",
+  "requested_samples": 5,
+  "capacity": 5,
+  "rocks": [
+    [
+      3.5,
+      -1,
+      0.22,
+      3.6,
+      0.9
+    ],
+    [
+      6,
+      1.3,
+      0.22,
+      3.3,
+      0.9
+    ],
+    [
+      8.5,
+      -1,
+      0.22,
+      3.6,
+      0.9
+    ],
+    [
+      9.8,
+      2,
+      1,
+      0.22,
+      0.9
+    ],
+    [
+      4.7,
+      2.5,
+      0.6,
+      0.22,
+      0.9
+    ]
+  ],
+  "samples": [
+    {
+      "sample_id": "S1",
+      "sample_type": "basalto",
+      "x": 4.7,
+      "y": 0,
+      "target": true
+    },
+    {
+      "sample_id": "S2",
+      "sample_type": "hematita",
+      "x": 7.3,
+      "y": -2,
+      "target": true
+    },
+    {
+      "sample_id": "S3",
+      "sample_type": "basalto",
+      "x": 10.7,
+      "y": 3.8,
+      "target": true
+    },
+    {
+      "sample_id": "S4",
+      "sample_type": "hematita",
+      "x": 10.7,
+      "y": -3.8,
+      "target": true
+    },
+    {
+      "sample_id": "S5",
+      "sample_type": "basalto",
+      "x": 2,
+      "y": 3.5,
+      "target": true
+    },
+    {
+      "sample_id": "D1",
+      "sample_type": "sulfato",
+      "x": 2,
+      "y": -3.5,
+      "target": false
+    }
+  ],
+  "dunes": [
+    [
+      9,
+      4,
+      0.04,
+      1.3
+    ]
+  ],
+  "craters": [
+    [
+      2,
+      -4.5,
+      -0.2,
+      0.65
+    ],
+    [
+      9,
+      -4.5,
+      -0.18,
+      0.65
+    ]
+  ],
+  "traction_zones": [
+    [
+      4.6,
+      -1,
+      0.6,
+      0.6,
+      0.5
+    ]
+  ],
+  "relief_m": 0.025,
+  "traction": 0.9,
+  "wind_speed_m_s": 12,
+  "dust_opacity": 0.45,
+  "wind_direction_rad": 0.5,
+  "temperature_c": -55,
+  "battery_budget": 100,
+  "max_steps": 1550,
+  "energy_scale": 0.32
+}

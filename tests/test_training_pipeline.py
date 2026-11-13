@@ -132,7 +132,7 @@ def test_planetary_config_contract_and_curriculum_checkpoint_resume(tmp_path):
     env = build_env(config)
     observation, _ = env.reset(seed=7)
     assert observation.shape == (33,)
-    assert env.action_space.n == 6
+    assert env.action_space.n == 7
     env.close()
 
     checkpoint = tmp_path / "checkpoint"
@@ -194,7 +194,7 @@ def test_periodic_planetary_evaluation_uses_a_frozen_holdout(tmp_path, monkeypat
         SimpleNamespace(log_metric=lambda *args, **kwargs: logged.append((args, kwargs))),
     )
     callback = train.PeriodicPlanetaryEvaluationCallback(
-        {"environment": {"kind": "planetary"}, "evaluation_max_level": 8},
+        {"environment": {"kind": "planetary", "campaign": False}, "evaluation_max_level": 8},
         tmp_path,
         frequency=10,
         episodes=4,
@@ -205,7 +205,7 @@ def test_periodic_planetary_evaluation_uses_a_frozen_holdout(tmp_path, monkeypat
     assert callback._on_step() and not calls
     model.num_timesteps = 10
     assert callback._on_step() and len(calls) == 1
-    assert calls[0][1] == {"episodes": 4, "seed_start": 910_000, "max_level": 8}
+    assert calls[0][1] == {"episodes": 4, "seed_start": 910_000, "max_level": 8, "scenario_level": None}
     payload = json.loads((tmp_path / "periodic-evaluation-10.json").read_text())
     assert payload["suite_id"] == "planetary-periodic-holdout-v1"
     assert payload["training_step"] == 10

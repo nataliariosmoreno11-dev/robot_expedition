@@ -10,6 +10,7 @@ modelos con sus reglas originales.
 from __future__ import annotations
 
 import math
+import json
 import os
 import subprocess
 import sys
@@ -297,7 +298,8 @@ class ResetRequest(BaseModel):
     seed: int = 0
     policy: str = Field(default="manual", description="manual, baseline-rule, baseline-random o un run_id")
     environment: Literal["beacon", "planetary"] = "beacon"
-    difficulty_level: int = Field(default=1, ge=1, le=8)
+    difficulty_level: int = Field(default=1, ge=1, le=10)
+    previous_session_id: str | None = None
 
 
 class StepRequest(BaseModel):
@@ -321,6 +323,9 @@ def sim_reset(req: ResetRequest):
     )
     sid = uuid.uuid4().hex
     with sessions_lock:
+        if req.previous_session_id:
+            previous=sessions.pop(req.previous_session_id,None)
+            if previous: previous.env.close()
         _prune_sessions()
         sessions[sid] = session
     env = session.env
@@ -374,13 +379,13 @@ def _with_episode_store(callback):
 
 
 @app.get("/episodes")
-def episodes(limit: int = 100, offset: int = 0, run_id: str | None = None):
+def episodes(limit: int = 100, offset: int = 0, run_id: str | None = None, scenario_id: str | None = None, mode: str | None = None):
     return {
         "schema_version": 2,
         "database": EPISODE_DB.name,
         "storage": _with_episode_store(lambda episode_store: episode_store.storage_status()),
         "episodes": _with_episode_store(
-            lambda episode_store: episode_store.list_episodes(limit=limit, offset=offset, run_id=run_id)
+            lambda episode_store: episode_store.list_episodes(limit=limit, offset=offset, run_id=run_id, scenario_id=scenario_id, mode=mode)
         ),
     }
 
@@ -444,3 +449,41 @@ def compare_episode_data(req: CompareEpisodesRequest):
         fail(404, str(exc))
     except ValueError as exc:
         fail(422, str(exc))
+
+
+@app.get("/scenarios")
+def campaign_catalog():
+    from robot_expedition.planetary.campaign import SCENARIO_IDS, load_scenario, catalog_hash
+    from robot_expedition.planetary.reference import campaign_reference
+    return {"catalog_hash":catalog_hash(),"scenarios":[{
+        **load_scenario(sid).to_dict(include_heightfield=False),
+        "analysis":{k:v for k,v in campaign_reference(sid).items() if k!="reference_path"}
+    } for sid in SCENARIO_IDS]}
+
+
+@app.get("/scenarios/{scenario_id}/analysis")
+def scenario_analysis(scenario_id: str):
+    from robot_expedition.planetary.reference import campaign_reference
+    try: return campaign_reference(scenario_id)
+    except ValueError as exc: fail(422,str(exc))
+
+
+@app.get("/scenarios/{scenario_id}/history")
+def scenario_history(scenario_id: str, limit: int=100, offset: int=0, mode: str | None=None):
+    return _with_episode_store(lambda store: store.get_scenario_history(scenario_id,limit=limit,offset=offset,mode=mode))
+
+
+@app.get("/scenarios/{scenario_id}/progress")
+def scenario_progress(scenario_id: str, mode: str="entrenamiento"):
+    return _with_episode_store(lambda store: store.scenario_report(scenario_id,mode=mode))
+
+
+@app.get("/campaign/progress")
+def campaign_progress():
+    paths=sorted((ROOT/"models").glob("*/curriculum_state.json"),key=lambda p:p.stat().st_mtime,reverse=True)
+    for path in paths:
+        state=json.loads(path.read_text())
+        if state.get("schema")=="fixed-campaign-curriculum/v1":
+            return {"run_id":path.parent.name,**state}
+    from robot_expedition.planetary.campaign_curriculum import CampaignCurriculum
+    return {"run_id":None,**CampaignCurriculum().snapshot()}

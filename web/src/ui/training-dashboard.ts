@@ -58,6 +58,12 @@ export class TrainingDashboard {
       { title: 'Distancia recorrida', color: '#83b5ff', values: this.episodes.map((episode) => episode.path_length), suffix: ' m' },
       { title: 'Duración', color: '#d9a17a', values: this.episodes.map((episode) => episode.duration_s), suffix: ' s' },
     ]
+    charts.push(
+      {title:'Energía consumida',color:'#ffb855',values:this.episodes.map(e=>e.energy_consumed ?? 0)},
+      {title:'Muestras completadas',color:'#61d5d2',values:this.episodes.map(e=>100*e.samples_collected/Math.max(1,e.requested_samples)),suffix:'%'},
+    )
+    const comparable=this.episodes.filter(e=>e.success && e.path_efficiency!=null)
+    if (comparable.length) charts.push({title:'Eficiencia de ruta ? ?xitos',color:'#c69cff',values:comparable.map(e=>e.path_efficiency!)})
     const columns = width >= 720 ? 2 : 1
     const rows = Math.ceil(charts.length / columns)
     const gap = 16

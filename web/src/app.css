@@ -452,3 +452,16 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* Campaign analysis uses the same controls and typography as the mission panel. */
+.episode-section > label:not(.field) { display: flex; align-items: center; gap: 8px; margin: 10px 0; color: var(--muted); font-size: 12px; }
+.episode-section input[type="checkbox"] { accent-color: var(--rust); }
+.episode-section > .secondary-button { width: 100%; margin-bottom: 8px; white-space: normal; min-height: 36px; }
+#campaignProgress { padding: 10px; margin: 10px 0; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font: 10px/1.7 var(--mono); }
+#comparisonResult { font-size: 11px; }
+#comparisonResult h3 { margin: 12px 0; font-size: 14px; }
+#comparisonResult h4 { margin: 14px 0 8px; color: var(--muted); }
+#comparisonResult table { border-collapse: collapse; min-width: 540px; font: 10px/1.6 var(--mono); }
+#comparisonResult th, #comparisonResult td { text-align: left; padding: 7px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+#comparisonResult th { color: var(--muted); }
+#comparisonResult tr:hover { background: rgba(97,213,210,.06); }

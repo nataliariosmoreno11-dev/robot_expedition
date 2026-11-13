@@ -1,23 +1,15 @@
-# Contrato del simulador planetario
+# Contrato planetario v2
 
-El ambiente nuevo se activa de forma explícita con `PlanetaryExplorationEnv` o
-`environment=planetary`. `BeaconExpeditionEnv`, sus cinco acciones, sus veinte
-observaciones, los modelos publicados y las rutas de evaluación anteriores se
-mantienen sin cambios.
+Versión: `planetary-exploration/2.0.0`. El ambiente anterior de balizas conserva
+20 observaciones y cinco acciones. No se pueden intercambiar sus checkpoints.
 
-## Reproducibilidad del escenario
+## Escenarios fijos
 
-Un escenario queda identificado por `(generator_version, planet, difficulty_level,
-seed)`. Con esos cuatro valores, el generador produce exactamente el mismo terreno,
-clima, rocas, cráteres, dunas, tipos y posiciones de muestras. Antes de aceptar un
-escenario comprueba rutas transitables, pendientes, tracción, capacidad de batería,
-inventario y límite de pasos. Si un intento no es válido, incrementa un contador de
-intento determinista y vuelve a generarlo.
-
-El perfil físico `mars-v1` declara gravedad de `3.71 m/s²`, densidad atmosférica
-aproximada de `0.020 kg/m³`, temperatura de referencia de `-55 °C`, resistencia a la
-rodadura, fricción y parámetros aerodinámicos del rover. Son aproximaciones de
-simulación documentadas, no mediciones de una misión real.
+`scenario_01` a `scenario_10` identifican las diez definiciones en
+`configs/campaign/`. El hash del catálogo forma parte del hash del ambiente.
+La semilla del episodio controla sensores; geometría, objetivos, terreno, clima y
+presupuestos se cargan de la definición. Una misión termina con muestras completas
+y regreso a la base. Los escenarios 06–10 requieren muestras de dos tipos.
 
 ## Acciones
 
@@ -29,6 +21,7 @@ simulación documentadas, no mediciones de una misión real.
 | 3 | girar izquierda |
 | 4 | girar derecha |
 | 5 | recolectar |
+| 6 | retroceder |
 
 `recolectar` solo funciona dentro del radio de colección. Una muestra del tipo
 incorrecto, una repetida, un inventario lleno o intentar recolectar sin una muestra
@@ -45,12 +38,12 @@ de reunir el número solicitado del tipo correcto y regresar a la base.
 | 12–13 | velocidad y giro | normalizados |
 | 14 | batería | `[0, 1]` |
 | 15–17 | fracción recogida, restante e inventario | `[0, 1]` |
-| 18–20 | tipo solicitado: roca, hielo, mineral | one-hot |
+| 18–20 | tipo solicitado: roca, hielo, mineral | multi-hot de tipos pendientes |
 | 21–22 | muestra visible y distancia | indicador, metros |
 | 23–25 | tipo de muestra visible | one-hot |
 | 26–29 | gravedad, tracción, visibilidad y viento | normalizados |
 | 30–31 | inclinación longitudinal y lateral | radianes |
-| 32 | dificultad curricular | nivel / 8 |
+| 32 | dificultad curricular | nivel / 10 |
 
 La especificación del manifiesto guarda tamaño de observación y acciones. Un modelo
 del contrato de balizas no puede servirse dentro de una sesión planetaria.
@@ -58,51 +51,53 @@ Las posiciones de muestras ocultas no forman parte de la observación. El detect
 solo informa una muestra dentro del alcance afectado por polvo y con línea de visión
 sin rocas; después de completar el inventario, la base sí se usa como destino conocido.
 
-## Persistencia de episodios
+## Memoria y versiones
 
-`EpisodeStore` usa SQLite con WAL. Crea un registro temporal al iniciar y confirma
-cada paso de forma incremental; no conserva el episodio completo en memoria. Al
-cerrar el intento guarda siempre una fila liviana en `training_metrics`, pero solo
-mantiene hasta 10 experimentos nuevos con el detalle completo. El límite se configura
-con `max_experiments` o `EXPEDITION_MAX_EXPERIMENTS` y no limita el entrenamiento:
-pueden ejecutarse miles o millones de episodios.
+Cada observación instantánea tiene 33 valores. `history_steps: 4` concatena las
+últimas cuatro (132 floats); al reiniciar se repite la observación inicial.
+PPO sigue siendo MlpPolicy. La memoria y la normalización se mantienen durante
+el entrenamiento; el checkpoint guarda optimizador, pesos, normalización y contador.
+No hay rutas del planificador ni posiciones ocultas en la observación.
 
-La selección automática compara nivel, éxito o fallo, rocas, dunas, cráteres,
-zonas de baja tracción, viento y polvo. El replay más redundante se reemplaza cuando
-aparece uno más representativo. Un experimento protegido manualmente nunca se
-sobrescribe. Los registros creados antes de este esquema se marcan como históricos,
-se resumen de forma aditiva y quedan fuera de la poda.
+## Persistencia
 
-Cada uno de los experimentos completos conserva:
+El esquema SQLite 2 se amplía de forma aditiva con `analysis_json`. Cada paso se
+confirma en WAL y su estado se comprime con zlib. Se guardan pose, observación,
+acción, recompensa, inventario, eventos, recursos y versión de política. El
+registro de campaña no poda episodios, aunque el constructor reciba un límite
+antiguo. Los lectores respetan los registros históricos existentes.
 
-- identidad de run, versión de política, semilla, escenario, planeta y dificultad;
-- mapa y escenario completos comprimidos;
-- pose, inventario, estado de cada muestra y ambiente en cada paso;
-- acción, recompensa instantánea y acumulada, evento, choque y señales de fin;
-- resultado, causa, duración, recorrido y muestras recogidas.
+Un episodio contiene `scenario_id`, semilla sensorial, definición del escenario,
+versión de política, modo y pasos. Los modos se distinguen: `entrenamiento`,
+`evaluación`, `robustez`, `manual`. Las trayectorias se cargan solo al consultar
+un episodio, nunca se mantienen todas en memoria. Reinicio y cierre normal
+finalizan el intento; tras un cierre abrupto los pasos confirmados siguen en SQLite.
 
-Los demás episodios conservan recompensa, éxito, dificultad, muestras, choques,
-pasos, recorrido, causa final y firma de terreno. `metrics()` calcula recompensa
-promedio, tasa de éxito, evolución de dificultad y muestras sin mapas ni trayectorias.
-
-`replay_episode(n)` devuelve los cuadros guardados. Nunca vuelve a ejecutar la
-política, por lo que cambiar un checkpoint posteriormente no altera un episodio.
-El esquema actual es `2`. Los checkpoints del entrenamiento permanecen en el flujo
-de entrenamiento y no cuentan dentro de los 10 experimentos.
-
-## API planetaria
+## API
 
 ```text
-POST /sim/reset              environment=planetary, difficulty_level=1..8
-POST /sim/step               action=0..5
-GET  /episodes
-GET  /episodes/{n}
-GET  /episodes/{n}/replay
-GET  /episodes/{n}/scenario
-POST /episodes/{n}/protect     protected=true|false
+GET  /scenarios
+GET  /scenarios/{scenario_id}/analysis
+GET  /scenarios/{scenario_id}/history?mode=entrenamiento&limit=100&offset=0
+GET  /scenarios/{scenario_id}/progress?mode=entrenamiento
+GET  /campaign/progress
+POST /sim/reset  {environment: planetary, difficulty_level: 1..10, seed, previous_session_id?}
+POST /sim/step   {session_id, action: 0..6}
+GET  /episodes?scenario_id=scenario_08&mode=entrenamiento&limit=100&offset=0
+GET  /episodes/{number}
+GET  /episodes/{number}/replay
+GET  /episodes/{number}/scenario
+POST /episodes/{number}/protect
+POST /episodes/compare {episode_numbers: [100,500,1000]}
 GET  /episodes/metrics/summary
-POST /episodes/compare       episode_numbers=[...]
 ```
 
-La ubicación se configura con `EXPEDITION_EPISODE_DB`; por defecto es
-`logs/planetary_episodes.sqlite`.
+`previous_session_id` cierra el intento anterior al iniciar uno nuevo. Los replays
+incluyen `reference_path` para análisis; la web lo mantiene oculto en control manual.
+`path_efficiency` es nulo para fallos o costes no comparables. Las referencias son
+óptimas solo en la rejilla de validación y sobre las posiciones de interacción
+comparadas; no constituyen un óptimo continuo ni una política aprendida.
+
+La ruta de SQLite se controla con `EXPEDITION_EPISODE_DB`. Los umbrales del currículo
+se configuran en `environment.curriculum_settings`; el estado de cada run se guarda
+en `models/<run_id>/curriculum_state.json`.

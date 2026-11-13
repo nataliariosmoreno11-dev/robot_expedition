@@ -106,7 +106,8 @@ def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
     assert body["environment"] == "planetary"
     assert body["map"]["difficulty_level"] == 4
     assert len(body["map"]["samples"]) > body["map"]["mission"]["requested_samples"]
-    assert body["actions"][-1] == "recolectar"
+    assert body["actions"][5] == "recolectar"
+    assert body["actions"][6] == "retroceder"
 
     stepped = client.post("/sim/step", json={"session_id": body["session_id"], "action": 5})
     assert stepped.status_code == 200, stepped.text
@@ -125,7 +126,7 @@ def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
     ).json()
     listing = client.get("/episodes").json()
     assert listing["schema_version"] == 2
-    assert listing["storage"]["max_experiments"] == 10
+    assert listing["storage"]["max_experiments"] is None
     protected = client.post(
         f"/episodes/{summaries[0]['episode_number']}/protect", json={"protected": True}
     )

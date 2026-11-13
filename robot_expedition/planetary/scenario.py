@@ -77,6 +77,8 @@ class PlanetaryScenario:
     max_steps: int
     terrain_heights: np.ndarray
     generation_attempt: int = 0
+    energy_scale: float = 1.0
+    start: tuple = (1.5, 0.0, 0.0)
 
     @property
     def target_samples(self) -> list[SampleSpec]:
@@ -108,6 +110,8 @@ class PlanetaryScenario:
             "battery_budget": self.battery_budget,
             "max_steps": self.max_steps,
             "generation_attempt": self.generation_attempt,
+            "energy_scale": self.energy_scale,
+            "start": list(self.start),
         }
         if include_heightfield:
             data["terrain"] = {

@@ -16,7 +16,7 @@ base antes de agotar la batería**, sin caer en la grieta ni volcar.
 | Ficha del ambiente y niveles | [docs/ambiente-v1.md](docs/ambiente-v1.md) |
 | Experimentos y decisiones | [docs/experimentos.md](docs/experimentos.md) |
 | Escenarios variados y generalización | [docs/escenarios-variados.md](docs/escenarios-variados.md) |
-| Simulador planetario procedural | [docs/simulador-planetario.md](docs/simulador-planetario.md) |
+| Campaña planetaria de diez escenarios | [docs/simulador-planetario.md](docs/simulador-planetario.md) |
 | Contrato planetario y episodios | [docs/contratos-planetario.md](docs/contratos-planetario.md) |
 | Incidente y rollback | [docs/incidente.md](docs/incidente.md) · [docs/evidencia/rollback.md](docs/evidencia/rollback.md) |
 | Informe y guion de defensa | [docs/informe.md](docs/informe.md) · [docs/guion-defensa.md](docs/guion-defensa.md) |
@@ -74,29 +74,24 @@ Las variables están en [`.env.example`](.env.example); cópialo como `.env`.
 Ninguna es secreta salvo las credenciales de DVC y DagsHub, que solo van en
 `.env` local o como secretos del Space.
 
-## Simulador planetario procedural
+## Campaña planetaria de diez escenarios
 
-El ambiente `PlanetaryExplorationEnv` agrega misiones de recolección con terrenos,
-obstáculos, muestras y condiciones ambientales generadas por semilla. Tiene ocho
-niveles curriculares, una acción explícita `recolectar`, inventario y registro
-incremental de todos los intentos en SQLite. Es opcional: el ambiente de balizas y
-los modelos publicados mantienen sus contratos anteriores.
+La ampliación planetaria usa **diez mapas fijos** (`scenario_01`…`scenario_10`),
+misiones de recolección explícita, PPO con cuatro observaciones de historial y un
+currículo que solo avanza mediante evaluaciones independientes. Conserva todos
+los intentos completos en SQLite y permite reproducirlos y comparar rutas.
 
 ```bash
-# API y control manual planetario desde la web
-export EXPEDITION_EPISODE_DB=logs/planetary_episodes.sqlite
-python -m uvicorn api.main:app --reload --port 8000
-
-# inspección y replay exacto, sin volver a ejecutar la política
-python scripts/episodes.py list
-python scripts/episodes.py replay 1 --output /tmp/episode-1.json
-
-# entrenamiento PPO con currículo L1–L8
+python scripts/campaign.py validate --physical --output logs/campaign-validation.json
 python pipelines/train.py --config configs/experiments/exp-007-planetary.yaml --seed 1
+python scripts/episodes.py history scenario_08
 ```
 
-La especificación de observaciones, acciones, persistencia, reproducibilidad y rutas
-API está en [docs/contratos-planetario.md](docs/contratos-planetario.md).
+**Guía de ejecución, entrenamiento, checkpoints, replay y evaluación:**
+[docs/campana-diez-escenarios.md](docs/campana-diez-escenarios.md).
+El contrato planetario es v2; los modelos anteriores de balizas siguen separados.
+La prueba física y los runs cortos verifican funcionamiento, no dominio aprendido.
+
 
 ## Recuperar los modelos y reproducir una evaluación
 
@@ -226,7 +221,7 @@ cd web && echo "VITE_API_BASE_URL=http://127.0.0.1:8000" > .env.local && npm ci 
 
 La web tiene estas secciones:
 - **Simulación:** escena 3D, evaluación y control manual con las flechas.
-- **Exploración planetaria:** dificultad L1–L8, muestras objetivo y distractoras,
+- **Exploración planetaria:** escenarios 01–10, muestras objetivo y distractoras,
   recolección explícita e historial/replay de episodios persistidos.
 - **Catálogo:** filtros por nivel y estado. Cada run muestra hipótesis,
   cambio, semilla, pasos, tiempo, métricas por nivel, commit, MLflow y
@@ -290,7 +285,7 @@ profundos funcionen al recargar.
 | Ruta | Contenido |
 |---|---|
 | `robot_expedition/envs/beacon_expedition.py` | Ambiente Gymnasium 3D (MuJoCo) |
-| `robot_expedition/envs/planetary_exploration.py`, `robot_expedition/planetary/` | Ambiente procedural, currículo, perfiles físicos y SQLite de episodios |
+| `robot_expedition/envs/planetary_exploration.py`, `robot_expedition/planetary/` | Campaña fija, currículo, perfiles físicos y SQLite de episodios |
 | `configs/levels/`, `configs/suites/`, `configs/experiments/`, `configs/selection.yaml` | Niveles, suites fijas, experimentos y criterios |
 | `pipelines/` | `train.py`, `evaluate.py`, `policies.py`, `catalog.py` y `flow.py` (Prefect) |
 | `api/` | FastAPI: `main.py` (rutas y monitoreo) y `store.py` (catálogo y carga verificada) |

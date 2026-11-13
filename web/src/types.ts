@@ -102,6 +102,8 @@ export interface EpisodeSummary {
   reward: number
   collisions: number
   path_length: number
+  energy_consumed?: number
+  path_efficiency?: number | null
   duration_s: number
   end: string
 }
@@ -131,6 +133,8 @@ export interface EpisodeData {
   objective?: string
   requestedSamples?: number
   samplesCollected?: number
+  referencePath?: number[][]
+  pathEfficiency?: number | null
   missionTimeline?: MissionState[]
   actionsTimeline?: string[]
 }

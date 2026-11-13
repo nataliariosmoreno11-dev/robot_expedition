@@ -293,6 +293,8 @@ export const normalizeEpisode = (
     objective: asString(merged.objective) || undefined,
     requestedSamples: merged.requested_samples === undefined ? undefined : asNumber(merged.requested_samples),
     samplesCollected: merged.samples_collected === undefined ? undefined : asNumber(merged.samples_collected),
+    referencePath: Array.isArray(merged.reference_path) ? merged.reference_path as number[][] : [],
+    pathEfficiency: typeof merged.path_efficiency === 'number' ? merged.path_efficiency : null,
     missionTimeline: normalizeMissionTimeline(merged.mission_timeline),
     actionsTimeline: Array.isArray(merged.actions_timeline)
       ? merged.actions_timeline.map((action) => asString(action)).filter(Boolean)

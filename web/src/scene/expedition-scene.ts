@@ -31,6 +31,8 @@ export class ExpeditionScene {
   private rays: SensorRays
   private trailGeometry = new THREE.BufferGeometry()
   private trail: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>
+  private reference?: THREE.Line
+  private referenceVisible = false
   private map?: ExpeditionMap
   private episode?: EpisodeData
   private cumulativeRewards: number[] = []
@@ -94,6 +96,12 @@ export class ExpeditionScene {
 
   setEpisode(episode: EpisodeData) {
     this.episode = episode
+    if (this.reference) { this.scene.remove(this.reference); this.reference.geometry.dispose(); (this.reference.material as THREE.Material).dispose() }
+    const points = (episode.referencePath ?? []).map(p => this.terrain.position(p[0], p[1], 0.12))
+    this.reference = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color:0xc69cff,dashSize:.25,gapSize:.15}))
+    this.reference.computeLineDistances()
+    this.reference.visible = this.referenceVisible && points.length>0 && episode.mode.includes('replay')
+    this.scene.add(this.reference)
     this.framePosition = 0
     this.lastFrameIndex = -1
     let total = 0
@@ -124,6 +132,13 @@ export class ExpeditionScene {
   setPlaying(playing: boolean) {
     this.playingState = Boolean(this.episode) && playing
     this.callbacks.onPlaybackChange(this.playingState)
+  }
+
+  setTrailVisible(visible: boolean) { this.trail.visible = visible }
+
+  setReferenceVisible(visible: boolean) {
+    this.referenceVisible = visible
+    if (this.reference) this.reference.visible = visible && Boolean(this.episode?.mode.includes('replay'))
   }
 
   setSpeed(speed: number) {

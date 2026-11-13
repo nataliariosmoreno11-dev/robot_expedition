@@ -77,10 +77,11 @@ export class ExpeditionApi {
     environment: 'beacon' | 'planetary' = 'beacon',
     difficultyLevel = 1,
     seed = 0,
+    previousSessionId?: string,
   ): Promise<SimulationResponse> {
     return this.request('/sim/reset', {
       method: 'POST',
-      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed }),
+      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed, previous_session_id: previousSessionId }),
     }) as Promise<SimulationResponse>
   }
 
@@ -91,8 +92,14 @@ export class ExpeditionApi {
     }) as Promise<SimulationResponse>
   }
 
-  async episodes(limit = 30): Promise<unknown> {
-    return this.request(`/episodes?limit=${Math.max(1, Math.min(100, limit))}`)
+  async episodes(limit = 30, scenarioId = '', mode = ''): Promise<unknown> {
+    return this.request(`/episodes?limit=${Math.max(1, Math.min(100, limit))}&scenario_id=${encodeURIComponent(scenarioId)}&mode=${encodeURIComponent(mode)}`)
+  }
+
+  async campaignProgress() { return this.request('/campaign/progress') }
+
+  async scenarioProgress(scenarioId: string, mode: string) {
+    return this.request(`/scenarios/${encodeURIComponent(scenarioId)}/progress?mode=${encodeURIComponent(mode)}`)
   }
 
   async episodeReplay(episodeNumber: number): Promise<unknown> {

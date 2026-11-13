@@ -83,7 +83,9 @@ def test_every_attempt_is_incremental_and_replay_uses_saved_frames(tmp_path):
     env.close()
     replay_after = store.replay_episode(1)
     assert replay_after == replay_before
-    assert store.load_scenario(1)["seed"] == 10
+    assert store.get_episode(1)["seed"] == 10
+    assert store.load_scenario(1)["seed"] == 41001
+    assert store.load_scenario(1) == store.load_scenario(2)
     comparison = store.compare_episodes(1, 2, 3)
     assert len(comparison["episodes"]) == 3
     assert comparison["shortest_success"] == 1

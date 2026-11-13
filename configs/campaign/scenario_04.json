@@ -1,0 +1,90 @@
+{
+  "scenario_id": "scenario_04",
+  "name": "El cráter central",
+  "start": [
+    1.5,
+    0,
+    0
+  ],
+  "terrain_seed": 41004,
+  "dimensions": [
+    12,
+    12
+  ],
+  "target_type": "basalto",
+  "requested_samples": 3,
+  "capacity": 3,
+  "rocks": [
+    [
+      6,
+      0,
+      1.4,
+      1.4,
+      1.0
+    ]
+  ],
+  "samples": [
+    {
+      "sample_id": "S1",
+      "sample_type": "basalto",
+      "x": 8.5,
+      "y": 0,
+      "target": true
+    },
+    {
+      "sample_id": "S2",
+      "sample_type": "basalto",
+      "x": 6,
+      "y": 3.8,
+      "target": true
+    },
+    {
+      "sample_id": "S3",
+      "sample_type": "basalto",
+      "x": 6,
+      "y": -3.8,
+      "target": true
+    },
+    {
+      "sample_id": "D1",
+      "sample_type": "sulfato",
+      "x": 2,
+      "y": -3.5,
+      "target": false
+    }
+  ],
+  "dunes": [
+    [
+      9,
+      4,
+      0.12,
+      0.8
+    ]
+  ],
+  "craters": [
+    [
+      6,
+      0,
+      -0.12,
+      1.1
+    ]
+  ],
+  "traction_zones": [
+    [
+      4.6,
+      -1,
+      0.6,
+      0.6,
+      0.5
+    ]
+  ],
+  "relief_m": 0.1,
+  "traction": 0.9,
+  "wind_speed_m_s": 0,
+  "dust_opacity": 0,
+  "wind_direction_rad": 0.5,
+  "temperature_c": -55,
+  "battery_budget": 100,
+  "max_steps": 1100,
+  "energy_scale": 0.6
+}

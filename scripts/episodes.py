@@ -57,10 +57,26 @@ def main() -> None:
         command = commands.add_parser(name)
         command.add_argument("episode", type=int)
 
+    history=commands.add_parser("history")
+    history.add_argument("scenario_id")
+    history.add_argument("--offset",type=int,default=0)
+    history.add_argument("--limit",type=int,default=100)
+    report=commands.add_parser("progress")
+    report.add_argument("scenario_id")
+    report.add_argument("--mode",default="entrenamiento")
+    attempts=commands.add_parser("attempts")
+    attempts.add_argument("scenario_id")
+    attempts.add_argument("attempts",type=int,nargs="+")
     args = parser.parse_args()
     store = EpisodeStore(args.db)
     try:
-        if args.command == "list":
+        if args.command == "history":
+            result=store.get_scenario_history(args.scenario_id,limit=args.limit,offset=args.offset)
+        elif args.command == "progress":
+            result=store.scenario_report(args.scenario_id,mode=args.mode)
+        elif args.command == "attempts":
+            result=store.compare_scenario_attempts(args.scenario_id,*args.attempts)
+        elif args.command == "list":
             result = store.list_episodes(limit=args.limit, offset=args.offset, run_id=args.run_id)
         elif args.command == "show":
             result = store.get_episode(args.episode)
