@@ -40,6 +40,7 @@ from robot_expedition.envs.planetary_exploration import (  # noqa: E402
     PlanetaryExplorationEnv,
 )
 from robot_expedition.planetary.episode_store import EpisodeStore  # noqa: E402
+from robot_expedition.planetary.qlearning import PlanetaryQLearningAgent  # noqa: E402
 
 API_VERSION = "1.1.0"
 MAX_SEEDS = 20                 # la web corta las solicitudes a los 12 s
@@ -47,6 +48,10 @@ MAX_SESSIONS = 50
 SESSION_TTL_S = 15 * 60
 STARTED = time.time()
 EPISODE_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", ROOT / "logs" / "planetary_episodes.sqlite"))
+PLANETARY_Q_CHECKPOINT = Path(os.environ.get(
+    "PLANETARY_Q_CHECKPOINT", ROOT / "models" / "planetary_qlearning.npz"
+))
+q_checkpoint_lock = threading.Lock()
 
 store = Store(ROOT)
 app = FastAPI(title="Robot Expedition API", version=API_VERSION,
@@ -335,6 +340,36 @@ class PlanetaryRulePolicy:
         return 0
 
 
+class PlanetaryQLearningPolicy:
+    """Q-learning persistente con la política reactiva como guía inicial."""
+
+    def __init__(self, seed: int, checkpoint: Path | None = None):
+        self.guide = PlanetaryRulePolicy()
+        self.checkpoint = Path(checkpoint or PLANETARY_Q_CHECKPOINT)
+        self.agent = PlanetaryQLearningAgent(seed=seed)
+        with q_checkpoint_lock:
+            self.agent.load(self.checkpoint)
+        self.last_state = None
+        self.last_action = None
+
+    def __call__(self, observation) -> int:
+        guide_action = self.guide(observation)
+        self.last_state, self.last_action = self.agent.choose(observation, guide_action=guide_action)
+        return self.last_action
+
+    def learn(self, reward: float, next_observation, done: bool) -> None:
+        if self.last_state is None or self.last_action is None:
+            return
+        self.agent.learn(self.last_state, self.last_action, reward, next_observation, done)
+        if done:
+            self.agent.finish_episode()
+            with q_checkpoint_lock:
+                self.agent.save(self.checkpoint)
+
+    def snapshot(self) -> dict:
+        return self.agent.snapshot()
+
+
 class Session:
     def __init__(self, level_id: str, policy, policy_id: str, seed: int,
                  environment_kind: str = "beacon", difficulty_level: int = 1):
@@ -346,7 +381,7 @@ class Session:
                 record_episodes=True,
                 run_id="api-manual" if policy is None else policy_id,
                 policy_version=policy_id,
-                mode="manual" if policy is None else "evaluación",
+                mode="manual" if policy is None else ("entrenamiento" if policy_id == "planetary-qlearning" else "evaluación"),
                 update_curriculum=False,
             )
             self.action_names = [item[0] for item in PLANETARY_ACTIONS]
@@ -356,7 +391,7 @@ class Session:
         self.policy, self.policy_id, self.level_id = policy, policy_id, level_id
         self.environment_kind = environment_kind
         self.obs, _ = self.env.reset(seed=seed)
-        if environment_kind == "planetary" and policy_id == "planetary-rule":
+        if environment_kind == "planetary" and policy_id in {"planetary-rule", "planetary-qlearning"}:
             # El episodio automático siempre termina. La dificultad conserva
             # más tiempo en mapas grandes, pero nunca queda en un bucle sin fin.
             self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
@@ -391,12 +426,14 @@ class StepRequest(BaseModel):
 
 @app.post("/sim/reset")
 def sim_reset(req: ResetRequest):
-    if req.environment == "planetary" and req.policy not in {"manual", "planetary-rule"}:
+    if req.environment == "planetary" and req.policy not in {"manual", "planetary-rule", "planetary-qlearning"}:
         fail(422, "los modelos publicados usan el contrato anterior; usa manual o entrena exp-007-planetary")
     if req.policy == "manual":
         policy = None
     elif req.policy == "planetary-rule":
         policy = PlanetaryRulePolicy()
+    elif req.policy == "planetary-qlearning":
+        policy = PlanetaryQLearningPolicy(req.seed)
     else:
         policy = policy_for(req.policy)
     session = Session(
@@ -439,7 +476,10 @@ def sim_step(req: StepRequest):
     session.obs, reward, terminated, truncated, info = session.env.step(action)
     session.total += reward
     session.done = terminated or truncated
+    if hasattr(session.policy, "learn"):
+        session.policy.learn(float(reward), session.obs, session.done)
     session.touched = time.time()
+    training = session.policy.snapshot() if hasattr(session.policy, "snapshot") else None
     return {"session_id": req.session_id, "frame": frame(session.env, action, reward, info["collision"]),
             "action": action, "action_name": session.action_names[action], "reward": round(float(reward), 4),
             "return": round(session.total, 4), "terminated": terminated, "truncated": truncated,
@@ -450,7 +490,19 @@ def sim_step(req: StepRequest):
             "requested_samples": info.get("requested_samples"),
             "samples_collected": info.get("samples_collected"),
             "storm_intensity": info.get("storm_intensity", 0.0),
-            "inventory": info.get("inventory")}
+            "inventory": info.get("inventory"), "training": training}
+
+
+@app.get("/training/qlearning")
+def qlearning_training_status():
+    agent = PlanetaryQLearningAgent()
+    with q_checkpoint_lock:
+        agent.load(PLANETARY_Q_CHECKPOINT)
+    try:
+        checkpoint = str(PLANETARY_Q_CHECKPOINT.relative_to(ROOT))
+    except ValueError:
+        checkpoint = str(PLANETARY_Q_CHECKPOINT)
+    return {**agent.snapshot(), "checkpoint": checkpoint}
 
 
 # ------------------------------------------------------- historial planetario

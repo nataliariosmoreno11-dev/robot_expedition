@@ -44,6 +44,7 @@ const loadEpisodeButton = required<HTMLButtonElement>('#loadEpisodeButton')
 const episodeNumberInput = required<HTMLInputElement>('#episodeNumberInput')
 const episodeList = required<HTMLElement>('#episodeList')
 const learningMeta = required<HTMLElement>('#learningMeta')
+const qTrainingStatus = required<HTMLElement>('#qTrainingStatus')
 const keypadButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-action]'))
 const trainedValue = required<HTMLElement>('#trainedValue')
 const configValue = required<HTMLElement>('#configValue')
@@ -201,6 +202,15 @@ const setProvenance = (trained: string, config: string) => {
   configValue.textContent = config
 }
 
+const showQTraining = (value: unknown) => {
+  if (!isRecord(value)) return
+  const episode = Number(value.episodes ?? 0)
+  const states = Number(value.states ?? 0)
+  const updates = Number(value.updates ?? 0)
+  const epsilon = Number(value.epsilon ?? 0)
+  qTrainingStatus.textContent = `Q-learning · episodio ${episode} · ${states} estados · ${updates} actualizaciones · ε ${epsilon.toFixed(3)}`
+}
+
 scene.setMap(currentMap)
 scene.setSpeed(4)
 hud.reset()
@@ -263,7 +273,7 @@ const updatePlanetaryLevel = () => {
     button.classList.toggle('selected', selected)
     button.setAttribute('aria-pressed', String(selected))
   }
-  if (!manualSessionId) manualButton.textContent = `Iniciar agente automático L${level}`
+  if (!manualSessionId) manualButton.textContent = `Entrenar Q-learning en L${level}`
 }
 
 const randomScenarioSeed = () => {
@@ -378,6 +388,7 @@ const connectApi = async () => {
     else hud.showNotice('Catálogo vacío', 'La API responde, pero /catalog todavía no contiene modelos recuperables.')
     void refreshMonitor()
     void refreshEpisodes()
+    void api.qlearningStatus().then(showQTraining).catch(() => undefined)
   } catch (error) {
     apiOnline = false
     hud.setConnection('offline', 'API sin respuesta')
@@ -438,7 +449,7 @@ async function refreshEpisodes() {
     if (!episodes.length) {
       const empty = document.createElement('p')
       empty.className = 'section-copy'
-      empty.textContent = 'Aún no hay episodios planetarios guardados. Inicia el agente automático para crear el primero.'
+      empty.textContent = 'Aún no hay episodios planetarios guardados. Inicia Q-learning para crear el primero.'
       episodeList.append(empty)
       return
     }
@@ -587,7 +598,7 @@ const startManualMode = async () => {
     const environment = manualEnvironment.value === 'planetary' ? 'planetary' : 'beacon'
     const difficulty = Number(difficultySelect.value)
     const seed = environment === 'planetary' ? randomScenarioSeed() : 0
-    const policy = environment === 'planetary' ? 'planetary-rule' : 'baseline-rule'
+    const policy = environment === 'planetary' ? 'planetary-qlearning' : 'baseline-rule'
     const response = await api.reset(levelSelect.value, environment, difficulty, seed, policy)
     const frame = frameFromResponse(response)
     if (!response.session_id) throw new Error('/sim/reset no devolvió session_id.')
@@ -601,8 +612,8 @@ const startManualMode = async () => {
       { ...response, frames: [frame], episode: `auto-${automaticEpisodeCount + 1}`, end: 'running' },
       {
         mode: 'entrenamiento-replay',
-        runId: 'planetary-rule',
-        modelName: 'agente autónomo reactivo',
+        runId: 'planetary-qlearning',
+        modelName: 'Q-learning tabular persistente',
         environmentVersion: environmentVersionFrom(response) ?? apiEnvironmentVersion,
         levelId: environment === 'planetary' ? `L${difficulty}` : levelSelect.value,
       },
@@ -625,7 +636,7 @@ const startManualMode = async () => {
       }],
     } : initial
     automaticEpisodeCount += 1
-    loadEpisode(manualEpisode, map, 'api', 'API · AGENTE AUTOMÁTICO')
+    loadEpisode(manualEpisode, map, 'api', 'API · Q-LEARNING')
     const conditions = map.environment
     required<HTMLElement>('#planetReadoutTitle').textContent = `${String(conditions?.planet?.planet_id ?? 'MARTE').toUpperCase()} · ${map.difficulty ?? `L${difficulty}`}`
     required<HTMLElement>('#readoutGravity').textContent = `${Number(conditions?.planet?.gravity_m_s2 ?? 3.71).toFixed(2)} m/s²`
@@ -635,20 +646,20 @@ const startManualMode = async () => {
     required<HTMLElement>('#readoutStorm').textContent = difficulty >= 3 ? 'ciclos dinámicos' : 'sin tormenta'
     required<HTMLElement>('#readoutTraction').textContent = Number(conditions?.traction ?? 0).toFixed(2)
     required<HTMLElement>('#readoutSamples').textContent = `${map.mission?.requested_samples ?? 0} × ${map.mission?.target_type ?? '—'}`
-    setProvenance('planetary-rule', environment === 'planetary' ? `agente autónomo · escenario procedural · L${difficulty}` : 'baseline autónomo')
+    setProvenance('planetary-qlearning', environment === 'planetary' ? `memoria persistente · escenario procedural · L${difficulty}` : 'baseline autónomo')
     automaticRunning = true
     setManualControls(false)
-    manualButton.textContent = 'Pausar agente'
+    manualButton.textContent = 'Pausar entrenamiento'
     hud.hideNotice()
     scheduleAutomaticStep(400)
   } catch (error) {
     manualSessionId = undefined
     manualEpisode = undefined
     setManualControls(false)
-    hud.showNotice('No se pudo iniciar el agente automático', errorMessage(error))
+    hud.showNotice('No se pudo iniciar Q-learning', errorMessage(error))
   } finally {
     manualButton.disabled = false
-    if (!manualSessionId) manualButton.textContent = `Iniciar agente automático L${difficultySelect.value}`
+    if (!manualSessionId) manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
   }
 }
 
@@ -666,6 +677,7 @@ async function sendAutomaticAction() {
         ? `${Math.round(response.storm_intensity * 100)}% · ACTIVA`
         : 'en calma'
     }
+    showQTraining(response.training)
     const finished = Boolean(response.terminated || response.truncated)
     const map = response.map ? normalizeMap(response.map) : currentMap
     // La etapa 3 es siempre "volver a la base": en N1 se pasa de 1 a 3, con una sola baliza.
@@ -701,7 +713,7 @@ async function sendAutomaticAction() {
         },
       ],
     }
-    loadEpisode(manualEpisode, map, 'api', 'API · AGENTE AUTOMÁTICO')
+    loadEpisode(manualEpisode, map, 'api', 'API · Q-LEARNING')
     scene.seek(frames.length - 1)
     if (finished) {
       manualSessionId = undefined
@@ -711,7 +723,7 @@ async function sendAutomaticAction() {
     }
   } catch (error) {
     automaticRunning = false
-    hud.showNotice('El agente automático se detuvo', errorMessage(error))
+    hud.showNotice('El entrenamiento Q-learning se detuvo', errorMessage(error))
   } finally {
     manualBusy = false
     setManualControls(false)
@@ -779,7 +791,7 @@ manualButton.addEventListener('click', () => {
     return
   }
   automaticRunning = !automaticRunning
-  manualButton.textContent = automaticRunning ? 'Pausar agente' : 'Reanudar agente'
+  manualButton.textContent = automaticRunning ? 'Pausar entrenamiento' : 'Reanudar entrenamiento'
   if (automaticRunning) scheduleAutomaticStep(0)
   else window.clearTimeout(automaticTimer)
 })
@@ -799,7 +811,7 @@ difficultySelect.addEventListener('change', () => {
 manualEnvironment.addEventListener('change', () => {
   difficultySelect.disabled = manualEnvironment.value !== 'planetary'
   setManualControls(false)
-  manualButton.textContent = `Iniciar agente automático L${difficultySelect.value}`
+  manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
 })
 refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
 loadEpisodeButton.addEventListener('click', () => { void loadStoredEpisode(Number(episodeNumberInput.value)) })

@@ -184,6 +184,30 @@ def test_planetary_rule_escapes_when_rover_stays_stalled():
     assert policy.recovery_steps > 0
 
 
+def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monkeypatch):
+    checkpoint = tmp_path / "planetary-qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "q-episodes.sqlite")
+    reset = client.post("/sim/reset", json={
+        "environment": "planetary", "difficulty_level": 1,
+        "seed": 707, "policy": "planetary-qlearning",
+    })
+    assert reset.status_code == 200, reset.text
+    sid = reset.json()["session_id"]
+    step = client.post("/sim/step", json={"session_id": sid}).json()
+    assert step["training"]["updates"] == 1
+    with api_main.sessions_lock:
+        session = api_main.sessions[sid]
+        session.policy.agent.finish_episode()
+        session.policy.agent.save(checkpoint)
+        api_main.sessions.pop(sid)
+    session.env.close()
+    assert checkpoint.exists()
+    status = client.get("/training/qlearning")
+    assert status.status_code == 200
+    assert status.json()["updates"] == 1
+
+
 def test_policy_session_runs_to_the_end():
     sid = client.post("/sim/reset", json={"level_id": "n1", "seed": 100000, "policy": "baseline-rule"}).json()["session_id"]
     for _ in range(400):

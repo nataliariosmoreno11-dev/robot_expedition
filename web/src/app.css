@@ -349,6 +349,7 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
 
 .section-copy { margin: -5px 0 14px; color: var(--muted); font-size: 11px; line-height: 1.55; }
 .section-copy code { color: #d6aaa0; font: 400 10px var(--mono); }
+.q-training-status { margin: 8px 0 14px; padding: 9px 11px; border: 1px solid rgba(97,213,210,.28); border-radius: 6px; color: var(--cyan); background: rgba(97,213,210,.06); font: 500 9px var(--mono); letter-spacing: .03em; }
 .keypad { width: 190px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
 .keypad button,
 .keypad-core { height: 44px; display: grid; place-items: center; border-radius: 7px; }

@@ -111,6 +111,10 @@ export class ExpeditionApi {
     return this.request('/episodes/metrics/summary')
   }
 
+  async qlearningStatus(): Promise<unknown> {
+    return this.request('/training/qlearning')
+  }
+
   async compareEpisodes(episodeNumbers: number[]): Promise<unknown> {
     return this.request('/episodes/compare', {
       method: 'POST',
