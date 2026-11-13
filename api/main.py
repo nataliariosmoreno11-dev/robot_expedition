@@ -56,6 +56,7 @@ DEFAULT_ORIGINS = "http://localhost:5173,http://localhost:4173,https://web-five-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[o.strip() for o in os.environ.get("ALLOWED_ORIGINS", DEFAULT_ORIGINS).split(",") if o.strip()],
+    allow_origin_regex=r"^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?$",
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Accept"],
 )
