@@ -243,13 +243,15 @@ def test_robustness_is_separate_and_never_updates_curriculum(tmp_path):
     )
 
 
-def test_real_ppo_updates_and_resumes_optimizer_and_replay(tmp_path, monkeypatch):
+@pytest.mark.parametrize("backend", ["dummy", "subproc"])
+def test_real_ppo_updates_and_resumes_optimizer_and_replay(tmp_path, monkeypatch, backend):
     import torch
     from stable_baselines3 import PPO
 
     import pipelines.train as training
 
     config = training.read_config(Path("configs/experiments/exp-007-planetary.yaml"))
+    config["vector_backend"] = backend
     config["environment"].update(
         max_steps=4,
         episode_db=str(tmp_path / "episodes.sqlite"),
@@ -268,8 +270,11 @@ def test_real_ppo_updates_and_resumes_optimizer_and_replay(tmp_path, monkeypatch
     monkeypatch.setattr(training, "_download_checkpoint", lambda _: first)
     second = tmp_path / "second"
     second.mkdir()
+    config["hyperparams"].update(ent_coef=0.04, learning_rate=0.0002)
     model_path, steps, _ = training._train_ppo(config, 1, 32, second, "parent", 4, 8)
     resumed = PPO.load(model_path)
+    assert resumed.ent_coef == pytest.approx(0.04)
+    assert resumed.learning_rate == pytest.approx(0.0002)
     assert steps == 32 and resumed.num_timesteps == 64
     assert any(
         not torch.equal(v, resumed.policy.state_dict()[k]) for k, v in weights.items()

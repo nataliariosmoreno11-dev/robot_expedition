@@ -205,7 +205,8 @@ def test_periodic_planetary_evaluation_uses_a_frozen_holdout(tmp_path, monkeypat
     assert callback._on_step() and not calls
     model.num_timesteps = 10
     assert callback._on_step() and len(calls) == 1
-    assert calls[0][1] == {"episodes": 4, "seed_start": 910_000, "max_level": 8, "scenario_level": None}
+    assert calls[0][1] == {"episodes": 4, "seed_start": 910_000, "max_level": 8, "scenario_level": None,
+                          "abort_below_success_rate": None}
     payload = json.loads((tmp_path / "periodic-evaluation-10.json").read_text())
     assert payload["suite_id"] == "planetary-periodic-holdout-v1"
     assert payload["training_step"] == 10

@@ -118,6 +118,9 @@ select:disabled { cursor: not-allowed; opacity: 0.48; }
 .connection-loading { color: var(--gold); }
 .connection-online { color: var(--green); }
 
+.training-strip { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 24px; border-bottom: 1px solid var(--green); background: #142019; color: #d3ecda; }
+.training-strip p { margin: 0; flex: 1 1 280px; line-height: 1.5; }
+.training-strip a { color: #a9e9be; text-decoration: underline; }
 .workspace { min-height: calc(100vh - 72px); display: grid; grid-template-columns: minmax(0, 1fr) 390px; }
 
 .viewport-panel { position: sticky; top: 0; height: calc(100vh - 72px); min-height: 620px; overflow: hidden; background: #140c08; }

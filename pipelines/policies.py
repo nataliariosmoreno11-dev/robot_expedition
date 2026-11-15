@@ -14,6 +14,7 @@ Acciones: 0 avanzar, 1 avanzar+izq, 2 avanzar+der, 3 girar izq, 4 girar der.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import os
 import pickle
@@ -243,6 +244,22 @@ def verified_policy(models_dir: Path, manifest: dict):
                                f"checkpoint disponible ({manifest.get('diagnosis') or 'sin diagnóstico'})")
     weights, normalization = model_files(models_dir, manifest)
     if not weights.exists():
+        if manifest["algorithm"] == "ppo" and os.environ.get("POLICY_BACKEND") == "numpy":
+            adapter = adapter_path(models_dir, run_id)
+            evidence_path = Path(models_dir).parent / "docs/evidencia/adaptador-numpy.json"
+            evidence = json.loads(evidence_path.read_text()).get(run_id, {}) if evidence_path.exists() else {}
+            if not adapter.exists() or not evidence:
+                raise ModelUnavailable(f"falta el adaptador validado de {run_id}")
+            if (sha256_file(adapter) != evidence.get("adapter_sha256")
+                    or evidence.get("model_sha256") != manifest["model_sha256"]):
+                raise ModelIntegrityError(f"el adaptador de {run_id} no coincide con su evidencia")
+            if not all(evidence.get("levels", {}).get(level, {}).get("identical_cases")
+                       for level in ("n1", "n2", "n3")):
+                raise ModelIntegrityError(f"validación incompleta del adaptador de {run_id}")
+            policy = NumpyPPOPolicy(adapter)
+            if policy.source_sha256 != manifest["model_sha256"]:
+                raise ModelIntegrityError(f"el adaptador de {run_id} se exportó de otro modelo")
+            return policy
         raise ModelUnavailable(f"los pesos de {run_id} no están en models/{run_id}/")
     actual = sha256_file(weights)
     if actual != manifest["model_sha256"]:

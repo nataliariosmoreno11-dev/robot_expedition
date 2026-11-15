@@ -76,6 +76,10 @@ Ninguna es secreta salvo las credenciales de DVC y DagsHub, que solo van en
 
 ## Campaña planetaria de diez escenarios
 
+La web local incluye **Agente automático · PPO** para entrenar, guardar,
+continuar pesos y ejecutar versiones aprendidas. Inicia la API con
+`ENABLE_LOCAL_TRAINING=1` y consulta [política, controles y versionado](docs/agente-automatico.md).
+
 La ampliación planetaria usa **diez mapas fijos** (`scenario_01`…`scenario_10`),
 misiones de recolección explícita, PPO con cuatro observaciones de historial y un
 currículo que solo avanza mediante evaluaciones independientes. Conserva todos

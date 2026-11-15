@@ -15,6 +15,7 @@ import { LearningCurve } from './ui/curve'
 import { MissionHud, required } from './ui/hud'
 import { RegistryView } from './ui/registry'
 import { TrainingDashboard } from './ui/training-dashboard'
+import { mountAgentTraining } from './ui/agent-training'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -764,6 +765,23 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
   } finally {
     input.value = ''
   }
+})
+
+mountAgentTraining({
+  baseUrl: () => api?.baseUrl,
+  level: () => Number(difficultySelect.value),
+  replay: (payload, label) => {
+    const bundle = normalizeReplayBundle(payload)
+    loadEpisode(bundle.episodes[0], bundle.map, 'replay', label)
+    setProvenance('PPO · entrenamiento', label)
+    scene.setPlaying(true)
+  },
+  frame: (payload, label) => {
+    const episode = normalizeEpisode(payload, { mode: 'evaluación', modelName: 'PPO' })
+    loadEpisode(episode, mapFromPayload(payload) ?? currentMap, 'api', label)
+    setProvenance('PPO · pesos congelados', label)
+    scene.seek(episode.frames.length - 1)
+  },
 })
 
 void connectApi()

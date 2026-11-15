@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from pipelines.policies import (
-    ModelIntegrityError, ModelUnavailable, RandomPolicy, RulePolicy, model_files, verified_policy,
+    ModelIntegrityError, ModelUnavailable, RandomPolicy, RulePolicy, model_files, verified_policy, adapter_path,
 )
 from robot_expedition.envs.beacon_expedition import ENVIRONMENT_VERSION
 
@@ -145,6 +145,11 @@ class Store:
         if cached is not None:
             return cached
         weights, _ = model_files(self.models_dir, manifest)
+        if (manifest.get("algorithm") == "ppo" and os.environ.get("POLICY_BACKEND") == "numpy"
+                and adapter_path(self.models_dir, run_id).exists()):
+            policy = verified_policy(self.models_dir, manifest)
+            self._policies[run_id] = policy
+            return policy
         if manifest.get("status") == "completed" and not weights.exists():
             error = self._dvc_pull(run_id)
             if not weights.exists():

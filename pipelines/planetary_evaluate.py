@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import time
+import os
+from pathlib import Path
 from collections import Counter
 
 import numpy as np
@@ -19,11 +21,14 @@ def evaluate_planetary(
     max_level: int = 10,
     scenario_level: int | None = None,
     evaluation_kind: str = "mastery",
+    abort_below_success_rate: float | None = None,
 ) -> dict:
     if episodes < 1:
         raise ValueError("episodes must be positive")
     if evaluation_kind not in ("mastery", "robustness"):
         raise ValueError("invalid evaluation kind")
+    if abort_below_success_rate is not None and (scenario_level is None or not 0 <= abort_below_success_rate <= 1):
+        raise ValueError("early rejection requires one scenario and a threshold in [0, 1]")
     options = dict(environment)
     options.pop("kind", None)
     persist_evaluation = bool(
@@ -55,6 +60,10 @@ def evaluate_planetary(
         total = 0.0
         latencies = []
         while True:
+            stop_file = os.environ.get("EXPEDITION_STOP_FILE")
+            if stop_file and Path(stop_file).exists():
+                env.close()
+                raise KeyboardInterrupt("Evaluación detenida; se conservan los pesos entrenados")
             before = time.perf_counter()
             action = int(policy(observation))
             latencies.append((time.perf_counter() - before) * 1000.0)
@@ -85,6 +94,12 @@ def evaluate_planetary(
                 "latency_ms_mean": round(float(np.mean(latencies)), 4),
             }
         )
+        # Reject only when even success in ALL remaining cases cannot pass.
+        # Never approve early; promotion still requires the complete suite.
+        if abort_below_success_rate is not None:
+            possible = sum(case["success"] for case in cases) + int(episodes) - len(cases)
+            if possible / int(episodes) < abort_below_success_rate:
+                break
     env.close()
     if options.get("campaign", True):
         from robot_expedition.planetary.reference import campaign_reference
@@ -158,10 +173,12 @@ def evaluate_planetary(
         "suite_id": f"campaign-{evaluation_kind}-v1",
         "evaluation_kind": evaluation_kind,
         "scenario_level": scenario_level,
+        "requested_episodes": int(episodes),
+        "early_rejection": len(cases) < int(episodes),
         "partial": (
-            int(episodes) < 50 * (1 if scenario_level else max(1, min(10, int(max_level))))
+            len(cases) < 50 * (1 if scenario_level else max(1, min(10, int(max_level))))
             if options.get("campaign", True)
-            else int(episodes) < 24
+            else len(cases) < 24
         ),
         "environment": environment,
         "wall_time_s": round(time.perf_counter() - started, 3),

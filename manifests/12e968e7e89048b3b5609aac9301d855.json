@@ -1,0 +1,44 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 262144,
+  "checkpoint_uri": "runs:/12e968e7e89048b3b5609aac9301d855/checkpoint",
+  "config_sha256": "e050322453e19b666d288f0b1e3f6505173c0b0d4c694c5c43eb7d0ed93ee9aa",
+  "diagnosis": null,
+  "effective_budget_timesteps": 262144,
+  "environment_hash": "b5b59c031c5458e7d761f3556bc8da82acab9f1df3127db7af0ec68ae7983b6e",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "campaign-mastery-v1",
+  "experiment_id": "exp-010-parallel",
+  "git_commit": "32f9d291bbe8288ca025cf6f08054b391d7166d6",
+  "level_id": "n2",
+  "metrics": {
+    "collisions_per_episode": 180.5417,
+    "evaluation_episodes": 24,
+    "evaluation_partial": true,
+    "evaluation_reward": 19.4752,
+    "failures_by_cause": {
+      "bateria": 4,
+      "grieta": 3,
+      "tiempo": 3
+    },
+    "steps_mean": 480.125,
+    "success_rate": 0.5833
+  },
+  "model_sha256": "0e023e6460f1c08eeac273e7a5c453178e2d87e6481ae72db2173ceffcb826fc",
+  "model_uri": "dvc://dagshub/models/12e968e7e89048b3b5609aac9301d855",
+  "normalization_uri": "runs:/12e968e7e89048b3b5609aac9301d855/vecnormalize.pkl",
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "logs/training_jobs/3e98634b24a940f4b453e49d38318ae4/config.json",
+    "repository": "https://github.com/Nicol-Tatiana-Cerinza-Tejada/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/a25e4a0a6f164b4c88aafc976be827f6",
+  "run_id": "12e968e7e89048b3b5609aac9301d855",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 11,
+  "source_config_sha256": "0364947c4c8a69378902eab1d30090ccce624aeba48779bc80f002cf68cc032b",
+  "status": "completed"
+}

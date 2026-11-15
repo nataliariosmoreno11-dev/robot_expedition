@@ -113,6 +113,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         max_steps: int | None = None,
         render_mode: str | None = None,
         update_curriculum: bool = True,
+        training_no_progress_limit: int = 0,
     ):
         self.campaign = campaign
         if campaign and planet != "mars":
@@ -132,6 +133,9 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             **(curriculum_settings or {}),
         )
         self.update_curriculum = bool(update_curriculum)
+        self.training_no_progress_limit = int(training_no_progress_limit)
+        if self.training_no_progress_limit < 0:
+            raise ValueError("training_no_progress_limit must be nonnegative")
         self.configured_max_steps = max_steps
         self.run_id = str(run_id)
         self.policy_version = str(policy_version)
@@ -157,6 +161,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.visibility_range = RAY_RANGE
         self._last_event: str | None = None
         self._stuck_steps = 0
+        self._no_progress_steps = 0
         super().__init__(
             level="n2",
             max_steps=max_steps or 540,
@@ -648,9 +653,17 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         # directional penalty. One-time coverage cannot be farmed by loops.
         reward = 0.12 * discovery - 0.01 - 0.05 * drain - 0.6 * collision
         event = None
+        collected_before = len(self.inventory)
         if action == COLLECT_ACTION:
             collect_reward, event = self._collect()
             reward += collect_reward
+
+        # All actions count, including collecting in place and reversing in a loop.
+        # Only observed exploration/recollection resets this clock; no hidden target.
+        self._no_progress_steps = (
+            0 if discovery or len(self.inventory) > collected_before
+            else self._no_progress_steps + 1
+        )
 
         if action < COLLECT_ACTION and abs(speed) < 0.025:
             self._stuck_steps += 1
@@ -688,6 +701,14 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         truncated = not terminated and self.steps >= self.max_steps
         if truncated:
             end = "tiempo"
+        if (not terminated and self.mode == "entrenamiento"
+                and self.training_no_progress_limit
+                and self._no_progress_steps >= self.training_no_progress_limit):
+            # Training-only time limit. Evaluation always runs the original mission.
+            truncated = True
+            end = "sin_progreso"
+            event = "reinicio de entrenamiento: sin explorar ni recolectar"
+            reward -= 2.0
 
         self._done = terminated or truncated
         self.total_reward += float(reward)
@@ -754,6 +775,8 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             "target_type": self.target_type,
             "requested_samples": self.requested_samples,
             "samples_collected": len(self.inventory),
+            "explored_cells": len(self.explored_cells),
+            "no_progress_steps": self._no_progress_steps,
             "inventory": list(self.inventory),
             "mission_progress": (min(len(self.inventory), requested) + (end == "exito"))
             / (requested + 1),

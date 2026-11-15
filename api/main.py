@@ -53,6 +53,9 @@ store = Store(ROOT)
 app = FastAPI(title="Robot Expedition API", version=API_VERSION,
               description="Simulación 3D (MuJoCo) y evaluación de modelos de Robot Expedition.")
 
+from api.training import router as training_router, checkpoint_for
+app.include_router(training_router)
+
 DEFAULT_ORIGINS = "http://localhost:5173,http://localhost:4173,https://web-five-gules-83.vercel.app"
 app.add_middleware(
     CORSMiddleware,
@@ -263,6 +266,7 @@ class Session:
         if environment_kind == "planetary":
             self.env = PlanetaryExplorationEnv(
                 difficulty_level=difficulty_level,
+                history_steps=4 if policy is not None else 1,
                 curriculum=False,
                 episode_db=EPISODE_DB,
                 record_episodes=True,
@@ -310,9 +314,14 @@ class StepRequest(BaseModel):
 
 @app.post("/sim/reset")
 def sim_reset(req: ResetRequest):
-    if req.environment == "planetary" and req.policy != "manual":
+    if req.environment == "planetary" and req.policy.startswith("trained:"):
+        from pipelines.policies import PPOPolicy
+        directory = checkpoint_for(req.policy.removeprefix("trained:"))
+        policy = PPOPolicy(directory / "ppo_model.zip", directory / "vecnormalize.pkl")
+    elif req.environment == "planetary" and req.policy != "manual":
         fail(422, "los modelos publicados usan el contrato anterior; usa manual o entrena exp-007-planetary")
-    policy = None if req.policy == "manual" else policy_for(req.policy)
+    else:
+        policy = None if req.policy == "manual" else policy_for(req.policy)
     session = Session(
         req.level_id,
         policy,
