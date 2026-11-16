@@ -24,14 +24,15 @@ def capture(env):
                 history=[o.tolist() for o in env._history])
 
 
-def build(output):
-    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=6, history_steps=4,
+def build(output, trajectory_output=None, level=6):
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=level, history_steps=4,
                                   mode="demostraci?n", record_episodes=False)
     states = []
+    observations, actions = [], []
     try:
-        env.reset(seed=700001)
+        observation, _ = env.reset(seed=700001)
         planner = ReferencePlanner(env.scenario)
-        order = campaign_reference("scenario_06")["target_order"]
+        order = campaign_reference(f"scenario_{level:02d}")["target_order"]
         targets = [next(s for s in env.samples if s["sample_id"] == sid) for sid in order]
         targets.append(dict(x=1.5, y=0.0, sample_id="base"))
         done = False
@@ -54,7 +55,9 @@ def build(output):
                     x,y = route[index]
                     error = (math.atan2(y-env.y,x-env.x)-env.theta+math.pi)%(2*math.pi)-math.pi
                     action = (3 if error > 0 else 4) if abs(error) > 0.24 else 0
-                _,_,terminated,truncated,info = env.step(action)
+                observations.append(observation.copy())
+                actions.append(action)
+                observation,_,terminated,truncated,info = env.step(action)
                 done = terminated or truncated
                 if target["sample_id"] in env.inventory:
                     if len(env.inventory) >= 2 and not done:
@@ -62,13 +65,18 @@ def build(output):
                     break
             if done:
                 break
-        if not info.get("success") or env.collisions > 2 or len(states) != 3:
+        if not info.get("success") or env.collisions > 2 or len(states) != max(0, env.requested_samples - 1):
             raise RuntimeError(f"Demonstration rejected: {info}")
-        result = dict(schema="training-stage-bank/v1", scenario_id="scenario_06",
+        result = dict(schema="training-stage-bank/v1", scenario_id=f"scenario_{level:02d}",
                       catalog_hash=catalog_hash(), history_steps=4,
                       purpose="privileged demonstration reset states; not learned-policy evaluation",
                       demonstration=dict(success=True, steps=env.steps, collisions=env.collisions,
                                          battery=env.battery), states=states)
+        if trajectory_output is not None:
+            import numpy as np
+            trajectory_output.parent.mkdir(parents=True, exist_ok=True)
+            np.savez_compressed(trajectory_output, observations=np.asarray(observations, dtype=np.float32),
+                                actions=np.asarray(actions, dtype=np.int64), catalog_hash=catalog_hash())
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(result, separators=(",", ":"))+"\n")
         print(json.dumps(dict(path=str(output), bytes=output.stat().st_size,

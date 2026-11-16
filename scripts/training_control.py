@@ -136,12 +136,15 @@ def resume():
                 candidates = []
                 for _, job in entries:
                     try:
-                        candidates.append((verified_checkpoint(job), job["job_id"]))
+                        steps = verified_checkpoint(job)
+                        model = ROOT / "models" / job["run_id"]
+                        mastered = len(read(model / "curriculum_state.json").get("mastered", []))
+                        candidates.append((steps, mastered, (model / "checkpoint_state.json").stat().st_mtime_ns, job["job_id"]))
                     except (OSError, ValueError, KeyError, TypeError):
                         continue
                 if not candidates:
                     raise ValueError("No hay checkpoint completo y verificable. No se iniciará desde cero.")
-                steps, parent = max(candidates)
+                steps, _, _, parent = max(candidates)
                 print(f"Checkpoint verificado: {steps:,} pasos · ejecución {parent}")
                 print("Se usa la versión completa más reciente; cualquier guardado incompleto se conserva y se omite.")
                 state.setdefault("rounds", []).append({"job_id": state.get("active_job_id"), "status": "interrupted", "reason": "terminal recovery"})

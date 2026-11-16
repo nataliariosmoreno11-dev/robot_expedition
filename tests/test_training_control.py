@@ -99,3 +99,19 @@ def test_status_distinguishes_failed_evaluation_from_step_progress(tmp_path, mon
     assert "2.12 muestras" in status
     assert "pesos seguros restaurados" in status
     assert "Suite rechazada" in status
+
+
+def test_resume_prefers_validated_mastery_when_imitation_does_not_add_steps(tmp_path, monkeypatch):
+    monkeypatch.setattr(control, "ROOT", tmp_path)
+    monkeypatch.setattr(control.time, "sleep", lambda _: None)
+    older = make_job(tmp_path, 99, 100)
+    validated = make_job(tmp_path, 1, 100)
+    for job, levels in [(older, [1,2,3,4,5]), (validated, [1,2,3,4,5,6])]:
+        control.write(tmp_path / "models" / job["run_id"] / "curriculum_state.json", {"mastered": levels})
+    class Process:
+        pid = 123
+        def poll(self):
+            return None
+    monkeypatch.setattr(control.subprocess, "Popen", lambda *args, **kwargs: Process())
+    control.resume()
+    assert control.read(tmp_path / "logs/autonomous_campaign/state.json")["parent_job_id"] == validated["job_id"]

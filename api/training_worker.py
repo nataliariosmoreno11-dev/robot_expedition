@@ -20,7 +20,7 @@ def main(directory):
         names = subprocess.check_output(["git", "ls-files", "--cached", "--others", "--exclude-standard"], cwd=ROOT, text=True).splitlines()
         sources = {}
         for name in names:
-            if name.endswith((".py", ".ts", ".json", ".yaml", ".html", ".css", ".ini", ".txt", ".md", ".toml")) and not name.startswith(("catalog/", "manifests/")):
+            if name.endswith((".py", ".ts", ".json", ".yaml", ".html", ".css", ".ini", ".txt", ".md", ".toml", ".npz")) and not name.startswith(("catalog/", "manifests/")):
                 path = ROOT / name
                 if path.is_file():
                     data = path.read_bytes()

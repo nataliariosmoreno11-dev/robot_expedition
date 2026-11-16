@@ -363,6 +363,8 @@ class RetentionGuardCallback(BaseCallback):
         return True
 
     def protect_mastery(self, levels):
+        from pipelines.specialist_policy import freeze_mastered
+        freeze_mastered(self.model, levels)
         self.levels = list(levels)
         self._save_safe()
         self.checked_step = int(self.model.num_timesteps)
@@ -672,6 +674,13 @@ def _train_ppo(
             verbose=0,
             **hyperparams,
         )
+
+    if config.get("specialist_actor") and parent_checkpoint:
+        mastered = json.loads((parent_checkpoint / "curriculum_state.json").read_text()).get("mastered", [])
+        if set(range(1, 6)).issubset(mastered):
+            from pipelines.specialist_policy import specialize_by_scenario, freeze_mastered
+            specialize_by_scenario(model, vec_env)
+            freeze_mastered(model, mastered)
 
     callbacks = [TrainingMetricsCallback(parent_steps), PersistentTrainingCallback(model_dir, config)]
     retention_guard = None

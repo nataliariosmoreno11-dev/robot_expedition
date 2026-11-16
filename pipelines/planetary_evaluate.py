@@ -104,21 +104,29 @@ def evaluate_planetary(
     if options.get("campaign", True):
         from robot_expedition.planetary.reference import campaign_reference
 
+        reference_planners = {}
+        matched_references = {}
         for case in cases:
             ref = campaign_reference(case["scenario_id"])
             case["reference_path_cost"] = ref["reference_path_cost"]
             case["path_efficiency"] = None
             if case["success"] and case["route_cost"] > 0:
                 from robot_expedition.planetary.campaign import load_scenario
-                from robot_expedition.planetary.reference import comparable_reference
+                from robot_expedition.planetary.reference import comparable_reference, ReferencePlanner
 
                 try:
-                    matched = comparable_reference(
-                        load_scenario(case["scenario_id"]),
-                        case["initial_position"],
-                        case["collection_positions"],
-                        case["final_position"],
-                    )
+                    scenario_id = case["scenario_id"]
+                    if scenario_id not in reference_planners:
+                        reference_planners[scenario_id] = ReferencePlanner(load_scenario(scenario_id))
+                    planner = reference_planners[scenario_id]
+                    key = (scenario_id, tuple(case["initial_position"]),
+                           tuple(tuple(point) for point in case["collection_positions"]),
+                           tuple(case["final_position"]))
+                    if key not in matched_references:
+                        matched_references[key] = comparable_reference(
+                            planner.scenario, case["initial_position"],
+                            case["collection_positions"], case["final_position"], planner=planner)
+                    matched = matched_references[key]
                 except ValueError:
                     matched = None
                 if matched:

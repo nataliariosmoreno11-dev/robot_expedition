@@ -65,13 +65,13 @@ def campaign_reference(scenario_id):
     return ReferencePlanner(load_scenario(scenario_id)).analyze()
 
 
-def comparable_reference(scenario, start, collection_positions, finish):
+def comparable_reference(scenario, start, collection_positions, finish, *, planner=None):
     """Minimum grid tour through the same interaction positions as the rover.
 
     This avoids penalizing an agent that collects at the edge of the allowed
     radius or finishes at the edge of the base. No comparison for failed runs.
     """
-    planner = ReferencePlanner(scenario)
+    planner = planner if planner is not None else ReferencePlanner(scenario)
     points = [start, *collection_positions]
     searches = [planner.search(p) for p in points]
     matrix = [
