@@ -115,6 +115,24 @@ export class ExpeditionApi {
     return this.request('/training/qlearning')
   }
 
+  async qlearningCheckpoints(): Promise<unknown> {
+    return this.request('/training/qlearning/checkpoints')
+  }
+
+  async activateQlearningCheckpoint(name: string): Promise<unknown> {
+    return this.request('/training/qlearning/checkpoints/activate', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    })
+  }
+
+  async snapshotQlearningCheckpoint(name: string): Promise<unknown> {
+    return this.request('/training/qlearning/checkpoints/snapshot', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    })
+  }
+
   async compareEpisodes(episodeNumbers: number[]): Promise<unknown> {
     return this.request('/episodes/compare', {
       method: 'POST',

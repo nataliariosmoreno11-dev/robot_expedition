@@ -45,6 +45,11 @@ const episodeNumberInput = required<HTMLInputElement>('#episodeNumberInput')
 const episodeList = required<HTMLElement>('#episodeList')
 const learningMeta = required<HTMLElement>('#learningMeta')
 const qTrainingStatus = required<HTMLElement>('#qTrainingStatus')
+const checkpointSelect = required<HTMLSelectElement>('#checkpointSelect')
+const checkpointMeta = required<HTMLElement>('#checkpointMeta')
+const activateCheckpointButton = required<HTMLButtonElement>('#activateCheckpointButton')
+const snapshotCheckpointButton = required<HTMLButtonElement>('#snapshotCheckpointButton')
+const refreshCheckpointsButton = required<HTMLButtonElement>('#refreshCheckpointsButton')
 const keypadButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-action]'))
 const trainedValue = required<HTMLElement>('#trainedValue')
 const configValue = required<HTMLElement>('#configValue')
@@ -209,6 +214,42 @@ const showQTraining = (value: unknown) => {
   const updates = Number(value.updates ?? 0)
   const epsilon = Number(value.epsilon ?? 0)
   qTrainingStatus.textContent = `Q-learning · episodio ${episode} · ${states} estados · ${updates} actualizaciones · ε ${epsilon.toFixed(3)}`
+}
+
+async function refreshCheckpoints() {
+  if (!api) return
+  refreshCheckpointsButton.disabled = true
+  try {
+    const payload = await api.qlearningCheckpoints()
+    const checkpoints = isRecord(payload) && Array.isArray(payload.checkpoints)
+      ? payload.checkpoints.filter(isRecord)
+      : []
+    checkpointSelect.replaceChildren()
+    for (const checkpoint of checkpoints) {
+      const option = document.createElement('option')
+      option.value = String(checkpoint.name ?? '')
+      option.textContent = `${checkpoint.active ? '● ' : ''}${String(checkpoint.name ?? 'checkpoint')} · ep ${Number(checkpoint.episodes ?? 0)} · ${Number(checkpoint.states ?? 0)} estados`
+      checkpointSelect.append(option)
+      if (checkpoint.active) checkpointSelect.value = option.value
+    }
+    if (!checkpoints.length) {
+      checkpointSelect.append(new Option('Se creará al terminar el primer episodio', ''))
+    }
+    checkpointSelect.disabled = !checkpoints.length
+    activateCheckpointButton.disabled = !checkpoints.length
+    snapshotCheckpointButton.disabled = !checkpoints.length
+    const selected = checkpoints.find((item) => item.active) ?? checkpoints[0]
+    checkpointMeta.textContent = selected
+      ? `${Number(selected.episodes ?? 0)} episodios · ${Number(selected.updates ?? 0)} actualizaciones · ε ${Number(selected.epsilon ?? 0).toFixed(3)} · ${String(selected.updated_at ?? 'fecha desconocida')}`
+      : 'Todavía no existe memoria persistida. El primer episodio terminado creará el checkpoint.'
+    if (isRecord(payload) && payload.persistent === false) {
+      checkpointMeta.textContent += ' · servidor sin disco persistente configurado'
+    }
+  } catch (error) {
+    checkpointMeta.textContent = errorMessage(error)
+  } finally {
+    refreshCheckpointsButton.disabled = !apiOnline
+  }
 }
 
 scene.setMap(currentMap)
@@ -384,11 +425,13 @@ const connectApi = async () => {
     manualButton.disabled = false
     refreshEpisodesButton.disabled = false
     loadEpisodeButton.disabled = false
+    refreshCheckpointsButton.disabled = false
     if (normalizedCatalog.runs.length) hud.hideNotice()
     else hud.showNotice('Catálogo vacío', 'La API responde, pero /catalog todavía no contiene modelos recuperables.')
     void refreshMonitor()
     void refreshEpisodes()
     void api.qlearningStatus().then(showQTraining).catch(() => undefined)
+    void refreshCheckpoints()
   } catch (error) {
     apiOnline = false
     hud.setConnection('offline', 'API sin respuesta')
@@ -420,7 +463,10 @@ async function refreshEpisodes() {
   const activeApi = api
   refreshEpisodesButton.disabled = true
   try {
-    const payload = await api.episodes(100)
+    const [payload, metricsPayload] = await Promise.all([
+      api.episodes(100),
+      api.episodeMetrics().catch(() => undefined),
+    ])
     const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []
     const storage = isRecord(payload) && isRecord(payload.storage) ? payload.storage : undefined
     required<HTMLElement>('#experimentStorageMeta').textContent = storage
@@ -441,9 +487,13 @@ async function refreshEpisodes() {
     })).filter((item) => Number.isInteger(item.episode_number) && item.episode_number > 0)
     const finished = summaries.filter((episode) => episode.success !== null)
     trainingDashboard.setEpisodes(finished)
-    const successCount = finished.filter((episode) => episode.success).length
-    learningMeta.textContent = summaries.length
-      ? `${summaries.length} episodios recientes · ${finished.length ? ((successCount / finished.length) * 100).toFixed(1) : '0.0'}% de misiones completadas`
+    const metrics = isRecord(metricsPayload) ? metricsPayload : undefined
+    const totalEpisodes = Number(metrics?.episodes ?? summaries.length)
+    const successRate = metrics ? Number(metrics.success_rate ?? 0) * 100 : (finished.length
+      ? (finished.filter((episode) => episode.success).length / finished.length) * 100
+      : 0)
+    learningMeta.textContent = totalEpisodes
+      ? `${totalEpisodes} episodios entrenados · ${successRate.toFixed(1)}% de éxito · recompensa media ${Number(metrics?.reward_mean ?? 0).toFixed(1)} · ${Number(metrics?.samples_collected ?? 0)} muestras acumuladas`
       : 'Sin episodios registrados.'
     episodeList.replaceChildren()
     if (!episodes.length) {
@@ -814,6 +864,45 @@ manualEnvironment.addEventListener('change', () => {
   manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
 })
 refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
+refreshCheckpointsButton.addEventListener('click', () => { void refreshCheckpoints() })
+checkpointSelect.addEventListener('change', async () => {
+  if (!api || !checkpointSelect.value) return
+  const payload = await api.qlearningCheckpoints().catch(() => undefined)
+  const checkpoints = isRecord(payload) && Array.isArray(payload.checkpoints) ? payload.checkpoints.filter(isRecord) : []
+  const selected = checkpoints.find((item) => item.name === checkpointSelect.value)
+  if (selected) checkpointMeta.textContent = `${Number(selected.episodes ?? 0)} episodios · ${Number(selected.updates ?? 0)} actualizaciones · ε ${Number(selected.epsilon ?? 0).toFixed(3)} · ${String(selected.updated_at ?? 'fecha desconocida')}`
+})
+activateCheckpointButton.addEventListener('click', async () => {
+  if (!api || !checkpointSelect.value) return
+  activateCheckpointButton.disabled = true
+  try {
+    const result = await api.activateQlearningCheckpoint(checkpointSelect.value)
+    showQTraining(result)
+    checkpointMeta.textContent = 'Memoria activada. El siguiente episodio continuará desde ese checkpoint.'
+    manualSessionId = undefined
+    automaticRunning = false
+    manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
+    await refreshCheckpoints()
+  } catch (error) {
+    hud.showNotice('No se pudo activar el checkpoint', errorMessage(error))
+  } finally {
+    activateCheckpointButton.disabled = !apiOnline || !checkpointSelect.value
+  }
+})
+snapshotCheckpointButton.addEventListener('click', async () => {
+  if (!api || !checkpointSelect.value) return
+  snapshotCheckpointButton.disabled = true
+  try {
+    const label = `memoria-ep-${Date.now()}`
+    await api.snapshotQlearningCheckpoint(label)
+    await refreshCheckpoints()
+    checkpointMeta.textContent = 'Copia guardada. Puedes volver a activarla cuando quieras.'
+  } catch (error) {
+    hud.showNotice('No se pudo guardar la copia', errorMessage(error))
+  } finally {
+    snapshotCheckpointButton.disabled = !apiOnline || !checkpointSelect.value
+  }
+})
 loadEpisodeButton.addEventListener('click', () => { void loadStoredEpisode(Number(episodeNumberInput.value)) })
 episodeNumberInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') void loadStoredEpisode(Number(episodeNumberInput.value))

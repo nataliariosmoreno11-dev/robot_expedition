@@ -350,6 +350,12 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
 .section-copy { margin: -5px 0 14px; color: var(--muted); font-size: 11px; line-height: 1.55; }
 .section-copy code { color: #d6aaa0; font: 400 10px var(--mono); }
 .q-training-status { margin: 8px 0 14px; padding: 9px 11px; border: 1px solid rgba(97,213,210,.28); border-radius: 6px; color: var(--cyan); background: rgba(97,213,210,.06); font: 500 9px var(--mono); letter-spacing: .03em; }
+.checkpoint-manager { margin: 0 0 16px; padding: 12px; border: 1px solid rgba(131,181,255,.22); border-radius: 8px; background: rgba(24,32,39,.5); }
+.checkpoint-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.checkpoint-heading strong { display: block; margin-top: 3px; font-size: 13px; }
+.checkpoint-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 9px; }
+.checkpoint-actions button { min-width: 0; padding-inline: 8px; font-size: 9px; }
+.icon-button { width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; color: var(--text); background: var(--panel-soft); cursor: pointer; }
 .keypad { width: 190px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
 .keypad button,
 .keypad-core { height: 44px; display: grid; place-items: center; border-radius: 7px; }

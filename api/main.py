@@ -11,6 +11,9 @@ from __future__ import annotations
 
 import math
 import os
+import json
+import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -47,11 +50,56 @@ MAX_SEEDS = 20                 # la web corta las solicitudes a los 12 s
 MAX_SESSIONS = 50
 SESSION_TTL_S = 15 * 60
 STARTED = time.time()
-EPISODE_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", ROOT / "logs" / "planetary_episodes.sqlite"))
+DATA_DIR = Path(os.environ.get("EXPEDITION_DATA_DIR", ROOT))
+EPISODE_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", DATA_DIR / "logs" / "planetary_episodes.sqlite"))
 PLANETARY_Q_CHECKPOINT = Path(os.environ.get(
-    "PLANETARY_Q_CHECKPOINT", ROOT / "models" / "planetary_qlearning.npz"
+    "PLANETARY_Q_CHECKPOINT", DATA_DIR / "models" / "planetary_qlearning.npz"
 ))
+PLANETARY_Q_CHECKPOINT_DIR = Path(os.environ.get(
+    "PLANETARY_Q_CHECKPOINT_DIR", PLANETARY_Q_CHECKPOINT.parent
+))
+PLANETARY_Q_SELECTION = PLANETARY_Q_CHECKPOINT_DIR / "planetary_qlearning_active.json"
 q_checkpoint_lock = threading.Lock()
+
+
+def _relative_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def _checkpoint_candidates() -> list[Path]:
+    PLANETARY_Q_CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    candidates = set(PLANETARY_Q_CHECKPOINT_DIR.glob("*.npz"))
+    if PLANETARY_Q_CHECKPOINT.exists():
+        candidates.add(PLANETARY_Q_CHECKPOINT)
+    return sorted(candidates, key=lambda path: path.stat().st_mtime, reverse=True)
+
+
+def _active_checkpoint() -> Path:
+    try:
+        selected = json.loads(PLANETARY_Q_SELECTION.read_text(encoding="utf-8"))["name"]
+        candidate = PLANETARY_Q_CHECKPOINT_DIR / Path(selected).name
+        if candidate.exists() and candidate.suffix == ".npz":
+            return candidate
+    except (OSError, KeyError, TypeError, json.JSONDecodeError):
+        pass
+    return PLANETARY_Q_CHECKPOINT
+
+
+def _checkpoint_info(path: Path, *, active: Path | None = None) -> dict:
+    agent = PlanetaryQLearningAgent()
+    agent.load(path)
+    stat = path.stat()
+    return {
+        "name": path.name,
+        "path": _relative_path(path),
+        "active": path.resolve() == (active or _active_checkpoint()).resolve(),
+        "size_bytes": stat.st_size,
+        "updated_at": datetime.fromtimestamp(stat.st_mtime, timezone.utc).isoformat(timespec="seconds"),
+        **agent.snapshot(),
+    }
 
 store = Store(ROOT)
 app = FastAPI(title="Robot Expedition API", version=API_VERSION,
@@ -148,7 +196,8 @@ def root():
                    "/sim/reset", "/sim/step", "/episodes", "/episodes/{number}",
                    "/episodes/{number}/replay", "/episodes/{number}/scenario",
                    "/episodes/{number}/protect", "/episodes/metrics/summary",
-                   "/episodes/compare", "/monitor"],
+                   "/episodes/compare", "/training/qlearning",
+                   "/training/qlearning/checkpoints", "/monitor"],
         "repository": "https://github.com/nataliariosmoreno11-dev/robot_expedition",
     }
 
@@ -345,7 +394,7 @@ class PlanetaryQLearningPolicy:
 
     def __init__(self, seed: int, checkpoint: Path | None = None):
         self.guide = PlanetaryRulePolicy()
-        self.checkpoint = Path(checkpoint or PLANETARY_Q_CHECKPOINT)
+        self.checkpoint = Path(checkpoint or _active_checkpoint())
         self.agent = PlanetaryQLearningAgent(seed=seed)
         with q_checkpoint_lock:
             self.agent.load(self.checkpoint)
@@ -495,14 +544,77 @@ def sim_step(req: StepRequest):
 
 @app.get("/training/qlearning")
 def qlearning_training_status():
+    checkpoint_path = _active_checkpoint()
     agent = PlanetaryQLearningAgent()
     with q_checkpoint_lock:
-        agent.load(PLANETARY_Q_CHECKPOINT)
-    try:
-        checkpoint = str(PLANETARY_Q_CHECKPOINT.relative_to(ROOT))
-    except ValueError:
-        checkpoint = str(PLANETARY_Q_CHECKPOINT)
-    return {**agent.snapshot(), "checkpoint": checkpoint}
+        agent.load(checkpoint_path)
+    return {
+        **agent.snapshot(),
+        "checkpoint": _relative_path(checkpoint_path),
+        "checkpoint_name": checkpoint_path.name,
+        "persistent_data_dir": str(DATA_DIR),
+    }
+
+
+@app.get("/training/qlearning/checkpoints")
+def qlearning_checkpoints():
+    """Lista únicamente checkpoints compatibles con el agente planetario."""
+    active = _active_checkpoint()
+    compatible, incompatible = [], []
+    with q_checkpoint_lock:
+        for path in _checkpoint_candidates():
+            try:
+                compatible.append(_checkpoint_info(path, active=active))
+            except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+                incompatible.append({"name": path.name, "reason": str(exc)})
+    return {
+        "active": active.name,
+        "directory": str(PLANETARY_Q_CHECKPOINT_DIR),
+        "persistent": DATA_DIR.resolve() != ROOT.resolve(),
+        "checkpoints": compatible,
+        "incompatible": incompatible,
+    }
+
+
+class ActivateCheckpointRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+
+
+@app.post("/training/qlearning/checkpoints/activate")
+def activate_qlearning_checkpoint(req: ActivateCheckpointRequest):
+    name = Path(req.name).name
+    if name != req.name or not re.fullmatch(r"[A-Za-z0-9_.-]+\.npz", name):
+        fail(422, "nombre de checkpoint inválido")
+    candidate = PLANETARY_Q_CHECKPOINT_DIR / name
+    if not candidate.is_file():
+        fail(404, f"no existe el checkpoint {name}")
+    with q_checkpoint_lock:
+        try:
+            info = _checkpoint_info(candidate, active=candidate)
+        except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+            fail(409, f"checkpoint incompatible: {exc}")
+        PLANETARY_Q_SELECTION.write_text(json.dumps({"name": name}), encoding="utf-8")
+    return {**info, "message": "checkpoint activado; el próximo episodio continuará desde este estado"}
+
+
+class SnapshotCheckpointRequest(BaseModel):
+    name: str = Field(default="", max_length=80)
+
+
+@app.post("/training/qlearning/checkpoints/snapshot")
+def snapshot_qlearning_checkpoint(req: SnapshotCheckpointRequest):
+    source = _active_checkpoint()
+    if not source.exists():
+        fail(409, "todavía no existe un checkpoint para guardar")
+    stem = re.sub(r"[^A-Za-z0-9_-]+", "-", req.name.strip()).strip("-")
+    if not stem:
+        stem = datetime.now(timezone.utc).strftime("checkpoint-%Y%m%d-%H%M%S")
+    destination = PLANETARY_Q_CHECKPOINT_DIR / f"{stem}.npz"
+    if destination.exists():
+        fail(409, f"ya existe {destination.name}; usa otro nombre")
+    with q_checkpoint_lock:
+        shutil.copy2(source, destination)
+        return _checkpoint_info(destination)
 
 
 # ------------------------------------------------------- historial planetario

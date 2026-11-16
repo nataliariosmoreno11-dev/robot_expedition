@@ -181,6 +181,22 @@
             <p class="mission-seed">Escenario: <b id="missionSeedValue">se genera al iniciar</b></p>
             <p id="qTrainingStatus" class="q-training-status">Q-learning: esperando conexión</p>
 
+            <div class="checkpoint-manager" aria-labelledby="checkpointTitle">
+              <div class="checkpoint-heading">
+                <div><span class="eyebrow">Memoria del agente</span><strong id="checkpointTitle">Continuar entrenamiento</strong></div>
+                <button id="refreshCheckpointsButton" class="icon-button" type="button" disabled aria-label="Actualizar checkpoints">↻</button>
+              </div>
+              <label class="field">
+                <span>Checkpoint compatible</span>
+                <select id="checkpointSelect" disabled><option value="">Sin checkpoints disponibles</option></select>
+              </label>
+              <div class="checkpoint-actions">
+                <button id="activateCheckpointButton" class="secondary-button" type="button" disabled>Continuar desde este</button>
+                <button id="snapshotCheckpointButton" class="secondary-button" type="button" disabled>Guardar copia</button>
+              </div>
+              <p id="checkpointMeta" class="section-copy">La API mostrará aquí episodios, estados y fecha de cada memoria.</p>
+            </div>
+
             <div class="sample-legend" aria-label="Leyenda de muestras">
               <span><i class="sample-target"></i>Muestra objetivo</span>
               <span><i class="sample-distractor"></i>Distractor</span>

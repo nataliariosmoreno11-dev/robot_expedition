@@ -247,6 +247,18 @@ Un error de la API se muestra como error y un archivo local se rotula
    repositorio. Render lee [`render.yaml`](render.yaml) y crea el servicio `robot-expedition-api`.
 2. Esperar el primer build (unos 3–5 min) y abrir `https://robot-expedition-api.onrender.com/health`.
 
+Para conservar episodios y checkpoints entre redespliegues, monta un disco persistente en
+`/var/data` y configura `EXPEDITION_DATA_DIR=/var/data`. La API guardará allí
+`logs/planetary_episodes.sqlite`, el checkpoint activo y sus copias. Sin disco persistente,
+la aplicación funciona, pero el sistema de archivos de Render puede perder esos artefactos
+al reiniciar. El catálogo y los modelos versionados de Tomás siguen separados y no se
+reescriben desde la web.
+
+La sección **Memoria del agente** permite consultar checkpoints Q-learning planetarios,
+activar uno para continuar sus episodios y crear una copia antes de experimentar. Los
+modelos históricos del catálogo permanecen disponibles para evaluación y no se presentan
+como checkpoints compatibles cuando su contrato de observación es diferente.
+
 Para verificar de forma reproducible la integración publicada (Vercel, CORS,
 catálogo, evaluación, control manual y enlaces directos):
 
