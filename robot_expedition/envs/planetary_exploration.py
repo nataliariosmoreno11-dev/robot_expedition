@@ -117,6 +117,8 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         training_navigation_shaping: float = 0.0,
         training_shaping_gamma: float = 0.995,
         training_shaping_min_level: int = 6,
+        training_stage_bank: str | None = None,
+        training_stage_probability: float = 0.0,
     ):
         self.campaign = campaign
         if campaign and planet != "mars":
@@ -140,6 +142,12 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.training_navigation_shaping = float(training_navigation_shaping)
         self.training_shaping_gamma = float(training_shaping_gamma)
         self.training_shaping_min_level = int(training_shaping_min_level)
+        self.training_stage_bank = training_stage_bank
+        self.training_stage_probability = float(training_stage_probability)
+        self._stage_bank = None
+        self.training_stage = 0
+        if not 0 <= self.training_stage_probability <= 1:
+            raise ValueError("training_stage_probability must be in [0, 1]")
         if not 0 <= self.training_navigation_shaping < float("inf"):
             raise ValueError("training_navigation_shaping must be finite and nonnegative")
         if not 0 < self.training_shaping_gamma <= 1:
@@ -357,6 +365,9 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.total_reward = 0.0
         self._last_event = None
         self._stuck_steps = 0
+        self._no_progress_steps = 0
+        self.training_stage = 0
+        self._apply_training_stage()
         self.episode_started = time.perf_counter()
         observation = self._observation()
 
@@ -365,7 +376,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             self.writer = self.store.start_episode(
                 run_id=self.run_id,
                 policy_version=self.policy_version,
-                mode=self.mode,
+                mode="entrenamiento_etapa" if self.training_stage else self.mode,
                 seed=scenario_seed,
                 scenario=scenario.to_dict(),
                 map_spec=self.map_spec(),
@@ -382,6 +393,43 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
                 truncated=False,
             )
         return observation, self._info(None)
+
+    def _apply_training_stage(self):
+        if (self.mode != "entrenamiento" or self.scenario_id != "scenario_06"
+                or not self.training_stage_bank or not self.training_stage_probability):
+            return
+        if self._stage_bank is None:
+            path = Path(self.training_stage_bank)
+            if not path.is_absolute():
+                path = Path(__file__).resolve().parents[2] / path
+            bank = json.loads(path.read_text())
+            if (bank.get("schema") != "training-stage-bank/v1"
+                    or bank.get("catalog_hash") != catalog_hash()
+                    or bank.get("scenario_id") != self.scenario_id
+                    or bank.get("history_steps") != self.history_steps):
+                raise ValueError("Training stage bank is incompatible with this environment")
+            self._stage_bank = bank
+        if self.np_random.random() >= self.training_stage_probability:
+            return
+        state = self._stage_bank["states"][int(self.np_random.integers(0, len(self._stage_bank["states"])))]
+        self.data.qpos[:] = state["qpos"]
+        self.data.qvel[:] = state["qvel"]
+        self.data.time = state["time"]
+        mujoco.mj_forward(self.model, self.data)
+        self.inventory = list(state["inventory"])
+        self.collected_ids = set(self.inventory)
+        for sample in self.samples:
+            sample["collected"] = sample["sample_id"] in self.collected_ids
+        self.collection_positions = [list(p) for p in state["collection_positions"]]
+        self.battery = state["battery"]
+        self.steps = state["steps"]
+        self.path_length = state["path_length"]
+        self.route_cost = state["route_cost"]
+        self.explored_cells = {tuple(c) for c in state["explored_cells"]}
+        self._history = [np.asarray(o, dtype=np.float32) for o in state["history"]]
+        self.training_stage = len(self.inventory)
+        self.visited = [i < len(self.inventory) for i in range(self.requested_samples)]
+        self.stage = 3 if len(self.inventory) >= self.requested_samples else min(2, len(self.inventory) + 1)
 
     # --------------------------------------------------------- sensores
     def _remaining_targets(self) -> list[dict]:
@@ -771,7 +819,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
                     collisions=self.collisions,
                     path_length=self.path_length,
                 )
-            if self.curriculum_enabled and self.update_curriculum:
+            if self.curriculum_enabled and self.update_curriculum and not self.training_stage:
                 info["curriculum_advanced"] = self.curriculum.record_result(
                     success, evaluated_level=self.scenario.difficulty_level
                 )
@@ -808,6 +856,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             "samples_collected": len(self.inventory),
             "explored_cells": len(self.explored_cells),
             "no_progress_steps": self._no_progress_steps,
+            "training_stage": self.training_stage,
             "inventory": list(self.inventory),
             "mission_progress": (min(len(self.inventory), requested) + (end == "exito"))
             / (requested + 1),

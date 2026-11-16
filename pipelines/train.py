@@ -214,7 +214,7 @@ def _make_env(config: dict[str, Any], seed: int | None = None) -> Monitor:
     env = build_env(config)
     if seed is not None:
         env.reset(seed=seed)
-    info_keywords = ("success", "samples_collected", "difficulty_level", "explored_cells", "no_progress_steps") if is_planetary(config) else ("success",)
+    info_keywords = ("success", "samples_collected", "difficulty_level", "explored_cells", "no_progress_steps", "training_stage") if is_planetary(config) else ("success",)
     return Monitor(env, info_keywords=info_keywords)
 
 
@@ -230,7 +230,7 @@ class TrainingMetricsCallback(BaseCallback):
             if episode is not None:
                 mlflow.log_metric("training/reward", float(episode["r"]), step=step)
                 mlflow.log_metric(
-                    "training/success_rate",
+                    "training/stage_success_rate" if episode.get("training_stage") else "training/success_rate",
                     float(bool(episode.get("success", False))),
                     step=step,
                 )

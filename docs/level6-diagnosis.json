@@ -1,0 +1,87 @@
+{
+  "model": "ef2bcbedc60745e396b33f46e3b0bc1a",
+  "seed": 910000,
+  "events": [
+    {
+      "step": 54,
+      "x": 7.2618540930837225,
+      "y": -1.66139968718637,
+      "event": "recolectada S2 (hematita)"
+    },
+    {
+      "step": 137,
+      "x": 5.234785464256001,
+      "y": 0.07410475116356112,
+      "event": "recolectada S1 (basalto)"
+    },
+    {
+      "step": 1077,
+      "x": 10.056158620996372,
+      "y": 3.7606027900367724,
+      "event": "recolectada S3 (basalto)"
+    }
+  ],
+  "collision_hotspots": [
+    {
+      "samples": 2,
+      "x": 5,
+      "y": -1,
+      "collisions": 67
+    },
+    {
+      "samples": 3,
+      "x": 7,
+      "y": 3,
+      "collisions": 56
+    },
+    {
+      "samples": 2,
+      "x": 5,
+      "y": -2,
+      "collisions": 41
+    },
+    {
+      "samples": 3,
+      "x": 7,
+      "y": 2,
+      "collisions": 37
+    },
+    {
+      "samples": 3,
+      "x": 6,
+      "y": 1,
+      "collisions": 26
+    },
+    {
+      "samples": 1,
+      "x": 6,
+      "y": -1,
+      "collisions": 23
+    },
+    {
+      "samples": 3,
+      "x": 6,
+      "y": 3,
+      "collisions": 22
+    },
+    {
+      "samples": 2,
+      "x": 6,
+      "y": -2,
+      "collisions": 21
+    }
+  ],
+  "actions": {
+    "2": 169,
+    "0": 61,
+    "1": 303,
+    "5": 3,
+    "6": 721,
+    "3": 30,
+    "4": 5
+  },
+  "end": "bateria",
+  "steps": 1292,
+  "samples": 3,
+  "battery": 0.0
+}
