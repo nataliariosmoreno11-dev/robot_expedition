@@ -123,3 +123,63 @@ def test_evaluation_only_rejects_when_passing_is_impossible(threshold, expected)
     assert result['requested_episodes'] == 50
     assert result['early_rejection'] == (expected < 50)
     assert result['partial'] == (expected < 50)
+
+
+@pytest.mark.parametrize("mode,level", [("evaluaci?n", 6), ("manual", 6), ("entrenamiento", 3)])
+def test_navigation_hint_does_not_change_evaluation_or_rehearsal(mode, level):
+    options = dict(curriculum=False, difficulty_level=level, mode=mode)
+    plain = PlanetaryExplorationEnv(**options)
+    shaped = PlanetaryExplorationEnv(**options, training_navigation_shaping=8)
+    try:
+        import numpy as np
+        plain.reset(seed=21)
+        shaped.reset(seed=21)
+        for action in [0, 1, 0, 2, 5, 6]:
+            a, b = plain.step(action), shaped.step(action)
+            assert np.array_equal(a[0], b[0])
+            assert a[1:4] == b[1:4]
+            assert b[4]["navigation_shaping"] == 0
+    finally:
+        plain.close()
+        shaped.close()
+
+
+def test_navigation_potential_uses_only_visible_targets(monkeypatch):
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=6,
+                                  training_navigation_shaping=8)
+    try:
+        env.reset(seed=21)
+        monkeypatch.setattr(env, "_nearest_visible_sample", lambda: (None, 1.0))
+        assert env._navigation_potential() == 0
+        monkeypatch.setattr(env, "_nearest_visible_sample", lambda: ({"target": False}, 1.0))
+        assert env._navigation_potential() == 0
+        monkeypatch.setattr(env, "_nearest_visible_sample", lambda: ({"target": True}, 1.0))
+        assert 0 < env._navigation_potential() <= 8
+    finally:
+        env.close()
+
+
+def test_navigation_shaping_telescopes_and_terminal_clears_potential(monkeypatch):
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=6,
+                                  training_navigation_shaping=8)
+    try:
+        env.reset(seed=21)
+        potentials = iter([2.0, 3.0, 3.0, 2.0, 2.0])
+        monkeypatch.setattr(env, "_navigation_potential", lambda: next(potentials))
+        first = env.step(5)[4]["navigation_shaping"]
+        second = env.step(5)[4]["navigation_shaping"]
+        gamma = env.training_shaping_gamma
+        assert first + gamma * second == pytest.approx((gamma ** 2 - 1) * 2)
+        env.battery = 0.000001
+        _, _, terminated, _, info = env.step(5)
+        assert terminated
+        assert info["navigation_shaping"] == -2
+    finally:
+        env.close()
+
+
+def test_navigation_experiment_uses_matching_discount():
+    from pathlib import Path
+    from pipelines.train import read_config
+    config = read_config(Path("configs/experiments/exp-012-observable-navigation.yaml"))
+    assert config["hyperparams"]["gamma"] == config["environment"]["training_shaping_gamma"]

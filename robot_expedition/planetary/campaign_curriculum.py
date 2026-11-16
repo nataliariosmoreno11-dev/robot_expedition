@@ -15,6 +15,7 @@ class CampaignCurriculum:
         success_threshold=0.85,
         max_collisions=2.0,
         rehearsal_probability=0.2,
+        rehearsal_weights=None,
     ):
         self.state_path = Path(state_path) if state_path else None
         self.current_level = initial_level
@@ -22,6 +23,9 @@ class CampaignCurriculum:
         self.success_threshold = success_threshold
         self.max_collisions = max_collisions
         self.rehearsal_probability = rehearsal_probability
+        self.rehearsal_weights = {int(k): float(v) for k, v in (rehearsal_weights or {}).items()}
+        if any(not 1 <= k <= 10 or not 0 < v < float('inf') for k, v in self.rehearsal_weights.items()):
+            raise ValueError("rehearsal weights must be finite positive values for levels 1-10")
         self.mastered = []
         self.evaluations = {}
         self._load()
@@ -52,11 +56,12 @@ class CampaignCurriculum:
 
     def select_level(self, rng):
         self._load()
-        return (
-            int(rng.integers(1, self.current_level))
-            if self.current_level > 1 and rng.random() < self.rehearsal_probability
-            else self.current_level
-        )
+        if self.current_level > 1 and rng.random() < self.rehearsal_probability:
+            levels = list(range(1, self.current_level))
+            weights = [self.rehearsal_weights.get(level, 1.0) for level in levels]
+            total = sum(weights)
+            return int(rng.choice(levels, p=[value / total for value in weights]))
+        return self.current_level
 
     def record_result(self, success, *, evaluated_level):
         return False  # training must not promote the policy
@@ -126,6 +131,8 @@ class CampaignCurriculum:
                 "minimum_episodes": self.minimum_episodes,
                 "success_threshold": self.success_threshold,
                 "max_collisions": self.max_collisions,
+                "rehearsal_probability": self.rehearsal_probability,
+                "rehearsal_weights": self.rehearsal_weights,
             },
         }
 

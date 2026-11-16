@@ -114,6 +114,9 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         render_mode: str | None = None,
         update_curriculum: bool = True,
         training_no_progress_limit: int = 0,
+        training_navigation_shaping: float = 0.0,
+        training_shaping_gamma: float = 0.995,
+        training_shaping_min_level: int = 6,
     ):
         self.campaign = campaign
         if campaign and planet != "mars":
@@ -134,6 +137,13 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         )
         self.update_curriculum = bool(update_curriculum)
         self.training_no_progress_limit = int(training_no_progress_limit)
+        self.training_navigation_shaping = float(training_navigation_shaping)
+        self.training_shaping_gamma = float(training_shaping_gamma)
+        self.training_shaping_min_level = int(training_shaping_min_level)
+        if not 0 <= self.training_navigation_shaping < float("inf"):
+            raise ValueError("training_navigation_shaping must be finite and nonnegative")
+        if not 0 < self.training_shaping_gamma <= 1:
+            raise ValueError("training_shaping_gamma must be in (0, 1]")
         if self.training_no_progress_limit < 0:
             raise ValueError("training_no_progress_limit must be nonnegative")
         self.configured_max_steps = max_steps
@@ -582,12 +592,26 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         bonus = 16.0 if len(self.inventory) == self.requested_samples else 12.0
         return bonus, f"recolectada {sample['sample_id']} ({sample['sample_type']})"
 
+    def _navigation_potential(self):
+        """Training hint from visible samples or the observed base direction only."""
+        if (self.mode != "entrenamiento" or not self.training_navigation_shaping
+                or self.scenario.difficulty_level < self.training_shaping_min_level):
+            return 0.0
+        if len(self.inventory) >= self.requested_samples:
+            distance = math.hypot(BASE[0] - self.x, BASE[1] - self.y)
+        else:
+            visible, distance = self._nearest_visible_sample()
+            if visible is None or not visible["target"]:
+                return 0.0
+        return self.training_navigation_shaping * max(0.0, 1.0 - distance / RAY_RANGE)
+
     def step(self, action):
         if self._done:
             raise RuntimeError("reset required after episode termination")
         action = int(action)
         if not self.action_space.contains(action):
             raise ValueError(f"acción fuera de rango: {action}")
+        potential_before = self._navigation_potential()
         _, velocity, angular = PLANETARY_ACTIONS[action]
         distance_before = self._distance_to_target()
         path_before = self.path_length
@@ -711,12 +735,18 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             event = "reinicio de entrenamiento: sin explorar ni recolectar"
             reward -= 2.0
 
+        # Discounted potential differences cannot reward repeated back-and-forth
+        # motion. True terminals have zero potential; time limits bootstrap.
+        potential_after = 0.0 if terminated else self._navigation_potential()
+        navigation_shaping = self.training_shaping_gamma * potential_after - potential_before
+        reward += navigation_shaping
         self._done = terminated or truncated
         self.total_reward += float(reward)
         self._last_event = event
         observation = self._observation()
         info = self._info(end)
         info.update(collision=collision, event=event, energy=energy, progress=progress)
+        info["navigation_shaping"] = navigation_shaping
         if self.writer is not None:
             self.writer.record_step(
                 state=self._snapshot(action, reward, collision),

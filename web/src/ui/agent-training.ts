@@ -20,7 +20,7 @@ export function mountAgentTraining(options: {
     <button id="agentFinal" class="primary-button" disabled>Ver modelo final validado</button>
     <button id="agentCampaignStop" class="secondary-button" hidden>Detener campaña automática y guardar</button>
     <p class="section-copy">La red decide entre 7 acciones usando sensores, batería e historial de 4 observaciones. Aprende al recolectar, regresar y explorar; recibe penalizaciones por choques y consumo. No recibe rutas resueltas.</p>
-    <p class="section-copy">Entrenamiento de exploración: reinicia los intentos con 80 pasos sin descubrir terreno ni recolectar. Las evaluaciones conservan las reglas originales.</p>
+    <p class="section-copy">Los intentos de entrenamiento sin explorar ni recolectar se reinician según la configuración de su versión. Las evaluaciones conservan las reglas originales.</p>
     <label class="field"><span>Pasos adicionales de entrenamiento</span><input id="agentBudget" type="number" value="65536" min="128" max="2000000" step="1024"></label>
     <label class="field"><span>Versión guardada / ejecución</span><select id="agentVersions"><option value="">Nueva política desde cero</option></select></label>
     <button id="agentLatest" class="secondary-button">Usar mejor versión evaluada</button>

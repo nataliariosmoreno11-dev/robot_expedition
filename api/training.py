@@ -119,10 +119,9 @@ def start(req: StartTraining):
         parent = checkpoint_for(req.parent_job_id) if req.parent_job_id else None
         job_id = uuid.uuid4().hex
         directory = JOBS / job_id
-        config = yaml.safe_load((ROOT / "configs/experiments/exp-010-parallel.yaml").read_text(encoding="utf-8"))
+        config = yaml.safe_load((ROOT / "configs/experiments/exp-012-observable-navigation.yaml").read_text(encoding="utf-8"))
         config.update(budget_timesteps=req.budget, seeds=[req.seed],
                       parent_run_id=f"local:{parent}" if parent else None)
-        config["hyperparams"]["n_steps"] = 256
         config["environment"]["episode_db"] = str(ROOT / "logs/planetary_episodes.sqlite")
         state = {"job_id": job_id, "status": "starting", "algorithm": "PPO",
                  "budget": req.budget, "seed": req.seed, "parent_job_id": req.parent_job_id,

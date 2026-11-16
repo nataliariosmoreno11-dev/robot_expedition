@@ -248,6 +248,21 @@ class TrainingMetricsCallback(BaseCallback):
         return True
 
 
+def prune_intermediate_checkpoints(model_dir, prefix, keep):
+    """Keep recent recovery points; never prune root, mastery or retention-safe weights."""
+    if keep is None:
+        return
+    keep = max(1, int(keep))
+    candidates = sorted((p for p in model_dir.glob(f"{prefix}-*")
+                         if p.is_dir() and not p.is_symlink()
+                         and p.name.removeprefix(prefix + "-").isdigit()),
+                        key=lambda p: int(p.name.rsplit("-", 1)[1]))
+    for path in candidates[:-keep]:
+        if path.resolve().parent != model_dir.resolve():
+            raise ValueError("Checkpoint outside model directory")
+        shutil.rmtree(path)
+
+
 class PersistentTrainingCallback(BaseCallback):
     """Progress and immutable checkpoints after optimizer updates, including stop requests."""
 
@@ -285,6 +300,7 @@ class PersistentTrainingCallback(BaseCallback):
                 p.name: sha256_file(p) for p in checkpoint.iterdir() if p.is_file() and p.name != "sha256.json"
             })
             self.last_checkpoint = step
+            prune_intermediate_checkpoints(self.model_dir, "checkpoint", self.config.get("checkpoint_keep"))
         if stopping:
             raise KeyboardInterrupt("Detención solicitada; actualización PPO completada y pesos guardados")
 
@@ -369,6 +385,7 @@ class RetentionGuardCallback(BaseCallback):
             rejected.mkdir(exist_ok=True)
             self.model.save(rejected / "ppo_model.zip")
             self.training_env.save(rejected / "vecnormalize.pkl")
+            prune_intermediate_checkpoints(self.model_dir, "rejected", self.config.get("rejected_checkpoint_keep"))
             self.restore()
         record = {"step": step, "passed": passed, "safe_step": self.safe_step,
                   "protected_levels": self.levels, "evaluations": evaluations,
@@ -635,7 +652,7 @@ def _train_ppo(
             json.loads((parent_checkpoint / "checkpoint_state.json").read_text())["total_timesteps"]
         )
         vec_env = VecNormalize.load(parent_checkpoint / "vecnormalize.pkl", base_env)
-        vec_env.training = True
+        vec_env.training = not config.get("freeze_normalization", False)
         vec_env.norm_reward = False
         model = PPO.load(parent_checkpoint / "ppo_model.zip", env=vec_env, device="auto", **hyperparams)
         optimizer_state = torch.load(

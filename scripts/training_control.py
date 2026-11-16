@@ -64,6 +64,10 @@ def snapshot():
     campaign = read(ROOT / "logs/autonomous_campaign/state.json")
     job_id = campaign.get("active_job_id") or campaign.get("parent_job_id")
     job = read(ROOT / "logs/training_jobs" / str(job_id) / "state.json")
+    if not alive(job, "api.training_worker"):
+        live_jobs = [value for _, value in jobs() if alive(value, "api.training_worker")]
+        if len(live_jobs) == 1:
+            job = live_jobs[0]
     model = ROOT / "models" / str(job.get("run_id"))
     progress = read(model / "progress.json") or campaign.get("progress", {})
     curriculum = read(model / "curriculum_state.json") or campaign
@@ -79,6 +83,23 @@ def snapshot():
     path = model / "progress.json"
     if path.exists():
         lines.append(f"Última actualización de pasos: hace {int(time.time() - path.stat().st_mtime)} s (puede pausarse durante evaluaciones/guardado)")
+    reports = list(model.glob("periodic-evaluation-*.json"))
+    if reports:
+        latest = max(reports, key=lambda p: int(p.stem.rsplit("-", 1)[1]))
+        report = read(latest)
+        metrics = report.get("metrics", {})
+        lines.append(f"Evaluación nivel {report.get('scenario_level', '?')} a {report.get('training_step', 0):,} pasos: "
+                     f"{metrics.get('success_rate', 0):.0%} éxitos en {metrics.get('episodes', 0)} intentos · "
+                     f"{metrics.get('samples_collected_mean', 0):.2f} muestras · "
+                     f"{metrics.get('collisions_per_episode', 0):.2f} choques de media")
+        if report.get("early_rejection"):
+            lines.append("Suite rechazada anticipadamente: ya no podía alcanzar el mínimo de aprobación.")
+    else:
+        lines.append("Esta versión aún no tiene una evaluación periódica; los pasos no prueban aprobación.")
+    guard = read(model / "retention_guard.json")
+    if guard:
+        lines.append(f"Retención: {'aceptada' if guard.get('passed') else 'rechazada; pesos seguros restaurados'} · "
+                     f"Último punto seguro: {guard.get('safe_step', 0):,} pasos")
     if not supervisor and not worker:
         lines.append("Para reanudar: .venv/bin/python scripts/training_control.py resume")
     if job.get("error"):

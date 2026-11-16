@@ -92,8 +92,13 @@ def run(parent_job, budget, resume=False):
         save()
         try:
             while not (directory / "stop").exists():
-                if shutil.disk_usage(jobs.ROOT).free < 5 * 1024**3:
-                    raise RuntimeError("Less than 5 GiB free; checkpoints preserved, free disk before resuming")
+                disks = [jobs.ROOT]
+                if Path('/mnt/c').is_dir():
+                    disks.append(Path('/mnt/c'))
+                if min(shutil.disk_usage(path).free for path in disks) < 10 * 1024**3:
+                    if state.get("active_job_id"):
+                        jobs.stop(state["active_job_id"])
+                    raise RuntimeError("Less than 10 GiB free on Linux or Windows C:; stopping to save checkpoints")
                 job_id = state.get("active_job_id")
                 if not job_id:
                     job = jobs.start(jobs.StartTraining(budget=budget, seed=1 + len(state["rounds"]),

@@ -72,3 +72,30 @@ def test_status_does_not_trust_saved_running_flag(tmp_path, monkeypatch):
     monkeypatch.setattr(control, "ROOT", tmp_path)
     control.write(tmp_path / "logs/autonomous_campaign/state.json", {"status": "running", "pid": 99999999})
     assert "DETENIDO" in control.snapshot()
+
+
+def test_status_finds_standalone_pilot(tmp_path, monkeypatch):
+    monkeypatch.setattr(control, "ROOT", tmp_path)
+    monkeypatch.setattr(control, "alive", lambda state, module: module == "api.training_worker" and state.get('job_id') == 'pilot')
+    control.write(tmp_path / 'logs/training_jobs/pilot/state.json', {'job_id': 'pilot', 'status': 'running', 'run_id': 'experiment'})
+    control.write(tmp_path / 'models/experiment/progress.json', {'total_timesteps': 12345})
+    assert 'ACTIVO' in control.snapshot()
+    assert '12,345' in control.snapshot()
+
+
+def test_status_distinguishes_failed_evaluation_from_step_progress(tmp_path, monkeypatch):
+    monkeypatch.setattr(control, "ROOT", tmp_path)
+    monkeypatch.setattr(control, "alive", lambda *args: False)
+    job = make_job(tmp_path, 1, 200)
+    control.write(tmp_path / "logs/autonomous_campaign/state.json", {"active_job_id": job["job_id"]})
+    model = tmp_path / "models" / job["run_id"]
+    control.write(model / "periodic-evaluation-200.json", {
+        "training_step": 200, "scenario_level": 6, "early_rejection": True,
+        "metrics": {"episodes": 8, "success_rate": 0, "samples_collected_mean": 2.125,
+                    "collisions_per_episode": 253.125}})
+    control.write(model / "retention_guard.json", {"passed": False, "safe_step": 100})
+    status = control.snapshot()
+    assert "0%" in status and "8 intentos" in status
+    assert "2.12 muestras" in status
+    assert "pesos seguros restaurados" in status
+    assert "Suite rechazada" in status

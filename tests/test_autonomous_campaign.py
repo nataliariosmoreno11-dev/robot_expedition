@@ -67,6 +67,19 @@ def test_explicit_stop_prevents_restart(tmp_path, monkeypatch):
         campaign.run("parent", 1024)
 
 
+def test_low_disk_requests_worker_save_before_supervisor_exits(tmp_path, monkeypatch):
+    monkeypatch.setattr(training, "ROOT", tmp_path)
+    path = tmp_path / "logs/autonomous_campaign/state.json"
+    training.write(path, {"active_job_id": "a" * 32, "status": "running"})
+    monkeypatch.setattr(campaign.shutil, "disk_usage", lambda _: SimpleNamespace(free=9 * 1024**3))
+    stopped = []
+    monkeypatch.setattr(training, "stop", stopped.append)
+    with pytest.raises(RuntimeError, match="10 GiB"):
+        campaign.run("parent", 1024)
+    assert stopped == ["a" * 32]
+    assert training.read(path)["status"] == "failed"
+
+
 def test_stop_campaign_signals_current_worker(tmp_path, monkeypatch):
     monkeypatch.setattr(training, "ROOT", tmp_path)
     monkeypatch.setattr(training, "JOBS", tmp_path / "jobs")
