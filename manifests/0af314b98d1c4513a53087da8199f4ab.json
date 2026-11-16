@@ -1,0 +1,47 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 0,
+  "checkpoint_uri": "local:/home/tom/code/robot_expedition/models/0af314b98d1c4513a53087da8199f4ab",
+  "config_sha256": "33971783875617cb0d3bd3e1d7eb2981705789d23c45883eea1645c396327439",
+  "diagnosis": "Supervised transfer; level 6 and retention 1-5 passed. Not a ten-level release.",
+  "effective_budget_timesteps": 0,
+  "environment_hash": "b429277ae502490e67761a33613992c5425180c68848eac3900bf04ce94ceec7",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "campaign-mastery-v1",
+  "experiment_id": "exp-014-specialist",
+  "git_commit": "fb544e12f332c7815b89741585c80b6ee3756a0f",
+  "level_id": "n2",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 1.4668,
+    "mission_completion": 1.0,
+    "path_length_mean": 51.141,
+    "return_mean": 315.5034,
+    "return_std": 0.0,
+    "samples_collected_mean": 4.0,
+    "steps_mean": 369.0,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "6": 1.0
+    }
+  },
+  "model_sha256": "3079df71dca8d9310fc48a52e08e1ce0f90731cf32ccde77c7dd78729c830c66",
+  "model_uri": "dvc://dagshub/models/0af314b98d1c4513a53087da8199f4ab",
+  "normalization_uri": "local:/home/tom/code/robot_expedition/models/0af314b98d1c4513a53087da8199f4ab/vecnormalize.pkl",
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "models/0af314b98d1c4513a53087da8199f4ab/config.json",
+    "repository": "https://github.com/Nicol-Tatiana-Cerinza-Tejada/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/70d953f89deb419a9f142f51375d5dc7",
+  "run_id": "0af314b98d1c4513a53087da8199f4ab",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 41,
+  "source_config_sha256": "ebe61633024ffef0655c7ceb48a3a09d00f39a187f5e1fa8153c4eb759a73ea6",
+  "status": "completed"
+}
