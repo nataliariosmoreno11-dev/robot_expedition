@@ -139,6 +139,23 @@ select:disabled { cursor: not-allowed; opacity: 0.48; }
     radial-gradient(circle at 58% 42%, transparent 30%, rgba(6, 5, 4, 0.36) 100%);
 }
 
+.viewer-fullscreen { position: absolute; top: 14px; right: 18px; z-index: 8; }
+.viewer-history { position: absolute; top: 14px; left: 18px; z-index: 9; width: min(410px, calc(100% - 220px)); padding: 12px; background: #20160ff2; border: 1px solid #72513a; border-radius: 10px; max-height: calc(100% - 120px); overflow-y: auto; }
+.viewer-history summary { cursor: pointer; font-size: 13px; }
+.viewer-history label { display: grid; gap: 5px; margin: 12px 0; font-size: 12px; }
+.viewer-history select { width: 100%; min-width: 0; }
+.viewer-history p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.battery-audit-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.battery-audit-table th, .battery-audit-table td { text-align: left; padding: 8px 4px; border-bottom: 1px solid var(--line); }
+.viewport-panel:fullscreen, .viewport-panel.viewer-expanded { position: fixed; inset: 0; width: 100vw; height: 100dvh; min-height: 0; z-index: 1000; }
+.viewport-panel .scene-heading { top: 82px; }
+@media (max-width: 600px) {
+  .viewer-history { left: 8px; width: calc(100% - 175px); }
+  .viewer-fullscreen { right: 8px; max-width: 150px; font-size: 12px; }
+  .viewer-history[open] { width: calc(100% - 16px); top: 64px; }
+  .viewport-panel .scene-heading { top: 112px; }
+}
+
 .scene-heading {
   position: absolute;
   z-index: 3;
@@ -468,3 +485,7 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
 #comparisonResult th, #comparisonResult td { text-align: left; padding: 7px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 #comparisonResult th { color: var(--muted); }
 #comparisonResult tr:hover { background: rgba(97,213,210,.06); }
+.progress-preview { margin: 12px 24px; padding: 16px 20px; border: 1px solid #72513a; border-radius: 14px; background: #19130f; }
+.progress-preview p { color: #c9b9ac; font-size: 13px; margin: 8px 0; }
+.progress-preview .replay-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.progress-preview [aria-pressed="true"] { border-color: #ff914d; background: #5a2a12; }

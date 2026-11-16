@@ -142,7 +142,8 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.mode = str(mode)
         self.store = (
             EpisodeStore(
-                episode_db, max_experiments=None if campaign else max_experiments
+                episode_db, max_experiments=None if campaign else max_experiments,
+                compact_history=campaign,
             )
             if record_episodes and episode_db
             else None

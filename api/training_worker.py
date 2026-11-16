@@ -2,7 +2,6 @@
 import hashlib
 import os
 import shutil
-import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -56,16 +55,14 @@ def main(directory):
             model_dir = ROOT / "models" / state["run_id"]
             if (model_dir / "checkpoint_state.json").exists():
                 try:
-                    # Consistent database snapshot: retained along with this version's weights.
+                    # The shared replay store is versioned separately. Copying its
+                    # entire history into every model caused quadratic disk growth.
                     db = ROOT / "logs/planetary_episodes.sqlite"
                     if db.exists():
-                        source = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
-                        target = sqlite3.connect(model_dir / "episodes.sqlite")
-                        try:
-                            source.backup(target)
-                        finally:
-                            target.close()
-                            source.close()
+                        write(model_dir / "episode-store.json", {
+                            "path": str(db.relative_to(ROOT)), "run_id": state["run_id"],
+                            "storage": "shared; representative replays and complete metrics",
+                        })
                     _register_dvc_model(model_dir, state["run_id"])
                     state["dvc_pointer"] = f"models/{state['run_id']}.dvc"
                 except Exception as exc:

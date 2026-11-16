@@ -113,10 +113,12 @@ class EpisodeStore:
         path: str | Path = DEFAULT_DB,
         *,
         max_experiments: int | None = DEFAULT_MAX_EXPERIMENTS,
+        compact_history: bool = False,
     ):
         if max_experiments is not None and int(max_experiments) < 1:
             raise ValueError("max_experiments debe ser al menos 1")
         self.max_experiments = None if max_experiments is None else int(max_experiments)
+        self.compact_history = compact_history
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._lock = threading.RLock()
@@ -129,6 +131,18 @@ class EpisodeStore:
         self._create_schema()
 
     def _create_schema(self) -> None:
+        # Opening a worker must not rewrite the entire episode history.
+        try:
+            metadata = dict(self._connection.execute("SELECT key, value FROM metadata"))
+        except sqlite3.OperationalError as exc:
+            if "no such table" not in str(exc):
+                raise
+            metadata = {}
+        if int(metadata.get("schema_version", "0")) > SCHEMA_VERSION:
+            raise ValueError("versión de SQLite no soportada")
+        if (metadata.get("schema_version") == str(SCHEMA_VERSION)
+                and metadata.get("metrics_backfill_complete") == "1"):
+            return
         with self._connection:
             self._connection.executescript(
                 """
@@ -204,6 +218,12 @@ class EpisodeStore:
                 CREATE INDEX IF NOT EXISTS idx_metrics_level ON training_metrics(difficulty_level);
                 """
             )
+            # Serialize migrations across subprocess environment startup.
+            self._connection.execute("BEGIN IMMEDIATE")
+            ready = dict(self._connection.execute("SELECT key, value FROM metadata"))
+            if (ready.get("schema_version") == str(SCHEMA_VERSION)
+                    and ready.get("metrics_backfill_complete") == "1"):
+                return
             columns = {
                 row["name"]
                 for row in self._connection.execute("PRAGMA table_info(episodes)")
@@ -243,6 +263,9 @@ class EpisodeStore:
             self._connection.execute(
                 "INSERT OR REPLACE INTO metadata(key, value) VALUES('schema_version', ?)",
                 (str(SCHEMA_VERSION),),
+            )
+            self._connection.execute(
+                "INSERT OR REPLACE INTO metadata(key, value) VALUES('metrics_backfill_complete', '1')"
             )
 
     def start_episode(
@@ -405,6 +428,22 @@ class EpisodeStore:
             )
             self._save_analysis(episode_number)
             self._rebalance_retained()
+
+            if self.compact_history:
+                # Keep two successes/two failures per run/scenario/mode, plus
+                # recent attempts and anything explicitly protected. Scalar
+                # training metrics survive removal of heavy replay blobs.
+                victims = self._connection.execute("""
+                    SELECT episode_number FROM (
+                        SELECT episode_number, protected, ROW_NUMBER() OVER (
+                            PARTITION BY run_id, difficulty_level, mode, success
+                            ORDER BY episode_number DESC
+                        ) AS rank FROM episodes WHERE run_id=? AND ended_at IS NOT NULL
+                    ) WHERE rank > 2 AND protected=0 AND episode_number < COALESCE(
+                        (SELECT episode_number FROM episodes ORDER BY episode_number DESC LIMIT 1 OFFSET 49), 0)
+                """, (row["run_id"],)).fetchall()
+                self._connection.executemany("UPDATE training_metrics SET replay_retained=0 WHERE episode_number=?", victims)
+                self._connection.executemany("DELETE FROM episodes WHERE episode_number=?", victims)
 
     def _save_analysis(self, number):
         row = self._connection.execute(

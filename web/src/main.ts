@@ -16,6 +16,7 @@ import { MissionHud, required } from './ui/hud'
 import { RegistryView } from './ui/registry'
 import { TrainingDashboard } from './ui/training-dashboard'
 import { mountAgentTraining } from './ui/agent-training'
+import { mountViewerControls } from './ui/viewer-controls'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -765,6 +766,16 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
   } finally {
     input.value = ''
   }
+})
+
+mountViewerControls({
+  baseUrl: () => api?.baseUrl,
+  replay: (payload, label) => {
+    const bundle = normalizeReplayBundle(payload)
+    loadEpisode(bundle.episodes[0], bundle.map, 'replay', label)
+    setProvenance('PPO · entrenamiento histórico', label)
+    scene.setPlaying(true)
+  },
 })
 
 mountAgentTraining({

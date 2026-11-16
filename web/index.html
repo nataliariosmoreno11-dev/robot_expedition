@@ -41,9 +41,31 @@
         <p id="trainingOverview" role="status">Consultando el entrenamiento en segundo plano…</p>
         <a href="#agentTraining">Ver avance y modelos</a>
       </aside>
+      <section class="progress-preview" aria-label="Avances guardados">
+        <strong>Ver avances · escenarios 1–5</strong>
+        <p>Recorridos exitosos registrados durante el entrenamiento. Son ejemplos seleccionados, no una garantía de éxito en todos los intentos.</p>
+        <div class="replay-actions" id="progressScenarios">
+          <button class="secondary-button" data-progress-level="1">Escenario 1</button>
+          <button class="secondary-button" data-progress-level="2">Escenario 2</button>
+          <button class="secondary-button" data-progress-level="3">Escenario 3</button>
+          <button class="secondary-button" data-progress-level="4">Escenario 4</button>
+          <button class="secondary-button" data-progress-level="5">Escenario 5</button>
+        </div>
+        <p id="progressReplayStatus" role="status">Cargando recorrido guardado…</p>
+      </section>
       <main id="mission" class="workspace">
         <section class="viewport-panel" aria-label="Simulación tridimensional">
           <div id="scene" class="scene"></div>
+          <details class="viewer-history">
+            <summary>Comparar versiones del modelo</summary>
+            <label>Modelo guardado<select id="historyModel"><option>Cargando versiones…</option></select></label>
+            <label>Escenario<select id="historyScenario"></select></label>
+            <button id="historyLoad" class="secondary-button" type="button">Buscar intentos</button>
+            <label>Intento registrado<select id="historyEpisode"><option>Selecciona una versión y escenario</option></select></label>
+            <button id="historyPlay" class="primary-button" type="button" disabled>Reproducir intento</button>
+            <p id="historyStatus" role="status">Replays de entrenamiento: cada intento conserva sus resultados, incluidos los fallos. No equivalen a una evaluación de los pesos finales.</p>
+          </details>
+          <button id="fullscreenButton" class="secondary-button viewer-fullscreen" type="button" aria-pressed="false">Pantalla completa</button>
 
           <div class="scene-heading">
             <span id="modeBadge" class="mode-badge">SIN DATOS</span>
@@ -102,6 +124,14 @@
         </section>
 
         <aside class="control-panel">
+          <section class="panel-section">
+            <details id="batteryAudit">
+              <summary>¿Alcanza la batería? · Ver prueba de los 10 escenarios</summary>
+              <p class="section-copy">Prueba física con rutas de referencia, independiente del PPO. Comprueba que la misión es realizable con la batería actual; no acredita aprendizaje del modelo. Un intento por escenario, semilla 700001.</p>
+              <p id="batteryAuditStatus" class="section-copy" role="status">Cargando resultados…</p>
+              <table class="battery-audit-table"><thead><tr><th>Escenario</th><th>Batería restante</th><th>Resultado</th></tr></thead><tbody id="batteryAuditRows"></tbody></table>
+            </details>
+          </section>
           <section id="planetaryMission" class="panel-section planetary-launcher">
             <div class="section-heading">
               <div><span class="eyebrow">Campaña de mapas fijos</span><h2>Diez misiones marcianas</h2></div>

@@ -1,0 +1,110 @@
+{
+  "generated_at": "2026-11-15T17:25:46.020142+00:00",
+  "catalog_sha256": "99b374af18d96d77251e5ca7cf3a7ce6156d653fdde045cc01902851bb420902",
+  "seed": 700001,
+  "controller": "Validation-only waypoint follower; not PPO, not evidence of learning",
+  "method": "MuJoCo rollout with original battery, terrain, action and termination rules. One deterministic seed per fixed scenario; demonstrates feasibility, not robustness across seeds.",
+  "command": ".venv/bin/python scripts/campaign.py validate --physical --output logs/battery-validation.json",
+  "scenarios": [
+    {
+      "scenario": 1,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 92.73,
+      "consumed": 7.27,
+      "steps": 23,
+      "collisions": 0,
+      "samples": 1
+    },
+    {
+      "scenario": 2,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 53.82,
+      "consumed": 46.18,
+      "steps": 124,
+      "collisions": 0,
+      "samples": 2
+    },
+    {
+      "scenario": 3,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 44.99,
+      "consumed": 55.01,
+      "steps": 251,
+      "collisions": 0,
+      "samples": 3
+    },
+    {
+      "scenario": 4,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 72.01,
+      "consumed": 27.99,
+      "steps": 118,
+      "collisions": 0,
+      "samples": 3
+    },
+    {
+      "scenario": 5,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 60.96,
+      "consumed": 39.04,
+      "steps": 176,
+      "collisions": 0,
+      "samples": 4
+    },
+    {
+      "scenario": 6,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 59.37,
+      "consumed": 40.63,
+      "steps": 369,
+      "collisions": 0,
+      "samples": 4
+    },
+    {
+      "scenario": 7,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 58.44,
+      "consumed": 41.56,
+      "steps": 371,
+      "collisions": 0,
+      "samples": 5
+    },
+    {
+      "scenario": 8,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 28.63,
+      "consumed": 71.37,
+      "steps": 606,
+      "collisions": 0,
+      "samples": 5
+    },
+    {
+      "scenario": 9,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 27.85,
+      "consumed": 72.15,
+      "steps": 623,
+      "collisions": 0,
+      "samples": 6
+    },
+    {
+      "scenario": 10,
+      "success": true,
+      "initial_battery": 100,
+      "remaining_battery": 36.27,
+      "consumed": 63.73,
+      "steps": 618,
+      "collisions": 0,
+      "samples": 8
+    }
+  ]
+}

@@ -6,6 +6,47 @@ from robot_expedition.planetary.episode_store import EpisodeStore
 from pipelines.planetary_evaluate import evaluate_planetary
 
 
+def test_reopen_initialized_store_does_not_require_write_lock(tmp_path):
+    path = tmp_path / "episodes.sqlite"
+    store = EpisodeStore(path)
+    store._connection.close()
+    with sqlite3.connect(path) as writer:
+        writer.execute("BEGIN IMMEDIATE")
+        reopened = EpisodeStore(path)
+        assert reopened._connection.execute(
+            "SELECT value FROM metadata WHERE key='metrics_backfill_complete'"
+        ).fetchone()[0] == "1"
+        reopened._connection.close()
+
+
+def test_compact_campaign_keeps_metrics_and_protected_replays(tmp_path):
+    store = EpisodeStore(tmp_path / "compact.sqlite", max_experiments=None, compact_history=True)
+    first = _record_direct(store, 1, level=1, success=True, terrain=(0, 0, 0))
+    store.protect_episode(first)
+    for number in range(2, 71):
+        _record_direct(store, number, level=1, success=number % 2 == 0, terrain=(0, 0, 0))
+    assert store.metrics()["episodes"] == 70
+    assert len(store.list_episodes(limit=100)) == 51
+    assert store.get_episode(first)["protected"]
+    assert store._connection.execute("PRAGMA foreign_key_check").fetchall() == []
+    assert store._connection.execute("SELECT count(*) FROM training_metrics WHERE replay_retained=0").fetchone()[0] == 19
+
+
+def test_compact_export_preserves_metrics_and_episode_ids(tmp_path):
+    from scripts.compact_episode_history import compact
+    source = tmp_path / "source.sqlite"
+    store = EpisodeStore(source, max_experiments=None)
+    for number in range(1, 61):
+        _record_direct(store, number, level=1, success=True, terrain=(0, 0, 0))
+    store._connection.close()
+    destination = tmp_path / "small.sqlite"
+    result = compact(source, destination)
+    assert result["metrics"] == 60
+    assert result["episodes"] == 50
+    restored = EpisodeStore(destination, max_experiments=None)
+    assert _record_direct(restored, 61, level=1, success=True, terrain=(0, 0, 0)) == 61
+
+
 def _record_direct(store, number, *, level, success, terrain):
     scenario = {
         "scenario_id": f"scenario-{number}", "planet": {"planet_id": "mars"},

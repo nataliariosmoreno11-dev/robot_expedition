@@ -43,6 +43,34 @@ export function mountAgentTraining(options: {
   let followLatest = true
   let evaluating = false
   let releaseJob: string | undefined
+  let previewToken = 0
+  document.addEventListener('historical-replay-selected', () => {
+    previewToken++; viewToken++; evaluating = false
+    el<HTMLInputElement>('agentFollow').checked = false
+  })
+  const preview = async (level: number) => {
+    const token = ++previewToken
+    viewToken++
+    evaluating = false
+    el<HTMLInputElement>('agentFollow').checked = false
+    const notice = document.querySelector<HTMLElement>('#progressReplayStatus')!
+    notice.textContent = `Cargando escenario ${level}…`
+    try {
+      const response = await fetch(`/demo/progress/scenario-${level}.json`)
+      if (!response.ok) throw new Error('No se pudo cargar el recorrido guardado')
+      const payload = await response.json()
+      if (token !== previewToken) return
+      options.replay(payload, `PPO · ESCENARIO ${level} · RECORRIDO EXITOSO GUARDADO`)
+      notice.textContent = `Escenario ${level} · episodio ${payload.episode.episode} · ${payload.episode.steps} pasos · ${payload.episode.samples_collected}/${payload.episode.requested_samples} muestras · ${payload.episode.collisions} colisiones. Versión ${payload.episode.run_id.slice(0, 8)}.`
+      document.querySelectorAll<HTMLButtonElement>('[data-progress-level]').forEach(button => {
+        button.setAttribute('aria-pressed', String(Number(button.dataset.progressLevel) === level))
+      })
+    } catch (error) { if (token === previewToken) notice.textContent = String(error) }
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-progress-level]').forEach(button => {
+    button.onclick = () => { void preview(Number(button.dataset.progressLevel)) }
+  })
+  void preview(1)
   const active = () => jobs.find(j => ['starting', 'running', 'stopping'].includes(j.status))
   const selected = () => jobs.find(j => j.job_id === el<HTMLSelectElement>('agentVersions').value)
   const request = async (path: string, payload?: unknown) => {
