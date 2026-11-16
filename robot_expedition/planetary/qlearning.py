@@ -50,6 +50,8 @@ class PlanetaryQLearningAgent:
         epsilon: float = 0.75,
         epsilon_min: float = 0.06,
         epsilon_decay: float = 0.992,
+        guide_probability: float = 0.80,
+        warmup_visits: int = 3,
     ):
         self.rng = np.random.default_rng(seed)
         self.alpha = float(alpha)
@@ -57,28 +59,59 @@ class PlanetaryQLearningAgent:
         self.epsilon = float(epsilon)
         self.epsilon_min = float(epsilon_min)
         self.epsilon_decay = float(epsilon_decay)
+        self.guide_probability = float(guide_probability)
+        self.warmup_visits = int(warmup_visits)
         self.episodes = 0
         self.updates = 0
         self.q: dict[tuple[int, ...], np.ndarray] = {}
+        self.visits: dict[tuple[int, ...], np.ndarray] = {}
+        self.guided_decisions = 0
+        self.random_decisions = 0
+        self.greedy_decisions = 0
 
     def values(self, state: tuple[int, ...]) -> np.ndarray:
         if state not in self.q:
             self.q[state] = np.zeros(ACTION_COUNT, dtype=np.float32)
         return self.q[state]
 
+    def visit_counts(self, state: tuple[int, ...]) -> np.ndarray:
+        if state not in self.visits:
+            self.visits[state] = np.zeros(ACTION_COUNT, dtype=np.int32)
+        return self.visits[state]
+
     def choose(self, observation, *, guide_action: int) -> tuple[tuple[int, ...], int]:
         state = discretize_planetary(observation)
         values = self.values(state)
-        if self.rng.random() < self.epsilon:
-            action = int(self.rng.integers(ACTION_COUNT))
-        elif not np.any(values):
+        visits = self.visit_counts(state)
+
+        # Recolectar es una acción escasa y de alta recompensa. Cuando el
+        # controlador sensorial confirma que procede, no se desperdicia ese
+        # instante con una acción aleatoria.
+        if int(guide_action) == ACTION_COUNT - 1:
             action = int(guide_action)
+            self.guided_decisions += 1
+        elif self.rng.random() < self.epsilon:
+            # Exploración guiada: mantiene variedad, pero la mayor parte de
+            # los pasos exploratorios siguen una maniobra segura. El esquema
+            # anterior era 100 % aleatorio y hacía parecer que el rover no
+            # aprendía incluso después de actualizar su tabla.
+            if self.rng.random() < self.guide_probability:
+                action = int(guide_action)
+                self.guided_decisions += 1
+            else:
+                action = int(self.rng.integers(ACTION_COUNT))
+                self.random_decisions += 1
+        elif int(visits.sum()) < self.warmup_visits or not np.any(values):
+            action = int(guide_action)
+            self.guided_decisions += 1
         else:
             action = int(np.argmax(values))
+            self.greedy_decisions += 1
         return state, action
 
     def learn(self, state, action: int, reward: float, next_observation, done: bool) -> None:
         current = self.values(state)
+        self.visit_counts(state)[action] += 1
         next_state = discretize_planetary(next_observation)
         future = 0.0 if done else float(np.max(self.values(next_state)))
         target = float(reward) + self.gamma * future
@@ -98,6 +131,10 @@ class PlanetaryQLearningAgent:
             "states": len(self.q),
             "alpha": self.alpha,
             "gamma": self.gamma,
+            "guide_probability": self.guide_probability,
+            "guided_decisions": self.guided_decisions,
+            "random_decisions": self.random_decisions,
+            "greedy_decisions": self.greedy_decisions,
         }
 
     def save(self, path: str | Path) -> Path:
@@ -105,10 +142,11 @@ class PlanetaryQLearningAgent:
         destination.parent.mkdir(parents=True, exist_ok=True)
         states = np.asarray(list(self.q), dtype=np.int16).reshape((-1, STATE_SIZE))
         values = np.asarray([self.q[state] for state in self.q], dtype=np.float32).reshape((-1, ACTION_COUNT))
+        visits = np.asarray([self.visit_counts(state) for state in self.q], dtype=np.int32).reshape((-1, ACTION_COUNT))
         metadata = json.dumps(self.snapshot(), separators=(",", ":"))
         temporary = destination.with_suffix(destination.suffix + ".tmp")
         with temporary.open("wb") as handle:
-            np.savez_compressed(handle, states=states, q=values, metadata=np.asarray(metadata))
+            np.savez_compressed(handle, states=states, q=values, visits=visits, metadata=np.asarray(metadata))
         temporary.replace(destination)
         return destination
 
@@ -119,13 +157,21 @@ class PlanetaryQLearningAgent:
         with np.load(source, allow_pickle=False) as payload:
             states = payload["states"]
             values = payload["q"]
+            visits = payload["visits"] if "visits" in payload.files else np.zeros_like(values, dtype=np.int32)
             metadata = json.loads(str(payload["metadata"].item()))
-        if states.ndim != 2 or states.shape[1] != STATE_SIZE or values.shape != (len(states), ACTION_COUNT):
+        if (states.ndim != 2 or states.shape[1] != STATE_SIZE
+                or values.shape != (len(states), ACTION_COUNT)
+                or visits.shape != (len(states), ACTION_COUNT)):
             raise ValueError("checkpoint Q-learning planetario incompatible")
         self.q = {tuple(int(item) for item in state): value.astype(np.float32) for state, value in zip(states, values)}
+        self.visits = {tuple(int(item) for item in state): value.astype(np.int32) for state, value in zip(states, visits)}
         self.episodes = int(metadata.get("episodes", 0))
         self.updates = int(metadata.get("updates", 0))
         self.epsilon = float(metadata.get("epsilon", self.epsilon))
         self.alpha = float(metadata.get("alpha", self.alpha))
         self.gamma = float(metadata.get("gamma", self.gamma))
+        self.guide_probability = float(metadata.get("guide_probability", self.guide_probability))
+        self.guided_decisions = int(metadata.get("guided_decisions", 0))
+        self.random_decisions = int(metadata.get("random_decisions", 0))
+        self.greedy_decisions = int(metadata.get("greedy_decisions", 0))
         return self

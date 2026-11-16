@@ -213,7 +213,11 @@ const showQTraining = (value: unknown) => {
   const states = Number(value.states ?? 0)
   const updates = Number(value.updates ?? 0)
   const epsilon = Number(value.epsilon ?? 0)
-  qTrainingStatus.textContent = `Q-learning · episodio ${episode} · ${states} estados · ${updates} actualizaciones · ε ${epsilon.toFixed(3)}`
+  const guided = Number(value.guided_decisions ?? 0)
+  const random = Number(value.random_decisions ?? 0)
+  const totalDecisions = guided + random + Number(value.greedy_decisions ?? 0)
+  const guidance = totalDecisions ? ` · guía ${((guided / totalDecisions) * 100).toFixed(0)}%` : ''
+  qTrainingStatus.textContent = `Q-learning · episodio ${episode} · ${states} estados · ${updates} actualizaciones · ε ${epsilon.toFixed(3)}${guidance}`
 }
 
 async function refreshCheckpoints() {
