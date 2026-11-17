@@ -395,13 +395,17 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         return observation, self._info(None)
 
     def _apply_training_stage(self):
-        if (self.mode != "entrenamiento" or self.scenario_id != "scenario_06"
+        if (self.mode != "entrenamiento" or self.scenario.difficulty_level < 6
                 or not self.training_stage_bank or not self.training_stage_probability):
             return
+        if self._stage_bank is not None and self._stage_bank.get("scenario_id") != self.scenario_id:
+            self._stage_bank = None
         if self._stage_bank is None:
-            path = Path(self.training_stage_bank)
+            path = Path(self.training_stage_bank.format(level=self.scenario.difficulty_level, run_id=self.run_id))
             if not path.is_absolute():
                 path = Path(__file__).resolve().parents[2] / path
+            if not path.exists() and "{level" in self.training_stage_bank:
+                return
             bank = json.loads(path.read_text())
             if (bank.get("schema") != "training-stage-bank/v1"
                     or bank.get("catalog_hash") != catalog_hash()

@@ -795,7 +795,17 @@ mountAgentTraining({
   },
 })
 
-void connectApi()
+const requestedEpisode = Number(new URLSearchParams(window.location.search).get('episode'))
+if (Number.isInteger(requestedEpisode) && requestedEpisode > 0) {
+  document.dispatchEvent(new Event('historical-replay-selected'))
+  required<HTMLInputElement>('#agentFollow').checked = false
+}
+void connectApi().then(async () => {
+  if (apiOnline && Number.isInteger(requestedEpisode) && requestedEpisode > 0) {
+    episodeNumberInput.value = String(requestedEpisode)
+    await loadStoredEpisode(requestedEpisode)
+  }
+})
 updatePlanetaryLevel()
 
 required<HTMLInputElement>('#showTrail').addEventListener('change',event => scene.setTrailVisible((event.target as HTMLInputElement).checked))

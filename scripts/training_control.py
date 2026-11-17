@@ -96,6 +96,15 @@ def snapshot():
             lines.append("Suite rechazada anticipadamente: ya no podía alcanzar el mínimo de aprobación.")
     else:
         lines.append("Esta versión aún no tiene una evaluación periódica; los pasos no prueban aprobación.")
+    acceleration = read(model / "acceleration.json")
+    if acceleration:
+        lines.append(f"Aprendizaje acelerado: nivel {acceleration.get('level', '?')} ? fase {acceleration.get('phase', '?')} ? {acceleration.get('updates', 0)}/{acceleration.get('max_updates', 0)} actualizaciones supervisadas")
+        evaluation = acceleration.get("evaluation")
+        if evaluation and acceleration.get("phase") in ("diagnostic", "mastery", "retention"):
+            lines.append(f"Prueba nivel {evaluation.get('level', '?')}: {evaluation['completed']}/{evaluation['total']} ? {evaluation['successes']} ?xitos")
+        for stage in acceleration.get("stages", []):
+            if "imitation_accuracy" in stage:
+                lines.append(f"Tramo {stage['stage']+1}: {stage['imitation_accuracy']:.0%} coincidencia con demostraci?n (no certifica dominio)")
     guard = read(model / "retention_guard.json")
     if guard:
         lines.append(f"Retención: {'aceptada' if guard.get('passed') else 'rechazada; pesos seguros restaurados'} · "

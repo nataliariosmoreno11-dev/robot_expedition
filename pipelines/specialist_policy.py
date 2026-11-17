@@ -85,6 +85,12 @@ class ScenarioActor(nn.Module):
 
     def forward(self, features):
         levels = torch.bucketize(features[:, -1].contiguous(), self.boundaries)
+        if len(features) == 1:
+            level = int(levels[0])
+            if self.frozen_levels[level]:
+                with torch.no_grad():
+                    return self.actors[level](features)
+            return self.actors[level](features)
         output = features.new_zeros((len(features), self.action_count))
         for level, actor in enumerate(self.actors):
             mask = levels == level

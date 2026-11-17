@@ -1,3 +1,9 @@
+type Acceleration = {
+  phase: string; level?: number; updates?: number; max_updates?: number; note?: string
+  evaluation?: { completed: number; total: number; successes: number; level?: number } | null
+  stages?: { stage: number; examples: number; imitation_accuracy?: number }[]
+}
+
 type Job = {
   job_id: string; status: string; run_id?: string; budget: number; parent_job_id?: string
   progress: { total_timesteps?: number; updates?: number }
@@ -19,7 +25,7 @@ export function mountAgentTraining(options: {
     <p id="agentCampaign" role="status" class="section-copy">Consultando modelo final…</p>
     <button id="agentFinal" class="primary-button" disabled>Ver modelo final validado</button>
     <button id="agentCampaignStop" class="secondary-button" hidden>Detener campaña automática y guardar</button>
-    <p class="section-copy">La red decide entre 7 acciones usando sensores, batería e historial de 4 observaciones. Aprende al recolectar, regresar y explorar; recibe penalizaciones por choques y consumo. No recibe rutas resueltas.</p>
+    <p class="section-copy">La red decide entre 7 acciones usando sensores, batería e historial de 4 observaciones. Aprende al recolectar, regresar y explorar; recibe penalizaciones por choques y consumo. Puede practicar con demostraciones durante el entrenamiento; al evaluar decide solo con sus sensores. Cada escenario aprobado conserva su propia pol?tica.</p>
     <p class="section-copy">Los intentos de entrenamiento sin explorar ni recolectar se reinician según la configuración de su versión. Las evaluaciones conservan las reglas originales.</p>
     <label class="field"><span>Pasos adicionales de entrenamiento</span><input id="agentBudget" type="number" value="65536" min="128" max="2000000" step="1024"></label>
     <label class="field"><span>Versión guardada / ejecución</span><select id="agentVersions"><option value="">Nueva política desde cero</option></select></label>
@@ -27,6 +33,9 @@ export function mountAgentTraining(options: {
     <p id="agentVersionNotice" class="section-copy"></p>
     <div class="replay-actions"><button id="agentStart" class="primary-button">Entrenar desde cero</button><button id="agentResume" class="secondary-button" disabled>Continuar pesos</button><button id="agentStop" class="secondary-button" disabled>Detener y guardar</button></div>
     <label class="section-copy"><input id="agentFollow" type="checkbox"> Mostrar replays del entrenamiento automáticamente</label>
+    <p id="agentPhase" role="status" class="section-copy"></p>
+    <progress id="agentPhaseProgress" max="1" value="0" style="width:100%" hidden></progress>
+    <ul id="agentStages" class="section-copy"></ul>
     <p id="agentStatus" role="status">Conectando con el entrenador…</p>
     <progress id="agentProgress" max="1" value="0" style="width:100%"></progress>
     <p class="section-copy">Los replays muestran intentos guardados del agente. Cada continuación crea una versión nueva y conserva la anterior. El currículo avanza con ≥85% de éxito en al menos 50 evaluaciones independientes.</p>
@@ -92,10 +101,33 @@ export function mountAgentTraining(options: {
       const result = await request('/training/jobs') as { enabled: boolean; jobs: Job[] }
       jobs = result.jobs
       const campaign = await request('/training/campaign') as {
-        status: string; mastered?: number[]; current_level?: number; error?: string
+        status: string; mastered?: number[]; current_level?: number; error?: string; acceleration?: Acceleration | null
         progress?: { total_timesteps?: number }
         release?: { job_id: string; run_id: string }
       }
+      const phase = campaign.acceleration
+      const labels: Record<string, string> = {
+        preparing: 'Preparando pr?ctica', demonstration: 'Generando demostraciones verificadas',
+        imitation: 'Practicando fragmentos de la misi?n', diagnostic: 'Prueba corta desde la base',
+        mastery: 'Validaci?n completa del escenario', retention: 'Comprobando escenarios anteriores',
+        replay: 'Guardando recorrido aprobado', approved: 'Escenario aprobado', ppo: 'Afinando mediante intentos y recompensas',
+        all_scenarios_passed: 'Escenarios aprobados; falta certificaci?n final',
+      }
+      el('agentPhase').textContent = phase
+        ? `Escenario ${phase.level ?? campaign.current_level ?? 1} ? ${labels[phase.phase] ?? phase.phase}${phase.evaluation && ['diagnostic', 'mastery', 'retention'].includes(phase.phase)
+            ? ` ? nivel evaluado ${phase.evaluation.level ?? phase.level}: ${phase.evaluation.completed}/${phase.evaluation.total} intentos, ${phase.evaluation.successes} ?xitos`
+            : phase.phase === 'imitation' ? ` ? ${phase.updates ?? 0}/${phase.max_updates ?? 0} actualizaciones supervisadas` : ''}`
+        : 'Entrenamiento PPO. Consultando la fase actual.'
+      const phaseProgress = el<HTMLProgressElement>('agentPhaseProgress')
+      phaseProgress.hidden = !phase || !['imitation', 'diagnostic', 'mastery', 'retention'].includes(phase.phase)
+      phaseProgress.value = phase?.phase === 'imitation'
+        ? (phase.updates ?? 0) / Math.max(1, phase.max_updates ?? 1)
+        : (phase?.evaluation?.completed ?? 0) / Math.max(1, phase?.evaluation?.total ?? 1)
+      el('agentStages').replaceChildren(...(phase?.stages ?? []).map(stage => {
+        const row = document.createElement('li')
+        row.textContent = `Tramo ${stage.stage + 1} ? ${stage.examples} ejemplos${stage.imitation_accuracy === undefined ? '' : ` ? ${(stage.imitation_accuracy * 100).toFixed(0)}% de coincidencia con la demostraci?n`}. No equivale a misi?n aprobada.`
+        return row
+      }))
       releaseJob = campaign.release?.job_id
       const automated = ['running', 'validating', 'stopping'].includes(campaign.status)
       const overview = document.querySelector<HTMLElement>('#trainingOverview')!
@@ -134,7 +166,7 @@ export function mountAgentTraining(options: {
       if (job && !busy && !evaluating) {
         const parent = jobs.find(j => j.job_id === job.parent_job_id)
         const additional = Math.max(0, (job.progress?.total_timesteps ?? 0) - (parent?.checkpoint?.total_timesteps ?? 0))
-        el<HTMLProgressElement>('agentProgress').value = Math.min(1, additional / job.budget)
+        el<HTMLProgressElement>('agentProgress').value = Math.min(1, job.budget > 0 ? additional / job.budget : 1)
         const scenarioRate = job.evaluation?.success_rate_by_difficulty?.[String(options.level())]
         status(`${job.status} · ${job.progress?.total_timesteps ?? 0} pasos acumulados · ${job.progress?.updates ?? 0} actualizaciones PPO. ${job.error ?? ''} ${job.versioning_error ?? ''} ${job.dvc_pointer ? 'Pesos versionados con DVC.' : ''} ${job.evaluation ? `Éxito global: ${((job.evaluation.success_rate ?? 0) * 100).toFixed(1)}%. ${scenarioRate === undefined ? '' : `Escenario ${options.level()}: ${(scenarioRate * 100).toFixed(0)}%.`}` : 'Sin evaluación final; no implica dominio.'}`)
       } else if (!job) status(result.enabled ? 'Listo para entrenar. La política inicial aún no sabe resolver las misiones.' : 'Entrenamiento deshabilitado en este servidor.')

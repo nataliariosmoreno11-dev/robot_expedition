@@ -22,6 +22,7 @@ def evaluate_planetary(
     scenario_level: int | None = None,
     evaluation_kind: str = "mastery",
     abort_below_success_rate: float | None = None,
+    on_progress=None,
 ) -> dict:
     if episodes < 1:
         raise ValueError("episodes must be positive")
@@ -94,6 +95,9 @@ def evaluate_planetary(
                 "latency_ms_mean": round(float(np.mean(latencies)), 4),
             }
         )
+        if on_progress is not None:
+            on_progress({"completed": len(cases), "total": int(episodes),
+                         "successes": sum(case["success"] for case in cases), "level": level})
         # Reject only when even success in ALL remaining cases cannot pass.
         # Never approve early; promotion still requires the complete suite.
         if abort_below_success_rate is not None:

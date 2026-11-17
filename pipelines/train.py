@@ -687,6 +687,11 @@ def _train_ppo(
     if is_planetary(config) and config.get("retention_guard_freq"):
         retention_guard = RetentionGuardCallback(config, model_dir, parent_checkpoint)
         callbacks.insert(0, retention_guard)
+    if config.get("accelerated_curriculum"):
+        from pipelines.accelerated_curriculum import AcceleratedCurriculumCallback
+        if parent_checkpoint and (parent_checkpoint / "practice").exists():
+            shutil.copytree(parent_checkpoint / "practice", model_dir / "practice", dirs_exist_ok=True)
+        callbacks.append(AcceleratedCurriculumCallback(config, model_dir, parent_checkpoint, retention_guard))
     periodic_frequency = int(config.get("periodic_evaluation_freq", 0))
     if is_planetary(config) and periodic_frequency > 0:
         callbacks.append(

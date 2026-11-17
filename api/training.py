@@ -73,7 +73,8 @@ def describe(path):
     directory = ROOT / "models" / (state.get("run_id") or "unavailable")
     if (path / "stop").exists() and state["status"] in ("starting", "running"):
         state = {**state, "status": "stopping"}
-    return {**state, "progress": read(directory / "progress.json", {}),
+    return {**state, "acceleration": read(directory / "acceleration.json"),
+            "progress": read(directory / "progress.json", {}),
             "checkpoint": read(directory / "checkpoint_state.json"),
             "evaluation": read(directory / "evaluacion.json", {}).get("metrics"),
             "manifest": read(ROOT / "manifests" / f"{state.get('run_id')}.json"),
@@ -119,7 +120,7 @@ def start(req: StartTraining):
         parent = checkpoint_for(req.parent_job_id) if req.parent_job_id else None
         job_id = uuid.uuid4().hex
         directory = JOBS / job_id
-        config = yaml.safe_load((ROOT / "configs/experiments/exp-014-specialist.yaml").read_text(encoding="utf-8"))
+        config = yaml.safe_load((ROOT / "configs/experiments/exp-015-accelerated.yaml").read_text(encoding="utf-8"))
         config.update(budget_timesteps=req.budget, seeds=[req.seed],
                       parent_run_id=f"local:{parent}" if parent else None)
         config["environment"]["episode_db"] = str(ROOT / "logs/planetary_episodes.sqlite")

@@ -109,7 +109,7 @@ def run(parent_job, budget, resume=False):
                 job = jobs.describe(jobs.job_path(job_id))
                 model_dir = jobs.ROOT / "models" / (job.get("run_id") or "pending")
                 curriculum = jobs.read(model_dir / "curriculum_state.json", {})
-                state.update(progress=job["progress"], mastered=curriculum.get("mastered", []),
+                state.update(acceleration=job.get("acceleration"), progress=job["progress"], mastered=curriculum.get("mastered", []),
                              current_level=curriculum.get("current_level", 1))
                 save()
                 if job["status"] in ("starting", "running", "stopping"):

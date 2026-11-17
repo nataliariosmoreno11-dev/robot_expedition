@@ -76,10 +76,10 @@ export function mountViewerControls(options: {
     notice.textContent = 'Buscando intentos registrados…'
     try {
       if (!model.value) throw new Error('Selecciona una versión guardada.')
-      const payload = await request(`/episodes?run_id=${encodeURIComponent(model.value)}&scenario_id=${scenario.value}&mode=entrenamiento&limit=100`)
+      const payload = await request(`/episodes?run_id=${encodeURIComponent(model.value)}&scenario_id=${scenario.value}&limit=100`)
       if (token !== selection) return
       const rows = payload.episodes.filter((row: { success: boolean | null }) => row.success !== null)
-      episode.replaceChildren(...rows.map((row: { episode_number: number; success: boolean; steps: number; collisions: number }) =>
+      episode.replaceChildren(...rows.map((row: { episode_number: number; success: boolean; steps: number; collisions: number; mode?: string }) =>
         new Option(`#${row.episode_number} · ${row.success ? 'Misión cumplida' : 'Sin completar'} · ${row.steps} pasos · ${row.collisions} choques`, String(row.episode_number))))
       play.disabled = !rows.length
       notice.textContent = rows.length ? `${rows.length} intentos recientes de esta versión y escenario. Selecciona uno para comparar su recorrido.` : 'Esta versión no tiene intentos guardados en este escenario. Prueba otro escenario o modelo.'

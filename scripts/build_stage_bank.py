@@ -24,13 +24,13 @@ def capture(env):
                 history=[o.tolist() for o in env._history])
 
 
-def build(output, trajectory_output=None, level=6):
+def build(output, trajectory_output=None, level=6, seed=700001):
     env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=level, history_steps=4,
                                   mode="demostraci?n", record_episodes=False)
     states = []
-    observations, actions = [], []
+    observations, actions, stages = [], [], []
     try:
-        observation, _ = env.reset(seed=700001)
+        observation, _ = env.reset(seed=seed)
         planner = ReferencePlanner(env.scenario)
         order = campaign_reference(f"scenario_{level:02d}")["target_order"]
         targets = [next(s for s in env.samples if s["sample_id"] == sid) for sid in order]
@@ -57,6 +57,7 @@ def build(output, trajectory_output=None, level=6):
                     action = (3 if error > 0 else 4) if abs(error) > 0.24 else 0
                 observations.append(observation.copy())
                 actions.append(action)
+                stages.append(len(env.inventory))
                 observation,_,terminated,truncated,info = env.step(action)
                 done = terminated or truncated
                 if target["sample_id"] in env.inventory:
@@ -76,7 +77,7 @@ def build(output, trajectory_output=None, level=6):
             import numpy as np
             trajectory_output.parent.mkdir(parents=True, exist_ok=True)
             np.savez_compressed(trajectory_output, observations=np.asarray(observations, dtype=np.float32),
-                                actions=np.asarray(actions, dtype=np.int64), catalog_hash=catalog_hash())
+                                actions=np.asarray(actions, dtype=np.int64), stages=np.asarray(stages, dtype=np.int64), catalog_hash=catalog_hash())
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(result, separators=(",", ":"))+"\n")
         print(json.dumps(dict(path=str(output), bytes=output.stat().st_size,
