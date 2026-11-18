@@ -429,10 +429,27 @@ class PlanetaryQLearningPolicy:
             self.agent.load(self.checkpoint)
         self.last_state = None
         self.last_action = None
+        self.recent_states: deque[tuple[int, ...]] = deque(maxlen=18)
+        self.loop_escapes = 0
+        self.escape_direction = 1
 
     def __call__(self, observation) -> int:
         guide_action = self.guide(observation)
         self.last_state, self.last_action = self.agent.choose(observation, guide_action=guide_action)
+        repetitions = sum(state == self.last_state for state in self.recent_states)
+        self.recent_states.append(self.last_state)
+        # Un estado sensorial repetido muchas veces suele ser un giro circular
+        # o una cara de obstaculo. Fuerza una maniobra corta distinta y deja
+        # que la recompensa negativa actualice precisamente esa accion.
+        if repetitions >= 5 and self.last_action != len(PLANETARY_ACTIONS) - 1:
+            visits = self.agent.visit_counts(self.last_state)
+            candidates = (3, 4, 1, 2, 0)
+            self.last_action = min(candidates, key=lambda action: int(visits[action]))
+            if self.last_action in (3, 4):
+                self.last_action = 3 if self.escape_direction > 0 else 4
+                self.escape_direction *= -1
+            self.loop_escapes += 1
+            self.recent_states.clear()
         return self.last_action
 
     def learn(self, reward: float, next_observation, done: bool) -> None:
@@ -445,7 +462,7 @@ class PlanetaryQLearningPolicy:
                 self.agent.save(self.checkpoint)
 
     def snapshot(self) -> dict:
-        return self.agent.snapshot()
+        return {**self.agent.snapshot(), "loop_escapes": self.loop_escapes}
 
 
 class Session:
@@ -472,7 +489,11 @@ class Session:
         if environment_kind == "planetary" and policy_id in {"planetary-rule", "planetary-qlearning"}:
             # El episodio automático siempre termina. La dificultad conserva
             # más tiempo en mapas grandes, pero nunca queda en un bucle sin fin.
-            self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
+            # Mantiene un final obligatorio, pero da a los mapas grandes un
+            # presupuesto compatible con las rutas observadas en la campana
+            # PPO (L8 promedia ~606 pasos en la evidencia aprobada).
+            step_budget = (350 + difficulty_level * 55) if policy_id == "planetary-qlearning" else (140 + difficulty_level * 30)
+            self.env.max_steps = min(self.env.max_steps, step_budget)
         self.done, self.total, self.touched = False, 0.0, time.time()
 
 
