@@ -1,0 +1,42 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 4096,
+  "checkpoint_uri": "local:/home/natalia/code/proyecto final/models/31dc551f115945108de6904aa3592b2e",
+  "config_sha256": "1a90810d96a8a39c8797a197563a1132367b74a1d03a3de4f77e17f083c0cbd9",
+  "diagnosis": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/ppo-export/bin/dvc'; checkpoint recuperable en /home/natalia/code/proyecto final/models/31dc551f115945108de6904aa3592b2e",
+  "effective_budget_timesteps": 4096,
+  "environment_hash": "c720f80f64f25b005dfd54b9acd3205ea9e0540ddc448d89bbaade4bd98078a9",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "planetary-holdout-v1",
+  "experiment_id": "exp-016-procedural-generalization",
+  "git_commit": "010c06b1cfbc3ab597fffea2aadf2740c1178919",
+  "level_id": "n2",
+  "metrics": {
+    "collisions_per_episode": 13.0,
+    "evaluation_episodes": 4,
+    "evaluation_partial": true,
+    "evaluation_reward": -90.3741,
+    "failures_by_cause": {
+      "tiempo": 4
+    },
+    "steps_mean": 200.0,
+    "success_rate": 0.0
+  },
+  "model_sha256": "83c9168f555f368dbd90d39588cd6fa465cd8344f2e2a0a069cb723ec054eaf0",
+  "model_uri": null,
+  "normalization_uri": "runs:/31dc551f115945108de6904aa3592b2e/vecnormalize.pkl",
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "configs/experiments/exp-016-procedural-generalization.yaml",
+    "repository": "https://github.com/nataliariosmoreno11-dev/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": null,
+  "run_id": "31dc551f115945108de6904aa3592b2e",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 11,
+  "source_config_sha256": "c559d90613a1ff42895528f0a1186ea0bd507c21d3bc811be21285a79333a504",
+  "status": "failed"
+}

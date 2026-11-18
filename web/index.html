@@ -183,7 +183,7 @@
 
             <section class="episode-model" aria-labelledby="episodeModelTitle">
               <div class="episode-model-heading">
-                <div><span class="eyebrow">Modelo del episodio</span><strong id="episodeModelTitle">Q-learning tabular persistente</strong></div>
+                <div><span class="eyebrow">Proceso superior · modelo realmente activo</span><strong id="episodeModelTitle">Q-learning tabular persistente</strong></div>
                 <span id="episodeModelCheckpoint" class="model-chip">SIN CHECKPOINT</span>
               </div>
               <div class="model-flow" aria-label="Conexiones del modelo de aprendizaje">
@@ -436,18 +436,79 @@
         <article class="ppo-campaign" aria-labelledby="ppoCampaignTitle">
           <div class="ppo-campaign-head">
             <div>
-              <span class="eyebrow">Modelo de Tomás integrado</span>
+              <span class="eyebrow">Simulador PPO independiente · el checkpoint seleccionado controla este visor</span>
               <h3 id="ppoCampaignTitle">Campaña PPO aprobada · 8 niveles</h3>
               <p id="ppoCampaignMeta" class="section-copy">Cargando checkpoints, métricas y escenarios reales…</p>
             </div>
             <span class="ppo-badge">PPO · MEMORIA CONTINUA</span>
           </div>
           <div id="ppoCampaignLevels" class="ppo-level-grid" aria-live="polite"></div>
-          <div id="ppoEvidenceDetail" class="ppo-evidence-detail">
-            Selecciona un nivel para inspeccionar su escenario, checkpoint y evaluación.
+          <div class="ppo-simulator-layout">
+            <div class="ppo-viewport-wrap">
+              <div id="ppoScene" class="ppo-scene" aria-label="Simulador visual PPO de Marte"></div>
+              <div class="ppo-scene-badge"><span id="ppoMode">CHECKPOINT SELECCIONADO · SIN EJECUTAR</span><b id="ppoSceneLevel">L1</b></div>
+              <div class="ppo-scene-status">
+                <span><small>Paso</small><b id="ppoStep">0</b></span>
+                <span><small>Recompensa</small><b id="ppoReward">0,00</b></span>
+                <span><small>Batería</small><b id="ppoBattery">100%</b></span>
+                <span><small>Estado</small><b id="ppoEnd">Preparado</b></span>
+              </div>
+            </div>
+            <aside class="ppo-live-panel">
+              <span class="eyebrow">Decisión PPO en tiempo real</span>
+              <h4 id="ppoObjective">Selecciona un nivel e inicia el episodio</h4>
+              <dl>
+                <div><dt>Checkpoint</dt><dd id="ppoCheckpoint">—</dd></div>
+                <div><dt>Acción actual</dt><dd id="ppoAction">—</dd></div>
+                <div><dt>Valor estimado V(s)</dt><dd id="ppoValue">—</dd></div>
+                <div><dt>Muestras</dt><dd id="ppoSamples">0 / 0</dd></div>
+                <div><dt>Colisiones</dt><dd id="ppoCollisions">0</dd></div>
+                <div><dt>Sensor más cercano</dt><dd id="ppoNearestObstacle">—</dd></div>
+              </dl>
+              <div id="ppoActionProbabilities" class="ppo-probabilities" aria-label="Probabilidades reales de las acciones"></div>
+            </aside>
+          </div>
+          <div class="ppo-controls" aria-label="Controles del simulador PPO">
+            <button id="ppoStart" class="primary-button" type="button" disabled>Iniciar inferencia</button>
+            <button id="ppoPause" class="secondary-button" type="button" disabled>Pausar</button>
+            <button id="ppoRestart" class="secondary-button" type="button" disabled>Reiniciar</button>
+            <label>Velocidad <select id="ppoSpeed"><option value="650">1×</option><option value="300" selected>2×</option><option value="120">4×</option><option value="45">8×</option></select></label>
+            <button id="ppoFollow" class="secondary-button" type="button" aria-pressed="false">Seguir rover</button>
+            <button id="ppoTrail" class="secondary-button" type="button" aria-pressed="true">Trayectoria</button>
+            <button id="ppoSensors" class="secondary-button" type="button" aria-pressed="true">Sensores</button>
+          </div>
+          <div class="ppo-tabs" role="tablist" aria-label="Información del simulador PPO">
+            <button role="tab" aria-selected="true" data-ppo-tab="simulator">Simulador</button>
+            <button role="tab" aria-selected="false" data-ppo-tab="model">Cómo piensa el agente</button>
+            <button role="tab" aria-selected="false" data-ppo-tab="decisions">Decisiones</button>
+            <button role="tab" aria-selected="false" data-ppo-tab="experiments">Experimentos</button>
+            <button role="tab" aria-selected="false" data-ppo-tab="metrics">Métricas</button>
+          </div>
+          <div id="ppoTabSimulator" class="ppo-tab-panel">
+            <div id="ppoEvidenceDetail" class="ppo-evidence-detail">Selecciona un nivel para inspeccionar su escenario, checkpoint y evaluación.</div>
+          </div>
+          <div id="ppoTabModel" class="ppo-tab-panel" hidden>
+            <div class="ppo-thinking">
+              <div class="ppo-network" aria-label="Arquitectura neuronal PPO real">
+                <div class="ppo-layer"><b>132</b><span>observaciones</span><small>4 × 33 estados</small></div><i>→</i>
+                <div class="ppo-layer"><b>64</b><span>Tanh</span><small>capa oculta 1</small></div><i>→</i>
+                <div class="ppo-layer"><b>64</b><span>Tanh</span><small>capa oculta 2</small></div><i>↗</i>
+                <div class="ppo-output"><div><b>7</b><span>logits de política</span></div><div><b>1</b><span>valor V(s)</span></div></div>
+              </div>
+              <p id="ppoArchitectureNote">Arquitectura leída del checkpoint. Las activaciones se resumen sin atribuirles una explicación causal.</p>
+            </div>
+          </div>
+          <div id="ppoTabDecisions" class="ppo-tab-panel" hidden>
+            <div class="decision-table-wrap"><table class="decision-table"><thead><tr><th>Paso</th><th>Acción</th><th>Prob.</th><th>V(s)</th><th>Recompensa</th><th>Evento</th></tr></thead><tbody id="ppoDecisionHistory"><tr><td colspan="6">Inicia una inferencia para ver decisiones reales.</td></tr></tbody></table></div>
+          </div>
+          <div id="ppoTabExperiments" class="ppo-tab-panel" hidden>
+            <p class="section-copy">Los experimentos completos se conservan en el banco representativo. Selecciona uno arriba para reproducir sus posiciones, acciones y recompensas.</p>
+            <button id="ppoGoExperiments" class="secondary-button" type="button">Abrir los 10 experimentos</button>
+          </div>
+          <div id="ppoTabMetrics" class="ppo-tab-panel" hidden>
+            <canvas id="trainingDashboardCanvas" class="training-dashboard" aria-label="Ocho gráficas de entrenamiento"></canvas>
           </div>
         </article>
-        <canvas id="trainingDashboardCanvas" class="training-dashboard" aria-label="Ocho gráficas de entrenamiento"></canvas>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>

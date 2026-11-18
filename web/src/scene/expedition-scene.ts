@@ -170,6 +170,8 @@ export class ExpeditionScene {
     this.trailPoints.visible = visible
   }
 
+  setSensorsVisible(visible: boolean) { this.rays.setVisible(visible) }
+
   setReferenceVisible(visible: boolean) {
     this.referenceVisible = visible
     if (this.reference) this.reference.visible = visible && Boolean(this.episode?.mode.includes('replay'))

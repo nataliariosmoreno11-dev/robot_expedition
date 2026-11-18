@@ -91,6 +91,11 @@ def evaluate_planetary(
                 "collection_positions": info["collection_positions"],
                 "final_position": [info["x"], info["y"]],
                 "energy_consumed": info["energy_consumed"],
+                "explored_cells": info["explored_cells"],
+                "stagnation_steps": info.get("stagnation_steps", 0),
+                "stagnation_events": info.get("stagnation_events", 0),
+                "stagnation_reasons": info.get("stagnation_reasons", {}),
+                "returned_to_base": bool(info["success"]),
                 "return": round(float(total), 4),
                 "latency_ms_mean": round(float(np.mean(latencies)), 4),
             }
@@ -167,6 +172,14 @@ def evaluate_planetary(
         "collisions_per_episode": mean("collisions"),
         "steps_mean": mean("steps"),
         "samples_collected_mean": mean("samples_collected"),
+        "return_to_base_rate": round(float(np.mean([case["returned_to_base"] for case in cases])), 4),
+        "energy_consumed_mean": mean("energy_consumed"),
+        "explored_cells_mean": mean("explored_cells"),
+        "stagnation_steps_mean": mean("stagnation_steps"),
+        "stagnation_events_mean": mean("stagnation_events"),
+        "episodes_with_stagnation_rate": round(
+            float(np.mean([case["stagnation_steps"] > 0 for case in cases])), 4
+        ),
         "mission_completion": round(
             float(
                 np.mean(

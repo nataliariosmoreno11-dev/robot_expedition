@@ -1,0 +1,42 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 8192,
+  "checkpoint_uri": "runs:/590fcc0a66884eb9ba0bea9dc974433d/checkpoint",
+  "config_sha256": "95ff5cff366c475ae7cf2db904948d0b2f77e4c2b8c02e3ec783763cfe1205ee",
+  "diagnosis": null,
+  "effective_budget_timesteps": 8192,
+  "environment_hash": "8f449e89975246dacd35c464411b0f4375a99c4353917d3c3cd5fb2820058446",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "planetary-holdout-v1",
+  "experiment_id": "exp-016-procedural-generalization",
+  "git_commit": "010c06b1cfbc3ab597fffea2aadf2740c1178919",
+  "level_id": "n2",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "evaluation_episodes": 8,
+    "evaluation_partial": true,
+    "evaluation_reward": -53.826,
+    "failures_by_cause": {
+      "tiempo": 7
+    },
+    "steps_mean": 177.5,
+    "success_rate": 0.125
+  },
+  "model_sha256": "b4d2c510b2146f16e0cb35227257ae0cc579e15532e59dd51840a0022dfe6e7b",
+  "model_uri": "local://models/590fcc0a66884eb9ba0bea9dc974433d",
+  "normalization_uri": "runs:/590fcc0a66884eb9ba0bea9dc974433d/vecnormalize.pkl",
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "configs/experiments/exp-016-procedural-generalization.yaml",
+    "repository": "https://github.com/nataliariosmoreno11-dev/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": null,
+  "run_id": "590fcc0a66884eb9ba0bea9dc974433d",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 11,
+  "source_config_sha256": "c559d90613a1ff42895528f0a1186ea0bd507c21d3bc811be21285a79333a504",
+  "status": "completed"
+}

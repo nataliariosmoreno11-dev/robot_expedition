@@ -173,6 +173,90 @@ class NumpyPPOPolicy:
                 "model_sha256": self.source_sha256}
 
 
+class CampaignNumpyPPOPolicy:
+    """PPO planetario especializado exportado fielmente a NumPy.
+
+    Conserva la normalización, los actores por escenario y la rama de valor.
+    ``last_decision`` expone únicamente resultados reales del forward pass.
+    """
+
+    name = "ppo"
+
+    def __init__(self, adapter_path: str | Path):
+        self.adapter_path = Path(adapter_path)
+        data = np.load(self.adapter_path)
+        self.actor_count = int(data["actor_count"])
+        self.boundaries = data["boundaries"].astype(np.float32)
+        self.mean, self.var = data["obs_mean"], data["obs_var"]
+        self.clip, self.eps = float(data["clip_obs"]), float(data["epsilon"])
+        self.source_sha256 = str(data["source_sha256"])
+        self.actors = [(
+            data[f"actor_{index}_w0"], data[f"actor_{index}_b0"],
+            data[f"actor_{index}_w1"], data[f"actor_{index}_b1"],
+            data[f"actor_{index}_out_w"], data[f"actor_{index}_out_b"],
+        ) for index in range(self.actor_count)]
+        self.value = (data["value_w0"], data["value_b0"], data["value_w1"],
+                      data["value_b1"], data["value_out_w"], data["value_out_b"])
+        self.last_decision: dict | None = None
+
+    def __call__(self, observation) -> int:
+        raw = np.asarray(observation, dtype=np.float32)
+        normalized = np.clip((raw - self.mean) / np.sqrt(self.var + self.eps),
+                             -self.clip, self.clip).astype(np.float32)
+        actor_index = int(np.searchsorted(self.boundaries, normalized[-1])) if self.actor_count > 1 else 0
+        w0, b0, w1, b1, wo, bo = self.actors[actor_index]
+        hidden_1 = np.tanh(w0 @ normalized + b0)
+        hidden_2 = np.tanh(w1 @ hidden_1 + b1)
+        logits = wo @ hidden_2 + bo
+        shifted = logits - np.max(logits)
+        probabilities = np.exp(shifted) / np.exp(shifted).sum()
+        vw0, vb0, vw1, vb1, vwo, vbo = self.value
+        value_hidden = np.tanh(vw0 @ normalized + vb0)
+        value_hidden = np.tanh(vw1 @ value_hidden + vb1)
+        estimated_value = float((vwo @ value_hidden + vbo).reshape(-1)[0])
+        action = int(np.argmax(logits))
+        self.last_decision = {
+            "action": action,
+            "actor_index": actor_index,
+            "probabilities": probabilities.round(6).tolist(),
+            "logits": logits.round(6).tolist(),
+            "value": round(estimated_value, 6),
+            "observation": raw.round(6).tolist(),
+            "normalized_observation": normalized.round(6).tolist(),
+            "hidden_1_summary": {
+                "minimum": round(float(hidden_1.min()), 6),
+                "maximum": round(float(hidden_1.max()), 6),
+                "mean": round(float(hidden_1.mean()), 6),
+            },
+            "hidden_2_summary": {
+                "minimum": round(float(hidden_2.min()), 6),
+                "maximum": round(float(hidden_2.max()), 6),
+                "mean": round(float(hidden_2.mean()), 6),
+            },
+        }
+        return action
+
+    def describe(self) -> dict:
+        return {
+            "algorithm": "PPO",
+            "kind": "checkpoint PPO · adaptador NumPy validado",
+            "adapter_path": str(self.adapter_path),
+            "adapter_sha256": sha256_file(self.adapter_path),
+            "model_sha256": self.source_sha256,
+            "observation_shape": [132],
+            "history_steps": 4,
+            "features_per_step": 33,
+            "action_space": {"type": "Discrete", "size": 7},
+            "architecture": {
+                "policy": [132, 64, 64, 7],
+                "activation": "Tanh",
+                "actors": self.actor_count,
+                "value": [132, 64, 64, 1],
+            },
+            "deterministic": True,
+        }
+
+
 def export_ppo_numpy(model_path: Path, vecnormalize_path: Path | None, out: Path) -> Path:
     """Exporta los pesos de la politica PPO y la normalizacion a un .npz (necesita torch y SB3)."""
     from stable_baselines3 import PPO

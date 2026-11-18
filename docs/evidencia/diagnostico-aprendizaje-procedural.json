@@ -1,0 +1,2745 @@
+{
+  "schema": "planetary-learning-diagnostic/v1",
+  "created_at": "2026-11-18T15:56:50.729298+00:00",
+  "evaluation": "semillas procedurales no usadas por la campaña fija",
+  "episodes_per_level": 2,
+  "seed_start": 970000,
+  "policies": {
+    "random": {
+      "1": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 1,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 1.516,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "1": 0.0
+          },
+          "failures_by_cause": {
+            "fuera_area": 2
+          },
+          "return_mean": -32.9335,
+          "return_std": 4.9841,
+          "collisions_per_episode": 0.0,
+          "steps_mean": 55.5,
+          "samples_collected_mean": 0.5,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 17.5701,
+          "explored_cells_mean": 10.0,
+          "stagnation_steps_mean": 2.0,
+          "stagnation_events_mean": 0.5,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.5,
+          "path_length_mean": 5.998,
+          "latency_ms_mean": 0.0483
+        },
+        "cases": [
+          {
+            "seed": 970100,
+            "scenario_id": "mars-L1-0756f82b02",
+            "difficulty_level": 1,
+            "difficulty": "L1 · llanura inicial",
+            "success": false,
+            "end": "fuera_area",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 0,
+            "steps": 39,
+            "battery": 87.849,
+            "path_length": 4.226,
+            "route_cost": 4.267033704958386,
+            "initial_position": [
+              1.499884276737035,
+              2.1822349269990742e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              4.784012043342679,
+              0.5002873202926303
+            ],
+            "energy_consumed": 12.151209672101587,
+            "explored_cells": 9,
+            "stagnation_steps": 4,
+            "stagnation_events": 1,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 4
+            },
+            "returned_to_base": false,
+            "return": -37.9176,
+            "latency_ms_mean": 0.059
+          },
+          {
+            "seed": 970101,
+            "scenario_id": "mars-L1-79227eb26c",
+            "difficulty_level": 1,
+            "difficulty": "L1 · llanura inicial",
+            "success": false,
+            "end": "fuera_area",
+            "samples_collected": 1,
+            "requested_samples": 1,
+            "collisions": 0,
+            "steps": 72,
+            "battery": 77.011,
+            "path_length": 7.77,
+            "route_cost": 7.806732761425257,
+            "initial_position": [
+              1.4998842766996416,
+              2.1821513170256442e-10
+            ],
+            "collection_positions": [
+              [
+                3.347480206287323,
+                -0.6696660825194843
+              ]
+            ],
+            "final_position": [
+              3.768036883604302,
+              -2.4616401261524445
+            ],
+            "energy_consumed": 22.988892950000846,
+            "explored_cells": 11,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -27.9494,
+            "latency_ms_mean": 0.0377
+          }
+        ]
+      },
+      "2": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 2,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 1.642,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "2": 0.0
+          },
+          "failures_by_cause": {
+            "fuera_area": 2
+          },
+          "return_mean": -44.3544,
+          "return_std": 3.5147,
+          "collisions_per_episode": 7.0,
+          "steps_mean": 85.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 22.488,
+          "explored_cells_mean": 13.5,
+          "stagnation_steps_mean": 10.5,
+          "stagnation_events_mean": 1.5,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 9.447,
+          "latency_ms_mean": 0.0382
+        },
+        "cases": [
+          {
+            "seed": 970200,
+            "scenario_id": "mars-L2-10f4e82e91",
+            "difficulty_level": 2,
+            "difficulty": "L2 · rocas dispersas",
+            "success": false,
+            "end": "fuera_area",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 14,
+            "steps": 93,
+            "battery": 77.218,
+            "path_length": 10.019,
+            "route_cost": 11.43250131207467,
+            "initial_position": [
+              1.4998842766839473,
+              2.1821162360617142e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              1.2998736893370684,
+              -3.103542649848689
+            ],
+            "energy_consumed": 22.7816535564546,
+            "explored_cells": 15,
+            "stagnation_steps": 19,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 18,
+              "sin_exploracion": 1
+            },
+            "returned_to_base": false,
+            "return": -47.8691,
+            "latency_ms_mean": 0.0442
+          },
+          {
+            "seed": 970201,
+            "scenario_id": "mars-L2-16c1d4e9d7",
+            "difficulty_level": 2,
+            "difficulty": "L2 · rocas dispersas",
+            "success": false,
+            "end": "fuera_area",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 0,
+            "steps": 77,
+            "battery": 77.806,
+            "path_length": 8.875,
+            "route_cost": 9.937354131316209,
+            "initial_position": [
+              1.4998842767129554,
+              2.1821810869621716e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.46208608807672547,
+              3.043656497635477
+            ],
+            "energy_consumed": 22.194286779375844,
+            "explored_cells": 12,
+            "stagnation_steps": 2,
+            "stagnation_events": 1,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 2
+            },
+            "returned_to_base": false,
+            "return": -40.8397,
+            "latency_ms_mean": 0.0322
+          }
+        ]
+      },
+      "3": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 3,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 3.046,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "3": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 1,
+            "volco": 1
+          },
+          "return_mean": -65.6551,
+          "return_std": 1.9683,
+          "collisions_per_episode": 46.0,
+          "steps_mean": 205.5,
+          "samples_collected_mean": 0.5,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 55.6012,
+          "explored_cells_mean": 20.0,
+          "stagnation_steps_mean": 67.0,
+          "stagnation_events_mean": 15.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.25,
+          "path_length_mean": 18.1245,
+          "latency_ms_mean": 0.0317
+        },
+        "cases": [
+          {
+            "seed": 970300,
+            "scenario_id": "mars-L3-2d027bf4a0",
+            "difficulty_level": 3,
+            "difficulty": "L3 · pendientes y fricción",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 1,
+            "requested_samples": 2,
+            "collisions": 78,
+            "steps": 310,
+            "battery": 11.864,
+            "path_length": 26.414,
+            "route_cost": 35.118955021298575,
+            "initial_position": [
+              1.4998842767122997,
+              2.1821796391656724e-10
+            ],
+            "collection_positions": [
+              [
+                3.344480290201625,
+                -0.9708983324176091
+              ]
+            ],
+            "final_position": [
+              3.5923705193485227,
+              -1.3251366899565131
+            ],
+            "energy_consumed": 86.13635436361713,
+            "explored_cells": 28,
+            "stagnation_steps": 107,
+            "stagnation_events": 24,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 40,
+              "choques_repetidos": 54,
+              "sin_exploracion": 13
+            },
+            "returned_to_base": false,
+            "return": -63.6868,
+            "latency_ms_mean": 0.0316
+          },
+          {
+            "seed": 970301,
+            "scenario_id": "mars-L3-893b5a7423",
+            "difficulty_level": 3,
+            "difficulty": "L3 · pendientes y fricción",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 14,
+            "steps": 101,
+            "battery": 72.934,
+            "path_length": 9.835,
+            "route_cost": 11.9263471558072,
+            "initial_position": [
+              1.4998842767221123,
+              2.1822015510151358e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              4.806796440403095,
+              0.5449953893445291
+            ],
+            "energy_consumed": 25.06611746382005,
+            "explored_cells": 12,
+            "stagnation_steps": 27,
+            "stagnation_events": 6,
+            "stagnation_reasons": {
+              "sin_exploracion": 15,
+              "oscilacion_dos_posiciones": 12
+            },
+            "returned_to_base": false,
+            "return": -67.6233,
+            "latency_ms_mean": 0.0318
+          }
+        ]
+      },
+      "4": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 4,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.325,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "4": 0.0
+          },
+          "failures_by_cause": {
+            "fuera_area": 1,
+            "volco": 1
+          },
+          "return_mean": -59.4895,
+          "return_std": 1.6851,
+          "collisions_per_episode": 1.5,
+          "steps_mean": 174.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 49.2901,
+          "explored_cells_mean": 18.5,
+          "stagnation_steps_mean": 40.5,
+          "stagnation_events_mean": 7.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 17.383,
+          "latency_ms_mean": 0.029
+        },
+        "cases": [
+          {
+            "seed": 970400,
+            "scenario_id": "mars-L4-1f8bf74e8e",
+            "difficulty_level": 4,
+            "difficulty": "L4 · cráteres y viento",
+            "success": false,
+            "end": "fuera_area",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 3,
+            "steps": 223,
+            "battery": 38.509,
+            "path_length": 20.379,
+            "route_cost": 35.38997098845093,
+            "initial_position": [
+              1.4998842767519145,
+              2.182268144405346e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              2.1284501930725273,
+              4.316579164903915
+            ],
+            "energy_consumed": 56.49130447147522,
+            "explored_cells": 19,
+            "stagnation_steps": 66,
+            "stagnation_events": 9,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 57,
+              "sin_exploracion": 9
+            },
+            "returned_to_base": false,
+            "return": -61.1746,
+            "latency_ms_mean": 0.0289
+          },
+          {
+            "seed": 970401,
+            "scenario_id": "mars-L4-94d76ab557",
+            "difficulty_level": 4,
+            "difficulty": "L4 · cráteres y viento",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 0,
+            "steps": 126,
+            "battery": 52.911,
+            "path_length": 14.387,
+            "route_cost": 23.317347404202263,
+            "initial_position": [
+              1.4998842767808156,
+              2.182332746273197e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              4.055768972016529,
+              1.7208296063385562
+            ],
+            "energy_consumed": 42.088843874604855,
+            "explored_cells": 18,
+            "stagnation_steps": 15,
+            "stagnation_events": 5,
+            "stagnation_reasons": {
+              "sin_exploracion": 5,
+              "oscilacion_dos_posiciones": 10
+            },
+            "returned_to_base": false,
+            "return": -57.8044,
+            "latency_ms_mean": 0.0291
+          }
+        ]
+      },
+      "5": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 5,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.278,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "5": 0.0
+          },
+          "failures_by_cause": {
+            "volco": 2
+          },
+          "return_mean": -91.6695,
+          "return_std": 37.4688,
+          "collisions_per_episode": 48.5,
+          "steps_mean": 133.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 31.4909,
+          "explored_cells_mean": 9.5,
+          "stagnation_steps_mean": 64.5,
+          "stagnation_events_mean": 5.0,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.0,
+          "path_length_mean": 9.6795,
+          "latency_ms_mean": 0.031
+        },
+        "cases": [
+          {
+            "seed": 970500,
+            "scenario_id": "mars-L5-9c57d8181a",
+            "difficulty_level": 5,
+            "difficulty": "L5 · dunas y polvo",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 97,
+            "steps": 224,
+            "battery": 38.632,
+            "path_length": 14.253,
+            "route_cost": 27.648122376553367,
+            "initial_position": [
+              1.499884276773838,
+              2.182317166101318e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              4.870002633489875,
+              -1.1428449685232906
+            ],
+            "energy_consumed": 52.368483865686144,
+            "explored_cells": 11,
+            "stagnation_steps": 129,
+            "stagnation_events": 10,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 8,
+              "choques_repetidos": 105,
+              "sin_exploracion": 16
+            },
+            "returned_to_base": false,
+            "return": -129.1384,
+            "latency_ms_mean": 0.032
+          },
+          {
+            "seed": 970501,
+            "scenario_id": "mars-L5-10e4d8fbd2",
+            "difficulty_level": 5,
+            "difficulty": "L5 · dunas y polvo",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 3,
+            "collisions": 0,
+            "steps": 43,
+            "battery": 80.387,
+            "path_length": 5.106,
+            "route_cost": 8.69271412459779,
+            "initial_position": [
+              1.4998842767356988,
+              2.1822319243964306e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.7178185439986207,
+              0.1323701403893021
+            ],
+            "energy_consumed": 10.613313505340358,
+            "explored_cells": 8,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -54.2007,
+            "latency_ms_mean": 0.03
+          }
+        ]
+      },
+      "6": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 6,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 3.736,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "6": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 1,
+            "volco": 1
+          },
+          "return_mean": -95.5329,
+          "return_std": 37.2111,
+          "collisions_per_episode": 46.5,
+          "steps_mean": 212.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 52.1183,
+          "explored_cells_mean": 22.5,
+          "stagnation_steps_mean": 71.5,
+          "stagnation_events_mean": 10.5,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.0,
+          "path_length_mean": 19.4955,
+          "latency_ms_mean": 0.0326
+        },
+        "cases": [
+          {
+            "seed": 970600,
+            "scenario_id": "mars-L6-fbcc8a4e26",
+            "difficulty_level": 6,
+            "difficulty": "L6 · rutas extensas",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 93,
+            "steps": 363,
+            "battery": 0.0,
+            "path_length": 32.654,
+            "route_cost": 51.99469273522072,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.28035301964382603,
+              0.6185533841930506
+            ],
+            "energy_consumed": 87.0,
+            "explored_cells": 37,
+            "stagnation_steps": 143,
+            "stagnation_events": 21,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 59,
+              "choques_repetidos": 68,
+              "sin_exploracion": 16
+            },
+            "returned_to_base": false,
+            "return": -132.7441,
+            "latency_ms_mean": 0.0335
+          },
+          {
+            "seed": 970601,
+            "scenario_id": "mars-L6-a858c42d3f",
+            "difficulty_level": 6,
+            "difficulty": "L6 · rutas extensas",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 3,
+            "collisions": 0,
+            "steps": 62,
+            "battery": 69.763,
+            "path_length": 6.337,
+            "route_cost": 11.046840676904885,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              1.5745769152914675,
+              -1.8755485696045016
+            ],
+            "energy_consumed": 17.236558494440203,
+            "explored_cells": 8,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -58.3218,
+            "latency_ms_mean": 0.0316
+          }
+        ]
+      },
+      "7": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 7,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.656,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "7": 0.0
+          },
+          "failures_by_cause": {
+            "fuera_area": 1,
+            "volco": 1
+          },
+          "return_mean": -57.5294,
+          "return_std": 0.6957,
+          "collisions_per_episode": 3.5,
+          "steps_mean": 147.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 57.4865,
+          "explored_cells_mean": 18.5,
+          "stagnation_steps_mean": 18.5,
+          "stagnation_events_mean": 5.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 14.7145,
+          "latency_ms_mean": 0.0365
+        },
+        "cases": [
+          {
+            "seed": 970700,
+            "scenario_id": "mars-L7-2338d8f425",
+            "difficulty_level": 7,
+            "difficulty": "L7 · meteorología variable",
+            "success": false,
+            "end": "fuera_area",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 7,
+            "steps": 206,
+            "battery": 4.326,
+            "path_length": 19.453,
+            "route_cost": 38.4829094260456,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              2.4297512513378914,
+              -5.63836784199473
+            ],
+            "energy_consumed": 78.67395822742455,
+            "explored_cells": 23,
+            "stagnation_steps": 23,
+            "stagnation_events": 6,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 17,
+              "choques_repetidos": 2,
+              "sin_exploracion": 4
+            },
+            "returned_to_base": false,
+            "return": -56.8337,
+            "latency_ms_mean": 0.0331
+          },
+          {
+            "seed": 970701,
+            "scenario_id": "mars-L7-ee192b9177",
+            "difficulty_level": 7,
+            "difficulty": "L7 · meteorología variable",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 0,
+            "steps": 89,
+            "battery": 46.701,
+            "path_length": 9.976,
+            "route_cost": 18.68415764307637,
+            "initial_position": [
+              1.4998842767177307,
+              2.1821917666292362e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.3595616609966962,
+              1.837169526356079
+            ],
+            "energy_consumed": 36.29905812298735,
+            "explored_cells": 14,
+            "stagnation_steps": 14,
+            "stagnation_events": 4,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 6,
+              "sin_exploracion": 8
+            },
+            "returned_to_base": false,
+            "return": -58.225,
+            "latency_ms_mean": 0.04
+          }
+        ]
+      },
+      "8": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 8,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.693,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "8": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 1,
+            "grieta": 1
+          },
+          "return_mean": -76.6262,
+          "return_std": 19.6144,
+          "collisions_per_episode": 22.5,
+          "steps_mean": 160.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 46.7189,
+          "explored_cells_mean": 18.5,
+          "stagnation_steps_mean": 24.5,
+          "stagnation_events_mean": 7.0,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.0,
+          "path_length_mean": 16.3565,
+          "latency_ms_mean": 0.0258
+        },
+        "cases": [
+          {
+            "seed": 970800,
+            "scenario_id": "mars-L8-9ada433781",
+            "difficulty_level": 8,
+            "difficulty": "L8 · expedición marciana",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 42,
+            "steps": 273,
+            "battery": 0.0,
+            "path_length": 27.935,
+            "route_cost": 53.79997340080214,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.3101203705702478,
+              -3.050906451009374
+            ],
+            "energy_consumed": 78.0,
+            "explored_cells": 30,
+            "stagnation_steps": 49,
+            "stagnation_events": 14,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 9,
+              "sin_exploracion": 18,
+              "choques_repetidos": 22
+            },
+            "returned_to_base": false,
+            "return": -96.2406,
+            "latency_ms_mean": 0.0296
+          },
+          {
+            "seed": 970801,
+            "scenario_id": "mars-L8-aff085e07b",
+            "difficulty_level": 8,
+            "difficulty": "L8 · expedición marciana",
+            "success": false,
+            "end": "grieta",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 3,
+            "steps": 48,
+            "battery": 62.562,
+            "path_length": 4.778,
+            "route_cost": 10.569311745257762,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              4.473658976255146,
+              0.17491353598426046
+            ],
+            "energy_consumed": 15.43779836516807,
+            "explored_cells": 7,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -57.0119,
+            "latency_ms_mean": 0.0219
+          }
+        ]
+      }
+    },
+    "qlearning_unassisted": {
+      "1": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 1,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 4.451,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "1": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -118.7096,
+          "return_std": 0.0166,
+          "collisions_per_episode": 193.0,
+          "steps_mean": 200.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 25.3919,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 184.0,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.273,
+          "latency_ms_mean": 0.3294
+        },
+        "cases": [
+          {
+            "seed": 970100,
+            "scenario_id": "mars-L1-0756f82b02",
+            "difficulty_level": 1,
+            "difficulty": "L1 · llanura inicial",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 193,
+            "steps": 200,
+            "battery": 74.941,
+            "path_length": 1.273,
+            "route_cost": 1.281691767007184,
+            "initial_position": [
+              1.499884276737035,
+              2.1822349269990742e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23797146300589223,
+              0.0019693630201519483
+            ],
+            "energy_consumed": 25.05900950758749,
+            "explored_cells": 3,
+            "stagnation_steps": 184,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 173
+            },
+            "returned_to_base": false,
+            "return": -118.693,
+            "latency_ms_mean": 0.3969
+          },
+          {
+            "seed": 970101,
+            "scenario_id": "mars-L1-79227eb26c",
+            "difficulty_level": 1,
+            "difficulty": "L1 · llanura inicial",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 193,
+            "steps": 200,
+            "battery": 74.275,
+            "path_length": 1.273,
+            "route_cost": 1.2779008920155173,
+            "initial_position": [
+              1.4998842766996416,
+              2.1821513170256442e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23797151464362548,
+              0.001971398023691248
+            ],
+            "energy_consumed": 25.7248712516066,
+            "explored_cells": 3,
+            "stagnation_steps": 184,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 173
+            },
+            "returned_to_base": false,
+            "return": -118.7262,
+            "latency_ms_mean": 0.2619
+          }
+        ]
+      },
+      "2": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 2,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 4.457,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "2": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -149.2964,
+          "return_std": 0.0606,
+          "collisions_per_episode": 243.0,
+          "steps_mean": 250.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 27.127,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 234.0,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.275,
+          "latency_ms_mean": 0.249
+        },
+        "cases": [
+          {
+            "seed": 970200,
+            "scenario_id": "mars-L2-10f4e82e91",
+            "difficulty_level": 2,
+            "difficulty": "L2 · rocas dispersas",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 243,
+            "steps": 250,
+            "battery": 74.086,
+            "path_length": 1.275,
+            "route_cost": 1.451926595496652,
+            "initial_position": [
+              1.4998842766839473,
+              2.1821162360617142e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23797136340830657,
+              0.002070079437001317
+            ],
+            "energy_consumed": 25.91433553728065,
+            "explored_cells": 3,
+            "stagnation_steps": 234,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 223
+            },
+            "returned_to_base": false,
+            "return": -149.2357,
+            "latency_ms_mean": 0.2684
+          },
+          {
+            "seed": 970201,
+            "scenario_id": "mars-L2-16c1d4e9d7",
+            "difficulty_level": 2,
+            "difficulty": "L2 · rocas dispersas",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 243,
+            "steps": 250,
+            "battery": 71.66,
+            "path_length": 1.275,
+            "route_cost": 1.4223732296607319,
+            "initial_position": [
+              1.4998842767129554,
+              2.1821810869621716e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23798001517760733,
+              0.0019948424152051395
+            ],
+            "energy_consumed": 28.33965030156905,
+            "explored_cells": 3,
+            "stagnation_steps": 234,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 223
+            },
+            "returned_to_base": false,
+            "return": -149.357,
+            "latency_ms_mean": 0.2297
+          }
+        ]
+      },
+      "3": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 3,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 4.652,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "3": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -186.5357,
+          "return_std": 0.0592,
+          "collisions_per_episode": 303.0,
+          "steps_mean": 310.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 39.9138,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 294.0,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.278,
+          "latency_ms_mean": 0.2074
+        },
+        "cases": [
+          {
+            "seed": 970300,
+            "scenario_id": "mars-L3-2d027bf4a0",
+            "difficulty_level": 3,
+            "difficulty": "L3 · pendientes y fricción",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 303,
+            "steps": 310,
+            "battery": 56.903,
+            "path_length": 1.278,
+            "route_cost": 1.6291834243156322,
+            "initial_position": [
+              1.4998842767122997,
+              2.1821796391656724e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23797784281233678,
+              0.0021500536337984645
+            ],
+            "energy_consumed": 41.09740595733166,
+            "explored_cells": 3,
+            "stagnation_steps": 294,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 283
+            },
+            "returned_to_base": false,
+            "return": -186.5949,
+            "latency_ms_mean": 0.2054
+          },
+          {
+            "seed": 970301,
+            "scenario_id": "mars-L3-893b5a7423",
+            "difficulty_level": 3,
+            "difficulty": "L3 · pendientes y fricción",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 303,
+            "steps": 310,
+            "battery": 59.27,
+            "path_length": 1.278,
+            "route_cost": 1.439466104150033,
+            "initial_position": [
+              1.4998842767221123,
+              2.1822015510151358e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.2379727034128397,
+              0.0021469105216132375
+            ],
+            "energy_consumed": 38.73017502432452,
+            "explored_cells": 3,
+            "stagnation_steps": 294,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 283
+            },
+            "returned_to_base": false,
+            "return": -186.4765,
+            "latency_ms_mean": 0.2093
+          }
+        ]
+      },
+      "4": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 4,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 5.629,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "4": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -223.4609,
+          "return_std": 0.1247,
+          "collisions_per_episode": 363.0,
+          "steps_mean": 370.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 46.4181,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 354.0,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.282,
+          "latency_ms_mean": 0.2112
+        },
+        "cases": [
+          {
+            "seed": 970400,
+            "scenario_id": "mars-L4-1f8bf74e8e",
+            "difficulty_level": 4,
+            "difficulty": "L4 · cráteres y viento",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 363,
+            "steps": 370,
+            "battery": 51.076,
+            "path_length": 1.282,
+            "route_cost": 1.9279479129787662,
+            "initial_position": [
+              1.4998842767519145,
+              2.182268144405346e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23798416254073296,
+              0.0011948987612494706
+            ],
+            "energy_consumed": 43.923603792289555,
+            "explored_cells": 3,
+            "stagnation_steps": 354,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 343
+            },
+            "returned_to_base": false,
+            "return": -223.3362,
+            "latency_ms_mean": 0.21
+          },
+          {
+            "seed": 970401,
+            "scenario_id": "mars-L4-94d76ab557",
+            "difficulty_level": 4,
+            "difficulty": "L4 · cráteres y viento",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 363,
+            "steps": 370,
+            "battery": 46.087,
+            "path_length": 1.282,
+            "route_cost": 2.0086037911203265,
+            "initial_position": [
+              1.4998842767808156,
+              2.182332746273197e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23797470651382857,
+              0.0021922311135241044
+            ],
+            "energy_consumed": 48.91265045323096,
+            "explored_cells": 3,
+            "stagnation_steps": 354,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 343
+            },
+            "returned_to_base": false,
+            "return": -223.5856,
+            "latency_ms_mean": 0.2124
+          }
+        ]
+      },
+      "5": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 5,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 6.384,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "5": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -254.141,
+          "return_std": 0.18,
+          "collisions_per_episode": 413.0,
+          "steps_mean": 420.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 50.0203,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 404.0,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.2845,
+          "latency_ms_mean": 0.2056
+        },
+        "cases": [
+          {
+            "seed": 970500,
+            "scenario_id": "mars-L5-9c57d8181a",
+            "difficulty_level": 5,
+            "difficulty": "L5 · dunas y polvo",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 413,
+            "steps": 420,
+            "battery": 37.379,
+            "path_length": 1.284,
+            "route_cost": 1.9203754246776226,
+            "initial_position": [
+              1.499884276773838,
+              2.182317166101318e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23796977498022961,
+              0.0021276785432677793
+            ],
+            "energy_consumed": 53.620784424805855,
+            "explored_cells": 3,
+            "stagnation_steps": 404,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 393
+            },
+            "returned_to_base": false,
+            "return": -254.321,
+            "latency_ms_mean": 0.2178
+          },
+          {
+            "seed": 970501,
+            "scenario_id": "mars-L5-10e4d8fbd2",
+            "difficulty_level": 5,
+            "difficulty": "L5 · dunas y polvo",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 3,
+            "collisions": 413,
+            "steps": 420,
+            "battery": 44.58,
+            "path_length": 1.285,
+            "route_cost": 1.898485224679197,
+            "initial_position": [
+              1.4998842767356988,
+              2.1822319243964306e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23798666431661072,
+              0.0009459486258043664
+            ],
+            "energy_consumed": 46.4197712222151,
+            "explored_cells": 3,
+            "stagnation_steps": 404,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 393
+            },
+            "returned_to_base": false,
+            "return": -253.961,
+            "latency_ms_mean": 0.1935
+          }
+        ]
+      },
+      "6": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 6,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 6.638,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "6": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -284.866,
+          "return_std": 0.0993,
+          "collisions_per_episode": 463.0,
+          "steps_mean": 470.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 54.521,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 454.0,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.287,
+          "latency_ms_mean": 0.1908
+        },
+        "cases": [
+          {
+            "seed": 970600,
+            "scenario_id": "mars-L6-fbcc8a4e26",
+            "difficulty_level": 6,
+            "difficulty": "L6 · rutas extensas",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 463,
+            "steps": 470,
+            "battery": 34.466,
+            "path_length": 1.287,
+            "route_cost": 2.004583935568001,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.2379760529701733,
+              0.0022353004213621665
+            ],
+            "energy_consumed": 52.53415213278124,
+            "explored_cells": 3,
+            "stagnation_steps": 454,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 443
+            },
+            "returned_to_base": false,
+            "return": -284.7667,
+            "latency_ms_mean": 0.184
+          },
+          {
+            "seed": 970601,
+            "scenario_id": "mars-L6-a858c42d3f",
+            "difficulty_level": 6,
+            "difficulty": "L6 · rutas extensas",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 3,
+            "collisions": 463,
+            "steps": 470,
+            "battery": 30.492,
+            "path_length": 1.287,
+            "route_cost": 2.0402644792247155,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.2379965120884284,
+              0.0019815040991354445
+            ],
+            "energy_consumed": 56.50790988032016,
+            "explored_cells": 3,
+            "stagnation_steps": 454,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 443
+            },
+            "returned_to_base": false,
+            "return": -284.9654,
+            "latency_ms_mean": 0.1976
+          }
+        ]
+      },
+      "7": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 7,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 9.432,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "7": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 2
+          },
+          "return_mean": -363.4379,
+          "return_std": 1.5231,
+          "collisions_per_episode": 507.5,
+          "steps_mean": 514.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 83.0,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 498.5,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.2955,
+          "latency_ms_mean": 0.2587
+        },
+        "cases": [
+          {
+            "seed": 970700,
+            "scenario_id": "mars-L7-2338d8f425",
+            "difficulty_level": 7,
+            "difficulty": "L7 · meteorología variable",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 505,
+            "steps": 512,
+            "battery": 0.0,
+            "path_length": 1.293,
+            "route_cost": 2.417214536113076,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23797797088730896,
+              0.01110393046718214
+            ],
+            "energy_consumed": 83.0,
+            "explored_cells": 3,
+            "stagnation_steps": 496,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 485
+            },
+            "returned_to_base": false,
+            "return": -361.9148,
+            "latency_ms_mean": 0.2664
+          },
+          {
+            "seed": 970701,
+            "scenario_id": "mars-L7-ee192b9177",
+            "difficulty_level": 7,
+            "difficulty": "L7 · meteorología variable",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 510,
+            "steps": 517,
+            "battery": 0.0,
+            "path_length": 1.298,
+            "route_cost": 2.3319742053691868,
+            "initial_position": [
+              1.4998842767177307,
+              2.1821917666292362e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23796498695154547,
+              -0.020294492611186477
+            ],
+            "energy_consumed": 83.0,
+            "explored_cells": 3,
+            "stagnation_steps": 501,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 490
+            },
+            "returned_to_base": false,
+            "return": -364.961,
+            "latency_ms_mean": 0.251
+          }
+        ]
+      },
+      "8": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 8,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 8.531,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "8": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 1,
+            "bateria": 1
+          },
+          "return_mean": -376.4517,
+          "return_std": 23.6447,
+          "collisions_per_episode": 570.5,
+          "steps_mean": 577.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 74.6702,
+          "explored_cells_mean": 3.0,
+          "stagnation_steps_mean": 561.5,
+          "stagnation_events_mean": 2.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 1.293,
+          "latency_ms_mean": 0.1915
+        },
+        "cases": [
+          {
+            "seed": 970800,
+            "scenario_id": "mars-L8-9ada433781",
+            "difficulty_level": 8,
+            "difficulty": "L8 · expedición marciana",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 573,
+            "steps": 580,
+            "battery": 6.66,
+            "path_length": 1.293,
+            "route_cost": 2.320786020941307,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.23796815827295426,
+              0.002251667651431495
+            ],
+            "energy_consumed": 71.34043962336071,
+            "explored_cells": 3,
+            "stagnation_steps": 564,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 553
+            },
+            "returned_to_base": false,
+            "return": -352.807,
+            "latency_ms_mean": 0.1809
+          },
+          {
+            "seed": 970801,
+            "scenario_id": "mars-L8-aff085e07b",
+            "difficulty_level": 8,
+            "difficulty": "L8 · expedición marciana",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 568,
+            "steps": 575,
+            "battery": 0.0,
+            "path_length": 1.293,
+            "route_cost": 2.4172861336168956,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              0.2379743425700202,
+              0.0021574821982813137
+            ],
+            "energy_consumed": 78.0,
+            "explored_cells": 3,
+            "stagnation_steps": 559,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 11,
+              "choques_repetidos": 548
+            },
+            "returned_to_base": false,
+            "return": -400.0964,
+            "latency_ms_mean": 0.2021
+          }
+        ]
+      }
+    },
+    "ppo_tomas_procedural": {
+      "1": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 1,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.784,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "1": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 2
+          },
+          "return_mean": -21.4278,
+          "return_std": 5.375,
+          "collisions_per_episode": 4.5,
+          "steps_mean": 200.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 52.5569,
+          "explored_cells_mean": 10.0,
+          "stagnation_steps_mean": 111.0,
+          "stagnation_events_mean": 5.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 11.3675,
+          "latency_ms_mean": 0.2918
+        },
+        "cases": [
+          {
+            "seed": 970100,
+            "scenario_id": "mars-L1-0756f82b02",
+            "difficulty_level": 1,
+            "difficulty": "L1 · llanura inicial",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 0,
+            "steps": 200,
+            "battery": 52.742,
+            "path_length": 2.291,
+            "route_cost": 2.306729241210187,
+            "initial_position": [
+              1.499884276737035,
+              2.1822349269990742e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              1.7853518624955658,
+              0.3048926035079914
+            ],
+            "energy_consumed": 47.25773008214916,
+            "explored_cells": 2,
+            "stagnation_steps": 189,
+            "stagnation_events": 4,
+            "stagnation_reasons": {
+              "giro_sin_desplazamiento": 148,
+              "oscilacion_dos_posiciones": 41
+            },
+            "returned_to_base": false,
+            "return": -26.8029,
+            "latency_ms_mean": 0.3095
+          },
+          {
+            "seed": 970101,
+            "scenario_id": "mars-L1-79227eb26c",
+            "difficulty_level": 1,
+            "difficulty": "L1 · llanura inicial",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 1,
+            "collisions": 9,
+            "steps": 200,
+            "battery": 42.144,
+            "path_length": 20.444,
+            "route_cost": 20.546132372026324,
+            "initial_position": [
+              1.4998842766996416,
+              2.1821513170256442e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.772167764538026,
+              -1.2272237292434311
+            ],
+            "energy_consumed": 57.85605402313243,
+            "explored_cells": 18,
+            "stagnation_steps": 33,
+            "stagnation_events": 6,
+            "stagnation_reasons": {
+              "sin_exploracion": 21,
+              "oscilacion_dos_posiciones": 11,
+              "accion_repetida_sin_progreso": 1
+            },
+            "returned_to_base": false,
+            "return": -16.0528,
+            "latency_ms_mean": 0.274
+          }
+        ]
+      },
+      "2": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 2,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 1.966,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.5,
+          "success_rate_by_difficulty": {
+            "2": 0.5
+          },
+          "failures_by_cause": {
+            "tiempo": 1
+          },
+          "return_mean": 57.0875,
+          "return_std": 222.5623,
+          "collisions_per_episode": 113.5,
+          "steps_mean": 140.0,
+          "samples_collected_mean": 0.5,
+          "return_to_base_rate": 0.5,
+          "energy_consumed_mean": 22.574,
+          "explored_cells_mean": 9.0,
+          "stagnation_steps_mean": 109.5,
+          "stagnation_events_mean": 1.0,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.5,
+          "path_length_mean": 5.8025,
+          "latency_ms_mean": 0.2711
+        },
+        "cases": [
+          {
+            "seed": 970200,
+            "scenario_id": "mars-L2-10f4e82e91",
+            "difficulty_level": 2,
+            "difficulty": "L2 · rocas dispersas",
+            "success": true,
+            "end": "exito",
+            "samples_collected": 1,
+            "requested_samples": 1,
+            "collisions": 0,
+            "steps": 30,
+            "battery": 88.749,
+            "path_length": 6.631,
+            "route_cost": 7.654548712659676,
+            "initial_position": [
+              1.4998842766839473,
+              2.1821162360617142e-10
+            ],
+            "collection_positions": [
+              [
+                4.418100760530624,
+                -0.6000191263441391
+              ]
+            ],
+            "final_position": [
+              2.397333338962361,
+              -0.033113744081599714
+            ],
+            "energy_consumed": 11.251058999874445,
+            "explored_cells": 10,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": true,
+            "return": 279.6498,
+            "latency_ms_mean": 0.256
+          },
+          {
+            "seed": 970201,
+            "scenario_id": "mars-L2-16c1d4e9d7",
+            "difficulty_level": 2,
+            "difficulty": "L2 · rocas dispersas",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 227,
+            "steps": 250,
+            "battery": 66.103,
+            "path_length": 4.974,
+            "route_cost": 5.604100713449809,
+            "initial_position": [
+              1.4998842767129554,
+              2.1821810869621716e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              2.8102509251254046,
+              -1.1442241290011106
+            ],
+            "energy_consumed": 33.89690213439849,
+            "explored_cells": 8,
+            "stagnation_steps": 219,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 12,
+              "choques_repetidos": 207
+            },
+            "returned_to_base": false,
+            "return": -165.4748,
+            "latency_ms_mean": 0.2862
+          }
+        ]
+      },
+      "3": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 3,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 4.155,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "3": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 1,
+            "tiempo": 1
+          },
+          "return_mean": -75.6519,
+          "return_std": 20.1988,
+          "collisions_per_episode": 70.0,
+          "steps_mean": 278.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 81.3069,
+          "explored_cells_mean": 16.5,
+          "stagnation_steps_mean": 109.0,
+          "stagnation_events_mean": 9.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 31.297,
+          "latency_ms_mean": 0.3102
+        },
+        "cases": [
+          {
+            "seed": 970300,
+            "scenario_id": "mars-L3-2d027bf4a0",
+            "difficulty_level": 3,
+            "difficulty": "L3 · pendientes y fricción",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 0,
+            "steps": 246,
+            "battery": 0.0,
+            "path_length": 46.336,
+            "route_cost": 61.30712342763637,
+            "initial_position": [
+              1.4998842767122997,
+              2.1821796391656724e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.636555194815574,
+              -1.4419246762364895
+            ],
+            "energy_consumed": 98.0,
+            "explored_cells": 16,
+            "stagnation_steps": 1,
+            "stagnation_events": 1,
+            "stagnation_reasons": {
+              "accion_repetida_sin_progreso": 1
+            },
+            "returned_to_base": false,
+            "return": -55.4531,
+            "latency_ms_mean": 0.3143
+          },
+          {
+            "seed": 970301,
+            "scenario_id": "mars-L3-893b5a7423",
+            "difficulty_level": 3,
+            "difficulty": "L3 · pendientes y fricción",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 140,
+            "steps": 310,
+            "battery": 33.386,
+            "path_length": 16.258,
+            "route_cost": 18.88183145904804,
+            "initial_position": [
+              1.4998842767221123,
+              2.1822015510151358e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              2.9046788097580363,
+              -1.128672132790382
+            ],
+            "energy_consumed": 64.6138472538826,
+            "explored_cells": 17,
+            "stagnation_steps": 217,
+            "stagnation_events": 17,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 58,
+              "sin_exploracion": 9,
+              "choques_repetidos": 150
+            },
+            "returned_to_base": false,
+            "return": -95.8507,
+            "latency_ms_mean": 0.306
+          }
+        ]
+      },
+      "4": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 4,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 3.692,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "4": 0.0
+          },
+          "failures_by_cause": {
+            "tiempo": 1,
+            "volco": 1
+          },
+          "return_mean": -85.595,
+          "return_std": 31.9997,
+          "collisions_per_episode": 81.0,
+          "steps_mean": 252.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 59.8997,
+          "explored_cells_mean": 13.0,
+          "stagnation_steps_mean": 122.0,
+          "stagnation_events_mean": 16.0,
+          "episodes_with_stagnation_rate": 1.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 23.173,
+          "latency_ms_mean": 0.287
+        },
+        "cases": [
+          {
+            "seed": 970400,
+            "scenario_id": "mars-L4-1f8bf74e8e",
+            "difficulty_level": 4,
+            "difficulty": "L4 · cráteres y viento",
+            "success": false,
+            "end": "tiempo",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 162,
+            "steps": 370,
+            "battery": 8.306,
+            "path_length": 33.918,
+            "route_cost": 53.529446971935975,
+            "initial_position": [
+              1.4998842767519145,
+              2.182268144405346e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.6409152546237857,
+              -0.4084205530520745
+            ],
+            "energy_consumed": 86.69362375711927,
+            "explored_cells": 16,
+            "stagnation_steps": 145,
+            "stagnation_events": 21,
+            "stagnation_reasons": {
+              "choques_repetidos": 97,
+              "sin_exploracion": 9,
+              "oscilacion_dos_posiciones": 39
+            },
+            "returned_to_base": false,
+            "return": -117.5947,
+            "latency_ms_mean": 0.3035
+          },
+          {
+            "seed": 970401,
+            "scenario_id": "mars-L4-94d76ab557",
+            "difficulty_level": 4,
+            "difficulty": "L4 · cráteres y viento",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 0,
+            "steps": 134,
+            "battery": 61.894,
+            "path_length": 12.428,
+            "route_cost": 23.99108471009257,
+            "initial_position": [
+              1.4998842767808156,
+              2.182332746273197e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.800169705456641,
+              1.2184324713932637
+            ],
+            "energy_consumed": 33.10569660955288,
+            "explored_cells": 10,
+            "stagnation_steps": 99,
+            "stagnation_events": 11,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 78,
+              "sin_exploracion": 10,
+              "accion_repetida_sin_progreso": 11
+            },
+            "returned_to_base": false,
+            "return": -53.5953,
+            "latency_ms_mean": 0.2705
+          }
+        ]
+      },
+      "5": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 5,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 0.374,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "5": 0.0
+          },
+          "failures_by_cause": {
+            "volco": 2
+          },
+          "return_mean": -49.7666,
+          "return_std": 0.3076,
+          "collisions_per_episode": 0.0,
+          "steps_mean": 25.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 8.2334,
+          "explored_cells_mean": 10.0,
+          "stagnation_steps_mean": 0.5,
+          "stagnation_events_mean": 0.5,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.0,
+          "path_length_mean": 4.6185,
+          "latency_ms_mean": 0.2902
+        },
+        "cases": [
+          {
+            "seed": 970500,
+            "scenario_id": "mars-L5-9c57d8181a",
+            "difficulty_level": 5,
+            "difficulty": "L5 · dunas y polvo",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 2,
+            "collisions": 0,
+            "steps": 18,
+            "battery": 83.514,
+            "path_length": 4.104,
+            "route_cost": 7.487179527318321,
+            "initial_position": [
+              1.499884276773838,
+              2.182317166101318e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              5.345157886925918,
+              -0.47388389489852567
+            ],
+            "energy_consumed": 7.486368818893851,
+            "explored_cells": 9,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -50.0743,
+            "latency_ms_mean": 0.2965
+          },
+          {
+            "seed": 970501,
+            "scenario_id": "mars-L5-10e4d8fbd2",
+            "difficulty_level": 5,
+            "difficulty": "L5 · dunas y polvo",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 3,
+            "collisions": 0,
+            "steps": 33,
+            "battery": 82.02,
+            "path_length": 5.133,
+            "route_cost": 8.37575277817293,
+            "initial_position": [
+              1.4998842767356988,
+              2.1822319243964306e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              4.596531919471345,
+              -0.2567132840250157
+            ],
+            "energy_consumed": 8.98040548212964,
+            "explored_cells": 11,
+            "stagnation_steps": 1,
+            "stagnation_events": 1,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 1
+            },
+            "returned_to_base": false,
+            "return": -49.459,
+            "latency_ms_mean": 0.2838
+          }
+        ]
+      },
+      "6": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 6,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.057,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "6": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 1,
+            "volco": 1
+          },
+          "return_mean": -52.2227,
+          "return_std": 2.8991,
+          "collisions_per_episode": 0.0,
+          "steps_mean": 139.5,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 47.7363,
+          "explored_cells_mean": 13.0,
+          "stagnation_steps_mean": 0.0,
+          "stagnation_events_mean": 0.0,
+          "episodes_with_stagnation_rate": 0.0,
+          "mission_completion": 0.0,
+          "path_length_mean": 27.07,
+          "latency_ms_mean": 0.3025
+        },
+        "cases": [
+          {
+            "seed": 970600,
+            "scenario_id": "mars-L6-fbcc8a4e26",
+            "difficulty_level": 6,
+            "difficulty": "L6 · rutas extensas",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 0,
+            "steps": 257,
+            "battery": 0.0,
+            "path_length": 49.212,
+            "route_cost": 79.26889006081356,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              3.1350826077584504,
+              1.81841017643454
+            ],
+            "energy_consumed": 87.0,
+            "explored_cells": 15,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -55.1219,
+            "latency_ms_mean": 0.3029
+          },
+          {
+            "seed": 970601,
+            "scenario_id": "mars-L6-a858c42d3f",
+            "difficulty_level": 6,
+            "difficulty": "L6 · rutas extensas",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 3,
+            "collisions": 0,
+            "steps": 22,
+            "battery": 78.527,
+            "path_length": 4.928,
+            "route_cost": 8.542917999711726,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              1.5409932799400095,
+              -3.514183670598859
+            ],
+            "energy_consumed": 8.472659429422748,
+            "explored_cells": 11,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -49.3236,
+            "latency_ms_mean": 0.3022
+          }
+        ]
+      },
+      "7": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 7,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 4.61,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "7": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 1,
+            "volco": 1
+          },
+          "return_mean": -187.9897,
+          "return_std": 161.5652,
+          "collisions_per_episode": 212.5,
+          "steps_mean": 249.0,
+          "samples_collected_mean": 1.5,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 51.9446,
+          "explored_cells_mean": 14.0,
+          "stagnation_steps_mean": 208.0,
+          "stagnation_events_mean": 1.0,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.375,
+          "path_length_mean": 6.897,
+          "latency_ms_mean": 0.3408
+        },
+        "cases": [
+          {
+            "seed": 970700,
+            "scenario_id": "mars-L7-2338d8f425",
+            "difficulty_level": 7,
+            "difficulty": "L7 · meteorología variable",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 1,
+            "requested_samples": 4,
+            "collisions": 425,
+            "steps": 452,
+            "battery": 0.0,
+            "path_length": 6.096,
+            "route_cost": 12.07454535728093,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [
+              [
+                3.9631594107244927,
+                0.3658800668323499
+              ]
+            ],
+            "final_position": [
+              4.886302854684961,
+              0.900771992608566
+            ],
+            "energy_consumed": 83.0,
+            "explored_cells": 14,
+            "stagnation_steps": 416,
+            "stagnation_events": 2,
+            "stagnation_reasons": {
+              "oscilacion_dos_posiciones": 12,
+              "choques_repetidos": 404
+            },
+            "returned_to_base": false,
+            "return": -349.5549,
+            "latency_ms_mean": 0.3321
+          },
+          {
+            "seed": 970701,
+            "scenario_id": "mars-L7-ee192b9177",
+            "difficulty_level": 7,
+            "difficulty": "L7 · meteorología variable",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 2,
+            "requested_samples": 4,
+            "collisions": 0,
+            "steps": 46,
+            "battery": 62.111,
+            "path_length": 7.698,
+            "route_cost": 15.581193894395264,
+            "initial_position": [
+              1.4998842767177307,
+              2.1821917666292362e-10
+            ],
+            "collection_positions": [
+              [
+                3.856360636715526,
+                -0.42603257527750743
+              ],
+              [
+                3.6993652347775705,
+                1.574699785867249
+              ]
+            ],
+            "final_position": [
+              3.4854162712086834,
+              1.8946832561118356
+            ],
+            "energy_consumed": 20.889184373146193,
+            "explored_cells": 14,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -26.4245,
+            "latency_ms_mean": 0.3495
+          }
+        ]
+      },
+      "8": {
+        "suite_id": "campaign-mastery-v1",
+        "evaluation_kind": "mastery",
+        "scenario_level": 8,
+        "requested_episodes": 2,
+        "early_rejection": false,
+        "partial": true,
+        "environment": {
+          "planet": "mars",
+          "campaign": false,
+          "history_steps": 4,
+          "record_episodes": false,
+          "training_reward_limit": 0.0,
+          "training_reward_floor": 0.0
+        },
+        "wall_time_s": 2.551,
+        "metrics": {
+          "episodes": 2,
+          "success_rate": 0.0,
+          "success_rate_by_difficulty": {
+            "8": 0.0
+          },
+          "failures_by_cause": {
+            "bateria": 1,
+            "volco": 1
+          },
+          "return_mean": -52.3398,
+          "return_std": 2.8145,
+          "collisions_per_episode": 0.5,
+          "steps_mean": 124.0,
+          "samples_collected_mean": 0.0,
+          "return_to_base_rate": 0.0,
+          "energy_consumed_mean": 44.6526,
+          "explored_cells_mean": 12.0,
+          "stagnation_steps_mean": 1.5,
+          "stagnation_events_mean": 1.5,
+          "episodes_with_stagnation_rate": 0.5,
+          "mission_completion": 0.0,
+          "path_length_mean": 22.401,
+          "latency_ms_mean": 0.3924
+        },
+        "cases": [
+          {
+            "seed": 970800,
+            "scenario_id": "mars-L8-9ada433781",
+            "difficulty_level": 8,
+            "difficulty": "L8 · expedición marciana",
+            "success": false,
+            "end": "bateria",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 1,
+            "steps": 220,
+            "battery": 0.0,
+            "path_length": 39.296,
+            "route_cost": 70.80366419736853,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              1.30427399969725,
+              0.742285715969002
+            ],
+            "energy_consumed": 78.0,
+            "explored_cells": 13,
+            "stagnation_steps": 3,
+            "stagnation_events": 3,
+            "stagnation_reasons": {
+              "accion_repetida_sin_progreso": 3
+            },
+            "returned_to_base": false,
+            "return": -55.1543,
+            "latency_ms_mean": 0.43
+          },
+          {
+            "seed": 970801,
+            "scenario_id": "mars-L8-aff085e07b",
+            "difficulty_level": 8,
+            "difficulty": "L8 · expedición marciana",
+            "success": false,
+            "end": "volco",
+            "samples_collected": 0,
+            "requested_samples": 4,
+            "collisions": 0,
+            "steps": 28,
+            "battery": 66.695,
+            "path_length": 5.506,
+            "route_cost": 11.656560519894976,
+            "initial_position": [
+              1.499884276712754,
+              2.1821806179421336e-10
+            ],
+            "collection_positions": [],
+            "final_position": [
+              1.4666053314633973,
+              -4.255636063374081
+            ],
+            "energy_consumed": 11.305150688873525,
+            "explored_cells": 11,
+            "stagnation_steps": 0,
+            "stagnation_events": 0,
+            "stagnation_reasons": {},
+            "returned_to_base": false,
+            "return": -49.5253,
+            "latency_ms_mean": 0.3548
+          }
+        ]
+      }
+    }
+  },
+  "qlearning_checkpoint": {
+    "path": "/tmp/robot-expedition-ppo/models/planetary_qlearning.npz",
+    "compatible": true
+  }
+}

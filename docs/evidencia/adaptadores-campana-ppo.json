@@ -1,0 +1,53 @@
+{
+  "schema": "scenario-ppo-numpy/v1",
+  "runs": [
+    {
+      "run_id": "f7c104a304f25b458721258b540a337e",
+      "adapter": "catalog/campaign_adapters/f7c104a304f25b458721258b540a337e.npz",
+      "adapter_sha256": "c0ef5a91c86de3af2874b1614e28ec4781eb4aed82b7906bdfd99e998dfb0071",
+      "model_sha256": "869c3908bf46ac5b1adbfaa14ffe7f17c3cc8e81deab108760faecbd48324060"
+    },
+    {
+      "run_id": "d0ecdae6689f527b835c1e473e893d0c",
+      "adapter": "catalog/campaign_adapters/d0ecdae6689f527b835c1e473e893d0c.npz",
+      "adapter_sha256": "0d841dc0320b8eee0fd5d42c579af1ff49292f6c9b9c148b735d5a48121db951",
+      "model_sha256": "0e14e9ec2c96b5fc6e958cd2e86b46304e00dcdc276dbbc08c3ac1c786add942"
+    },
+    {
+      "run_id": "d0c438b791c156688c71cf58c69fceb5",
+      "adapter": "catalog/campaign_adapters/d0c438b791c156688c71cf58c69fceb5.npz",
+      "adapter_sha256": "6dc14934a62460a300650a33f1f29608ca0935aeb5c5aecc14e4af1225e20528",
+      "model_sha256": "bd7087da7c0ef31566273100f10d493e8a7a635accaebf4cde245bc2c9a2abde"
+    },
+    {
+      "run_id": "bdbc0d04fffe5c37a5a5ac5a05013889",
+      "adapter": "catalog/campaign_adapters/bdbc0d04fffe5c37a5a5ac5a05013889.npz",
+      "adapter_sha256": "34f5531491d9ee1fb494a0162e79da163d3391dfdcf63701a96f6e9ba76055e5",
+      "model_sha256": "64d56b423c2422078b7ae63b44cc6609809f3b962afda74feca47d4ea3257432"
+    },
+    {
+      "run_id": "646fbc70700f5ab8b2363524540fddca",
+      "adapter": "catalog/campaign_adapters/646fbc70700f5ab8b2363524540fddca.npz",
+      "adapter_sha256": "c71cab53668f9c4df43770413b958f8b6d2e6602c4b02beb4d1e91a0d21ba5a2",
+      "model_sha256": "2f194ba2baa556474c48015168777c53199a782138435ec7dd8750c86d80be1b"
+    },
+    {
+      "run_id": "156aaf20543e523eb1fa4594547d956e",
+      "adapter": "catalog/campaign_adapters/156aaf20543e523eb1fa4594547d956e.npz",
+      "adapter_sha256": "aad76fcd2601702beebb0cb315bf564ab42859fba6d1b0565e71842771772cee",
+      "model_sha256": "3079df71dca8d9310fc48a52e08e1ce0f90731cf32ccde77c7dd78729c830c66"
+    },
+    {
+      "run_id": "6109346a105e5f3e82134dc9cafbbcb9",
+      "adapter": "catalog/campaign_adapters/6109346a105e5f3e82134dc9cafbbcb9.npz",
+      "adapter_sha256": "c4a908d6cb38e8d94935d42570c9689eecfa6e3e6734269e64eae9b9d1b970db",
+      "model_sha256": "e42b1299a37a946567611a724fd9f20034d150de9f37eb79290d362d2871cb10"
+    },
+    {
+      "run_id": "4bcfd8f641df50b9b5460d76b8c56482",
+      "adapter": "catalog/campaign_adapters/4bcfd8f641df50b9b5460d76b8c56482.npz",
+      "adapter_sha256": "f760b15cece13b897c6d652aed3e62140ba6c0779ed3102017fe8639db1eb05e",
+      "model_sha256": "a98e302c44f1d9532aa3cc8a0bea21fbbcd217447f6a62c295b92c64057c3722"
+    }
+  ]
+}

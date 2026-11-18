@@ -1,0 +1,47 @@
+experiment_id: exp-018-procedural-l2-transfer
+hypothesis: "La política L1 transferida aprende a rodear obstáculos L2 sin perder navegación y retorno"
+change: "Entrenar solo L2 procedural desde el campeón L1 y evaluar después retención L1 en semillas independientes"
+reference: exp-017-continue-procedural-l1
+level_id: n2
+algorithm: ppo
+budget_timesteps: 8192
+seeds: [11]
+evaluation_max_level: 2
+periodic_evaluation_freq: 4096
+periodic_evaluation_episodes: 20
+periodic_evaluation_seed_start: 981000
+checkpoint_freq: 4096
+checkpoint_keep: 3
+rejected_checkpoint_keep: 2
+hyperparams:
+  learning_rate: 0.0002
+  n_steps: 256
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  ent_coef: 0.015
+  clip_range: 0.15
+  max_grad_norm: 0.5
+normalize_obs: true
+parent_run_id: 75474a18b2c04536add80e5468c55fca
+environment:
+  kind: planetary
+  planet: mars
+  difficulty_level: 2
+  curriculum: false
+  campaign: false
+  history_steps: 4
+  record_episodes: false
+  mode: entrenamiento
+  max_steps: 200
+  training_reward_limit: 0.0
+  training_no_progress_limit: 80
+  training_step_penalty: 0.01
+  training_collision_penalty: 1.2
+  training_stuck_penalty: 0.5
+  training_no_progress_penalty: 8.0
+  training_navigation_shaping: 4.0
+  training_shaping_gamma: 0.99
+  training_shaping_min_level: 1
+vector_backend: subproc

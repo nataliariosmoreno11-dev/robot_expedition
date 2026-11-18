@@ -759,8 +759,10 @@ def _evaluate(
 def _register_dvc_model(model_dir: Path, run_id: str) -> str:
     dvc_executable = shutil.which("dvc")
     if dvc_executable is None:
-        executable_name = "dvc.exe" if os.name == "nt" else "dvc"
-        dvc_executable = str(Path(sys.executable).with_name(executable_name))
+        # DVC is optional for local experiments. The checkpoint and the MLflow
+        # artifacts are already durable at this point, so a missing CLI must not
+        # turn a completed training run into a failed run.
+        return f"local://{model_dir.relative_to(ROOT).as_posix()}"
     # Varios entrenamientos en paralelo comparten el lock del repositorio DVC: se reintenta.
     for attempt in range(30):
         result = subprocess.run(

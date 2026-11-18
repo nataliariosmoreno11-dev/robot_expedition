@@ -122,6 +122,7 @@ export interface EpisodeData {
   end: string
   reward: number
   steps: number
+  maxSteps?: number
   visited: number
   battery: number
   pathLength?: number
@@ -195,6 +196,8 @@ export const END_LABELS: Record<string, string> = {
   fuera_area: 'Fuera del área operativa',
   reinicio: 'Episodio reiniciado',
   interrumpido: 'Episodio interrumpido',
+  objetivo_recompensa: 'Objetivo de recompensa alcanzado',
+  limite_recompensa: 'Límite de recompensa alcanzado',
   running: 'En curso',
 }
 

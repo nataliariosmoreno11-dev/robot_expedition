@@ -71,6 +71,36 @@ def test_training_reward_limit_truncates_episode_for_next_scenario():
     env.close()
 
 
+def test_training_reward_floor_truncates_failed_episode_for_next_scenario():
+    env = PlanetaryExplorationEnv(
+        curriculum=False,
+        difficulty_level=8,
+        mode="entrenamiento",
+        training_reward_floor=-20.0,
+    )
+    env.reset(seed=708)
+    env.total_reward = -25.0
+    _, _, terminated, truncated, info = env.step(1)
+    assert not terminated
+    assert truncated
+    assert info["end"] == "limite_recompensa"
+    assert "recompensa mínima" in info["event"]
+    env.close()
+
+
+def test_stagnation_diagnostics_distinguish_spinning_and_repeated_collisions():
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=1)
+    env.reset(seed=709)
+    for index in range(12):
+        env._motion_window.append((0.0, 0.0, index * 0.5, 3, False, False))
+    assert env._diagnose_stagnation() == "giro_sin_desplazamiento"
+    env._motion_window.clear()
+    for index in range(12):
+        env._motion_window.append((index * 0.01, 0.0, 0.0, 0, index >= 6, False))
+    assert env._diagnose_stagnation() == "choques_repetidos"
+    env.close()
+
+
 def test_sandstorm_changes_visibility_wind_and_energy_deterministically():
     env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=8)
     env.reset(seed=808)
@@ -120,6 +150,19 @@ def test_hidden_samples_do_not_leak_their_direction_and_traction_zones_are_physi
     assert observation[27] == pytest.approx(coefficient)
     env.step(COLLECT_ACTION)
     assert env.model.geom_friction[env._terrain_id, 0] == pytest.approx(coefficient)
+    env.close()
+
+
+def test_procedural_lidar_observes_active_map_boundary():
+    env = PlanetaryExplorationEnv(
+        curriculum=False,
+        campaign=False,
+        difficulty_level=1,
+    )
+    env.reset(seed=151)
+    env.set_pose(env.scenario.active_x_max - 0.12, 0.0, 0.0)
+    rays = env.rays()
+    assert rays[len(rays) // 2] < 0.2
     env.close()
 
 

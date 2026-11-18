@@ -3,6 +3,7 @@ import * as THREE from 'three'
 export class SensorRays {
   readonly group = new THREE.Group()
   private lines: Array<THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>>
+  private enabled = true
 
   constructor(scene: THREE.Scene) {
     this.lines = Array.from({ length: 9 }, () => {
@@ -32,6 +33,11 @@ export class SensorRays {
       positions.needsUpdate = true
       line.material.color.set(length > 0 && length < 0.6 ? 0xff7164 : 0x61d5d2)
     })
-    this.group.visible = true
+    this.group.visible = this.enabled
+  }
+
+  setVisible(visible: boolean) {
+    this.enabled = visible
+    this.group.visible = visible
   }
 }

@@ -278,6 +278,7 @@ export const normalizeEpisode = (
     end: asString(merged.end, asString(merged.end_reason, 'running')),
     reward: asNumber(merged.reward, rewardFromFrames),
     steps: asNumber(merged.steps, frames.length - 1),
+    maxSteps: merged.max_steps === undefined ? undefined : asNumber(merged.max_steps),
     visited: asNumber(merged.visited, Math.max(0, finalFrame[7] - 1)),
     battery: asNumber(merged.battery, finalFrame[8]),
     pathLength: merged.path_length === undefined ? undefined : asNumber(merged.path_length),

@@ -1,0 +1,48 @@
+experiment_id: exp-016-procedural-generalization
+hypothesis: "PPO sin asistencia, entrenado en mapas procedurales L1 con potencial observable, mejora éxito de misión completa en semillas reservadas"
+change: "Campaña procedural, sin corte por recompensa, diagnóstico de estancamiento y separación train/validation/test"
+reference: exp-015-accelerated
+level_id: n2
+algorithm: ppo
+budget_timesteps: 32768
+seeds: [11, 29, 47]
+evaluation_max_level: 1
+periodic_evaluation_freq: 4096
+periodic_evaluation_episodes: 20
+periodic_evaluation_seed_start: 980000
+checkpoint_freq: 4096
+checkpoint_keep: 3
+rejected_checkpoint_keep: 2
+hyperparams:
+  learning_rate: 0.0003
+  n_steps: 512
+  batch_size: 128
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  ent_coef: 0.02
+  clip_range: 0.2
+  max_grad_norm: 0.5
+normalize_obs: true
+parent_run_id: null
+environment:
+  kind: planetary
+  planet: mars
+  difficulty_level: 1
+  curriculum: false
+  campaign: false
+  history_steps: 4
+  record_episodes: false
+  mode: entrenamiento
+  max_steps: 200
+  training_reward_limit: 0.0
+  training_no_progress_limit: 80
+  training_step_penalty: 0.01
+  training_collision_penalty: 1.2
+  training_stuck_penalty: 0.5
+  training_no_progress_penalty: 8.0
+  training_navigation_shaping: 4.0
+  training_shaping_gamma: 0.99
+  training_shaping_min_level: 1
+vector_backend: subproc
+

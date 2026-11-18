@@ -96,14 +96,15 @@ export class MissionHud {
       : snapshot.objective === 'Base'
         ? 'Regresar a la base'
         : `Alcanzar la baliza ${snapshot.objective}`
-    required<HTMLElement>('#stepValue').textContent = `${snapshot.index} / ${snapshot.total}`
+    const displayedTotal = this.episode.maxSteps ?? snapshot.total
+    required<HTMLElement>('#stepValue').textContent = `${snapshot.index} / ${displayedTotal}`
     required<HTMLElement>('#rewardValue').textContent = formatNumber(snapshot.cumulativeReward, 2)
     required<HTMLElement>('#batteryValue').textContent = `${formatNumber(frame[FRAME_INDEX.battery])}%`
     required<HTMLElement>('#actionValue').textContent = snapshot.actionName
     required<HTMLElement>('#collisionsValue').textContent = String(snapshot.collisions)
     const mission = this.episode.missionTimeline?.[Math.min(snapshot.index, this.episode.missionTimeline.length - 1)]
     required<HTMLElement>('#eventValue').textContent = mission?.event ?? '—'
-    required<HTMLElement>('#endValue').textContent = snapshot.index === snapshot.total
+    required<HTMLElement>('#endValue').textContent = this.episode.end !== 'running' || snapshot.index === snapshot.total
       ? (END_LABELS[this.episode.end] ?? this.episode.end)
       : 'En curso'
 
@@ -113,7 +114,7 @@ export class MissionHud {
     bar.style.background = battery > 40 ? 'var(--green)' : battery > 15 ? 'var(--gold)' : 'var(--red)'
 
     required<HTMLInputElement>('#timeline').value = String(snapshot.index)
-    required<HTMLElement>('#timeValue').textContent = `${this.formatTime(snapshot.index)} / ${this.formatTime(snapshot.total)}`
+    required<HTMLElement>('#timeValue').textContent = `${this.formatTime(snapshot.index)} / ${this.formatTime(displayedTotal)}`
   }
 
   reset() {

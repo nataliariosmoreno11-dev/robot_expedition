@@ -65,6 +65,11 @@ const elevationMap = required<HTMLCanvasElement>('#elevationMap')
 const ppoCampaignMeta = required<HTMLElement>('#ppoCampaignMeta')
 const ppoCampaignLevels = required<HTMLElement>('#ppoCampaignLevels')
 const ppoEvidenceDetail = required<HTMLElement>('#ppoEvidenceDetail')
+const ppoStart = required<HTMLButtonElement>('#ppoStart')
+const ppoPause = required<HTMLButtonElement>('#ppoPause')
+const ppoRestart = required<HTMLButtonElement>('#ppoRestart')
+const ppoDecisionHistory = required<HTMLElement>('#ppoDecisionHistory')
+const ppoActionProbabilities = required<HTMLElement>('#ppoActionProbabilities')
 
 const scene = new ExpeditionScene(required<HTMLElement>('#scene'), {
   onFrame: (snapshot) => {
@@ -75,6 +80,10 @@ const scene = new ExpeditionScene(required<HTMLElement>('#scene'), {
     playIcon.textContent = playing ? 'Ⅱ' : '▶'
     playButton.setAttribute('aria-label', playing ? 'Pausar' : 'Reproducir')
   },
+})
+const ppoScene = new ExpeditionScene(required<HTMLElement>('#ppoScene'), {
+  onFrame: () => undefined,
+  onPlaybackChange: () => undefined,
 })
 
 let api: ExpeditionApi | undefined
@@ -92,6 +101,14 @@ let automaticNetworkRetries = 0
 let lastVersion: Record<string, unknown> | undefined
 let latestQTraining: UnknownRecord | undefined
 let displayedEpisode: EpisodeData | undefined
+let selectedPpoLevel = 1
+let selectedPpoRun = ''
+let ppoSessionId: string | undefined
+let ppoEpisode: EpisodeData | undefined
+let ppoMap: ExpeditionMap | undefined
+let ppoRunning = false
+let ppoTimer: number | undefined
+let ppoDecisionRows: UnknownRecord[] = []
 
 function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
   const width = map.active_extent?.[0] ?? map.size[0]
@@ -791,6 +808,7 @@ async function sendAutomaticAction() {
       ...manualEpisode,
       frames,
       steps: frames.length - 1,
+      maxSteps: typeof response.max_steps === 'number' ? response.max_steps : manualEpisode.maxSteps,
       battery: frame[FRAME_INDEX.battery],
       reward: frames.reduce((total, item) => total + item[FRAME_INDEX.reward], 0),
       visited: Math.max(manualEpisode.visited, visitedNow),
@@ -822,12 +840,14 @@ async function sendAutomaticAction() {
     scene.seek(frames.length - 1)
     if (finished) {
       manualSessionId = undefined
-      const reachedRewardGoal = response.end === 'objetivo_recompensa'
+      const reachedRewardFloor = response.end === 'limite_recompensa'
       hud.showNotice(
-        reachedRewardGoal ? 'Meta de +20 alcanzada' : 'Episodio automático finalizado',
-        reachedRewardGoal
-          ? 'El checkpoint fue actualizado. El agente iniciará otro escenario para seguir aprendiendo.'
-          : `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`,
+        reachedRewardFloor
+            ? 'Límite de −20 alcanzado'
+            : 'Episodio automático finalizado',
+        reachedRewardFloor
+            ? 'La transición negativa se guardó en la tabla Q. El agente iniciará otro escenario con esa memoria actualizada.'
+            : `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`,
       )
       void refreshEpisodes()
       if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, 1200)
@@ -861,6 +881,148 @@ function setManualControls(enabled: boolean) {
 
 function metricNumber(record: UnknownRecord | undefined, key: string): number {
   return record && typeof record[key] === 'number' ? Number(record[key]) : 0
+}
+
+const ppoText = (selector: string, value: string) => { required<HTMLElement>(selector).textContent = value }
+
+function selectPpoLevel(item: UnknownRecord) {
+  ppoRunning = false
+  window.clearTimeout(ppoTimer)
+  ppoPause.disabled = true
+  selectedPpoLevel = Number(item.level ?? 1)
+  const model = isRecord(item.model) ? item.model : {}
+  selectedPpoRun = String(model.run_id ?? '')
+  ppoText('#ppoMode', 'CHECKPOINT SELECCIONADO · SIN EJECUTAR')
+  ppoText('#ppoAction', '—')
+  ppoText('#ppoValue', '—')
+  ppoText('#ppoSceneLevel', `L${selectedPpoLevel}`)
+  ppoText('#ppoCheckpoint', selectedPpoRun.slice(0, 12) || '—')
+  ppoStart.disabled = !apiOnline || !selectedPpoRun
+  ppoRestart.disabled = !selectedPpoRun
+  showPpoEvidence(item)
+}
+
+function renderPpoProbabilities(decision: UnknownRecord | undefined, actions: string[]) {
+  const probabilities = Array.isArray(decision?.probabilities) ? decision.probabilities : []
+  const selected = Number(decision?.action ?? -1)
+  ppoActionProbabilities.replaceChildren()
+  probabilities.forEach((raw, index) => {
+    const probability = Number(raw)
+    const row = document.createElement('div')
+    row.className = `ppo-probability${index === selected ? ' selected' : ''}`
+    row.innerHTML = `<i style="width:${Math.max(0, Math.min(100, probability * 100))}%"></i><span><b>${actions[index] ?? `acción ${index}`}</b><em>${(probability * 100).toFixed(1)}%</em></span>`
+    ppoActionProbabilities.append(row)
+  })
+}
+
+function renderPpoDecisionHistory() {
+  ppoDecisionHistory.replaceChildren()
+  for (const item of ppoDecisionRows.slice(-100).reverse()) {
+    const row = document.createElement('tr')
+    const values = [item.step, item.action_name, `${(Number(item.probability ?? 0) * 100).toFixed(1)}%`,
+      Number(item.value ?? 0).toFixed(2), Number(item.reward ?? 0).toFixed(2), item.event ?? '—']
+    for (const value of values) {
+      const cell = document.createElement('td'); cell.textContent = String(value); row.append(cell)
+    }
+    ppoDecisionHistory.append(row)
+  }
+}
+
+function updatePpoLive(response: SimulationResponse, frame: ReplayFrame, map: ExpeditionMap) {
+  const decision = isRecord(response.decision) ? response.decision : undefined
+  const actions = map.actions
+  const action = Number(response.action ?? frame[FRAME_INDEX.action])
+  const probability = Array.isArray(decision?.probabilities) ? Number(decision.probabilities[action] ?? 0) : 0
+  const rays = frame[FRAME_INDEX.rays].filter((distance) => distance > 0)
+  ppoText('#ppoStep', String(response.steps ?? Math.max(0, (ppoEpisode?.frames.length ?? 1) - 1)))
+  ppoText('#ppoReward', Number(response.return ?? 0).toFixed(2))
+  ppoText('#ppoBattery', `${Number(response.battery ?? frame[FRAME_INDEX.battery]).toFixed(1)}%`)
+  ppoText('#ppoEnd', String(response.end ?? 'en curso'))
+  ppoText('#ppoAction', actions[action] ?? `acción ${action}`)
+  ppoText('#ppoValue', decision ? Number(decision.value ?? 0).toFixed(3) : 'no disponible')
+  ppoText('#ppoSamples', `${Number(response.samples_collected ?? 0)} / ${Number(response.requested_samples ?? map.mission?.requested_samples ?? 0)}`)
+  ppoText('#ppoCollisions', String(response.collisions ?? 0))
+  ppoText('#ppoNearestObstacle', rays.length ? `${Math.min(...rays).toFixed(2)} m` : 'fuera de alcance')
+  ppoText('#ppoObjective', Number(response.samples_collected ?? 0) >= Number(response.requested_samples ?? map.mission?.requested_samples ?? 0)
+    ? 'Regresar a la base' : `Recolectar ${String(response.target_type ?? map.mission?.target_type ?? 'muestras')}`)
+  renderPpoProbabilities(decision, actions)
+  if (decision) {
+    ppoDecisionRows.push({ step: response.steps, action_name: actions[action] ?? action, probability,
+      value: decision.value, reward: response.reward, event: response.event })
+    renderPpoDecisionHistory()
+  }
+}
+
+const schedulePpoStep = () => {
+  window.clearTimeout(ppoTimer)
+  if (ppoRunning && ppoSessionId) {
+    const delay = Number(required<HTMLSelectElement>('#ppoSpeed').value)
+    ppoTimer = window.setTimeout(() => { void stepPpoEpisode() }, delay)
+  }
+}
+
+async function startPpoEpisode() {
+  if (!api || !selectedPpoRun) return
+  window.clearTimeout(ppoTimer)
+  ppoRunning = false
+  ppoStart.disabled = true
+  ppoStart.textContent = 'Cargando checkpoint…'
+  try {
+    const seed = 910000 + selectedPpoLevel
+    const response = await api.reset('n2', 'planetary', selectedPpoLevel, seed, `trained:${selectedPpoRun}`, ppoSessionId)
+    const frame = frameFromResponse(response)
+    if (!response.session_id || !frame || !response.map) throw new Error('La API PPO no devolvió sesión, mapa y frame inicial.')
+    ppoSessionId = response.session_id
+    ppoMap = normalizeMap(response.map)
+    ppoEpisode = normalizeEpisode({ ...response, frames: [frame], episode: `PPO-L${selectedPpoLevel}` }, {
+      mode: 'inferencia PPO', runId: selectedPpoRun, modelName: 'PPO checkpoint aprobado',
+      environmentVersion: environmentVersionFrom(response) ?? apiEnvironmentVersion, levelId: `L${selectedPpoLevel}`,
+    })
+    ppoEpisode = { ...ppoEpisode, scenarioId: ppoMap.scenario_id, planet: ppoMap.environment?.planet?.planet_id,
+      objective: `Recolectar ${ppoMap.mission?.requested_samples ?? 0} × ${ppoMap.mission?.target_type ?? 'muestra'}`,
+      requestedSamples: ppoMap.mission?.requested_samples, samplesCollected: 0 }
+    ppoDecisionRows = []
+    const policyModel = isRecord(response.policy_model) ? response.policy_model : {}
+    const architecture = isRecord(policyModel.architecture) ? policyModel.architecture : {}
+    ppoText('#ppoArchitectureNote', `Arquitectura real: ${Array.isArray(architecture.policy) ? architecture.policy.join(' → ') : '132 → 64 → 64 → 7'} · ${String(architecture.activation ?? 'Tanh')} · ${Number(architecture.actors ?? 1)} actor(es) especializados. Rama de valor ${Array.isArray(architecture.value) ? architecture.value.join(' → ') : '132 → 64 → 64 → 1'}. Hash ${String(policyModel.model_sha256 ?? '').slice(0, 12)}…. Las activaciones se resumen sin atribuirles una explicación causal.`)
+    ppoScene.setMap(ppoMap); ppoScene.setEpisode(ppoEpisode); ppoScene.seek(0)
+    ppoText('#ppoMode', 'INFERENCIA PPO REAL')
+    ppoText('#ppoObjective', ppoEpisode.objective ?? 'Misión planetaria')
+    ppoText('#ppoStep', '0'); ppoText('#ppoReward', '0,00'); ppoText('#ppoBattery', '100%'); ppoText('#ppoEnd', 'En curso')
+    ppoRunning = true
+    ppoPause.disabled = false; ppoPause.textContent = 'Pausar'; ppoRestart.disabled = false
+    schedulePpoStep()
+  } catch (error) {
+    ppoText('#ppoEnd', 'Error')
+    ppoText('#ppoObjective', errorMessage(error))
+  } finally {
+    ppoStart.textContent = 'Iniciar inferencia'
+    ppoStart.disabled = !apiOnline || !selectedPpoRun
+  }
+}
+
+async function stepPpoEpisode() {
+  if (!api || !ppoSessionId || !ppoEpisode || !ppoMap || !ppoRunning) return
+  try {
+    const response = await api.step(ppoSessionId)
+    const frame = frameFromResponse(response)
+    if (!frame) throw new Error('La inferencia PPO no devolvió un frame válido.')
+    const frames = [...ppoEpisode.frames, frame]
+    ppoEpisode = { ...ppoEpisode, frames, steps: frames.length - 1, reward: Number(response.return ?? ppoEpisode.reward),
+      battery: frame[FRAME_INDEX.battery], success: Boolean(response.success), end: String(response.end ?? 'running'),
+      samplesCollected: Number(response.samples_collected ?? ppoEpisode.samplesCollected ?? 0),
+      missionTimeline: [...(ppoEpisode.missionTimeline ?? []), { target_type: String(response.target_type ?? ppoMap.mission?.target_type ?? ''),
+        requested: Number(response.requested_samples ?? ppoMap.mission?.requested_samples ?? 0),
+        collected: Number(response.samples_collected ?? 0), inventory: Array.isArray(response.inventory) ? response.inventory.filter((x): x is string => typeof x === 'string') : [],
+        samples: ppoMap.samples, event: typeof response.event === 'string' ? response.event : null, status: String(response.end ?? 'running') }] }
+    ppoScene.setEpisode(ppoEpisode); ppoScene.seek(frames.length - 1)
+    updatePpoLive(response, frame, ppoMap)
+    if (response.terminated || response.truncated) {
+      ppoRunning = false; ppoPause.disabled = true; ppoText('#ppoEnd', String(response.end ?? 'finalizado'))
+    } else schedulePpoStep()
+  } catch (error) {
+    ppoRunning = false; ppoText('#ppoEnd', 'Detenido'); ppoText('#ppoObjective', errorMessage(error))
+  }
 }
 
 function showPpoEvidence(item: UnknownRecord) {
@@ -906,19 +1068,56 @@ async function loadPpoCampaign() {
       button.addEventListener('click', () => {
         ppoCampaignLevels.querySelectorAll('button').forEach((node) => node.classList.remove('selected'))
         button.classList.add('selected')
-        showPpoEvidence(item)
+        selectPpoLevel(item)
       })
       ppoCampaignLevels.append(button)
     }
     const first = levels[0]
     if (first) {
       ppoCampaignLevels.querySelector('button')?.classList.add('selected')
-      showPpoEvidence(first)
+      selectPpoLevel(first)
     }
   } catch (error) {
     ppoCampaignMeta.textContent = `No se pudo cargar el modelado PPO: ${errorMessage(error)}`
   }
 }
+
+ppoStart.addEventListener('click', () => { void startPpoEpisode() })
+ppoRestart.addEventListener('click', () => { void startPpoEpisode() })
+ppoPause.addEventListener('click', () => {
+  ppoRunning = !ppoRunning
+  ppoPause.textContent = ppoRunning ? 'Pausar' : 'Reanudar'
+  if (ppoRunning) schedulePpoStep()
+  else window.clearTimeout(ppoTimer)
+})
+required<HTMLButtonElement>('#ppoFollow').addEventListener('click', (event) => {
+  const button = event.currentTarget as HTMLButtonElement
+  const active = button.getAttribute('aria-pressed') !== 'true'
+  button.setAttribute('aria-pressed', String(active)); ppoScene.setFollow(active)
+})
+required<HTMLButtonElement>('#ppoTrail').addEventListener('click', (event) => {
+  const button = event.currentTarget as HTMLButtonElement
+  const active = button.getAttribute('aria-pressed') !== 'true'
+  button.setAttribute('aria-pressed', String(active)); ppoScene.setTrailVisible(active)
+})
+required<HTMLButtonElement>('#ppoSensors').addEventListener('click', (event) => {
+  const button = event.currentTarget as HTMLButtonElement
+  const active = button.getAttribute('aria-pressed') !== 'true'
+  button.setAttribute('aria-pressed', String(active)); ppoScene.setSensorsVisible(active)
+})
+document.querySelectorAll<HTMLButtonElement>('[data-ppo-tab]').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-ppo-tab]').forEach((item) => item.setAttribute('aria-selected', String(item === button)))
+    const selected = button.dataset.ppoTab
+    for (const [name, selector] of Object.entries({ simulator: '#ppoTabSimulator', model: '#ppoTabModel', decisions: '#ppoTabDecisions', experiments: '#ppoTabExperiments', metrics: '#ppoTabMetrics' })) {
+      required<HTMLElement>(selector).hidden = name !== selected
+    }
+    if (selected === 'metrics') trainingDashboard.resize()
+  })
+})
+required<HTMLButtonElement>('#ppoGoExperiments').addEventListener('click', () => {
+  document.querySelector('.episode-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+})
 
 playButton.addEventListener('click', () => scene.togglePlayback())
 timeline.addEventListener('input', () => {

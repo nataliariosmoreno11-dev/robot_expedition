@@ -199,9 +199,11 @@ def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monk
     assert step["training"]["updates"] == 1
     with api_main.sessions_lock:
         session = api_main.sessions[sid]
-        assert session.env.training_reward_limit == 20.0
+        assert session.env.training_reward_limit == 0.0
+        assert session.env.training_reward_floor == -20.0
         assert session.env.training_no_progress_limit == 35
         assert session.env.training_collision_penalty == 4.0
+        assert session.env.max_steps == 50
         session.policy.agent.finish_episode()
         session.policy.agent.save(checkpoint)
         api_main.sessions.pop(sid)
@@ -210,6 +212,54 @@ def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monk
     status = client.get("/training/qlearning")
     assert status.status_code == 200
     assert status.json()["updates"] == 1
+
+
+def test_planetary_qlearning_uses_short_and_advanced_step_limits(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", tmp_path / "planetary-qlearning.npz")
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "q-episodes.sqlite")
+    for level, expected in ((1, 50), (4, 50), (5, 100), (8, 100)):
+        reset = client.post("/sim/reset", json={
+            "environment": "planetary", "difficulty_level": level,
+            "seed": 700 + level, "policy": "planetary-qlearning",
+        })
+        assert reset.status_code == 200, reset.text
+        payload = reset.json()
+        assert payload["max_steps"] == expected
+        with api_main.sessions_lock:
+            session = api_main.sessions.pop(payload["session_id"])
+        assert session.env.max_steps == expected
+        assert session.env.training_reward_floor == -20.0
+        session.env.close()
+
+
+def test_failed_episode_is_saved_and_loaded_by_the_next_scenario(tmp_path, monkeypatch):
+    checkpoint = tmp_path / "planetary-qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "q-episodes.sqlite")
+    reset = client.post("/sim/reset", json={
+        "environment": "planetary", "difficulty_level": 1,
+        "seed": 801, "policy": "planetary-qlearning",
+    }).json()
+    with api_main.sessions_lock:
+        api_main.sessions[reset["session_id"]].env.total_reward = -25.0
+    failed = client.post("/sim/step", json={"session_id": reset["session_id"]}).json()
+    assert failed["truncated"] is True
+    assert failed["end"] == "limite_recompensa"
+    assert failed["reward_floor"] == -20.0
+    assert checkpoint.exists()
+
+    resumed = client.post("/sim/reset", json={
+        "environment": "planetary", "difficulty_level": 8,
+        "seed": 808, "policy": "planetary-qlearning",
+    }).json()
+    with api_main.sessions_lock:
+        restored = api_main.sessions.pop(resumed["session_id"])
+        failed_session = api_main.sessions.pop(reset["session_id"], None)
+    assert restored.policy.agent.episodes == failed["training"]["episodes"]
+    assert restored.policy.agent.updates == failed["training"]["updates"]
+    restored.env.close()
+    if failed_session is not None:
+        failed_session.env.close()
 
 
 def test_policy_session_runs_to_the_end():

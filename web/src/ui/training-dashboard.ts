@@ -30,6 +30,8 @@ export class TrainingDashboard {
     this.draw()
   }
 
+  resize() { this.draw() }
+
   private draw() {
     const ratio = Math.min(window.devicePixelRatio, 2)
     const width = Math.max(320, this.canvas.clientWidth)

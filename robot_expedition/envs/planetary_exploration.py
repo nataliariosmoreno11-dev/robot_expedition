@@ -11,6 +11,7 @@ import inspect
 import json
 import math
 import time
+from collections import Counter, deque
 from pathlib import Path
 
 import gymnasium as gym
@@ -36,6 +37,7 @@ from .beacon_expedition import (
     BASE,
     CRACK,
     DT,
+    RAY_ANGLES,
     RAY_RANGE,
     SAND,
     SUBSTEPS,
@@ -115,6 +117,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         update_curriculum: bool = True,
         training_no_progress_limit: int = 0,
         training_reward_limit: float = 0.0,
+        training_reward_floor: float = 0.0,
         training_step_penalty: float = 0.01,
         training_collision_penalty: float = 0.6,
         training_stuck_penalty: float = 0.12,
@@ -145,6 +148,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.update_curriculum = bool(update_curriculum)
         self.training_no_progress_limit = int(training_no_progress_limit)
         self.training_reward_limit = float(training_reward_limit)
+        self.training_reward_floor = float(training_reward_floor)
         self.training_step_penalty = float(training_step_penalty)
         self.training_collision_penalty = float(training_collision_penalty)
         self.training_stuck_penalty = float(training_stuck_penalty)
@@ -166,6 +170,8 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             raise ValueError("training_no_progress_limit must be nonnegative")
         if self.training_reward_limit < 0:
             raise ValueError("training_reward_limit must be nonnegative")
+        if self.training_reward_floor > 0:
+            raise ValueError("training_reward_floor must be nonpositive")
         if min(
             self.training_step_penalty,
             self.training_collision_penalty,
@@ -200,6 +206,11 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self._last_event: str | None = None
         self._stuck_steps = 0
         self._no_progress_steps = 0
+        self._motion_window = deque(maxlen=24)
+        self._stagnation_steps = 0
+        self._stagnation_events = 0
+        self._stagnation_reason: str | None = None
+        self._stagnation_reasons = Counter()
         self.storm_intensity = 0.0
         super().__init__(
             level="n2",
@@ -386,6 +397,11 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self._last_event = None
         self._stuck_steps = 0
         self._no_progress_steps = 0
+        self._motion_window.clear()
+        self._stagnation_steps = 0
+        self._stagnation_events = 0
+        self._stagnation_reason = None
+        self._stagnation_reasons.clear()
         self.training_stage = 0
         self._apply_training_stage()
         self.episode_started = time.perf_counter()
@@ -479,6 +495,31 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         rays = super().rays()
         if self.scenario is None:
             return rays
+        # Los mapas procedurales pueden ser menores que el hfield físico. Sin
+        # esta frontera virtual el LIDAR ve terreno transitable más allá del área
+        # activa y dos estados observacionalmente iguales tienen desenlaces
+        # distintos (continuar o terminar por fuera de área). Eso rompe la
+        # propiedad de Markov y fue la causa principal de muchas salidas L1.
+        # La campaña fija de Tomás conserva exactamente sus observaciones.
+        if not self.campaign:
+            x_min, x_max = 0.0, float(self.scenario.active_x_max)
+            y_min = -float(self.scenario.active_y_half)
+            y_max = float(self.scenario.active_y_half)
+            for index, relative_angle in enumerate(RAY_ANGLES):
+                angle = self.theta + float(relative_angle)
+                dx, dy = math.cos(angle), math.sin(angle)
+                intersections: list[float] = []
+                if dx > 1e-8:
+                    intersections.append((x_max - self.x) / dx)
+                elif dx < -1e-8:
+                    intersections.append((x_min - self.x) / dx)
+                if dy > 1e-8:
+                    intersections.append((y_max - self.y) / dy)
+                elif dy < -1e-8:
+                    intersections.append((y_min - self.y) / dy)
+                positive = [distance for distance in intersections if distance >= 0.0]
+                if positive:
+                    rays[index] = min(float(rays[index]), min(positive))
         noise = 0.015 + self.scenario.dust_opacity * 0.16
         rays = np.minimum(rays, self.visibility_range)
         rays += self.np_random.normal(0.0, noise, len(rays)).astype(np.float32)
@@ -786,6 +827,17 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             else self._no_progress_steps + 1
         )
 
+        self._motion_window.append(
+            (float(self.x), float(self.y), float(self.theta), action, bool(collision), bool(discovery))
+        )
+        stagnation_reason = self._diagnose_stagnation()
+        if stagnation_reason:
+            self._stagnation_steps += 1
+            self._stagnation_reasons[stagnation_reason] += 1
+            if stagnation_reason != self._stagnation_reason:
+                self._stagnation_events += 1
+        self._stagnation_reason = stagnation_reason
+
         if action < COLLECT_ACTION and abs(speed) < 0.025:
             self._stuck_steps += 1
         else:
@@ -831,10 +883,9 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             event = "reinicio de entrenamiento: sin explorar ni recolectar"
             reward -= self.training_no_progress_penalty
 
-        # Q-learning interactivo trabaja en episodios cortos. Al alcanzar la
-        # recompensa objetivo se cierra el episodio, se actualiza la última
-        # transición como terminal y el checkpoint queda listo para el mapa
-        # siguiente. Los entrenamientos PPO conservan el valor predeterminado 0.
+        # Compatibilidad con experimentos antiguos. Las sesiones y los nuevos
+        # experimentos usan 0: una recompensa intermedia nunca equivale a
+        # completar la misión.
         projected_total = self.total_reward + float(reward)
         if (
             not terminated
@@ -846,6 +897,17 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             truncated = True
             end = "objetivo_recompensa"
             event = "reinicio de entrenamiento: recompensa objetivo alcanzada"
+
+        if (
+            not terminated
+            and not truncated
+            and self.mode == "entrenamiento"
+            and self.training_reward_floor
+            and projected_total <= self.training_reward_floor
+        ):
+            truncated = True
+            end = "limite_recompensa"
+            event = "reinicio de entrenamiento: recompensa mínima alcanzada"
 
         # Discounted potential differences cannot reward repeated back-and-forth
         # motion. True terminals have zero potential; time limits bootstrap.
@@ -890,6 +952,30 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
                 info["curriculum"] = self.curriculum.snapshot()
         return observation, float(reward), terminated, truncated, info
 
+    def _diagnose_stagnation(self) -> str | None:
+        """Clasifica bloqueos usando únicamente movimiento y sensores observables."""
+        rows = list(self._motion_window)
+        if len(rows) < 12:
+            return None
+        positions = [(row[0], row[1]) for row in rows]
+        net = math.dist(positions[0], positions[-1])
+        travelled = sum(math.dist(a, b) for a, b in zip(positions, positions[1:]))
+        turns = sum(abs(_wrap(b[2] - a[2])) for a, b in zip(rows, rows[1:]))
+        collisions = sum(int(row[4]) for row in rows[-12:])
+        recent_actions = [row[3] for row in rows[-12:]]
+        quantized = [(round(x / 0.25), round(y / 0.25)) for x, y in positions[-12:]]
+        if collisions >= 6 and net < 0.45:
+            return "choques_repetidos"
+        if net < 0.16 and travelled < 0.32 and turns > math.pi * 1.5:
+            return "giro_sin_desplazamiento"
+        if len(set(quantized)) <= 2 and travelled > 0.35:
+            return "oscilacion_dos_posiciones"
+        if net < 0.16 and max(Counter(recent_actions).values()) >= 10:
+            return "accion_repetida_sin_progreso"
+        if self._no_progress_steps >= 20 and len(set(quantized)) <= 3:
+            return "sin_exploracion"
+        return None
+
     # --------------------------------------------------------- contratos
     def _info(self, end):
         requested = max(1, self.requested_samples)
@@ -920,6 +1006,10 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             "samples_collected": len(self.inventory),
             "explored_cells": len(self.explored_cells),
             "no_progress_steps": self._no_progress_steps,
+            "stagnation_reason": self._stagnation_reason,
+            "stagnation_steps": self._stagnation_steps,
+            "stagnation_events": self._stagnation_events,
+            "stagnation_reasons": dict(self._stagnation_reasons),
             "training_stage": self.training_stage,
             "inventory": list(self.inventory),
             "mission_progress": (min(len(self.inventory), requested) + (end == "exito"))

@@ -4,7 +4,7 @@ services:
   - type: web
     name: robot-expedition-api
     runtime: python
-    plan: free
+    plan: starter
     # Producción sigue el código integrado y validado.
     branch: main
     buildCommand: pip install -r api/requirements-lite.txt
@@ -22,4 +22,8 @@ services:
       - key: RELEASE
         value: v1.2-main-ppo8-qlearning
       - key: EXPEDITION_DATA_DIR
-        value: /tmp/robot-expedition
+        value: /var/data/robot-expedition
+    disk:
+      name: expedition-training-data
+      mountPath: /var/data
+      sizeGB: 1

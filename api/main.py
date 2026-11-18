@@ -42,6 +42,7 @@ from robot_expedition.envs.planetary_exploration import (  # noqa: E402
 )
 from robot_expedition.planetary.episode_store import EpisodeStore  # noqa: E402
 from robot_expedition.planetary.qlearning import PlanetaryQLearningAgent  # noqa: E402
+from pipelines.policies import CampaignNumpyPPOPolicy  # noqa: E402
 
 API_VERSION = "1.1.0"
 MAX_SEEDS = 20                 # la web corta las solicitudes a los 12 s
@@ -483,7 +484,10 @@ class Session:
                 mode="manual" if policy is None else ("entrenamiento" if policy_id == "planetary-qlearning" else "evaluación"),
                 update_curriculum=False,
                 training_no_progress_limit=35 if qlearning else 0,
-                training_reward_limit=20.0 if qlearning else 0.0,
+                # El episodio solo tiene éxito cuando la misión real termina.
+                # La recompensa acumulada nunca sustituye esa condición.
+                training_reward_limit=0.0,
+                training_reward_floor=-20.0 if qlearning else 0.0,
                 training_step_penalty=0.04 if qlearning else 0.01,
                 training_collision_penalty=4.0 if qlearning else 0.6,
                 training_stuck_penalty=1.0 if qlearning else 0.12,
@@ -498,7 +502,11 @@ class Session:
         self.obs, _ = self.env.reset(seed=seed)
         if environment_kind == "planetary" and policy_id in {"planetary-rule", "planetary-qlearning"}:
             if policy_id == "planetary-qlearning":
-                self.env.max_steps = 350 + difficulty_level * 55
+                # Los niveles introductorios deben resolver una misión corta; los
+                # avanzados reciben más margen por sus mapas y objetivos mayores.
+                # El entorno usa este valor para truncar el episodio y guardar el
+                # checkpoint antes de iniciar el siguiente escenario.
+                self.env.max_steps = 50 if difficulty_level <= 4 else 100
             else:
                 self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
         self.done, self.total, self.touched = False, 0.0, time.time()
@@ -534,9 +542,14 @@ class StepRequest(BaseModel):
 @app.post("/sim/reset")
 def sim_reset(req: ResetRequest):
     if req.environment == "planetary" and req.policy.startswith("trained:"):
-        from pipelines.policies import PPOPolicy
-        directory = checkpoint_for(req.policy.removeprefix("trained:"))
-        policy = PPOPolicy(directory / "ppo_model.zip", directory / "vecnormalize.pkl")
+        run_id = req.policy.removeprefix("trained:")
+        if run_id in PPO_CAMPAIGN_MODELS:
+            adapter = ROOT / "catalog" / "campaign_adapters" / f"{run_id}.npz"
+            if not adapter.is_file():
+                fail(503, f"no está desplegado el adaptador PPO de {run_id}")
+            policy = CampaignNumpyPPOPolicy(adapter)
+        else:
+            policy = store.policy(run_id)
     elif req.policy == "manual":
         policy = None
     elif req.environment == "planetary" and req.policy == "planetary-rule":
@@ -569,6 +582,8 @@ def sim_reset(req: ResetRequest):
             "environment_version": (PLANETARY_ENVIRONMENT_VERSION if req.environment == "planetary"
                                     else ENVIRONMENT_VERSION),
             "map": env.map_spec(), "frame": frame(env, -1, 0.0, False), "actions": session.action_names,
+            "max_steps": env.max_steps,
+            "policy_model": policy.describe() if hasattr(policy, "describe") else None,
             "terminated": False, "truncated": False, "end": "running"}
 
 
@@ -600,12 +615,15 @@ def sim_step(req: StepRequest):
             "end": info["end"] or "running", "event": info["event"], "stage": info["stage"],
             "battery": round(info["battery"], 2), "collisions": info["collisions"],
             "success": info["success"], "steps": session.env.steps,
+            "max_steps": session.env.max_steps,
             "target_type": info.get("target_type"),
             "requested_samples": info.get("requested_samples"),
             "samples_collected": info.get("samples_collected"),
             "reward_limit": session.env.training_reward_limit if session.environment_kind == "planetary" else None,
+            "reward_floor": session.env.training_reward_floor if session.environment_kind == "planetary" else None,
             "storm_intensity": info.get("storm_intensity", 0.0),
-            "inventory": info.get("inventory"), "training": training}
+            "inventory": info.get("inventory"), "training": training,
+            "decision": getattr(session.policy, "last_decision", None)}
 
 
 # ------------------------------------------------------- historial planetario
