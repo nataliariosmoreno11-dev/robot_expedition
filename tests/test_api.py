@@ -146,6 +146,69 @@ def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
     second_session.env.close()
 
 
+def test_planetary_rule_session_advances_without_manual_actions(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "automatic-episodes.sqlite")
+    reset = client.post(
+        "/sim/reset",
+        json={
+            "environment": "planetary",
+            "difficulty_level": 3,
+            "seed": 303,
+            "policy": "planetary-rule",
+        },
+    )
+    assert reset.status_code == 200, reset.text
+    body = reset.json()
+    assert body["mode"] == "política"
+    assert body["policy"] == "planetary-rule"
+    with api_main.sessions_lock:
+        assert api_main.sessions[body["session_id"]].env.max_steps == 230
+
+    step = client.post("/sim/step", json={"session_id": body["session_id"]})
+    assert step.status_code == 200, step.text
+    payload = step.json()
+    assert 0 <= payload["action"] < len(body["actions"])
+    assert payload["steps"] == 1
+
+    with api_main.sessions_lock:
+        session = api_main.sessions.pop(body["session_id"])
+    session.env.close()
+
+
+def test_planetary_rule_escapes_when_rover_stays_stalled():
+    policy = api_main.PlanetaryRulePolicy()
+    observation = np.ones(33, dtype=np.float32)
+    observation[12] = 0.0
+    observation[21] = 0.0
+    actions = [policy(observation) for _ in range(12)]
+    assert any(action in {3, 4} for action in actions)
+    assert policy.recovery_steps > 0
+
+
+def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monkeypatch):
+    checkpoint = tmp_path / "planetary-qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "q-episodes.sqlite")
+    reset = client.post("/sim/reset", json={
+        "environment": "planetary", "difficulty_level": 1,
+        "seed": 707, "policy": "planetary-qlearning",
+    })
+    assert reset.status_code == 200, reset.text
+    sid = reset.json()["session_id"]
+    step = client.post("/sim/step", json={"session_id": sid}).json()
+    assert step["training"]["updates"] == 1
+    with api_main.sessions_lock:
+        session = api_main.sessions[sid]
+        session.policy.agent.finish_episode()
+        session.policy.agent.save(checkpoint)
+        api_main.sessions.pop(sid)
+    session.env.close()
+    assert checkpoint.exists()
+    status = client.get("/training/qlearning")
+    assert status.status_code == 200
+    assert status.json()["updates"] == 1
+
+
 def test_policy_session_runs_to_the_end():
     sid = client.post("/sim/reset", json={"level_id": "n1", "seed": 100000, "policy": "baseline-rule"}).json()["session_id"]
     for _ in range(400):

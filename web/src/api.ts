@@ -65,6 +65,14 @@ export class ExpeditionApi {
     return this.request('/monitor')
   }
 
+  async ppoCampaign(): Promise<unknown> {
+    return this.request('/training/ppo/campaign')
+  }
+
+  async ppoReplay(level: number): Promise<unknown> {
+    return this.request(`/training/ppo/campaign/${level}/replay`)
+  }
+
   async evaluate(runId: string, levelId: string, seeds: number[]): Promise<unknown> {
     return this.request('/evaluate', {
       method: 'POST',
@@ -77,29 +85,24 @@ export class ExpeditionApi {
     environment: 'beacon' | 'planetary' = 'beacon',
     difficultyLevel = 1,
     seed = 0,
+    policy = 'manual',
     previousSessionId?: string,
   ): Promise<SimulationResponse> {
     return this.request('/sim/reset', {
       method: 'POST',
-      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed, previous_session_id: previousSessionId }),
+      body: JSON.stringify({ level_id: levelId, environment, difficulty_level: difficultyLevel, seed, policy, previous_session_id: previousSessionId }),
     }) as Promise<SimulationResponse>
   }
 
-  async step(sessionId: string, action: number): Promise<SimulationResponse> {
+  async step(sessionId: string, action?: number): Promise<SimulationResponse> {
     return this.request('/sim/step', {
       method: 'POST',
-      body: JSON.stringify({ session_id: sessionId, action }),
+      body: JSON.stringify(action === undefined ? { session_id: sessionId } : { session_id: sessionId, action }),
     }) as Promise<SimulationResponse>
   }
 
-  async episodes(limit = 30, scenarioId = '', mode = ''): Promise<unknown> {
-    return this.request(`/episodes?limit=${Math.max(1, Math.min(100, limit))}&scenario_id=${encodeURIComponent(scenarioId)}&mode=${encodeURIComponent(mode)}`)
-  }
-
-  async campaignProgress() { return this.request('/campaign/progress') }
-
-  async scenarioProgress(scenarioId: string, mode: string) {
-    return this.request(`/scenarios/${encodeURIComponent(scenarioId)}/progress?mode=${encodeURIComponent(mode)}`)
+  async episodes(limit = 30): Promise<unknown> {
+    return this.request(`/episodes?limit=${Math.max(1, Math.min(100, limit))}`)
   }
 
   async episodeReplay(episodeNumber: number): Promise<unknown> {
@@ -115,6 +118,28 @@ export class ExpeditionApi {
 
   async episodeMetrics(): Promise<unknown> {
     return this.request('/episodes/metrics/summary')
+  }
+
+  async qlearningStatus(): Promise<unknown> {
+    return this.request('/training/qlearning')
+  }
+
+  async qlearningCheckpoints(): Promise<unknown> {
+    return this.request('/training/qlearning/checkpoints')
+  }
+
+  async activateQlearningCheckpoint(name: string): Promise<unknown> {
+    return this.request('/training/qlearning/checkpoints/activate', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    })
+  }
+
+  async snapshotQlearningCheckpoint(name: string): Promise<unknown> {
+    return this.request('/training/qlearning/checkpoints/snapshot', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    })
   }
 
   async compareEpisodes(episodeNumbers: number[]): Promise<unknown> {

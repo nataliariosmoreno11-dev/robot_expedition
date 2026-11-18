@@ -5,7 +5,7 @@
   "description": "Panel web 3D para evaluar y recuperar modelos de Robot Expedition.",
   "type": "module",
   "engines": {
-    "node": "26.x"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "vite",

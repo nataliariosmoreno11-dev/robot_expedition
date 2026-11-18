@@ -181,6 +181,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self._last_event: str | None = None
         self._stuck_steps = 0
         self._no_progress_steps = 0
+        self.storm_intensity = 0.0
         super().__init__(
             level="n2",
             max_steps=max_steps or 540,
@@ -596,7 +597,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             return 0.0, 0.0
         # La ráfaga varía, pero su fuerza usa la baja densidad real aproximada de Marte.
         gust = 1.0 + 0.28 * math.sin(self.steps * DT / 7.0 + scenario.seed % 13)
-        speed = scenario.wind_speed_m_s * gust
+        speed = scenario.wind_speed_m_s * gust * (1.0 + 1.8 * self.storm_intensity)
         force = (
             0.5
             * scenario.planet["atmosphere_density_kg_m3"]
@@ -608,6 +609,21 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             self.steps * DT / 11.0
         )
         return force * math.cos(direction), force * math.sin(direction)
+
+    def _update_storm(self) -> None:
+        """Tormentas reproducibles que escalan con la dificultad del escenario."""
+        scenario = self.scenario
+        if scenario is None or scenario.difficulty_level < 3:
+            self.storm_intensity = 0.0
+            base_opacity = 0.0 if scenario is None else scenario.dust_opacity
+        else:
+            period = max(7.0, 20.0 - scenario.difficulty_level * 1.35)
+            wave = math.sin(self.steps * DT / period * 2.0 * math.pi + scenario.seed % 29)
+            threshold = 0.72 - scenario.difficulty_level * 0.035
+            self.storm_intensity = max(0.0, (wave - threshold) / max(0.05, 1.0 - threshold))
+            base_opacity = scenario.dust_opacity
+        opacity = min(0.92, base_opacity + self.storm_intensity * 0.62)
+        self.visibility_range = max(0.85, RAY_RANGE * (1.0 - 0.72 * opacity))
 
     def _collect(self) -> tuple[float, str]:
         nearby = [
@@ -628,7 +644,10 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         if sample["collected"]:
             return -1.2, f"muestra {sample['sample_id']} ya recolectada"
         if not sample["target"]:
-            return -2.5, f"muestra incorrecta: {sample['sample_type']}"
+            sample["collected"] = True
+            self.collected_ids.add(sample["sample_id"])
+            self.battery = max(0.0, self.battery - 6.0)
+            return -10.2, f"muestra contaminante: {sample['sample_type']} · batería -6%"
         if len(self.inventory) >= self.capacity:
             return -1.5, "inventario lleno"
         sample["collected"] = True
@@ -663,6 +682,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         action = int(action)
         if not self.action_space.contains(action):
             raise ValueError(f"acción fuera de rango: {action}")
+        self._update_storm()
         potential_before = self._navigation_potential()
         _, velocity, angular = PLANETARY_ACTIONS[action]
         distance_before = self._distance_to_target()
@@ -709,7 +729,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         energy = min(1.0, (speed / V_MAX) ** 2 + 0.25 * (turn / W_MAX) ** 2)
         cold_factor = 1.0 + max(0.0, -40.0 - self.scenario.temperature_c) / 180.0
         traction_factor = 1.0 + max(0.0, 0.75 - self._local_traction()) * 0.8
-        wind_factor = 1.0 + min(0.25, math.hypot(wind_x, wind_y) / 20.0)
+        wind_factor = 1.0 + min(0.55, math.hypot(wind_x, wind_y) / 20.0) + 0.35 * self.storm_intensity
         drain = (0.10 + 0.40 * energy) * cold_factor * traction_factor * wind_factor
         drain *= self.scenario.energy_scale
         self.battery = max(0.0, self.battery - drain)
@@ -864,6 +884,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             "inventory": list(self.inventory),
             "mission_progress": (min(len(self.inventory), requested) + (end == "exito"))
             / (requested + 1),
+            "storm_intensity": self.storm_intensity,
         }
 
     def _frame(

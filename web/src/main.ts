@@ -15,8 +15,6 @@ import { LearningCurve } from './ui/curve'
 import { MissionHud, required } from './ui/hud'
 import { RegistryView } from './ui/registry'
 import { TrainingDashboard } from './ui/training-dashboard'
-import { mountAgentTraining } from './ui/agent-training'
-import { mountViewerControls } from './ui/viewer-controls'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -46,12 +44,26 @@ const loadEpisodeButton = required<HTMLButtonElement>('#loadEpisodeButton')
 const episodeNumberInput = required<HTMLInputElement>('#episodeNumberInput')
 const episodeList = required<HTMLElement>('#episodeList')
 const learningMeta = required<HTMLElement>('#learningMeta')
+const qTrainingStatus = required<HTMLElement>('#qTrainingStatus')
+const checkpointSelect = required<HTMLSelectElement>('#checkpointSelect')
+const checkpointMeta = required<HTMLElement>('#checkpointMeta')
+const activateCheckpointButton = required<HTMLButtonElement>('#activateCheckpointButton')
+const snapshotCheckpointButton = required<HTMLButtonElement>('#snapshotCheckpointButton')
+const refreshCheckpointsButton = required<HTMLButtonElement>('#refreshCheckpointsButton')
 const keypadButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-action]'))
 const trainedValue = required<HTMLElement>('#trainedValue')
 const configValue = required<HTMLElement>('#configValue')
+const missionMinimap = required<HTMLCanvasElement>('#missionMinimap')
+const elevationMap = required<HTMLCanvasElement>('#elevationMap')
+const ppoCampaignMeta = required<HTMLElement>('#ppoCampaignMeta')
+const ppoCampaignLevels = required<HTMLElement>('#ppoCampaignLevels')
+const ppoEvidenceDetail = required<HTMLElement>('#ppoEvidenceDetail')
 
 const scene = new ExpeditionScene(required<HTMLElement>('#scene'), {
-  onFrame: (snapshot) => hud.updateFrame(snapshot),
+  onFrame: (snapshot) => {
+    hud.updateFrame(snapshot)
+    updateReferenceOverlay(snapshot.frame)
+  },
   onPlaybackChange: (playing) => {
     playIcon.textContent = playing ? 'Ⅱ' : '▶'
     playButton.setAttribute('aria-label', playing ? 'Pausar' : 'Reproducir')
@@ -66,81 +78,126 @@ let apiOnline = false
 let manualSessionId: string | undefined
 let manualEpisode: EpisodeData | undefined
 let manualBusy = false
+let automaticRunning = false
+let automaticTimer: number | undefined
+let automaticEpisodeCount = 0
+let automaticNetworkRetries = 0
 let lastVersion: Record<string, unknown> | undefined
 
-const PLANETARY_LEVELS: Record<number, { title: string; description: string; facts: string[] }> = {
-  "1": {
-    "title": "01 · Primeros movimientos",
-    "description": "Orientarse, recoger una muestra y regresar.",
-    "facts": [
-      "scenario_01",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "2": {
-    "title": "02 · El primer desvío",
-    "description": "Rodear una barrera; comparar dos rutas.",
-    "facts": [
-      "scenario_02",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "3": {
-    "title": "03 · El laberinto rocoso",
-    "description": "Intersecciones y pasillos con tres objetivos.",
-    "facts": [
-      "scenario_03",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "4": {
-    "title": "04 · El cráter central",
-    "description": "Rodear un cráter protegido por una formación rocosa.",
-    "facts": [
-      "scenario_04",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "5": {
-    "title": "05 · El valle de decisiones",
-    "description": "Elegir entre corredores y costes de tracción.",
-    "facts": [
-      "scenario_05",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "6": {
-    "title": "06 · El laberinto de los cráteres",
-    "description": "Ordenar cuatro muestras de distintos tipos.",
-    "facts": [
-      "scenario_06",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "7": {
-    "title": "07 · La tormenta marciana",
-    "description": "Resolver corredores con ruido, polvo y viento.",
-    "facts": [
-      "scenario_07",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "8": {
-    "title": "08 · La ruta imposible a simple vista",
-    "description": "Alejarse de objetivos para rodear barreras alternadas.",
-    "facts": [
-      "scenario_08",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
+function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
+  const width = map.active_extent?.[0] ?? map.size[0]
+  const height = map.active_extent?.[1] ?? map.size[1]
+  return [8 + (x / width) * (canvas.width - 16), 8 + ((height / 2 - y) / height) * (canvas.height - 16)]
+}
+
+function drawElevation(map: ExpeditionMap) {
+  const context = elevationMap.getContext('2d')
+  if (!context) return
+  const n = Math.max(1, map.terrain.n)
+  const values = map.terrain.heights
+  const maximum = Math.max(...values, 0.001)
+  const minimum = Math.min(...values, 0)
+  const range = Math.max(0.001, maximum - minimum)
+  context.clearRect(0, 0, elevationMap.width, elevationMap.height)
+  for (let row = 0; row < n; row += 1) {
+    for (let column = 0; column < n; column += 1) {
+      const normalized = ((values[row * n + column] ?? 0) - minimum) / range
+      const hue = 220 - normalized * 200
+      context.fillStyle = `hsl(${hue} 78% ${32 + normalized * 28}%)`
+      context.fillRect(column * elevationMap.width / n, row * elevationMap.height / n,
+        Math.ceil(elevationMap.width / n), Math.ceil(elevationMap.height / n))
+    }
   }
+}
+
+function drawMinimap(map: ExpeditionMap, frame?: ReplayFrame) {
+  const context = missionMinimap.getContext('2d')
+  if (!context) return
+  context.clearRect(0, 0, missionMinimap.width, missionMinimap.height)
+  context.fillStyle = '#552316'
+  context.fillRect(0, 0, missionMinimap.width, missionMinimap.height)
+  context.strokeStyle = 'rgba(255,215,170,.12)'
+  context.lineWidth = 1
+  for (let index = 1; index < 6; index += 1) {
+    context.beginPath(); context.moveTo(index * missionMinimap.width / 6, 0); context.lineTo(index * missionMinimap.width / 6, missionMinimap.height); context.stroke()
+    context.beginPath(); context.moveTo(0, index * missionMinimap.height / 6); context.lineTo(missionMinimap.width, index * missionMinimap.height / 6); context.stroke()
+  }
+  context.fillStyle = '#80614b'
+  for (const rock of map.rocks) {
+    const [x, y] = mapPoint(map, missionMinimap, rock[1], rock[2])
+    context.beginPath(); context.arc(x, y, 2.5, 0, Math.PI * 2); context.fill()
+  }
+  for (const sample of map.samples ?? []) {
+    const [x, y] = mapPoint(map, missionMinimap, sample.x, sample.y)
+    context.fillStyle = sample.target ? '#59d9ef' : '#ffc058'
+    context.beginPath(); context.arc(x, y, sample.collected ? 2 : 4, 0, Math.PI * 2); context.fill()
+  }
+  const [baseX, baseY] = mapPoint(map, missionMinimap, map.base[0], map.base[1])
+  context.fillStyle = '#8adb6f'; context.fillRect(baseX - 4, baseY - 4, 8, 8)
+  if (frame) {
+    const [x, y] = mapPoint(map, missionMinimap, frame[0], frame[1])
+    context.fillStyle = '#fff'; context.beginPath(); context.arc(x, y, 4, 0, Math.PI * 2); context.fill()
+  }
+}
+
+function updateReferenceOverlay(frame: ReplayFrame) {
+  required<HTMLElement>('#autoEnergy').textContent = `${Math.max(0, frame[FRAME_INDEX.battery]).toFixed(0)}%`
+  required<HTMLElement>('#autoCargo').textContent = `${manualEpisode?.samplesCollected ?? 0}/${manualEpisode?.requestedSamples ?? currentMap.mission?.requested_samples ?? 0}`
+  const collisions = manualEpisode?.frames.reduce((total, item) => total + item[FRAME_INDEX.collision], 0) ?? 0
+  required<HTMLElement>('#autoHealth').textContent = `${Math.max(0, 100 - collisions * 8)}%`
+  drawMinimap(currentMap, frame)
+}
+
+function updateReferenceMap(map: ExpeditionMap) {
+  drawElevation(map)
+  drawMinimap(map)
+  required<HTMLElement>('#obstacleCount').textContent = `${map.rocks.length} rocas`
+  required<HTMLElement>('#terrainKind').textContent = Number(map.difficulty_level ?? 1) >= 5 ? 'cráteres y dunas' : 'rocoso marciano'
+  const dust = Number(map.environment?.dust_opacity ?? 0)
+  required<HTMLElement>('#weatherCondition').textContent = dust > 0.45 ? 'tormenta de polvo' : dust > 0.2 ? 'polvo variable' : 'estable'
+}
+
+const PLANETARY_LEVELS: Record<number, { title: string; description: string; facts: string[] }> = {
+  1: {
+    title: 'L1 · Llanura inicial',
+    description: 'Mapa pequeño y casi plano para aprender navegación, recolección y regreso a base.',
+    facts: ['área 4.5 × 4.4 m', '1 muestra', '1 roca', 'plano y despejado'],
+  },
+  2: {
+    title: 'L2 · Rocas dispersas',
+    description: 'El área crece y aparecen más rutas, rocas, una duna y muestras distractoras.',
+    facts: ['área 5.8 × 5.6 m', '1–2 muestras', '3 rocas', '1 duna'],
+  },
+  3: {
+    title: 'L3 · Pendientes y fricción',
+    description: 'Dos muestras objetivo, relieve más marcado y zonas donde las ruedas pierden tracción.',
+    facts: ['área 7 × 7 m', '2 muestras', '5 rocas', '2 dunas'],
+  },
+  4: {
+    title: 'L4 · Cráteres y viento',
+    description: 'Rutas más largas con cráteres, viento variable y hasta tres muestras requeridas.',
+    facts: ['área 8.2 × 8.2 m', '7 rocas', '2 cráteres', 'viento ≤ 11 m/s'],
+  },
+  5: {
+    title: 'L5 · Dunas y polvo',
+    description: 'Más dunas y distractores; el polvo reduce la distancia a la que el rover detecta muestras.',
+    facts: ['área 9.2 × 9.2 m', '9 rocas', '5 dunas', '3 cráteres'],
+  },
+  6: {
+    title: 'L6 · Rutas extensas',
+    description: 'Mapa amplio, tres o cuatro muestras, varios cráteres y presupuesto de batería menor.',
+    facts: ['área 10.2 × 10.2 m', '12 rocas', '7 dunas', '5 cráteres'],
+  },
+  7: {
+    title: 'L7 · Meteorología variable',
+    description: 'Polvo intenso, viento fuerte, regiones peligrosas y poca tracción exigen rutas seguras.',
+    facts: ['área 11.1 × 10.7 m', '15 rocas', '7 cráteres', 'tormentas fuertes'],
+  },
+  8: {
+    title: 'L8 · Expedición marciana',
+    description: 'La misión completa combina el mapa mayor, cuatro muestras, dunas, cráteres, polvo y energía limitada.',
+    facts: ['área 11.8 × 11.5 m', '18 rocas', '10 cráteres', '12 dunas · polvo máximo'],
+  },
 }
 
 const registry = new RegistryView({
@@ -152,6 +209,56 @@ const trainingDashboard = new TrainingDashboard(required<HTMLCanvasElement>('#tr
 const setProvenance = (trained: string, config: string) => {
   trainedValue.textContent = trained
   configValue.textContent = config
+}
+
+const showQTraining = (value: unknown) => {
+  if (!isRecord(value)) return
+  const episode = Number(value.episodes ?? 0)
+  const states = Number(value.states ?? 0)
+  const updates = Number(value.updates ?? 0)
+  const epsilon = Number(value.epsilon ?? 0)
+  const guided = Number(value.guided_decisions ?? 0)
+  const random = Number(value.random_decisions ?? 0)
+  const escapes = Number(value.loop_escapes ?? 0)
+  const totalDecisions = guided + random + Number(value.greedy_decisions ?? 0)
+  const guidance = totalDecisions ? ` · guía ${((guided / totalDecisions) * 100).toFixed(0)}%` : ''
+  qTrainingStatus.textContent = `Q-learning · episodio ${episode} · ${states} estados · ${updates} actualizaciones · ε ${epsilon.toFixed(3)}${guidance}${escapes ? ` · ${escapes} escapes de ciclo` : ''}`
+}
+
+async function refreshCheckpoints() {
+  if (!api) return
+  refreshCheckpointsButton.disabled = true
+  try {
+    const payload = await api.qlearningCheckpoints()
+    const checkpoints = isRecord(payload) && Array.isArray(payload.checkpoints)
+      ? payload.checkpoints.filter(isRecord)
+      : []
+    checkpointSelect.replaceChildren()
+    for (const checkpoint of checkpoints) {
+      const option = document.createElement('option')
+      option.value = String(checkpoint.name ?? '')
+      option.textContent = `${checkpoint.active ? '● ' : ''}${String(checkpoint.name ?? 'checkpoint')} · ep ${Number(checkpoint.episodes ?? 0)} · ${Number(checkpoint.states ?? 0)} estados`
+      checkpointSelect.append(option)
+      if (checkpoint.active) checkpointSelect.value = option.value
+    }
+    if (!checkpoints.length) {
+      checkpointSelect.append(new Option('Se creará al terminar el primer episodio', ''))
+    }
+    checkpointSelect.disabled = !checkpoints.length
+    activateCheckpointButton.disabled = !checkpoints.length
+    snapshotCheckpointButton.disabled = !checkpoints.length
+    const selected = checkpoints.find((item) => item.active) ?? checkpoints[0]
+    checkpointMeta.textContent = selected
+      ? `${Number(selected.episodes ?? 0)} episodios · ${Number(selected.updates ?? 0)} actualizaciones · ε ${Number(selected.epsilon ?? 0).toFixed(3)} · ${String(selected.updated_at ?? 'fecha desconocida')}`
+      : 'Todavía no existe memoria persistida. El primer episodio terminado creará el checkpoint.'
+    if (isRecord(payload) && payload.persistent === false) {
+      checkpointMeta.textContent += ' · servidor sin disco persistente configurado'
+    }
+  } catch (error) {
+    checkpointMeta.textContent = errorMessage(error)
+  } finally {
+    refreshCheckpointsButton.disabled = !apiOnline
+  }
 }
 
 scene.setMap(currentMap)
@@ -216,7 +323,7 @@ const updatePlanetaryLevel = () => {
     button.classList.toggle('selected', selected)
     button.setAttribute('aria-pressed', String(selected))
   }
-  if (!manualSessionId) manualButton.textContent = `Iniciar escenario L${level}`
+  if (!manualSessionId) manualButton.textContent = `Entrenar Q-learning en L${level}`
 }
 
 const randomScenarioSeed = () => {
@@ -237,6 +344,7 @@ const loadEpisode = (
   sourceLabel?: string,
 ) => {
   currentMap = map
+  updateReferenceMap(map)
   scene.setMap(map)
   scene.setEpisode(episode)
   hud.setEpisode(episode, source, map)
@@ -326,10 +434,13 @@ const connectApi = async () => {
     manualButton.disabled = false
     refreshEpisodesButton.disabled = false
     loadEpisodeButton.disabled = false
+    refreshCheckpointsButton.disabled = false
     if (normalizedCatalog.runs.length) hud.hideNotice()
     else hud.showNotice('Catálogo vacío', 'La API responde, pero /catalog todavía no contiene modelos recuperables.')
     void refreshMonitor()
     void refreshEpisodes()
+    void api.qlearningStatus().then(showQTraining).catch(() => undefined)
+    void refreshCheckpoints()
   } catch (error) {
     apiOnline = false
     hud.setConnection('offline', 'API sin respuesta')
@@ -361,17 +472,15 @@ async function refreshEpisodes() {
   const activeApi = api
   refreshEpisodesButton.disabled = true
   try {
-    const progress=await api.campaignProgress()
-    if (isRecord(progress)) {
-      const mastered=Array.isArray(progress.mastered) ? progress.mastered.length : 0
-      required<HTMLElement>('#campaignProgress').textContent = `Currículo: escenario ${Number(progress.current_level ?? 1)} · ${mastered}/8 superados · ${8-mastered} pendientes${progress.run_id ? '' : ' · sin evaluación registrada'}`
-    }
-    const payload = await api.episodes(100, `scenario_${difficultySelect.value.padStart(2,'0')}`, required<HTMLSelectElement>('#episodeMode').value)
+    const [payload, metricsPayload] = await Promise.all([
+      api.episodes(100),
+      api.episodeMetrics().catch(() => undefined),
+    ])
     const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []
     const storage = isRecord(payload) && isRecord(payload.storage) ? payload.storage : undefined
     required<HTMLElement>('#experimentStorageMeta').textContent = storage
-      ? `${Number(storage.summarized_episodes ?? 0)} intentos registrados · historial completo, sin poda automática`
-      : 'Se conserva cada intento completo, incluidos los fallidos.'
+      ? `${Number(storage.retained_experiments ?? 0)}/${Number(storage.max_experiments ?? 10)} replays seleccionados · ${Number(storage.protected_experiments ?? 0)} protegidos · ${Number(storage.summarized_episodes ?? 0)} episodios resumidos${Number(storage.historical_untouched ?? 0) ? ` · ${Number(storage.historical_untouched)} históricos intactos` : ''}`
+      : 'Se conservan hasta 10 replays completos; las métricas resumidas continúan para todo el entrenamiento.'
     const summaries: EpisodeSummary[] = episodes.map((item) => ({
       episode_number: Number(item.episode_number ?? 0),
       scenario_id: String(item.scenario_id ?? 'sin escenario'),
@@ -382,22 +491,24 @@ async function refreshEpisodes() {
       reward: Number(item.reward ?? 0),
       collisions: Number(item.collisions ?? 0),
       path_length: Number(item.path_length ?? 0),
-      duration_s: Number(item.simulation_time_s ?? 0),
-      energy_consumed: Number(item.energy_consumed ?? 0),
-      path_efficiency: typeof item.path_efficiency === 'number' ? item.path_efficiency : null,
+      duration_s: Number(item.duration_s ?? 0),
       end: String(item.end ?? 'en progreso'),
     })).filter((item) => Number.isInteger(item.episode_number) && item.episode_number > 0)
     const finished = summaries.filter((episode) => episode.success !== null)
     trainingDashboard.setEpisodes(finished)
-    const successCount = finished.filter((episode) => episode.success).length
-    learningMeta.textContent = summaries.length
-      ? `${summaries.length} episodios recientes · ${finished.length ? ((successCount / finished.length) * 100).toFixed(1) : '0.0'}% de misiones completadas`
+    const metrics = isRecord(metricsPayload) ? metricsPayload : undefined
+    const totalEpisodes = Number(metrics?.episodes ?? summaries.length)
+    const successRate = metrics ? Number(metrics.success_rate ?? 0) * 100 : (finished.length
+      ? (finished.filter((episode) => episode.success).length / finished.length) * 100
+      : 0)
+    learningMeta.textContent = totalEpisodes
+      ? `${totalEpisodes} episodios entrenados · ${successRate.toFixed(1)}% de éxito · recompensa media ${Number(metrics?.reward_mean ?? 0).toFixed(1)} · ${Number(metrics?.samples_collected ?? 0)} muestras acumuladas`
       : 'Sin episodios registrados.'
     episodeList.replaceChildren()
     if (!episodes.length) {
       const empty = document.createElement('p')
       empty.className = 'section-copy'
-      empty.textContent = 'Aún no hay intentos planetarios guardados. Inicia un control manual para crear el primero.'
+      empty.textContent = 'Aún no hay episodios planetarios guardados. Inicia Q-learning para crear el primero.'
       episodeList.append(empty)
       return
     }
@@ -529,29 +640,39 @@ async function refreshMonitor() {
   }
 }
 
+const scheduleAutomaticStep = (delay = 150) => {
+  window.clearTimeout(automaticTimer)
+  if (automaticRunning && manualSessionId) {
+    automaticTimer = window.setTimeout(() => { void sendAutomaticAction() }, delay)
+  }
+}
+
 const startManualMode = async () => {
   if (!api) return
+  window.clearTimeout(automaticTimer)
+  automaticRunning = false
   manualButton.disabled = true
-  manualButton.textContent = 'Iniciando…'
+  manualButton.textContent = 'Preparando agente…'
   try {
     const environment = manualEnvironment.value === 'planetary' ? 'planetary' : 'beacon'
     const difficulty = Number(difficultySelect.value)
     const seed = environment === 'planetary' ? randomScenarioSeed() : 0
-    const response = await api.reset(levelSelect.value, environment, difficulty, seed, manualSessionId)
+    const policy = environment === 'planetary' ? 'planetary-qlearning' : 'baseline-rule'
+    const response = await api.reset(levelSelect.value, environment, difficulty, seed, policy)
     const frame = frameFromResponse(response)
     if (!response.session_id) throw new Error('/sim/reset no devolvió session_id.')
     if (!frame) throw new Error('/sim/reset no devolvió un cuadro compatible.')
     manualSessionId = response.session_id
     const map = response.map ? normalizeMap(response.map) : currentMap
     missionSeedValue.textContent = environment === 'planetary'
-      ? `semilla ${String(response.seed ?? seed)} · ${map.scenario_id ?? 'escenario fijo'}`
+      ? `semilla ${String(response.seed ?? seed)} · ${map.scenario_id ?? 'escenario procedural'}`
       : 'modo de balizas'
     const initial = normalizeEpisode(
-      { ...response, frames: [frame], episode: 'manual', end: 'running' },
+      { ...response, frames: [frame], episode: `auto-${automaticEpisodeCount + 1}`, end: 'running' },
       {
-        mode: 'manual',
-        runId: 'control-manual',
-        modelName: 'sin-modelo',
+        mode: 'entrenamiento-replay',
+        runId: 'planetary-qlearning',
+        modelName: 'Q-learning tabular persistente',
         environmentVersion: environmentVersionFrom(response) ?? apiEnvironmentVersion,
         levelId: environment === 'planetary' ? `L${difficulty}` : levelSelect.value,
       },
@@ -573,32 +694,52 @@ const startManualMode = async () => {
         status: 'recolectando',
       }],
     } : initial
-    loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
-    setProvenance('sin modelo', environment === 'planetary' ? `escenario fijo · L${difficulty}` : 'control manual heredado')
-    setManualControls(true)
+    automaticEpisodeCount += 1
+    loadEpisode(manualEpisode, map, 'api', 'API · Q-LEARNING')
+    const conditions = map.environment
+    required<HTMLElement>('#planetReadoutTitle').textContent = `${String(conditions?.planet?.planet_id ?? 'MARTE').toUpperCase()} · ${map.difficulty ?? `L${difficulty}`}`
+    required<HTMLElement>('#readoutGravity').textContent = `${Number(conditions?.planet?.gravity_m_s2 ?? 3.71).toFixed(2)} m/s²`
+    required<HTMLElement>('#readoutWind').textContent = `${Number(conditions?.wind_speed_m_s ?? 0).toFixed(1)} m/s`
+    required<HTMLElement>('#readoutTemperature').textContent = `${Number(conditions?.temperature_c ?? -55).toFixed(0)} °C`
+    required<HTMLElement>('#readoutVisibility').textContent = `${Number(conditions?.visibility_m ?? 0).toFixed(1)} m`
+    required<HTMLElement>('#readoutStorm').textContent = difficulty >= 3 ? 'ciclos dinámicos' : 'sin tormenta'
+    required<HTMLElement>('#readoutTraction').textContent = Number(conditions?.traction ?? 0).toFixed(2)
+    required<HTMLElement>('#readoutSamples').textContent = `${map.mission?.requested_samples ?? 0} × ${map.mission?.target_type ?? '—'}`
+    setProvenance('planetary-qlearning', environment === 'planetary' ? `memoria persistente · escenario procedural · L${difficulty}` : 'baseline autónomo')
+    automaticNetworkRetries = 0
+    automaticRunning = true
+    setManualControls(false)
+    manualButton.textContent = 'Pausar entrenamiento'
     hud.hideNotice()
+    scheduleAutomaticStep(400)
   } catch (error) {
     manualSessionId = undefined
     manualEpisode = undefined
     setManualControls(false)
-    hud.showNotice('No se pudo iniciar el control manual', errorMessage(error))
+    hud.showNotice('No se pudo iniciar Q-learning', errorMessage(error))
   } finally {
     manualButton.disabled = false
-    manualButton.textContent = manualEnvironment.value === 'planetary'
-      ? `${manualSessionId ? 'Nueva' : 'Generar'} misión L${difficultySelect.value}`
-      : `${manualSessionId ? 'Reiniciar' : 'Iniciar'} balizas`
+    if (!manualSessionId) manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
   }
 }
 
-async function sendManualAction(action: number) {
+async function sendAutomaticAction() {
   if (!api || !manualSessionId || !manualEpisode || manualBusy) return
   manualBusy = true
+  let retryDelay: number | undefined
   setManualControls(false)
   try {
-    const response = await api.step(manualSessionId, action)
+    const response = await api.step(manualSessionId)
+    automaticNetworkRetries = 0
     const frame = frameFromResponse(response)
     if (!frame) throw new Error('/sim/step no devolvió un cuadro compatible.')
     const frames = [...manualEpisode.frames, frame]
+    if (typeof response.storm_intensity === 'number') {
+      required<HTMLElement>('#readoutStorm').textContent = response.storm_intensity > 0.05
+        ? `${Math.round(response.storm_intensity * 100)}% · ACTIVA`
+        : 'en calma'
+    }
+    showQTraining(response.training)
     const finished = Boolean(response.terminated || response.truncated)
     const map = response.map ? normalizeMap(response.map) : currentMap
     // La etapa 3 es siempre "volver a la base": en N1 se pasa de 1 a 3, con una sola baliza.
@@ -634,25 +775,100 @@ async function sendManualAction(action: number) {
         },
       ],
     }
-    loadEpisode(manualEpisode, map, 'api', 'API · MANUAL')
+    loadEpisode(manualEpisode, map, 'api', 'API · Q-LEARNING')
     scene.seek(frames.length - 1)
     if (finished) {
       manualSessionId = undefined
-      hud.showNotice('Episodio finalizado', `Causa de fin: ${manualEpisode.end}. Pulsa Reiniciar para conducir de nuevo.`)
+      hud.showNotice('Episodio automático finalizado', `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`)
       void refreshEpisodes()
+      if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, 1200)
     }
   } catch (error) {
-    hud.showNotice('Falló la orden manual', errorMessage(error))
+    const transientNetworkFailure = error instanceof ApiError && error.status === undefined
+    if (transientNetworkFailure && automaticRunning && automaticNetworkRetries < 6) {
+      automaticNetworkRetries += 1
+      retryDelay = Math.min(5000, 500 * 2 ** (automaticNetworkRetries - 1))
+      hud.showNotice(
+        'Reconectando el entrenamiento',
+        `La API no respondió. Reintento ${automaticNetworkRetries}/6 en ${(retryDelay / 1000).toFixed(1)} s; el checkpoint ya guardado se conserva.`,
+      )
+    } else {
+      automaticRunning = false
+      automaticNetworkRetries = 0
+      hud.showNotice('El entrenamiento Q-learning se detuvo', errorMessage(error))
+    }
   } finally {
     manualBusy = false
-    setManualControls(Boolean(manualSessionId))
+    setManualControls(false)
+    if (manualSessionId && automaticRunning) scheduleAutomaticStep(retryDelay ?? 150)
   }
 }
 
 function setManualControls(enabled: boolean) {
   keypadButtons.forEach((button) => {
-    button.disabled = !enabled || (Number(button.dataset.action) >= 5 && manualEnvironment.value !== 'planetary')
+    button.disabled = !enabled || (Number(button.dataset.action) === 5 && manualEnvironment.value !== 'planetary')
   })
+}
+
+function metricNumber(record: UnknownRecord | undefined, key: string): number {
+  return record && typeof record[key] === 'number' ? Number(record[key]) : 0
+}
+
+function showPpoEvidence(item: UnknownRecord) {
+  const scenario = isRecord(item.scenario) ? item.scenario : {}
+  const model = isRecord(item.model) ? item.model : {}
+  const evidence = isRecord(item.evidence) ? item.evidence : {}
+  const metrics = isRecord(evidence.metrics) ? evidence.metrics : {}
+  const samples = Array.isArray(scenario.samples) ? scenario.samples : []
+  const targets = samples.filter((sample) => isRecord(sample) && sample.target === true).length
+  const distractors = Math.max(0, samples.length - targets)
+  const success = metricNumber(metrics, 'success_rate') * 100
+  const collisions = metricNumber(metrics, 'collisions_per_episode')
+  const reward = metricNumber(metrics, 'return_mean')
+  ppoEvidenceDetail.innerHTML = `
+    <div><span class="eyebrow">Escenario fijo</span><strong>L${Number(item.level)} · ${String(scenario.name ?? 'Sin nombre')}</strong></div>
+    <dl>
+      <div><dt>Checkpoint PPO</dt><dd>${String(model.run_id ?? '').slice(0, 10)}</dd></div>
+      <div><dt>Entrenamiento</dt><dd>${Number(model.total_timesteps ?? 0).toLocaleString('es-CO')} pasos</dd></div>
+      <div><dt>Evaluación</dt><dd>${Number(evidence.cases ?? 0)} episodios · ${success.toFixed(0)}% éxito</dd></div>
+      <div><dt>Resultado medio</dt><dd>${reward.toFixed(1)} recompensa · ${collisions.toFixed(2)} choques</dd></div>
+      <div><dt>Misión</dt><dd>${targets} objetivos · ${distractors} distractores · ${String(scenario.target_type ?? 'muestra')}</dd></div>
+      <div><dt>Complejidad</dt><dd>${Array.isArray(scenario.rocks) ? scenario.rocks.length : 0} rocas · ${Array.isArray(scenario.craters) ? scenario.craters.length : 0} cráteres · viento ${Number(scenario.wind_speed_m_s ?? 0)} m/s</dd></div>
+    </dl>`
+}
+
+async function loadPpoCampaign() {
+  if (!api) return
+  try {
+    const payload = await api.ppoCampaign()
+    if (!isRecord(payload) || !Array.isArray(payload.levels)) throw new Error('La API no devolvió la campaña PPO.')
+    const levels = payload.levels.filter(isRecord)
+    ppoCampaignMeta.textContent = `${levels.length} checkpoints aprobados · ${Number(payload.latest_total_timesteps ?? 0).toLocaleString('es-CO')} pasos acumulados en el hito final · producción en modo evidencia e inferencia`
+    ppoCampaignLevels.replaceChildren()
+    for (const item of levels) {
+      const model = isRecord(item.model) ? item.model : {}
+      const scenario = isRecord(item.scenario) ? item.scenario : {}
+      const evidence = isRecord(item.evidence) ? item.evidence : {}
+      const metrics = isRecord(evidence.metrics) ? evidence.metrics : {}
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'ppo-level-card'
+      button.innerHTML = `<span>L${Number(item.level)}</span><strong>${String(scenario.name ?? 'Escenario')}</strong><small>${Number(model.total_timesteps ?? 0).toLocaleString('es-CO')} pasos</small><i>${(metricNumber(metrics, 'success_rate') * 100).toFixed(0)}% éxito</i>`
+      button.addEventListener('click', () => {
+        ppoCampaignLevels.querySelectorAll('button').forEach((node) => node.classList.remove('selected'))
+        button.classList.add('selected')
+        showPpoEvidence(item)
+      })
+      ppoCampaignLevels.append(button)
+    }
+    const first = levels[0]
+    if (first) {
+      ppoCampaignLevels.querySelector('button')?.classList.add('selected')
+      showPpoEvidence(first)
+    }
+  } catch (error) {
+    ppoCampaignMeta.textContent = `No se pudo cargar el modelado PPO: ${errorMessage(error)}`
+  }
 }
 
 playButton.addEventListener('click', () => scene.togglePlayback())
@@ -678,6 +894,22 @@ required<HTMLButtonElement>('#lightModeButton').addEventListener('click', (event
   scene.setLightMode(active)
 })
 
+const fullscreenButton = required<HTMLButtonElement>('#fullscreenButton')
+const viewportPanel = required<HTMLElement>('.viewport-panel')
+fullscreenButton.addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen()
+    else await viewportPanel.requestFullscreen()
+  } catch (error) {
+    hud.showNotice('No fue posible cambiar la pantalla', errorMessage(error))
+  }
+})
+document.addEventListener('fullscreenchange', () => {
+  const active = document.fullscreenElement === viewportPanel
+  fullscreenButton.setAttribute('aria-pressed', String(active))
+  fullscreenButton.textContent = active ? 'Salir de pantalla completa' : 'Pantalla completa'
+})
+
 runSelect.addEventListener('change', () => {
   const run = selectedRun()
   if (run && hasLevel(run.levelId)) levelSelect.value = run.levelId
@@ -687,42 +919,79 @@ levelSelect.addEventListener('change', () => {
   if (recommended && [...runSelect.options].some((option) => option.value === recommended)) runSelect.value = recommended
 })
 evaluateButton.addEventListener('click', () => { void evaluateSelectedRun() })
-manualButton.addEventListener('click', () => { void startManualMode() })
+manualButton.addEventListener('click', () => {
+  if (!manualSessionId) {
+    void startManualMode()
+    return
+  }
+  automaticRunning = !automaticRunning
+  manualButton.textContent = automaticRunning ? 'Pausar entrenamiento' : 'Reanudar entrenamiento'
+  if (automaticRunning) scheduleAutomaticStep(0)
+  else window.clearTimeout(automaticTimer)
+})
 for (const button of planetLevelButtons) {
   button.addEventListener('click', () => {
     difficultySelect.value = button.dataset.planetLevel ?? '1'
     manualEnvironment.value = 'planetary'
     updatePlanetaryLevel()
-    void refreshEpisodes()
     document.querySelector('#planetaryMission')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (apiOnline) void startManualMode()
   })
 }
-difficultySelect.addEventListener('change', () => { updatePlanetaryLevel(); void refreshEpisodes() })
+difficultySelect.addEventListener('change', () => {
+  updatePlanetaryLevel()
+  if (apiOnline) void startManualMode()
+})
 manualEnvironment.addEventListener('change', () => {
   difficultySelect.disabled = manualEnvironment.value !== 'planetary'
-  setManualControls(Boolean(manualSessionId))
-  manualButton.textContent = manualEnvironment.value === 'planetary'
-    ? `Iniciar escenario L${difficultySelect.value}`
-    : 'Iniciar balizas'
+  setManualControls(false)
+  manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
 })
 refreshEpisodesButton.addEventListener('click', () => { void refreshEpisodes() })
+refreshCheckpointsButton.addEventListener('click', () => { void refreshCheckpoints() })
+checkpointSelect.addEventListener('change', async () => {
+  if (!api || !checkpointSelect.value) return
+  const payload = await api.qlearningCheckpoints().catch(() => undefined)
+  const checkpoints = isRecord(payload) && Array.isArray(payload.checkpoints) ? payload.checkpoints.filter(isRecord) : []
+  const selected = checkpoints.find((item) => item.name === checkpointSelect.value)
+  if (selected) checkpointMeta.textContent = `${Number(selected.episodes ?? 0)} episodios · ${Number(selected.updates ?? 0)} actualizaciones · ε ${Number(selected.epsilon ?? 0).toFixed(3)} · ${String(selected.updated_at ?? 'fecha desconocida')}`
+})
+activateCheckpointButton.addEventListener('click', async () => {
+  if (!api || !checkpointSelect.value) return
+  activateCheckpointButton.disabled = true
+  try {
+    const result = await api.activateQlearningCheckpoint(checkpointSelect.value)
+    showQTraining(result)
+    checkpointMeta.textContent = 'Memoria activada. El siguiente episodio continuará desde ese checkpoint.'
+    manualSessionId = undefined
+    automaticRunning = false
+    manualButton.textContent = `Entrenar Q-learning en L${difficultySelect.value}`
+    await refreshCheckpoints()
+  } catch (error) {
+    hud.showNotice('No se pudo activar el checkpoint', errorMessage(error))
+  } finally {
+    activateCheckpointButton.disabled = !apiOnline || !checkpointSelect.value
+  }
+})
+snapshotCheckpointButton.addEventListener('click', async () => {
+  if (!api || !checkpointSelect.value) return
+  snapshotCheckpointButton.disabled = true
+  try {
+    const label = `memoria-ep-${Date.now()}`
+    await api.snapshotQlearningCheckpoint(label)
+    await refreshCheckpoints()
+    checkpointMeta.textContent = 'Copia guardada. Puedes volver a activarla cuando quieras.'
+  } catch (error) {
+    hud.showNotice('No se pudo guardar la copia', errorMessage(error))
+  } finally {
+    snapshotCheckpointButton.disabled = !apiOnline || !checkpointSelect.value
+  }
+})
 loadEpisodeButton.addEventListener('click', () => { void loadStoredEpisode(Number(episodeNumberInput.value)) })
 episodeNumberInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') void loadStoredEpisode(Number(episodeNumberInput.value))
 })
 
-keypadButtons.forEach((button) => {
-  button.addEventListener('click', () => { void sendManualAction(Number(button.dataset.action)) })
-})
-
-window.addEventListener('keydown', (event) => {
-  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) return
-  const actions: Partial<Record<string, number>> = { ArrowUp: 0, ArrowLeft: 3, ArrowRight: 4, r: 5, R: 5 }
-  const action = actions[event.key]
-  if (action === undefined || !manualSessionId) return
-  event.preventDefault()
-  void sendManualAction(action)
-})
 
 demoReplayButton.addEventListener('click', async () => {
   setBusy(demoReplayButton, true, 'Ver demo REPLAY', 'Cargando…')
@@ -750,99 +1019,11 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
   }
 })
 
-mountViewerControls({
-  baseUrl: () => api?.baseUrl,
-  replay: (payload, label) => {
-    const bundle = normalizeReplayBundle(payload)
-    loadEpisode(bundle.episodes[0], bundle.map, 'replay', label)
-    setProvenance('PPO · entrenamiento histórico', label)
-    scene.setPlaying(true)
-  },
-})
-
-mountAgentTraining({
-  baseUrl: () => api?.baseUrl,
-  level: () => Number(difficultySelect.value),
-  replay: (payload, label) => {
-    const bundle = normalizeReplayBundle(payload)
-    loadEpisode(bundle.episodes[0], bundle.map, 'replay', label)
-    setProvenance('PPO · entrenamiento', label)
-    scene.setPlaying(true)
-  },
-  frame: (payload, label) => {
-    const episode = normalizeEpisode(payload, { mode: 'evaluación', modelName: 'PPO' })
-    loadEpisode(episode, mapFromPayload(payload) ?? currentMap, 'api', label)
-    setProvenance('PPO · pesos congelados', label)
-    scene.seek(episode.frames.length - 1)
-  },
-})
-
-const requestedEpisode = Number(new URLSearchParams(window.location.search).get('episode'))
-if (Number.isInteger(requestedEpisode) && requestedEpisode > 0) {
-  document.dispatchEvent(new Event('historical-replay-selected'))
-  required<HTMLInputElement>('#agentFollow').checked = false
-}
-void connectApi().then(async () => {
-  if (apiOnline && Number.isInteger(requestedEpisode) && requestedEpisode > 0) {
-    episodeNumberInput.value = String(requestedEpisode)
-    await loadStoredEpisode(requestedEpisode)
-  }
-})
+difficultySelect.value = '1'
 updatePlanetaryLevel()
-
-required<HTMLInputElement>('#showTrail').addEventListener('change',event => scene.setTrailVisible((event.target as HTMLInputElement).checked))
-required<HTMLInputElement>('#showReference').addEventListener('change',event => scene.setReferenceVisible((event.target as HTMLInputElement).checked))
-required<HTMLSelectElement>('#episodeMode').addEventListener('change',() => { void refreshEpisodes() })
-required<HTMLButtonElement>('#compareAttempts').addEventListener('click',async () => {
-  if (!api) return
-  try {
-    const ids=required<HTMLInputElement>('#compareNumbers').value.split(/[,;\s]+/).filter(Boolean).map(Number)
-    const result=await api.compareEpisodes(ids)
-    renderComparison(result)
-  } catch(error) { required<HTMLElement>('#comparisonResult').textContent=errorMessage(error) }
-})
-required<HTMLButtonElement>('#scenarioProgress').addEventListener('click',async () => {
-  if (!api) return
-  try {
-    const result=await api.scenarioProgress(`scenario_${difficultySelect.value.padStart(2,'0')}`,required<HTMLSelectElement>('#episodeMode').value)
-    renderComparison(result)
-  } catch(error) { required<HTMLElement>('#comparisonResult').textContent=errorMessage(error) }
-})
-
-function renderComparison(payload: unknown) {
-  const output=required<HTMLElement>('#comparisonResult')
-  output.replaceChildren()
-  if (!isRecord(payload)) return
-  const heading=document.createElement('h3')
-  heading.textContent=payload.scenario_id ? `Aprendizaje · ${String(payload.scenario_id)}` : 'Comparación de intentos'
-  output.append(heading)
-  if (typeof payload.episodes==='number') {
-    const summary=document.createElement('p')
-    summary.textContent=`${payload.episodes} intentos · éxito ${(Number(payload.success_rate ?? 0)*100).toFixed(1)}% · recompensa media ${Number(payload.reward_mean ?? 0).toFixed(2)}`
-    output.append(summary)
+void connectApi().then(() => {
+  if (apiOnline) {
+    void loadPpoCampaign()
+    if (!manualSessionId) void startManualMode()
   }
-  const groups: [string, unknown][] = Array.isArray(payload.episodes)
-    ? [['Intentos seleccionados',payload.episodes]]
-    : [['Primeros',payload.first],['Intermedios',payload.middle],['Recientes',payload.recent],['Mejor ruta completada',payload.best ? [payload.best] : []]]
-  for (const [label,items] of groups) {
-    if (!Array.isArray(items)) continue
-    const title=document.createElement('h4');title.textContent=label;output.append(title)
-    const table=document.createElement('table');table.style.width='100%'
-    const header=document.createElement('tr')
-    for (const name of ['Intento','Resultado','Recompensa','Choques','Distancia','Energía','Eficiencia']) { const cell=document.createElement('th');cell.textContent=name;header.append(cell) }
-    table.append(header)
-    for (const item of items.filter(isRecord)) {
-      const row=document.createElement('tr')
-      const values=[`#${item.episode_number}`,String(item.end),Number(item.reward).toFixed(1),String(item.collisions),`${Number(item.path_length).toFixed(1)} m`,Number(item.energy_consumed ?? 0).toFixed(1),typeof item.path_efficiency==='number' ? item.path_efficiency.toFixed(3) : '—']
-      for (const value of values) {const cell=document.createElement('td');cell.textContent=value;row.append(cell)}
-      row.style.cursor='pointer';row.title='Reproducir este intento'
-      row.addEventListener('click',()=>{ void loadStoredEpisode(Number(item.episode_number)) })
-      table.append(row)
-    }
-    output.append(table)
-  }
-  const policies=Array.isArray(payload.evaluated_policies) ? payload.evaluated_policies.filter(isRecord) : []
-  const status=document.createElement('p')
-  status.textContent=policies.length ? `Mejor política evaluada: ${String(policies[0].policy_version)} · ${Number(policies[0].episodes)} pruebas · éxito ${(Number(policies[0].success_rate)*100).toFixed(1)}%` : 'Sin evaluación de políticas suficiente para afirmar aprendizaje.'
-  output.append(status)
-}
+})

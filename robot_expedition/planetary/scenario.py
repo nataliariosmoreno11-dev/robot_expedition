@@ -234,8 +234,9 @@ class ScenarioGenerator:
     def _place_rocks(self, rng: np.random.Generator, spec: CurriculumLevel) -> list[tuple]:
         rocks: list[tuple] = []
         occupied: list[tuple[float, float]] = []
+        clearance = max(0.46, 0.76 - spec.level * 0.035)
         for _ in range(spec.rocks):
-            x, y = self._point(rng, spec, occupied, clearance=0.72)
+            x, y = self._point(rng, spec, occupied, clearance=clearance)
             occupied.append((x, y))
             hx, hy = rng.uniform(0.30, 0.62, size=2)
             height = float(rng.uniform(0.35, 0.90))
@@ -273,7 +274,7 @@ class ScenarioGenerator:
         samples: list[SampleSpec],
         base_traction: float,
     ) -> list[tuple[float, float, float, float, float]]:
-        count = 0 if spec.level < 3 else 1 if spec.level < 6 else 2
+        count = 0 if spec.level < 3 else 1 if spec.level < 5 else 2 if spec.level < 7 else 3
         occupied = [(rock[0], rock[1]) for rock in rocks]
         occupied.extend((sample.x, sample.y) for sample in samples)
         zones = []

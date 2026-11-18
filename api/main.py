@@ -41,13 +41,93 @@ from robot_expedition.envs.planetary_exploration import (  # noqa: E402
     PlanetaryExplorationEnv,
 )
 from robot_expedition.planetary.episode_store import EpisodeStore  # noqa: E402
+from robot_expedition.planetary.qlearning import PlanetaryQLearningAgent  # noqa: E402
 
 API_VERSION = "1.1.0"
 MAX_SEEDS = 20                 # la web corta las solicitudes a los 12 s
 MAX_SESSIONS = 50
 SESSION_TTL_S = 15 * 60
 STARTED = time.time()
-EPISODE_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", ROOT / "logs" / "planetary_episodes.sqlite"))
+DATA_DIR = Path(os.environ.get("EXPEDITION_DATA_DIR", ROOT))
+EPISODE_DB = Path(os.environ.get("EXPEDITION_EPISODE_DB", DATA_DIR / "logs" / "planetary_episodes.sqlite"))
+PLANETARY_Q_CHECKPOINT = Path(os.environ.get(
+    "PLANETARY_Q_CHECKPOINT", DATA_DIR / "models" / "planetary_qlearning.npz"
+))
+PLANETARY_Q_CHECKPOINT_DIR = Path(os.environ.get(
+    "PLANETARY_Q_CHECKPOINT_DIR", PLANETARY_Q_CHECKPOINT.parent
+))
+PLANETARY_Q_SELECTION = PLANETARY_Q_CHECKPOINT_DIR / "planetary_qlearning_active.json"
+q_checkpoint_lock = threading.Lock()
+
+# Hitos PPO aprobados en la campana fija de Tomas. Se publican como evidencia
+# de entrenamiento y no reemplazan el Q-learning interactivo de esta rama.
+PPO_CAMPAIGN_MODELS = (
+    "f7c104a304f25b458721258b540a337e",
+    "d0ecdae6689f527b835c1e473e893d0c",
+    "d0c438b791c156688c71cf58c69fceb5",
+    "bdbc0d04fffe5c37a5a5ac5a05013889",
+    "646fbc70700f5ab8b2363524540fddca",
+    "156aaf20543e523eb1fa4594547d956e",
+    "6109346a105e5f3e82134dc9cafbbcb9",
+    "4bcfd8f641df50b9b5460d76b8c56482",
+)
+
+
+def _json_file(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _campaign_evidence(model_dir: Path, level: int) -> dict | None:
+    evidence_files = sorted((model_dir / "evidence").glob("*.json"))
+    preferred = [path for path in evidence_files if f"-{level}" in path.stem]
+    for path in reversed(preferred or evidence_files):
+        payload = _json_file(path)
+        metrics = payload.get("metrics")
+        if isinstance(metrics, dict):
+            return {"file": path.name, "metrics": metrics,
+                    "cases": len(payload.get("cases", []))}
+    return None
+
+
+def _relative_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def _checkpoint_candidates() -> list[Path]:
+    PLANETARY_Q_CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    candidates = set(PLANETARY_Q_CHECKPOINT_DIR.glob("*.npz"))
+    if PLANETARY_Q_CHECKPOINT.exists():
+        candidates.add(PLANETARY_Q_CHECKPOINT)
+    return sorted(candidates, key=lambda path: path.stat().st_mtime, reverse=True)
+
+
+def _active_checkpoint() -> Path:
+    try:
+        selected = json.loads(PLANETARY_Q_SELECTION.read_text(encoding="utf-8"))["name"]
+        candidate = PLANETARY_Q_CHECKPOINT_DIR / Path(selected).name
+        if candidate.exists() and candidate.suffix == ".npz":
+            return candidate
+    except (OSError, KeyError, TypeError, json.JSONDecodeError):
+        pass
+    return PLANETARY_Q_CHECKPOINT
+
+
+def _checkpoint_info(path: Path, *, active: Path | None = None) -> dict:
+    agent = PlanetaryQLearningAgent()
+    agent.load(path)
+    stat = path.stat()
+    return {
+        "name": path.name,
+        "path": _relative_path(path),
+        "active": path.resolve() == (active or _active_checkpoint()).resolve(),
+        "size_bytes": stat.st_size,
+        "updated_at": datetime.fromtimestamp(stat.st_mtime, timezone.utc).isoformat(timespec="seconds"),
+        **agent.snapshot(),
+    }
+
 
 store = Store(ROOT)
 app = FastAPI(title="Robot Expedition API", version=API_VERSION,
@@ -60,6 +140,7 @@ DEFAULT_ORIGINS = "http://localhost:5173,http://localhost:4173,https://web-five-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[o.strip() for o in os.environ.get("ALLOWED_ORIGINS", DEFAULT_ORIGINS).split(",") if o.strip()],
+    allow_origin_regex=r"^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?$",
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Accept"],
 )
@@ -260,6 +341,132 @@ def evaluate(req: EvaluateRequest):
 
 
 # ------------------------------------------------------- control manual
+class PlanetaryRulePolicy:
+    """Política reactiva autónoma que navega solo con la observación pública."""
+
+    def __init__(self):
+        self.steps = 0
+        self.search_direction = 1
+        self.stalled_steps = 0
+        self.recovery_steps = 0
+
+    def __call__(self, observation) -> int:
+        self.steps += 1
+        rays = observation[:9]
+        relative_sin = float(observation[10])
+        relative_cos = float(observation[11])
+        collected_fraction = float(observation[15])
+        visible_distance = float(observation[22])
+        target_type = max(range(3), key=lambda index: float(observation[18 + index]))
+        visible_type = max(range(3), key=lambda index: float(observation[23 + index]))
+        correct_sample_visible = bool(observation[21] > 0.5 and target_type == visible_type)
+        returning_to_base = collected_fraction >= 0.999
+
+        speed = abs(float(observation[12]))
+        if speed < 0.045:
+            self.stalled_steps += 1
+        else:
+            self.stalled_steps = max(0, self.stalled_steps - 2)
+        if self.stalled_steps >= 7 and self.recovery_steps == 0:
+            self.recovery_steps = 18
+            self.stalled_steps = 0
+            self.search_direction *= -1
+
+        # Maniobra finita de escape: gira para salir de la cara del obstáculo y
+        # después avanza en arco. Evita repetir eternamente la misma decisión.
+        if self.recovery_steps > 0:
+            phase = self.recovery_steps
+            self.recovery_steps -= 1
+            if phase > 9:
+                return 3 if self.search_direction > 0 else 4
+            return 1 if self.search_direction > 0 else 2
+
+        if correct_sample_visible and visible_distance <= 0.62:
+            return 5
+
+        # La dirección de una muestra visible o de la base está codificada en
+        # sin/cos relativos. El controlador corrige rumbo antes de avanzar.
+        has_navigation_target = returning_to_base or correct_sample_visible
+        if has_navigation_target:
+            if relative_cos < -0.2:
+                return 3 if relative_sin >= 0 else 4
+            if relative_sin > 0.22:
+                return 1
+            if relative_sin < -0.22:
+                return 2
+
+        # Los nueve rayos van de izquierda a derecha. Si el frente está
+        # bloqueado, gira hacia el lado con más espacio medido por el LIDAR.
+        front = min(float(value) for value in rays[3:6])
+        left_clearance = sum(float(value) for value in rays[:4])
+        right_clearance = sum(float(value) for value in rays[5:])
+        if front < 0.72:
+            self.search_direction = 1 if left_clearance >= right_clearance else -1
+            return 3 if self.search_direction > 0 else 4
+
+        if has_navigation_target:
+            return 0
+
+        # Exploración sin mapa privilegiado: arcos largos alternados barren el
+        # terreno hasta que cámara/sensores detectan la muestra correcta.
+        phase = self.steps % 72
+        if phase == 0:
+            self.search_direction *= -1
+        if phase < 12:
+            return 1 if self.search_direction > 0 else 2
+        if phase in range(46, 52):
+            return 3 if self.search_direction > 0 else 4
+        return 0
+
+
+class PlanetaryQLearningPolicy:
+    """Q-learning persistente con la política reactiva como guía inicial."""
+
+    def __init__(self, seed: int, checkpoint: Path | None = None):
+        self.guide = PlanetaryRulePolicy()
+        self.checkpoint = Path(checkpoint or _active_checkpoint())
+        self.agent = PlanetaryQLearningAgent(seed=seed)
+        with q_checkpoint_lock:
+            self.agent.load(self.checkpoint)
+        self.last_state = None
+        self.last_action = None
+        self.recent_states: deque[tuple[int, ...]] = deque(maxlen=18)
+        self.loop_escapes = 0
+        self.escape_direction = 1
+
+    def __call__(self, observation) -> int:
+        guide_action = self.guide(observation)
+        self.last_state, self.last_action = self.agent.choose(observation, guide_action=guide_action)
+        repetitions = sum(state == self.last_state for state in self.recent_states)
+        self.recent_states.append(self.last_state)
+        # Un estado sensorial repetido muchas veces suele ser un giro circular
+        # o una cara de obstaculo. Fuerza una maniobra corta distinta y deja
+        # que la recompensa negativa actualice precisamente esa accion.
+        if repetitions >= 5 and self.last_action != len(PLANETARY_ACTIONS) - 1:
+            visits = self.agent.visit_counts(self.last_state)
+            candidates = (3, 4, 1, 2, 0)
+            self.last_action = min(candidates, key=lambda action: int(visits[action]))
+            if self.last_action in (3, 4):
+                self.last_action = 3 if self.escape_direction > 0 else 4
+                self.escape_direction *= -1
+            self.loop_escapes += 1
+            self.recent_states.clear()
+        return self.last_action
+
+    def learn(self, reward: float, next_observation, done: bool) -> None:
+        if self.last_state is None or self.last_action is None:
+            return
+        self.agent.learn(self.last_state, self.last_action, reward, next_observation, done)
+        if done:
+            self.agent.finish_episode()
+            with q_checkpoint_lock:
+                self.agent.save(self.checkpoint)
+
+    def snapshot(self) -> dict:
+        return {**self.agent.snapshot(), "loop_escapes": self.loop_escapes}
+
+
+
 class Session:
     def __init__(self, level_id: str, policy, policy_id: str, seed: int,
                  environment_kind: str = "beacon", difficulty_level: int = 1):
@@ -272,7 +479,7 @@ class Session:
                 record_episodes=True,
                 run_id="api-manual" if policy is None else policy_id,
                 policy_version=policy_id,
-                mode="manual" if policy is None else "evaluación",
+                mode="manual" if policy is None else ("entrenamiento" if policy_id == "planetary-qlearning" else "evaluación"),
                 update_curriculum=False,
             )
             self.action_names = [item[0] for item in PLANETARY_ACTIONS]
@@ -282,6 +489,11 @@ class Session:
         self.policy, self.policy_id, self.level_id = policy, policy_id, level_id
         self.environment_kind = environment_kind
         self.obs, _ = self.env.reset(seed=seed)
+        if environment_kind == "planetary" and policy_id in {"planetary-rule", "planetary-qlearning"}:
+            if policy_id == "planetary-qlearning":
+                self.env.max_steps = 350 + difficulty_level * 55
+            else:
+                self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
         self.done, self.total, self.touched = False, 0.0, time.time()
 
 
@@ -318,10 +530,16 @@ def sim_reset(req: ResetRequest):
         from pipelines.policies import PPOPolicy
         directory = checkpoint_for(req.policy.removeprefix("trained:"))
         policy = PPOPolicy(directory / "ppo_model.zip", directory / "vecnormalize.pkl")
-    elif req.environment == "planetary" and req.policy != "manual":
-        fail(422, "los modelos publicados usan el contrato anterior; usa manual o entrena exp-007-planetary")
+    elif req.policy == "manual":
+        policy = None
+    elif req.environment == "planetary" and req.policy == "planetary-rule":
+        policy = PlanetaryRulePolicy()
+    elif req.environment == "planetary" and req.policy == "planetary-qlearning":
+        policy = PlanetaryQLearningPolicy(req.seed)
+    elif req.environment == "planetary":
+        fail(422, "política planetaria desconocida")
     else:
-        policy = None if req.policy == "manual" else policy_for(req.policy)
+        policy = policy_for(req.policy)
     session = Session(
         req.level_id,
         policy,
@@ -365,7 +583,10 @@ def sim_step(req: StepRequest):
     session.obs, reward, terminated, truncated, info = session.env.step(action)
     session.total += reward
     session.done = terminated or truncated
+    if hasattr(session.policy, "learn"):
+        session.policy.learn(float(reward), session.obs, session.done)
     session.touched = time.time()
+    training = session.policy.snapshot() if hasattr(session.policy, "snapshot") else None
     return {"session_id": req.session_id, "frame": frame(session.env, action, reward, info["collision"]),
             "action": action, "action_name": session.action_names[action], "reward": round(float(reward), 4),
             "return": round(session.total, 4), "terminated": terminated, "truncated": truncated,
@@ -375,7 +596,8 @@ def sim_step(req: StepRequest):
             "target_type": info.get("target_type"),
             "requested_samples": info.get("requested_samples"),
             "samples_collected": info.get("samples_collected"),
-            "inventory": info.get("inventory")}
+            "storm_intensity": info.get("storm_intensity", 0.0),
+            "inventory": info.get("inventory"), "training": training}
 
 
 # ------------------------------------------------------- historial planetario
@@ -385,6 +607,147 @@ def _with_episode_store(callback):
         return callback(store)
     finally:
         store.close()
+
+
+@app.get("/training/qlearning")
+def qlearning_training_status():
+    checkpoint_path = _active_checkpoint()
+    agent = PlanetaryQLearningAgent()
+    with q_checkpoint_lock:
+        agent.load(checkpoint_path)
+    return {
+        **agent.snapshot(),
+        "checkpoint": _relative_path(checkpoint_path),
+        "checkpoint_name": checkpoint_path.name,
+        "persistent_data_dir": str(DATA_DIR),
+    }
+
+
+@app.get("/training/ppo/campaign")
+def ppo_campaign_catalog():
+    """Ocho niveles fijos y sus checkpoints PPO aprobados, listos para la defensa."""
+    levels = []
+    for level, run_id in enumerate(PPO_CAMPAIGN_MODELS, start=1):
+        scenario_path = ROOT / "configs" / "campaign" / f"scenario_{level:02d}.json"
+        model_dir = ROOT / "models" / run_id
+        if not scenario_path.is_file() or not (model_dir / "approved-version.json").is_file():
+            continue
+        scenario = _json_file(scenario_path)
+        approved = _json_file(model_dir / "approved-version.json")
+        evidence = _campaign_evidence(model_dir, level)
+        levels.append({
+            "level": level,
+            "scenario": scenario,
+            "model": {
+                "run_id": run_id,
+                "algorithm": "PPO",
+                "total_timesteps": approved.get("total_timesteps", 0),
+                "completed_scenarios": approved.get("completed_scenarios", []),
+                "weights_sha256": approved.get("weights_sha256"),
+                "checkpoint_complete": all((model_dir / name).is_file() for name in (
+                    "ppo_model.zip", "vecnormalize.pkl", "optimizer.pt", "checkpoint_state.json"
+                )),
+            },
+            "evidence": evidence,
+        })
+    return {
+        "schema": "ppo-fixed-campaign/v1",
+        "algorithm": "PPO",
+        "levels": levels,
+        "latest_run_id": PPO_CAMPAIGN_MODELS[-1],
+        "latest_total_timesteps": levels[-1]["model"]["total_timesteps"] if levels else 0,
+        "training_available": os.environ.get("ENABLE_LOCAL_TRAINING") == "1",
+        "deployment_mode": "inference-and-evidence",
+    }
+
+
+@app.get("/training/ppo/campaign/{level}/replay")
+def ppo_campaign_replay(level: int):
+    """Caso real de evaluacion que permite inspeccionar la ruta aprendida."""
+    if level < 1 or level > len(PPO_CAMPAIGN_MODELS):
+        fail(404, "nivel PPO desconocido")
+    model_dir = ROOT / "models" / PPO_CAMPAIGN_MODELS[level - 1]
+    evidence_files = sorted((model_dir / "evidence").glob("*.json"))
+    preferred = [path for path in evidence_files if f"-{level}" in path.stem]
+    for path in reversed(preferred or evidence_files):
+        payload = _json_file(path)
+        cases = payload.get("cases", [])
+        matching = [case for case in cases if int(case.get("difficulty_level", 0)) == level]
+        if matching:
+            return {"level": level, "run_id": PPO_CAMPAIGN_MODELS[level - 1],
+                    "source": path.name, "case": matching[0], "metrics": payload.get("metrics", {})}
+    fail(404, "el checkpoint no contiene un caso reproducible para este nivel")
+
+
+@app.get("/training/qlearning/checkpoints")
+def qlearning_checkpoints():
+    """Lista únicamente checkpoints compatibles con el agente planetario."""
+    active = _active_checkpoint()
+    compatible, incompatible = [], []
+    with q_checkpoint_lock:
+        for path in _checkpoint_candidates():
+            try:
+                compatible.append(_checkpoint_info(path, active=active))
+            except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+                incompatible.append({"name": path.name, "reason": str(exc)})
+    return {
+        "active": active.name,
+        "directory": str(PLANETARY_Q_CHECKPOINT_DIR),
+        "persistent": DATA_DIR.resolve() != ROOT.resolve(),
+        "checkpoints": compatible,
+        "incompatible": incompatible,
+    }
+
+
+class ActivateCheckpointRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+
+
+@app.post("/training/qlearning/checkpoints/activate")
+def activate_qlearning_checkpoint(req: ActivateCheckpointRequest):
+    name = Path(req.name).name
+    if name != req.name or not re.fullmatch(r"[A-Za-z0-9_.-]+\.npz", name):
+        fail(422, "nombre de checkpoint inválido")
+    candidate = PLANETARY_Q_CHECKPOINT_DIR / name
+    if not candidate.is_file():
+        fail(404, f"no existe el checkpoint {name}")
+    with q_checkpoint_lock:
+        try:
+            info = _checkpoint_info(candidate, active=candidate)
+        except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+            fail(409, f"checkpoint incompatible: {exc}")
+        PLANETARY_Q_SELECTION.write_text(json.dumps({"name": name}), encoding="utf-8")
+    return {**info, "message": "checkpoint activado; el próximo episodio continuará desde este estado"}
+
+
+class SnapshotCheckpointRequest(BaseModel):
+    name: str = Field(default="", max_length=80)
+
+
+@app.post("/training/qlearning/checkpoints/snapshot")
+def snapshot_qlearning_checkpoint(req: SnapshotCheckpointRequest):
+    source = _active_checkpoint()
+    if not source.exists():
+        fail(409, "todavía no existe un checkpoint para guardar")
+    stem = re.sub(r"[^A-Za-z0-9_-]+", "-", req.name.strip()).strip("-")
+    if not stem:
+        stem = datetime.now(timezone.utc).strftime("checkpoint-%Y%m%d-%H%M%S")
+    destination = PLANETARY_Q_CHECKPOINT_DIR / f"{stem}.npz"
+    if destination.exists():
+        fail(409, f"ya existe {destination.name}; usa otro nombre")
+    with q_checkpoint_lock:
+        shutil.copy2(source, destination)
+        return _checkpoint_info(destination)
+
+
+# ------------------------------------------------------- historial planetario
+def _with_episode_store(callback):
+    store = EpisodeStore(EPISODE_DB)
+    try:
+        return callback(store)
+    finally:
+        store.close()
+
 
 
 @app.get("/episodes")
