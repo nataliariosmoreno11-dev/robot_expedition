@@ -328,3 +328,34 @@ def test_cors_allows_the_vercel_origin_only():
     bad = client.options("/catalog", headers={"Origin": "https://evil.example",
                                               "Access-Control-Request-Method": "GET"})
     assert "access-control-allow-origin" not in bad.headers
+
+
+def test_qlearning_seed_downloads_only_when_checkpoint_is_missing(tmp_path, monkeypatch):
+    from robot_expedition.planetary.qlearning import PlanetaryQLearningAgent
+
+    seed = PlanetaryQLearningAgent()
+    seed.episodes = 42
+    seed_file = seed.save(tmp_path / "seed.npz")
+    checkpoint = tmp_path / "data" / "models" / "planetary_qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "PLANETARY_Q_SEED_URL", seed_file.as_uri())
+
+    assert api_main._seed_q_checkpoint() == "seeded"
+    assert PlanetaryQLearningAgent().load(checkpoint).episodes == 42
+
+    learned = PlanetaryQLearningAgent()
+    learned.episodes = 7
+    learned.save(checkpoint)
+    assert api_main._seed_q_checkpoint() == "existing"
+    assert PlanetaryQLearningAgent().load(checkpoint).episodes == 7     # nunca pisa lo aprendido
+
+
+def test_qlearning_seed_failure_keeps_api_usable(tmp_path, monkeypatch):
+    bad = tmp_path / "bad.npz"
+    bad.write_bytes(b"no es un npz")
+    checkpoint = tmp_path / "models" / "planetary_qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "PLANETARY_Q_SEED_URL", bad.as_uri())
+
+    assert api_main._seed_q_checkpoint() == "failed"
+    assert not checkpoint.exists() and not list(checkpoint.parent.glob("*.tmp"))

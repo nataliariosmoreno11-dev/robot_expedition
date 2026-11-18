@@ -253,6 +253,14 @@ la aplicación funciona, pero el sistema de archivos de Render puede perder esos
 al reiniciar. El catálogo y los modelos versionados de Tomás siguen separados y no se
 reescriben desde la web.
 
+Para que producción nunca arranque con el Q-learning vacío, la API descarga al iniciar un
+checkpoint base entrenado offline (release `qlearning-seed-v1`, variable
+`PLANETARY_Q_SEED_URL`; vacía la desactiva). Solo se descarga si el checkpoint activo no
+existe, así que nunca reemplaza lo aprendido. `/training/qlearning` indica en `seed` si se
+usó (`seeded`), si ya había uno (`existing`) o si falló la descarga (`failed`). Para
+regenerarlo: `python scripts/train_planetary_qlearning.py --out planetary_qlearning.npz --rounds 30`
+y subir el archivo como asset de una release nueva.
+
 La sección **Memoria del agente** permite consultar checkpoints Q-learning planetarios,
 activar uno para continuar sus episodios y crear una copia antes de experimentar. Los
 modelos históricos del catálogo permanecen disponibles para evaluación y no se presentan
