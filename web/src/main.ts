@@ -91,6 +91,7 @@ let automaticEpisodeCount = 0
 let automaticNetworkRetries = 0
 let lastVersion: Record<string, unknown> | undefined
 let latestQTraining: UnknownRecord | undefined
+let displayedEpisode: EpisodeData | undefined
 
 function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
   const width = map.active_extent?.[0] ?? map.size[0]
@@ -142,6 +143,22 @@ function drawMinimap(map: ExpeditionMap, frame?: ReplayFrame) {
   }
   const [baseX, baseY] = mapPoint(map, missionMinimap, map.base[0], map.base[1])
   context.fillStyle = '#8adb6f'; context.fillRect(baseX - 4, baseY - 4, 8, 8)
+  const route = displayedEpisode?.frames ?? []
+  if (route.length > 1) {
+    context.save()
+    context.strokeStyle = '#61d5d2'
+    context.lineWidth = 2.5
+    context.shadowColor = '#61d5d2'
+    context.shadowBlur = 5
+    context.beginPath()
+    route.forEach((routeFrame, index) => {
+      const [routeX, routeY] = mapPoint(map, missionMinimap, routeFrame[0], routeFrame[1])
+      if (index === 0) context.moveTo(routeX, routeY)
+      else context.lineTo(routeX, routeY)
+    })
+    context.stroke()
+    context.restore()
+  }
   if (frame) {
     const [x, y] = mapPoint(map, missionMinimap, frame[0], frame[1])
     context.fillStyle = '#fff'; context.beginPath(); context.arc(x, y, 4, 0, Math.PI * 2); context.fill()
@@ -360,6 +377,7 @@ const loadEpisode = (
   source: 'api' | 'replay',
   sourceLabel?: string,
 ) => {
+  displayedEpisode = episode
   currentMap = map
   updateReferenceMap(map)
   scene.setMap(map)

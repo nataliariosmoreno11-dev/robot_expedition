@@ -13,9 +13,9 @@ interface SceneCallbacks {
 
 const MAX_TRAIL = 1200
 const STAGE_COLORS = [
-  new THREE.Color(0xf5f0ea),
-  new THREE.Color(0xe6c36a),
-  new THREE.Color(0x7fd692),
+  new THREE.Color(0x61d5d2),
+  new THREE.Color(0xffb15f),
+  new THREE.Color(0x8fe18e),
 ]
 
 export class ExpeditionScene {
@@ -31,6 +31,7 @@ export class ExpeditionScene {
   private rays: SensorRays
   private trailGeometry = new THREE.BufferGeometry()
   private trail: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>
+  private trailPoints: THREE.Points<THREE.BufferGeometry, THREE.PointsMaterial>
   private reference?: THREE.Line
   private referenceVisible = false
   private map?: ExpeditionMap
@@ -77,8 +78,24 @@ export class ExpeditionScene {
 
     this.trailGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_TRAIL * 3), 3))
     this.trailGeometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(MAX_TRAIL * 3), 3))
-    this.trail = new THREE.Line(this.trailGeometry, new THREE.LineBasicMaterial({ vertexColors: true }))
+    this.trail = new THREE.Line(this.trailGeometry, new THREE.LineBasicMaterial({
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.95,
+      depthTest: false,
+    }))
+    this.trail.renderOrder = 20
+    this.trailPoints = new THREE.Points(this.trailGeometry, new THREE.PointsMaterial({
+      vertexColors: true,
+      size: 0.075,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.92,
+      depthTest: false,
+    }))
+    this.trailPoints.renderOrder = 21
     this.scene.add(this.trail)
+    this.scene.add(this.trailPoints)
 
     new ResizeObserver(() => this.resize()).observe(this.container)
     this.renderer.setAnimationLoop(() => this.animate())
@@ -148,7 +165,10 @@ export class ExpeditionScene {
     this.callbacks.onPlaybackChange(this.playingState)
   }
 
-  setTrailVisible(visible: boolean) { this.trail.visible = visible }
+  setTrailVisible(visible: boolean) {
+    this.trail.visible = visible
+    this.trailPoints.visible = visible
+  }
 
   setReferenceVisible(visible: boolean) {
     this.referenceVisible = visible
