@@ -328,3 +328,16 @@ def test_cors_allows_the_vercel_origin_only():
     bad = client.options("/catalog", headers={"Origin": "https://evil.example",
                                               "Access-Control-Request-Method": "GET"})
     assert "access-control-allow-origin" not in bad.headers
+
+
+def test_campaign_progress_picks_most_advanced_run_not_newest_file(tmp_path, monkeypatch):
+    import json as _json, os as _os
+    for run_id, passed, step, mtime in (("a" * 32, 8, 7_000_000, 100), ("b" * 32, 4, 2_000_000, 999)):
+        path = tmp_path / "models" / run_id / "curriculum_state.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(_json.dumps({"schema": "fixed-campaign-curriculum/v1", "current_level": passed + 1,
+                                     "evaluations": {str(i): {"passed": True, "training_step": step}
+                                                     for i in range(1, passed + 1)}}))
+        _os.utime(path, (mtime, mtime))                      # el menos avanzado es el mas reciente
+    monkeypatch.setattr(api_main, "ROOT", tmp_path)
+    assert client.get("/campaign/progress").json()["run_id"] == "a" * 32
