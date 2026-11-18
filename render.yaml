@@ -5,8 +5,8 @@ services:
     name: robot-expedition-api
     runtime: python
     plan: free
-    # Despliegue aislado para revisar la integración sin tocar main.
-    branch: natalia
+    # Producción sigue el código integrado y validado.
+    branch: main
     buildCommand: pip install -r api/requirements-lite.txt
     startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
@@ -20,6 +20,6 @@ services:
       - key: ALLOWED_ORIGINS
         value: https://web-five-gules-83.vercel.app
       - key: RELEASE
-        value: v1.1-natalia-ppo8
+        value: v1.2-main-ppo8-qlearning
       - key: EXPEDITION_DATA_DIR
         value: /tmp/robot-expedition
