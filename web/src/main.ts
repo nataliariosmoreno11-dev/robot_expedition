@@ -45,6 +45,13 @@ const episodeNumberInput = required<HTMLInputElement>('#episodeNumberInput')
 const episodeList = required<HTMLElement>('#episodeList')
 const learningMeta = required<HTMLElement>('#learningMeta')
 const qTrainingStatus = required<HTMLElement>('#qTrainingStatus')
+const episodeModelCheckpoint = required<HTMLElement>('#episodeModelCheckpoint')
+const episodeModelStates = required<HTMLElement>('#episodeModelStates')
+const episodeModelConnections = required<HTMLElement>('#episodeModelConnections')
+const episodeModelUpdates = required<HTMLElement>('#episodeModelUpdates')
+const episodeModelEpsilon = required<HTMLElement>('#episodeModelEpsilon')
+const episodeModelRates = required<HTMLElement>('#episodeModelRates')
+const episodeModelDecisions = required<HTMLElement>('#episodeModelDecisions')
 const checkpointSelect = required<HTMLSelectElement>('#checkpointSelect')
 const checkpointMeta = required<HTMLElement>('#checkpointMeta')
 const activateCheckpointButton = required<HTMLButtonElement>('#activateCheckpointButton')
@@ -83,6 +90,7 @@ let automaticTimer: number | undefined
 let automaticEpisodeCount = 0
 let automaticNetworkRetries = 0
 let lastVersion: Record<string, unknown> | undefined
+let latestQTraining: UnknownRecord | undefined
 
 function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
   const width = map.active_extent?.[0] ?? map.size[0]
@@ -213,6 +221,7 @@ const setProvenance = (trained: string, config: string) => {
 
 const showQTraining = (value: unknown) => {
   if (!isRecord(value)) return
+  latestQTraining = value
   const episode = Number(value.episodes ?? 0)
   const states = Number(value.states ?? 0)
   const updates = Number(value.updates ?? 0)
@@ -223,6 +232,14 @@ const showQTraining = (value: unknown) => {
   const totalDecisions = guided + random + Number(value.greedy_decisions ?? 0)
   const guidance = totalDecisions ? ` · guía ${((guided / totalDecisions) * 100).toFixed(0)}%` : ''
   qTrainingStatus.textContent = `Q-learning · episodio ${episode} · ${states} estados · ${updates} actualizaciones · ε ${epsilon.toFixed(3)}${guidance}${escapes ? ` · ${escapes} escapes de ciclo` : ''}`
+  episodeModelCheckpoint.textContent = String(value.checkpoint ?? value.active_checkpoint ?? 'checkpoint activo')
+  episodeModelCheckpoint.title = episodeModelCheckpoint.textContent
+  episodeModelStates.textContent = states.toLocaleString('es-CO')
+  episodeModelConnections.textContent = `${(states * 7).toLocaleString('es-CO')} conexiones Q`
+  episodeModelUpdates.textContent = updates.toLocaleString('es-CO')
+  episodeModelEpsilon.textContent = epsilon.toFixed(3)
+  episodeModelRates.textContent = `${Number(value.alpha ?? 0).toFixed(2)} / ${Number(value.gamma ?? 0).toFixed(2)}`
+  episodeModelDecisions.textContent = totalDecisions.toLocaleString('es-CO')
 }
 
 async function refreshCheckpoints() {
@@ -472,10 +489,12 @@ async function refreshEpisodes() {
   const activeApi = api
   refreshEpisodesButton.disabled = true
   try {
-    const [payload, metricsPayload] = await Promise.all([
+    const [payload, metricsPayload, qTrainingPayload] = await Promise.all([
       api.episodes(100),
       api.episodeMetrics().catch(() => undefined),
+      api.qlearningStatus().catch(() => undefined),
     ])
+    if (qTrainingPayload) showQTraining(qTrainingPayload)
     const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []
     const storage = isRecord(payload) && isRecord(payload.storage) ? payload.storage : undefined
     required<HTMLElement>('#experimentStorageMeta').textContent = storage
@@ -525,6 +544,12 @@ async function refreshEpisodes() {
       description.textContent = `${String(item.scenario_id ?? 'sin escenario')} · ${Number(item.samples_collected ?? 0)}/${Number(item.requested_samples ?? 0)} muestras`
       const status = document.createElement('small')
       status.textContent = `${String(item.end ?? 'en progreso')} · L${Number(item.difficulty_level ?? 1)} · ${String(item.terrain_signature ?? 'terreno legado')}`
+      const model = document.createElement('small')
+      model.className = 'episode-model-line'
+      const modelName = String(item.policy_version ?? item.model_name ?? 'planetary-qlearning')
+      const modelStates = Number(latestQTraining?.states ?? 0)
+      const modelConnections = modelStates * 7
+      model.textContent = `Modelo ${modelName} · 7 acciones · memoria asociada: ${modelStates.toLocaleString('es-CO')} estados / ${modelConnections.toLocaleString('es-CO')} conexiones · ${Number(latestQTraining?.updates ?? 0).toLocaleString('es-CO')} actualizaciones`
       const protect = document.createElement('button')
       protect.type = 'button'
       protect.className = `episode-protect${item.protected ? ' active' : ''}`
@@ -542,7 +567,7 @@ async function refreshEpisodes() {
           protect.disabled = false
         }
       })
-      button.append(numberLabel, description, status, protect)
+      button.append(numberLabel, description, status, protect, model)
       button.addEventListener('click', () => {
         episodeNumberInput.value = String(number)
         void loadStoredEpisode(number)

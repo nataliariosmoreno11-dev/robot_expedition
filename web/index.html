@@ -181,6 +181,27 @@
             <p class="mission-seed">Escenario: <b id="missionSeedValue">se genera al iniciar</b></p>
             <p id="qTrainingStatus" class="q-training-status">Q-learning: esperando conexión</p>
 
+            <section class="episode-model" aria-labelledby="episodeModelTitle">
+              <div class="episode-model-heading">
+                <div><span class="eyebrow">Modelo del episodio</span><strong id="episodeModelTitle">Q-learning tabular persistente</strong></div>
+                <span id="episodeModelCheckpoint" class="model-chip">SIN CHECKPOINT</span>
+              </div>
+              <div class="model-flow" aria-label="Conexiones del modelo de aprendizaje">
+                <div class="model-node"><b>11</b><span>señales de estado</span></div>
+                <div class="model-link"><span></span><small>codifica</small></div>
+                <div class="model-node model-memory"><b id="episodeModelStates">0</b><span>estados en memoria</span></div>
+                <div class="model-link"><span></span><small id="episodeModelConnections">0 conexiones</small></div>
+                <div class="model-node"><b>7</b><span>acciones posibles</span></div>
+              </div>
+              <div class="model-metrics">
+                <span><small>Actualizaciones Q</small><b id="episodeModelUpdates">0</b></span>
+                <span><small>Exploración ε</small><b id="episodeModelEpsilon">0.000</b></span>
+                <span><small>α / γ</small><b id="episodeModelRates">— / —</b></span>
+                <span><small>Decisiones</small><b id="episodeModelDecisions">0</b></span>
+              </div>
+              <p id="episodeModelPolicy" class="model-policy">Avanzar · diagonales · giros · recolectar · esperar</p>
+            </section>
+
             <div class="checkpoint-manager" aria-labelledby="checkpointTitle">
               <div class="checkpoint-heading">
                 <div><span class="eyebrow">Memoria del agente</span><strong id="checkpointTitle">Continuar entrenamiento</strong></div>
