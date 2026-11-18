@@ -1,0 +1,112 @@
+{
+  "versions": [
+    {
+      "run_id": "f7c104a304f25b458721258b540a337e",
+      "job_id": "f7c104a304f25b458721258b540a337e",
+      "completed_scenarios": [
+        1
+      ],
+      "source": "models/cfc7a1fb63ef4c91a1afb1e0e6828e3a/mastered-scenario-01-28072",
+      "total_timesteps": 28072,
+      "weights_sha256": "869c3908bf46ac5b1adbfaa14ffe7f17c3cc8e81deab108760faecbd48324060"
+    },
+    {
+      "run_id": "d0ecdae6689f527b835c1e473e893d0c",
+      "job_id": "d0ecdae6689f527b835c1e473e893d0c",
+      "completed_scenarios": [
+        1,
+        2
+      ],
+      "source": "models/a25e4a0a6f164b4c88aafc976be827f6/mastered-scenario-02-2214912",
+      "total_timesteps": 2214912,
+      "weights_sha256": "0e14e9ec2c96b5fc6e958cd2e86b46304e00dcdc276dbbc08c3ac1c786add942"
+    },
+    {
+      "run_id": "d0c438b791c156688c71cf58c69fceb5",
+      "job_id": "d0c438b791c156688c71cf58c69fceb5",
+      "completed_scenarios": [
+        1,
+        2,
+        3
+      ],
+      "source": "models/a25e4a0a6f164b4c88aafc976be827f6/mastered-scenario-03-2280448",
+      "total_timesteps": 2280448,
+      "weights_sha256": "bd7087da7c0ef31566273100f10d493e8a7a635accaebf4cde245bc2c9a2abde"
+    },
+    {
+      "run_id": "bdbc0d04fffe5c37a5a5ac5a05013889",
+      "job_id": "bdbc0d04fffe5c37a5a5ac5a05013889",
+      "completed_scenarios": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "source": "models/12e968e7e89048b3b5609aac9301d855/mastered-scenario-04-2329600",
+      "total_timesteps": 2329600,
+      "weights_sha256": "64d56b423c2422078b7ae63b44cc6609809f3b962afda74feca47d4ea3257432"
+    },
+    {
+      "run_id": "646fbc70700f5ab8b2363524540fddca",
+      "job_id": "646fbc70700f5ab8b2363524540fddca",
+      "completed_scenarios": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "source": "models/12e968e7e89048b3b5609aac9301d855/mastered-scenario-05-2345984",
+      "total_timesteps": 2345984,
+      "weights_sha256": "2f194ba2baa556474c48015168777c53199a782138435ec7dd8750c86d80be1b"
+    },
+    {
+      "run_id": "156aaf20543e523eb1fa4594547d956e",
+      "job_id": "156aaf20543e523eb1fa4594547d956e",
+      "completed_scenarios": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "source": "models/0af314b98d1c4513a53087da8199f4ab",
+      "total_timesteps": 5266272,
+      "weights_sha256": "3079df71dca8d9310fc48a52e08e1ce0f90731cf32ccde77c7dd78729c830c66"
+    },
+    {
+      "run_id": "6109346a105e5f3e82134dc9cafbbcb9",
+      "job_id": "6109346a105e5f3e82134dc9cafbbcb9",
+      "completed_scenarios": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "source": "models/951c605b179b47c38264af6474b45274/mastered-scenario-07-7084896",
+      "total_timesteps": 7084896,
+      "weights_sha256": "e42b1299a37a946567611a724fd9f20034d150de9f37eb79290d362d2871cb10"
+    },
+    {
+      "run_id": "4bcfd8f641df50b9b5460d76b8c56482",
+      "job_id": "4bcfd8f641df50b9b5460d76b8c56482",
+      "completed_scenarios": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "source": "models/f59726370d0d471a9790482135f4e3e2/mastered-scenario-08-7455260",
+      "total_timesteps": 7455260,
+      "weights_sha256": "a98e302c44f1d9532aa3cc8a0bea21fbbcd217447f6a62c295b92c64057c3722"
+    }
+  ]
+}

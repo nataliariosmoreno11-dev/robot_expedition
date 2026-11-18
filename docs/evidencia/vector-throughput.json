@@ -1,0 +1,16 @@
+{
+  "dummy": {
+    "steps": 2048,
+    "seconds": 11.987197968000146,
+    "steps_per_second": 170.8489344605087,
+    "startup_seconds": 0.20424248000017542
+  },
+  "subproc": {
+    "steps": 2048,
+    "seconds": 10.765871073999733,
+    "steps_per_second": 190.23077518976154,
+    "startup_seconds": 8.592633424000269
+  },
+  "identical_transitions": true,
+  "speedup": 1.1134443172879893
+}

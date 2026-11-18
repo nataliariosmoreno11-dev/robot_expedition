@@ -1,0 +1,32 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 262144,
+  "checkpoint_uri": null,
+  "config_sha256": "19732c9adf646d062fcca925d7f3a4328cdabaa0eb7d90d83e0ae3ae86a94c5e",
+  "diagnosis": "BrokenPipeError: [Errno 32] Broken pipe; sin checkpoint disponible",
+  "effective_budget_timesteps": 0,
+  "environment_hash": "b5b59c031c5458e7d761f3556bc8da82acab9f1df3127db7af0ec68ae7983b6e",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "campaign-mastery-v1",
+  "experiment_id": "exp-010-parallel",
+  "git_commit": "a4faf37ddf24e34a20279f10e6c35aacaf27ef3f",
+  "level_id": "n2",
+  "metrics": {},
+  "model_sha256": null,
+  "model_uri": null,
+  "normalization_uri": null,
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "logs/training_jobs/b75b3b8ff3214fc3be419ef0d2b9adc2/config.json",
+    "repository": "https://github.com/Nicol-Tatiana-Cerinza-Tejada/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/0d6ae9afcb58490e9f8d583b8f7b079b",
+  "run_id": "ded458eba5314a69aa91a26e5d3c53dc",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 14,
+  "source_config_sha256": "84a065458a9711a5cb8be89bc03b3573996d804875f01b7e889f1eecba89e6fd",
+  "status": "failed"
+}

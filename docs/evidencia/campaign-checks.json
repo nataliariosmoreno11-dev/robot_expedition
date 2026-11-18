@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-13",
+  "web_build": {
+    "command": "npm --prefix web run build",
+    "passed": true,
+    "warnings": [
+      "Vite bundle exceeds 500 kB",
+      "Local Node 22 differs from declared Node 26"
+    ]
+  },
+  "browser": {
+    "errors": [],
+    "tenScenarios": 10,
+    "episodes": 4,
+    "bodyScrollWidth": 390
+  },
+  "ppo_smoke": {
+    "run_id": "3f517d6e153440b6a9ccbf39c750e931",
+    "training_timesteps": 128,
+    "evaluation_episodes": 2,
+    "evaluation_success_rate": 0,
+    "purpose": "Development smoke test of training, checkpoint and artifact flow; not evidence of mastery",
+    "weights": "Local artifacts; model binary not published by this commit"
+  },
+  "limitations": [
+    "Full PPO curriculum training and independent mastery evaluation remain to be run.",
+    "Unseen-map generalization evaluation is not implemented.",
+    "Physical validation covers one documented seed per map."
+  ],
+  "tests": {
+    "command": "python -m pytest -q",
+    "passed": 94,
+    "warnings": 1,
+    "seconds": 26.91,
+    "warning": "Starlette TestClient httpx deprecation"
+  }
+}

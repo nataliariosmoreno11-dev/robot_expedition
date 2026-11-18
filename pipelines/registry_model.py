@@ -31,9 +31,17 @@ class ExpeditionPolicy(mlflow.pyfunc.PythonModel):
             return
 
         def make_env():
+            options = dict(environment)
+            kind = options.pop("kind", "beacon")
+            if kind == "planetary":
+                from robot_expedition.envs.planetary_exploration import PlanetaryExplorationEnv
+
+                options.update(record_episodes=False, update_curriculum=False)
+                env = PlanetaryExplorationEnv(**options)
+                return Monitor(env, info_keywords=("success", "samples_collected", "difficulty_level"))
             from robot_expedition.envs.beacon_expedition import BeaconExpeditionEnv
 
-            return Monitor(BeaconExpeditionEnv(level=config["level_id"], **environment), info_keywords=("success",))
+            return Monitor(BeaconExpeditionEnv(level=config["level_id"], **options), info_keywords=("success",))
 
         base_env = DummyVecEnv([make_env])
         self.vec_env = VecNormalize.load(context.artifacts["vecnormalize"], base_env)

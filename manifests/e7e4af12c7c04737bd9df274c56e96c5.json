@@ -1,0 +1,32 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 65536,
+  "checkpoint_uri": null,
+  "config_sha256": "8fa7465881fb42708ab686b69d2d4df27d7453c4be5af41a14cad2ab3dc901a5",
+  "diagnosis": "AssertionError: The learning rate schedule must be a float or a callable, not 5e-05; sin checkpoint disponible",
+  "effective_budget_timesteps": 0,
+  "environment_hash": "b5b59c031c5458e7d761f3556bc8da82acab9f1df3127db7af0ec68ae7983b6e",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "campaign-mastery-v1",
+  "experiment_id": "exp-009-retention",
+  "git_commit": "32f9d291bbe8288ca025cf6f08054b391d7166d6",
+  "level_id": "n2",
+  "metrics": {},
+  "model_sha256": null,
+  "model_uri": null,
+  "normalization_uri": null,
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "logs/training_jobs/73c6d150245841d8be4319aa6dc0e00a/config.json",
+    "repository": "https://github.com/Nicol-Tatiana-Cerinza-Tejada/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/cfc7a1fb63ef4c91a1afb1e0e6828e3a",
+  "run_id": "e7e4af12c7c04737bd9df274c56e96c5",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 1,
+  "source_config_sha256": "e7ac09fc66fb3cd582b6b8e48cdd092c3abe8fffd4f7b57e3ee32d47a6ddfba2",
+  "status": "failed"
+}

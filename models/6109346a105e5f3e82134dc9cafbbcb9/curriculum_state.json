@@ -1,0 +1,79 @@
+{
+  "current_level": 8,
+  "current_scenario": "scenario_08",
+  "evaluations": {
+    "1": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 1.0,
+      "training_step": 7084896
+    },
+    "2": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 1.0,
+      "training_step": 7084896
+    },
+    "3": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 1.0,
+      "training_step": 7084896
+    },
+    "4": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 1.0,
+      "training_step": 7084896
+    },
+    "5": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 1.0,
+      "training_step": 7084896
+    },
+    "6": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 1.0,
+      "training_step": 7084896
+    },
+    "7": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+      "success_rate": 0.98,
+      "training_step": 7084896
+    }
+  },
+  "mastered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "pending": [
+    "scenario_08",
+    "scenario_09",
+    "scenario_10"
+  ],
+  "schema": "fixed-campaign-curriculum/v1",
+  "settings": {
+    "max_collisions": 2.0,
+    "minimum_episodes": 50,
+    "rehearsal_probability": 0.1,
+    "rehearsal_weights": {
+      "3": 4.0
+    },
+    "success_threshold": 0.85
+  }
+}

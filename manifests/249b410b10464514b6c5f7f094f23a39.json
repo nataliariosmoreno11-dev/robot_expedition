@@ -1,0 +1,32 @@
+{
+  "action_spec": "Discrete(7)",
+  "algorithm": "ppo",
+  "budget_timesteps": 1024,
+  "checkpoint_uri": "local:/home/tom/code/robot_expedition/models/249b410b10464514b6c5f7f094f23a39",
+  "config_sha256": "36509bd3630ae81560d20e406de51d3c49c0bddf40b0e2c720c9dd9256c28b18",
+  "diagnosis": "KeyboardInterrupt: Se\u00f1al 2 recibida; checkpoint recuperable en /home/tom/code/robot_expedition/models/249b410b10464514b6c5f7f094f23a39",
+  "effective_budget_timesteps": 1024,
+  "environment_hash": "2805071fd096eea68716ece00b20f0a23b22867d4b5bf1dce2a96518767cd4af",
+  "environment_kind": "planetary",
+  "environment_version": "planetary-exploration/2.0.0",
+  "evaluation_suite_id": "campaign-mastery-v1",
+  "experiment_id": "exp-007-planetary",
+  "git_commit": "32f9d291bbe8288ca025cf6f08054b391d7166d6",
+  "level_id": "n2",
+  "metrics": {},
+  "model_sha256": null,
+  "model_uri": null,
+  "normalization_uri": null,
+  "obs_spec": "132 floats, ver docs/contratos-planetario.md",
+  "origin": {
+    "config_path": "logs/training_jobs/d64cbc6d521b4550b5dcf8d8e229e84e/config.json",
+    "repository": "https://github.com/Nicol-Tatiana-Cerinza-Tejada/robot_expedition.git",
+    "type": "experiment_config"
+  },
+  "parent_run_id": null,
+  "run_id": "249b410b10464514b6c5f7f094f23a39",
+  "runtime_ref": "requirements.txt + python 3.14.4",
+  "seed": 1,
+  "source_config_sha256": "c6c6db042381ae2d5bd9fa0797508fb606224d40c00e0e653bfee3df312850cc",
+  "status": "interrupted"
+}

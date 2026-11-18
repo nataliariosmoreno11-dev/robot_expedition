@@ -1,9 +1,9 @@
-# Ambiente v1.0 · Robot Expedition
+# Ambiente v1.1 · Robot Expedition
 
 > Ficha de entrega del ambiente (sección 02 del enunciado). Reemplaza a la
 > [ficha v0.1](ambiente-v0.1.md), que se conserva como historial del diseño.
 >
-> - **Versión:** `robot-expedition-3d/1.0.0` (`ENVIRONMENT_VERSION`).
+> - **Versión:** `robot-expedition-3d/1.1.0` (`ENVIRONMENT_VERSION`).
 > - **Código:** [`robot_expedition/envs/beacon_expedition.py`](../robot_expedition/envs/beacon_expedition.py).
 > - **Niveles:** [`configs/levels/`](../configs/levels).
 > - **Contrato de interfaz:** [`docs/contratos.md`](contratos.md).
@@ -178,11 +178,14 @@ acciones. Solo cambia el archivo YAML del nivel, y cada uno tiene su propio
 - **Uso:** este es el escenario del incidente controlado ([incidente](incidente.md)).
   Un modelo entrenado en N2 nunca vio el bloqueo.
 
-## 8. Simplificaciones
+## 8. Escenarios variables y simplificaciones
 
-- **Las balizas, la base, la grieta y las dunas son fijas.** Las semillas cambian
-  el ruido de los rayos. Con `rock_jitter > 0` también mueven las rocas, pero
-  las suites de evaluación usan `rock_jitter = 0`.
+- **Por defecto, las balizas y rocas siguen fijas** para reproducir los modelos
+  y resultados v1.0. El experimento `exp-006` activa `varied-v1`: seis
+  escenarios cambian B1/B2, la cantidad y posición de rocas y el bloqueo según
+  la semilla. La suite `suite-n2-generalization-v1` los cubre de forma
+  equilibrada. Ver [escenarios-variados.md](escenarios-variados.md).
+- La base, la grieta, la arena y las dunas conservan su posición en v1.1.
 - **El rover es un cuerpo rígido.** Tiene dos ruedas esféricas con motor de
   velocidad y dos apoyos sin fricción. No hay suspensión, deslizamiento de
   orugas ni daño.

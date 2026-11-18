@@ -27,7 +27,7 @@ def test_root_points_to_docs_and_routes():
 def test_health_version_and_monitor():
     assert client.get("/health").json()["status"] == "ok"
     version = client.get("/version").json()
-    assert version["environment_version"] == "robot-expedition-3d/1.0.0"
+    assert version["environment_version"] == "robot-expedition-3d/1.1.0"
     assert set(version["environment_hashes"]) == {"n1", "n2", "n3"}
     routes = client.get("/monitor").json()["routes"]
     assert "GET /health" in routes and routes["GET /health"]["requests"] >= 1
@@ -53,6 +53,15 @@ def test_evaluate_rule_returns_episode_frames_and_metrics():
     assert len(body["map"]["beacons"]) == 1 and body["map"]["terrain"]["n"] == 121
 
 
+def test_generalization_suite_exposes_the_first_scenario_map():
+    body = client.post("/evaluate", json={"run_id": "baseline-rule", "level_id": "n2",
+                                          "suite_id": "suite-n2-generalization-v1", "episodes": 2}).json()
+    assert body["environment"] == {"scenario_set": "varied-v1", "max_steps": 400}
+    assert body["episode"]["scenario_id"] == body["cases"][0]["scenario_id"]
+    assert body["map"]["beacons"] == body["cases"][0]["beacons"]
+    assert body["metrics"]["episodes_by_difficulty"] == {"easy": 2}
+
+
 def test_evaluate_matches_the_offline_suite():
     from pipelines.evaluate import evaluate
     from pipelines.policies import RulePolicy
@@ -60,7 +69,8 @@ def test_evaluate_matches_the_offline_suite():
     online = client.post("/evaluate", json={"run_id": "baseline-rule", "level_id": "n2",
                                             "suite_id": "suite-n2-v1", "episodes": 2}).json()
     offline = evaluate(RulePolicy(), "n2", "suite-n2-v1", episodes=2)
-    strip = lambda cases: [{k: v for k, v in c.items() if not k.startswith("latency")} for c in cases]
+    def strip(cases):
+        return [{k: v for k, v in case.items() if not k.startswith("latency")} for case in cases]
     assert strip(online["cases"]) == strip(offline["cases"])
 
 
@@ -82,6 +92,58 @@ def test_manual_session_flow():
     assert client.post("/sim/step", json={"session_id": sid}).status_code == 422      # manual sin accion
     assert client.post("/sim/step", json={"session_id": sid, "action": 9}).status_code == 422
     assert client.post("/sim/step", json={"session_id": "nope", "action": 0}).status_code == 404
+
+
+def test_planetary_manual_session_and_persisted_replay(tmp_path, monkeypatch):
+    database = tmp_path / "api-episodes.sqlite"
+    monkeypatch.setattr(api_main, "EPISODE_DB", database)
+    reset = client.post(
+        "/sim/reset",
+        json={"environment": "planetary", "difficulty_level": 4, "seed": 404},
+    )
+    assert reset.status_code == 200, reset.text
+    body = reset.json()
+    assert body["environment"] == "planetary"
+    assert body["map"]["difficulty_level"] == 4
+    assert len(body["map"]["samples"]) > body["map"]["mission"]["requested_samples"]
+    assert body["actions"][5] == "recolectar"
+    assert body["actions"][6] == "retroceder"
+
+    stepped = client.post("/sim/step", json={"session_id": body["session_id"], "action": 5})
+    assert stepped.status_code == 200, stepped.text
+    assert stepped.json()["requested_samples"] >= 1
+
+    summaries = client.get("/episodes").json()["episodes"]
+    assert len(summaries) == 1 and summaries[0]["difficulty_level"] == 4
+    replay = client.get(f"/episodes/{summaries[0]['episode_number']}/replay").json()
+    assert replay["episode"]["objective"].startswith("Recolectar")
+    assert len(replay["episode"]["frames"]) == 2
+    assert len(replay["episode"]["mission_timeline"]) == 2
+
+    second = client.post(
+        "/sim/reset",
+        json={"environment": "planetary", "difficulty_level": 2, "seed": 405},
+    ).json()
+    listing = client.get("/episodes").json()
+    assert listing["schema_version"] == 2
+    assert listing["storage"]["max_experiments"] is None
+    protected = client.post(
+        f"/episodes/{summaries[0]['episode_number']}/protect", json={"protected": True}
+    )
+    assert protected.status_code == 200 and protected.json()["protected"] is True
+    with api_main.sessions_lock:
+        api_main.sessions[body["session_id"]].env._finish_interrupted()
+    metrics = client.get("/episodes/metrics/summary").json()
+    assert metrics["episodes"] >= 1 and metrics["evolution"]
+    numbers = [item["episode_number"] for item in client.get("/episodes").json()["episodes"]]
+    compared = client.post("/episodes/compare", json={"episode_numbers": numbers}).json()
+    assert len(compared["episodes"]) == 2
+
+    with api_main.sessions_lock:
+        session = api_main.sessions.pop(body["session_id"])
+        second_session = api_main.sessions.pop(second["session_id"])
+    session.env.close()
+    second_session.env.close()
 
 
 def test_policy_session_runs_to_the_end():

@@ -15,6 +15,9 @@ base antes de agotar la batería**, sin caer en la grieta ni volcar.
 | API (FastAPI, HTTPS) | `https://robot-expedition-api.onrender.com` (ver [Despliegue](#despliegue)) |
 | Ficha del ambiente y niveles | [docs/ambiente-v1.md](docs/ambiente-v1.md) |
 | Experimentos y decisiones | [docs/experimentos.md](docs/experimentos.md) |
+| Escenarios variados y generalización | [docs/escenarios-variados.md](docs/escenarios-variados.md) |
+| Campaña planetaria de diez escenarios | [docs/simulador-planetario.md](docs/simulador-planetario.md) |
+| Contrato planetario y episodios | [docs/contratos-planetario.md](docs/contratos-planetario.md) |
 | Incidente y rollback | [docs/incidente.md](docs/incidente.md) · [docs/evidencia/rollback.md](docs/evidencia/rollback.md) |
 | Informe y guion de defensa | [docs/informe.md](docs/informe.md) · [docs/guion-defensa.md](docs/guion-defensa.md) |
 | Contratos (observación, manifiesto, catálogo y API) | [docs/contratos.md](docs/contratos.md) |
@@ -64,12 +67,35 @@ python3.12 -m venv .venv && source .venv/bin/activate        # Windows: py -3.12
 python -m pip install --upgrade pip
 python -m pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
 python -m pip install -r requirements.txt
-python -m pytest -q                                          # 58 pruebas
+python -m pytest -q                                          # 80 pruebas
 ```
 
 Las variables están en [`.env.example`](.env.example); cópialo como `.env`.
 Ninguna es secreta salvo las credenciales de DVC y DagsHub, que solo van en
 `.env` local o como secretos del Space.
+
+## Campaña planetaria de diez escenarios
+
+La web local incluye **Agente automático · PPO** para entrenar, guardar,
+continuar pesos y ejecutar versiones aprendidas. Inicia la API con
+`ENABLE_LOCAL_TRAINING=1` y consulta [política, controles y versionado](docs/agente-automatico.md).
+
+La ampliación planetaria usa **ocho mapas fijos** (`scenario_01`…`scenario_08`),
+misiones de recolección explícita, PPO con cuatro observaciones de historial y un
+currículo que solo avanza mediante evaluaciones independientes. Conserva todos
+los intentos completos en SQLite y permite reproducirlos y comparar rutas.
+
+```bash
+python scripts/campaign.py validate --physical --output logs/campaign-validation.json
+python pipelines/train.py --config configs/experiments/exp-007-planetary.yaml --seed 1
+python scripts/episodes.py history scenario_08
+```
+
+**Guía de ejecución, entrenamiento, checkpoints, replay y evaluación:**
+[docs/campana-diez-escenarios.md](docs/campana-diez-escenarios.md).
+El contrato planetario es v2; los modelos anteriores de balizas siguen separados.
+La prueba física y los runs cortos verifican funcionamiento, no dominio aprendido.
+
 
 ## Recuperar los modelos y reproducir una evaluación
 
@@ -116,6 +142,7 @@ Ahí están los runs, los parámetros, las métricas `training/*` y
 ```bash
 python pipelines/train.py --config configs/experiments/exp-002.yaml            # semillas del YAML
 python pipelines/train.py --config configs/experiments/exp-002.yaml --seed 2
+python pipelines/train.py --config configs/experiments/exp-006.yaml --seed 1    # objetivos y obstáculos variables
 ```
 
 Cada run deja estas piezas:
@@ -198,6 +225,8 @@ cd web && echo "VITE_API_BASE_URL=http://127.0.0.1:8000" > .env.local && npm ci 
 
 La web tiene estas secciones:
 - **Simulación:** escena 3D, evaluación y control manual con las flechas.
+- **Exploración planetaria:** escenarios 01–08, muestras objetivo y distractoras,
+  recolección explícita e historial/replay de episodios persistidos.
 - **Catálogo:** filtros por nivel y estado. Cada run muestra hipótesis,
   cambio, semilla, pasos, tiempo, métricas por nivel, commit, MLflow y
   decisión de selección, con un enlace `/run/<run_id>`.
@@ -260,6 +289,7 @@ profundos funcionen al recargar.
 | Ruta | Contenido |
 |---|---|
 | `robot_expedition/envs/beacon_expedition.py` | Ambiente Gymnasium 3D (MuJoCo) |
+| `robot_expedition/envs/planetary_exploration.py`, `robot_expedition/planetary/` | Campaña fija, currículo, perfiles físicos y SQLite de episodios |
 | `configs/levels/`, `configs/suites/`, `configs/experiments/`, `configs/selection.yaml` | Niveles, suites fijas, experimentos y criterios |
 | `pipelines/` | `train.py`, `evaluate.py`, `policies.py`, `catalog.py` y `flow.py` (Prefect) |
 | `api/` | FastAPI: `main.py` (rutas y monitoreo) y `store.py` (catálogo y carga verificada) |
@@ -267,7 +297,7 @@ profundos funcionen al recargar.
 | `manifests/`, `models/*.dvc`, `catalog/` | Trazabilidad: manifiestos, punteros DVC, catálogo versionado, historial y resultados por caso |
 | `scripts/` | Mapas, incidente, reportes, empaquetado, Space, sincronización de MLflow y simulacro |
 | `docs/` | Fichas, contratos, experimentos, incidente, evidencia, informe y defensa |
-| `tests/` | 58 pruebas: reglas del ambiente, niveles, evaluación, entrenamiento, API y catálogo |
+| `tests/` | 79 pruebas: ambientes, niveles, escenarios, persistencia, replay, entrenamiento, API y catálogo |
 
 ## Anexo: CLI original y bípedo
 

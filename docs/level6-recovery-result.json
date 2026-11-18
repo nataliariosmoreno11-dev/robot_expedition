@@ -1,0 +1,64 @@
+{
+  "run_id": "0af314b98d1c4513a53087da8199f4ab",
+  "parent_run_id": "70d953f89deb419a9f142f51375d5dc7",
+  "method": "PPO with independent scenario actors and supervised initialization for scenarios 2 and 6",
+  "mastered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "total_environment_steps": 5266272,
+  "supervised_updates_selected": {
+    "2": 500,
+    "6": 500
+  },
+  "evaluations": {
+    "3": {
+      "episodes": 50,
+      "success_rate": 1.0,
+      "collisions_per_episode": 1.0,
+      "steps_mean": 179.8,
+      "minimum_battery": 52.941
+    },
+    "4": {
+      "episodes": 50,
+      "success_rate": 1.0,
+      "collisions_per_episode": 0.0,
+      "steps_mean": 91.0,
+      "minimum_battery": 74.715
+    },
+    "1": {
+      "episodes": 50,
+      "success_rate": 1.0,
+      "collisions_per_episode": 0.0,
+      "steps_mean": 8.0,
+      "minimum_battery": 97.407
+    },
+    "2": {
+      "episodes": 50,
+      "success_rate": 1.0,
+      "collisions_per_episode": 0.0,
+      "steps_mean": 124.0,
+      "minimum_battery": 53.818
+    },
+    "5": {
+      "episodes": 50,
+      "success_rate": 1.0,
+      "collisions_per_episode": 0.0,
+      "steps_mean": 119.62,
+      "minimum_battery": 67.482
+    },
+    "6": {
+      "episodes": 50,
+      "success_rate": 1.0,
+      "collisions_per_episode": 0.0,
+      "steps_mean": 369.0,
+      "minimum_battery": 59.367
+    }
+  },
+  "weights_sha256": "3079df71dca8d9310fc48a52e08e1ce0f90731cf32ccde77c7dd78729c830c66",
+  "tests_passed": 154
+}

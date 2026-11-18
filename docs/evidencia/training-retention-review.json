@@ -1,0 +1,535 @@
+{
+  "purpose": "paired frozen-policy evaluation; unchanged mission rules",
+  "seeds": [
+    120001,
+    120002,
+    120003
+  ],
+  "models": {
+    "before": {
+      "checkpoint": "models/cfc7a1fb63ef4c91a1afb1e0e6828e3a",
+      "model_sha256": "d6e112e83016b1df989f2eaf184dff222d2cda8eb239a61e349262ae9aa61779",
+      "levels": {
+        "1": {
+          "suite_id": "campaign-mastery-v1",
+          "evaluation_kind": "mastery",
+          "scenario_level": 1,
+          "partial": true,
+          "environment": {
+            "history_steps": 4,
+            "curriculum": false
+          },
+          "wall_time_s": 2.917,
+          "metrics": {
+            "episodes": 3,
+            "success_rate": 1.0,
+            "success_rate_by_difficulty": {
+              "1": 1.0
+            },
+            "failures_by_cause": {},
+            "return_mean": 277.8455,
+            "return_std": 0.0,
+            "collisions_per_episode": 0.0,
+            "steps_mean": 46.0,
+            "samples_collected_mean": 1.0,
+            "mission_completion": 1.0,
+            "path_length_mean": 9.315,
+            "latency_ms_mean": 2.6306
+          },
+          "cases": [
+            {
+              "seed": 120001,
+              "scenario_id": "scenario_01",
+              "difficulty_level": 1,
+              "difficulty": "L1 \u00b7 Primeros movimientos",
+              "success": true,
+              "end": "exito",
+              "samples_collected": 1,
+              "requested_samples": 1,
+              "collisions": 0,
+              "steps": 46,
+              "battery": 81.727,
+              "path_length": 9.315,
+              "route_cost": 11.215858059095769,
+              "initial_position": [
+                1.4998842767631126,
+                2.1822931872939991e-10
+              ],
+              "collection_positions": [
+                [
+                  3.212385728892889,
+                  0.5777239521911584
+                ]
+              ],
+              "final_position": [
+                2.3936819170456034,
+                0.3747589576113845
+              ],
+              "energy_consumed": 18.27258715682082,
+              "return": 277.8455,
+              "latency_ms_mean": 3.0226,
+              "reference_path_cost": 3.538886429230133,
+              "path_efficiency": 0.3155252509958601
+            },
+            {
+              "seed": 120002,
+              "scenario_id": "scenario_01",
+              "difficulty_level": 1,
+              "difficulty": "L1 \u00b7 Primeros movimientos",
+              "success": true,
+              "end": "exito",
+              "samples_collected": 1,
+              "requested_samples": 1,
+              "collisions": 0,
+              "steps": 46,
+              "battery": 81.727,
+              "path_length": 9.315,
+              "route_cost": 11.215858059095769,
+              "initial_position": [
+                1.4998842767631126,
+                2.1822931872939991e-10
+              ],
+              "collection_positions": [
+                [
+                  3.212385728892889,
+                  0.5777239521911584
+                ]
+              ],
+              "final_position": [
+                2.3936819170456034,
+                0.3747589576113845
+              ],
+              "energy_consumed": 18.27258715682082,
+              "return": 277.8455,
+              "latency_ms_mean": 2.7095,
+              "reference_path_cost": 3.538886429230133,
+              "path_efficiency": 0.3155252509958601
+            },
+            {
+              "seed": 120003,
+              "scenario_id": "scenario_01",
+              "difficulty_level": 1,
+              "difficulty": "L1 \u00b7 Primeros movimientos",
+              "success": true,
+              "end": "exito",
+              "samples_collected": 1,
+              "requested_samples": 1,
+              "collisions": 0,
+              "steps": 46,
+              "battery": 81.727,
+              "path_length": 9.315,
+              "route_cost": 11.215858059095769,
+              "initial_position": [
+                1.4998842767631126,
+                2.1822931872939991e-10
+              ],
+              "collection_positions": [
+                [
+                  3.212385728892889,
+                  0.5777239521911584
+                ]
+              ],
+              "final_position": [
+                2.3936819170456034,
+                0.3747589576113845
+              ],
+              "energy_consumed": 18.27258715682082,
+              "return": 277.8455,
+              "latency_ms_mean": 2.1598,
+              "reference_path_cost": 3.538886429230133,
+              "path_efficiency": 0.3155252509958601
+            }
+          ]
+        },
+        "2": {
+          "suite_id": "campaign-mastery-v1",
+          "evaluation_kind": "mastery",
+          "scenario_level": 2,
+          "partial": true,
+          "environment": {
+            "history_steps": 4,
+            "curriculum": false
+          },
+          "wall_time_s": 15.932,
+          "metrics": {
+            "episodes": 3,
+            "success_rate": 0.0,
+            "success_rate_by_difficulty": {
+              "2": 0.0
+            },
+            "failures_by_cause": {
+              "bateria": 3
+            },
+            "return_mean": -67.2925,
+            "return_std": 2.182,
+            "collisions_per_episode": 0.0,
+            "steps_mean": 392.6667,
+            "samples_collected_mean": 0.0,
+            "mission_completion": 0.0,
+            "path_length_mean": 38.534,
+            "latency_ms_mean": 2.7051
+          },
+          "cases": [
+            {
+              "seed": 120001,
+              "scenario_id": "scenario_02",
+              "difficulty_level": 2,
+              "difficulty": "L2 \u00b7 El primer desv\u00edo",
+              "success": false,
+              "end": "bateria",
+              "samples_collected": 0,
+              "requested_samples": 2,
+              "collisions": 0,
+              "steps": 393,
+              "battery": 0.0,
+              "path_length": 37.498,
+              "route_cost": 45.186450949260774,
+              "initial_position": [
+                1.4998842767407958,
+                2.1822433143596926e-10
+              ],
+              "collection_positions": [],
+              "final_position": [
+                3.098185977515361,
+                1.370351975005161
+              ],
+              "energy_consumed": 100.0,
+              "return": -70.3307,
+              "latency_ms_mean": 2.8357,
+              "reference_path_cost": 23.795760510141733,
+              "path_efficiency": null
+            },
+            {
+              "seed": 120002,
+              "scenario_id": "scenario_02",
+              "difficulty_level": 2,
+              "difficulty": "L2 \u00b7 El primer desv\u00edo",
+              "success": false,
+              "end": "bateria",
+              "samples_collected": 0,
+              "requested_samples": 2,
+              "collisions": 0,
+              "steps": 392,
+              "battery": 0.0,
+              "path_length": 38.852,
+              "route_cost": 46.81153254702577,
+              "initial_position": [
+                1.4998842767407958,
+                2.1822433143596926e-10
+              ],
+              "collection_positions": [],
+              "final_position": [
+                3.074217236876397,
+                0.9938747031913882
+              ],
+              "energy_consumed": 100.0,
+              "return": -66.2408,
+              "latency_ms_mean": 2.3924,
+              "reference_path_cost": 23.795760510141733,
+              "path_efficiency": null
+            },
+            {
+              "seed": 120003,
+              "scenario_id": "scenario_02",
+              "difficulty_level": 2,
+              "difficulty": "L2 \u00b7 El primer desv\u00edo",
+              "success": false,
+              "end": "bateria",
+              "samples_collected": 0,
+              "requested_samples": 2,
+              "collisions": 0,
+              "steps": 393,
+              "battery": 0.0,
+              "path_length": 39.252,
+              "route_cost": 47.309047646773976,
+              "initial_position": [
+                1.4998842767407958,
+                2.1822433143596926e-10
+              ],
+              "collection_positions": [],
+              "final_position": [
+                3.1240444193328147,
+                -0.2213473627316352
+              ],
+              "energy_consumed": 100.0,
+              "return": -65.306,
+              "latency_ms_mean": 2.8873,
+              "reference_path_cost": 23.795760510141733,
+              "path_efficiency": null
+            }
+          ]
+        }
+      }
+    },
+    "after": {
+      "checkpoint": "models/e24bfc5140734088b9b1d76fc14cca15",
+      "model_sha256": "f4592c4b5c1899e6cbe800f16f2b375aded8892239065f1f93cfdda4798a3309",
+      "levels": {
+        "1": {
+          "suite_id": "campaign-mastery-v1",
+          "evaluation_kind": "mastery",
+          "scenario_level": 1,
+          "partial": true,
+          "environment": {
+            "history_steps": 4,
+            "curriculum": false
+          },
+          "wall_time_s": 0.897,
+          "metrics": {
+            "episodes": 3,
+            "success_rate": 1.0,
+            "success_rate_by_difficulty": {
+              "1": 1.0
+            },
+            "failures_by_cause": {},
+            "return_mean": 277.6673,
+            "return_std": 0.0,
+            "collisions_per_episode": 0.0,
+            "steps_mean": 11.0,
+            "samples_collected_mean": 1.0,
+            "mission_completion": 1.0,
+            "path_length_mean": 1.271,
+            "latency_ms_mean": 0.6791
+          },
+          "cases": [
+            {
+              "seed": 120001,
+              "scenario_id": "scenario_01",
+              "difficulty_level": 1,
+              "difficulty": "L1 \u00b7 Primeros movimientos",
+              "success": true,
+              "end": "exito",
+              "samples_collected": 1,
+              "requested_samples": 1,
+              "collisions": 0,
+              "steps": 11,
+              "battery": 97.086,
+              "path_length": 1.271,
+              "route_cost": 1.5247302566189531,
+              "initial_position": [
+                1.4998842767631126,
+                2.1822931872939991e-10
+              ],
+              "collection_positions": [
+                [
+                  2.4696074161264483,
+                  0.7703931615825156
+                ]
+              ],
+              "final_position": [
+                2.4696074161264483,
+                0.7703931615825156
+              ],
+              "energy_consumed": 2.913708737376396,
+              "return": 277.6673,
+              "latency_ms_mean": 0.7054,
+              "reference_path_cost": 1.6327922061357854,
+              "path_efficiency": 1.0708728308156332
+            },
+            {
+              "seed": 120002,
+              "scenario_id": "scenario_01",
+              "difficulty_level": 1,
+              "difficulty": "L1 \u00b7 Primeros movimientos",
+              "success": true,
+              "end": "exito",
+              "samples_collected": 1,
+              "requested_samples": 1,
+              "collisions": 0,
+              "steps": 11,
+              "battery": 97.086,
+              "path_length": 1.271,
+              "route_cost": 1.5247302566189531,
+              "initial_position": [
+                1.4998842767631126,
+                2.1822931872939991e-10
+              ],
+              "collection_positions": [
+                [
+                  2.4696074161264483,
+                  0.7703931615825156
+                ]
+              ],
+              "final_position": [
+                2.4696074161264483,
+                0.7703931615825156
+              ],
+              "energy_consumed": 2.913708737376396,
+              "return": 277.6673,
+              "latency_ms_mean": 0.6335,
+              "reference_path_cost": 1.6327922061357854,
+              "path_efficiency": 1.0708728308156332
+            },
+            {
+              "seed": 120003,
+              "scenario_id": "scenario_01",
+              "difficulty_level": 1,
+              "difficulty": "L1 \u00b7 Primeros movimientos",
+              "success": true,
+              "end": "exito",
+              "samples_collected": 1,
+              "requested_samples": 1,
+              "collisions": 0,
+              "steps": 11,
+              "battery": 97.086,
+              "path_length": 1.271,
+              "route_cost": 1.5247302566189531,
+              "initial_position": [
+                1.4998842767631126,
+                2.1822931872939991e-10
+              ],
+              "collection_positions": [
+                [
+                  2.4696074161264483,
+                  0.7703931615825156
+                ]
+              ],
+              "final_position": [
+                2.4696074161264483,
+                0.7703931615825156
+              ],
+              "energy_consumed": 2.913708737376396,
+              "return": 277.6673,
+              "latency_ms_mean": 0.6983,
+              "reference_path_cost": 1.6327922061357854,
+              "path_efficiency": 1.0708728308156332
+            }
+          ]
+        },
+        "2": {
+          "suite_id": "campaign-mastery-v1",
+          "evaluation_kind": "mastery",
+          "scenario_level": 2,
+          "partial": true,
+          "environment": {
+            "history_steps": 4,
+            "curriculum": false
+          },
+          "wall_time_s": 12.427,
+          "metrics": {
+            "episodes": 3,
+            "success_rate": 0.0,
+            "success_rate_by_difficulty": {
+              "2": 0.0
+            },
+            "failures_by_cause": {
+              "bateria": 3
+            },
+            "return_mean": -57.3815,
+            "return_std": 0.3392,
+            "collisions_per_episode": 0.0,
+            "steps_mean": 321.3333,
+            "samples_collected_mean": 1.0,
+            "mission_completion": 0.5,
+            "path_length_mean": 49.769,
+            "latency_ms_mean": 2.6613
+          },
+          "cases": [
+            {
+              "seed": 120001,
+              "scenario_id": "scenario_02",
+              "difficulty_level": 2,
+              "difficulty": "L2 \u00b7 El primer desv\u00edo",
+              "success": false,
+              "end": "bateria",
+              "samples_collected": 1,
+              "requested_samples": 2,
+              "collisions": 0,
+              "steps": 322,
+              "battery": 0.0,
+              "path_length": 49.156,
+              "route_cost": 59.042840184676805,
+              "initial_position": [
+                1.4998842767407958,
+                2.1822433143596926e-10
+              ],
+              "collection_positions": [
+                [
+                  8.451376802097743,
+                  -2.759263817798467
+                ]
+              ],
+              "final_position": [
+                8.416121354726055,
+                0.6145513133262089
+              ],
+              "energy_consumed": 100.0,
+              "return": -56.9029,
+              "latency_ms_mean": 2.7426,
+              "reference_path_cost": 23.795760510141733,
+              "path_efficiency": null
+            },
+            {
+              "seed": 120002,
+              "scenario_id": "scenario_02",
+              "difficulty_level": 2,
+              "difficulty": "L2 \u00b7 El primer desv\u00edo",
+              "success": false,
+              "end": "bateria",
+              "samples_collected": 1,
+              "requested_samples": 2,
+              "collisions": 0,
+              "steps": 318,
+              "battery": 0.0,
+              "path_length": 51.081,
+              "route_cost": 61.39103205857339,
+              "initial_position": [
+                1.4998842767407958,
+                2.1822433143596926e-10
+              ],
+              "collection_positions": [
+                [
+                  8.12237342366893,
+                  -2.8818688878267453
+                ]
+              ],
+              "final_position": [
+                7.601441194214018,
+                1.276846807285019
+              ],
+              "energy_consumed": 100.0,
+              "return": -57.5919,
+              "latency_ms_mean": 2.6227,
+              "reference_path_cost": 23.795760510141733,
+              "path_efficiency": null
+            },
+            {
+              "seed": 120003,
+              "scenario_id": "scenario_02",
+              "difficulty_level": 2,
+              "difficulty": "L2 \u00b7 El primer desv\u00edo",
+              "success": false,
+              "end": "bateria",
+              "samples_collected": 1,
+              "requested_samples": 2,
+              "collisions": 0,
+              "steps": 324,
+              "battery": 0.0,
+              "path_length": 49.07,
+              "route_cost": 58.93802291427233,
+              "initial_position": [
+                1.4998842767407958,
+                2.1822433143596926e-10
+              ],
+              "collection_positions": [
+                [
+                  8.12237342366893,
+                  -2.8818688878267453
+                ]
+              ],
+              "final_position": [
+                7.630746382421948,
+                1.1075913166397857
+              ],
+              "energy_consumed": 100.0,
+              "return": -57.6497,
+              "latency_ms_mean": 2.6186,
+              "reference_path_cost": 23.795760510141733,
+              "path_efficiency": null
+            }
+          ]
+        }
+      }
+    }
+  }
+}

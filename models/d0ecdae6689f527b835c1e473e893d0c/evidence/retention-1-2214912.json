@@ -1,0 +1,1751 @@
+{
+  "cases": [
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8758,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920000,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8195,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920001,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7511,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920002,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7672,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920003,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7329,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920004,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6889,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920005,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7344,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920006,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.868,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920007,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7438,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920008,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6967,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920009,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8139,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920010,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8735,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920011,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8197,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920012,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7286,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920013,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6775,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920014,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6179,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920015,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6803,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920016,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6441,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920017,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6324,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920018,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6555,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920019,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7126,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920020,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6064,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920021,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.676,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920022,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.643,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920023,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7901,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920024,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7436,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920025,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8833,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920026,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.672,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920027,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7202,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920028,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7032,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920029,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6941,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920030,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7059,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920031,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7908,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920032,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.774,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920033,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7825,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920034,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8686,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920035,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7032,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920036,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8072,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920037,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8456,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920038,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8591,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920039,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.78,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920040,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.837,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920041,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 1.147,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920042,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.8369,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920043,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7811,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920044,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7293,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920045,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.9389,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920046,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7249,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920047,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.6374,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920048,
+      "steps": 8,
+      "success": true
+    },
+    {
+      "battery": 97.407,
+      "collection_positions": [
+        [
+          2.4911914967959214,
+          0.766541568096729
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L1 \u00b7 Primeros movimientos",
+      "difficulty_level": 1,
+      "end": "exito",
+      "energy_consumed": 2.5929112750654184,
+      "final_position": [
+        2.4911914967959214,
+        0.766541568096729
+      ],
+      "initial_position": [
+        1.4998842767631126,
+        2.1822931872939991e-10
+      ],
+      "latency_ms_mean": 0.7705,
+      "path_efficiency": 1.0610456821254308,
+      "path_length": 1.282,
+      "reference_path_cost": 1.6327922061357854,
+      "requested_samples": 1,
+      "return": 279.5614,
+      "route_cost": 1.538851939781765,
+      "samples_collected": 1,
+      "scenario_id": "scenario_01",
+      "seed": 920049,
+      "steps": 8,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.5,
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/a25e4a0a6f164b4c88aafc976be827f6/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "a25e4a0a6f164b4c88aafc976be827f6:2214912",
+    "record_episodes": true,
+    "run_id": "a25e4a0a6f164b4c88aafc976be827f6",
+    "training_no_progress_limit": 80
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 0.7597,
+    "mission_completion": 1.0,
+    "path_length_mean": 1.282,
+    "return_mean": 279.5614,
+    "return_std": 0.0,
+    "samples_collected_mean": 1.0,
+    "steps_mean": 8.0,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "1": 1.0
+    }
+  },
+  "partial": false,
+  "policy_version": "a25e4a0a6f164b4c88aafc976be827f6:2214912",
+  "requested_episodes": 50,
+  "scenario_level": 1,
+  "suite_id": "campaign-mastery-v1",
+  "training_step": 2214912,
+  "wall_time_s": 16.377
+}

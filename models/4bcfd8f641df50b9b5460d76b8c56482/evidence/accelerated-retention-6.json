@@ -1,0 +1,2359 @@
+{
+  "cases": [
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6236,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920000,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6311,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920001,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6873,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920002,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6173,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920003,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6229,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920004,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6245,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920005,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6555,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920006,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6701,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920007,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6379,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920008,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6381,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920009,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6246,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920010,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6341,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920011,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6998,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920012,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6289,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920013,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.623,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920014,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6251,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920015,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6341,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920016,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6782,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920017,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6272,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920018,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.632,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920019,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6134,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920020,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.618,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920021,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6699,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920022,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6164,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920023,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6165,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920024,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6177,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920025,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6147,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920026,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6675,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920027,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.616,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920028,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6091,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920029,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6118,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920030,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6136,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920031,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.673,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920032,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6192,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920033,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.5555,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920034,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6013,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920035,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.607,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920036,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6893,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920037,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6218,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920038,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6222,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920039,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6395,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920040,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6251,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920041,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6728,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920042,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6054,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920043,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6071,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920044,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6149,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920045,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6144,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920046,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6736,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920047,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6191,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920048,
+      "steps": 369,
+      "success": true
+    },
+    {
+      "battery": 59.367,
+      "collection_positions": [
+        [
+          4.717565545071649,
+          0.336489882723309
+        ],
+        [
+          10.58280388733953,
+          -3.886123205502734
+        ],
+        [
+          7.278953105511361,
+          -2.3891554784986373
+        ],
+        [
+          10.409313124410383,
+          3.85788858018951
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L6 \u00b7 El laberinto de los cr\u00e1teres",
+      "difficulty_level": 6,
+      "end": "exito",
+      "energy_consumed": 40.63283497000132,
+      "final_position": [
+        1.50655730325416,
+        0.884701125223986
+      ],
+      "initial_position": [
+        1.499884276681654,
+        2.182111111546473e-10
+      ],
+      "latency_ms_mean": 0.6084,
+      "path_efficiency": 0.9447472542408168,
+      "path_length": 51.141,
+      "reference_path_cost": 61.906694443699166,
+      "requested_samples": 4,
+      "return": 315.5034,
+      "route_cost": 65.527255216472,
+      "samples_collected": 4,
+      "scenario_id": "scenario_06",
+      "seed": 920049,
+      "steps": 369,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/f59726370d0d471a9790482135f4e3e2/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "f59726370d0d471a9790482135f4e3e2",
+    "record_episodes": false,
+    "run_id": "f59726370d0d471a9790482135f4e3e2",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "models/{run_id}/practice/scenario_{level:02d}.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 0.6314,
+    "mission_completion": 1.0,
+    "path_length_mean": 51.141,
+    "return_mean": 315.5034,
+    "return_std": 0.0,
+    "samples_collected_mean": 4.0,
+    "steps_mean": 369.0,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "6": 1.0
+    }
+  },
+  "partial": false,
+  "policy_version": "f59726370d0d471a9790482135f4e3e2:imitation:1000",
+  "requested_episodes": 50,
+  "scenario_level": 6,
+  "suite_id": "campaign-mastery-v1",
+  "training_step": 7455260,
+  "wall_time_s": 53.809
+}

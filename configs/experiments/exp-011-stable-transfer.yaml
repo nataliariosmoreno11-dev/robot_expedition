@@ -1,0 +1,52 @@
+experiment_id: exp-011-stable-transfer
+hypothesis: Fixed observation normalization reduces forgetting while longer rollouts learn multi-sample missions
+change: Freeze inherited normalization, lower learning rate, longer credit horizon and bounded checkpoints
+reference: exp-010-parallel
+level_id: n2
+algorithm: ppo
+budget_timesteps: 32768
+seeds: [1]
+evaluation_max_level: 8
+periodic_evaluation_freq: 16384
+periodic_evaluation_episodes: 50
+periodic_evaluation_seed_start: 910000
+checkpoint_freq: 8192
+checkpoint_keep: 2
+rejected_checkpoint_keep: 1
+retention_guard_freq: 16384
+freeze_normalization: true
+hyperparams:
+  learning_rate: 0.00002
+  n_steps: 512
+  batch_size: 128
+  gamma: 0.995
+  gae_lambda: 0.95
+  ent_coef: 0.01
+  clip_range: 0.1
+  target_kl: 0.01
+normalize_obs: true
+parent_run_id: null
+environment:
+  kind: planetary
+  planet: mars
+  difficulty_level: 1
+  curriculum: true
+  curriculum_settings:
+    minimum_episodes: 50
+    success_threshold: 0.85
+    max_collisions: 2.0
+    rehearsal_probability: 0.6
+    rehearsal_weights:
+      3: 4.0
+  curriculum_state: logs/campaign_curriculum.json
+  episode_db: logs/planetary_episodes.sqlite
+  record_episodes: true
+  max_experiments: null
+  campaign: true
+  history_steps: 4
+  run_id: exp-011-stable-transfer
+  policy_version: ppo-exp-011
+  mode: entrenamiento
+  training_no_progress_limit: 120
+vector_backend: subproc
+resume_best_mastery: true

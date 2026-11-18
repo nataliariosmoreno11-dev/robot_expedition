@@ -1,9 +1,15 @@
 import * as THREE from 'three'
-import type { EpisodeRock, ExpeditionMap } from '../types'
+import type { EpisodeRock, ExpeditionMap, MissionState } from '../types'
 
 interface BeaconVisual {
   head: THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>
   ring: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>
+}
+
+interface SampleVisual {
+  root: THREE.Group
+  material: THREE.MeshStandardMaterial
+  target: boolean
 }
 
 const material = (color: THREE.ColorRepresentation, extra: THREE.MeshStandardMaterialParameters = {}) =>
@@ -89,6 +95,7 @@ export class TerrainWorld {
   height = 12
   private map?: ExpeditionMap
   private beacons: BeaconVisual[] = []
+  private samples = new Map<string, SampleVisual>()
   private block?: THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>
 
   constructor(scene: THREE.Scene) {
@@ -102,6 +109,7 @@ export class TerrainWorld {
     this.group.clear()
     this.rocks.clear()
     this.beacons = []
+    this.samples.clear()
 
     const outside = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), material(0x512718))
     outside.rotation.x = -Math.PI / 2
@@ -124,6 +132,38 @@ export class TerrainWorld {
       this.group.add(wall)
     }
 
+    if (map.active_extent) {
+      const [activeX, activeHeight] = map.active_extent
+      const halfY = activeHeight / 2
+      const boundary = new THREE.LineLoop(
+        new THREE.BufferGeometry().setFromPoints([
+          this.position(0, -halfY, 0.055),
+          this.position(activeX, -halfY, 0.055),
+          this.position(activeX, halfY, 0.055),
+          this.position(0, halfY, 0.055),
+        ]),
+        new THREE.LineBasicMaterial({ color: 0xf27d42, transparent: true, opacity: 0.72 }),
+      )
+      this.group.add(boundary)
+    }
+
+    for (const zone of map.environment?.traction_zones ?? []) {
+      const [x, y, halfX, halfY, traction] = zone
+      const patch = new THREE.Mesh(
+        new THREE.PlaneGeometry(halfX * 2, halfY * 2),
+        new THREE.MeshBasicMaterial({
+          color: traction < 0.5 ? 0x49464a : 0x766158,
+          transparent: true,
+          opacity: 0.34,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+        }),
+      )
+      patch.rotation.x = -Math.PI / 2
+      patch.position.copy(this.position(x, y, 0.035))
+      this.group.add(patch)
+    }
+
     const [baseX, baseY, halfX, halfY] = map.base
     const landingPad = box(
       halfX * 2,
@@ -137,7 +177,7 @@ export class TerrainWorld {
     baseLabel.position.copy(this.position(baseX, baseY - halfY - 0.35, 0.3))
     this.group.add(baseLabel)
 
-    this.beacons = map.beacons.map(([x, y], index) => {
+    this.beacons = (map.mission ? [] : map.beacons).map(([x, y], index) => {
       const beacon = new THREE.Group()
       beacon.position.copy(this.position(x, y))
       const post = box(0.1, 0.82, 0.1, material(0x232a2d))
@@ -164,6 +204,33 @@ export class TerrainWorld {
       this.group.add(beacon)
       return { head, ring }
     })
+
+    for (const sample of map.samples ?? []) {
+      const root = new THREE.Group()
+      root.position.copy(this.position(sample.x, sample.y, 0.16))
+      const color = sample.target ? 0x66e0cb : 0xd59459
+      const sampleMaterial = material(color, {
+        emissive: sample.target ? 0x0c4f46 : 0x492712,
+        emissiveIntensity: sample.target ? 0.85 : 0.28,
+      })
+      const specimen = new THREE.Mesh(new THREE.IcosahedronGeometry(0.18, 1), sampleMaterial)
+      specimen.scale.set(1, 0.72, 0.85)
+      specimen.castShadow = true
+      root.add(specimen)
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(0.3, 0.36, 32),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: sample.target ? 0.82 : 0.32, side: THREE.DoubleSide }),
+      )
+      ring.rotation.x = -Math.PI / 2
+      ring.position.y = -0.13
+      root.add(ring)
+      const label = createLabel(`${sample.sample_id} · ${sample.sample_type}`, sample.target ? '#bfffee' : '#e6b68c', 0.3)
+      label.position.y = 0.55
+      root.add(label)
+      root.visible = !sample.collected
+      this.group.add(root)
+      this.samples.set(sample.sample_id, { root, material: sampleMaterial, target: sample.target })
+    }
 
     const [, blockX, blockY, blockHalfX, blockHalfY, blockHeight] = map.block
     this.block = box(
@@ -201,6 +268,17 @@ export class TerrainWorld {
       ring.material.opacity = target ? 0.9 : 0.45
     })
     if (this.block) this.block.visible = blockActive && stage >= 2
+  }
+
+  updateSamples(mission?: MissionState) {
+    const byId = new Map((mission?.samples ?? []).map((sample) => [sample.sample_id, sample]))
+    const inventory = new Set(mission?.inventory ?? [])
+    for (const [id, visual] of this.samples) {
+      const state = byId.get(id)
+      const collected = Boolean(state?.collected) || inventory.has(id)
+      visual.root.visible = !collected
+      visual.material.emissiveIntensity = visual.target ? 0.85 : 0.28
+    }
   }
 
   position(x: number, y: number, elevation = 0) {

@@ -1,0 +1,50 @@
+experiment_id: exp-010-parallel
+hypothesis: Parallel simulation and early rejection reduce wall time without relaxing
+  mastery
+change: Four subprocess environments; reject mathematically failing periodic evaluations
+  early
+reference: exp-009-retention
+level_id: n2
+algorithm: ppo
+budget_timesteps: 65536
+seeds:
+- 1
+evaluation_max_level: 8
+periodic_evaluation_freq: 16384
+periodic_evaluation_episodes: 50
+periodic_evaluation_seed_start: 910000
+checkpoint_freq: 4096
+retention_guard_freq: 4096
+hyperparams:
+  learning_rate: 5.0e-05
+  n_steps: 256
+  batch_size: 64
+  gamma: 0.99
+  gae_lambda: 0.95
+  ent_coef: 0.02
+  clip_range: 0.1
+  target_kl: 0.015
+normalize_obs: true
+parent_run_id: null
+environment:
+  kind: planetary
+  planet: mars
+  difficulty_level: 1
+  curriculum: true
+  curriculum_settings:
+    minimum_episodes: 50
+    success_threshold: 0.85
+    max_collisions: 2.0
+    rehearsal_probability: 0.5
+  curriculum_state: logs/campaign_curriculum.json
+  episode_db: logs/planetary_episodes.sqlite
+  record_episodes: true
+  max_experiments: null
+  campaign: true
+  history_steps: 4
+  run_id: exp-009-retention
+  policy_version: ppo-exp-009
+  mode: entrenamiento
+  training_no_progress_limit: 80
+vector_backend: subproc
+resume_best_mastery: true

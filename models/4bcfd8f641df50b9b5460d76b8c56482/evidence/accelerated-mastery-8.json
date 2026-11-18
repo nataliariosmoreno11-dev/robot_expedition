@@ -1,0 +1,2559 @@
+{
+  "cases": [
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6519,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910000,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6848,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910001,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6687,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910002,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.7091,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910003,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.692,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910004,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6582,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910005,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6472,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910006,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6961,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910007,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6469,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910008,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.7617,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910009,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.7692,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910010,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.7024,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910011,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6093,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910012,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6945,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910013,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6491,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910014,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.65,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910015,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6861,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910016,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6439,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910017,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6623,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910018,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6686,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910019,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6399,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910020,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6768,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910021,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6323,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910022,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.667,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910023,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6721,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910024,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.642,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910025,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6356,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910026,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6803,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910027,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.5892,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910028,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.5903,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910029,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6409,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910030,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.5989,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910031,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.671,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910032,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6711,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910033,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6272,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910034,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6965,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910035,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6833,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910036,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6514,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910037,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6356,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910038,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.7715,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910039,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6759,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910040,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6597,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910041,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.729,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910042,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6211,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910043,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6014,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910044,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6444,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910045,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6339,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910046,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6518,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910047,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6715,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910048,
+      "steps": 606,
+      "success": true
+    },
+    {
+      "battery": 28.63,
+      "collection_positions": [
+        [
+          10.780621700532643,
+          -3.923375288435232
+        ],
+        [
+          10.979815441871807,
+          3.5113663706244247
+        ],
+        [
+          9.108036528665936,
+          -0.23710014037961805
+        ],
+        [
+          6.752589072762025,
+          0.20999900812663302
+        ],
+        [
+          4.85542293575686,
+          -0.13070854859273828
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L8 \u00b7 La ruta imposible a simple vista",
+      "difficulty_level": 8,
+      "end": "exito",
+      "energy_consumed": 71.36993724222715,
+      "final_position": [
+        1.524193092166228,
+        0.9808713972100833
+      ],
+      "initial_position": [
+        1.4998842767521585,
+        2.1822687066496361e-10
+      ],
+      "latency_ms_mean": 0.6301,
+      "path_efficiency": 0.9504146820406233,
+      "path_length": 90.627,
+      "reference_path_cost": 107.8467252888208,
+      "requested_samples": 5,
+      "return": 318.266,
+      "route_cost": 113.4733367726017,
+      "samples_collected": 5,
+      "scenario_id": "scenario_08",
+      "seed": 910049,
+      "steps": 606,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/f59726370d0d471a9790482135f4e3e2/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "f59726370d0d471a9790482135f4e3e2",
+    "record_episodes": false,
+    "run_id": "f59726370d0d471a9790482135f4e3e2",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "models/{run_id}/practice/scenario_{level:02d}.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 0.6629,
+    "mission_completion": 1.0,
+    "path_length_mean": 90.627,
+    "return_mean": 318.266,
+    "return_std": 0.0,
+    "samples_collected_mean": 5.0,
+    "steps_mean": 606.0,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "8": 1.0
+    }
+  },
+  "partial": false,
+  "policy_version": "f59726370d0d471a9790482135f4e3e2:imitation:1000",
+  "requested_episodes": 50,
+  "scenario_level": 8,
+  "suite_id": "campaign-mastery-v1",
+  "training_step": 7455260,
+  "wall_time_s": 91.824
+}

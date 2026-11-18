@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import os
@@ -17,34 +18,67 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-import mlflow
 import numpy as np
-import torch
 import yaml
-from dotenv import load_dotenv
-from mlflow.tracking import MlflowClient
-from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import BaseCallback
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.utils import set_random_seed
-from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
+
+try:  # Las utilidades de config/manifiesto siguen disponibles sin la pila pesada.
+    import mlflow
+    import torch
+    from mlflow.tracking import MlflowClient
+    from stable_baselines3 import PPO
+    from stable_baselines3.common.callbacks import BaseCallback
+    from stable_baselines3.common.monitor import Monitor
+    from stable_baselines3.common.utils import set_random_seed
+    from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv, VecNormalize
+except ModuleNotFoundError:  # pragma: no cover - la ruta se comprueba antes de entrenar
+    mlflow = torch = MlflowClient = PPO = Monitor = DummyVecEnv = VecNormalize = None
+    set_random_seed = None
+
+    class BaseCallback:  # type: ignore[no-redef]
+        def __init__(self, *args, **kwargs):
+            del args, kwargs
+            self.model = None
+            self.locals = {}
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from robot_expedition.envs.beacon_expedition import (  # noqa: E402
-    ENVIRONMENT_VERSION, BeaconExpeditionEnv, environment_hash, load_level_config,
+    ENVIRONMENT_VERSION, BeaconExpeditionEnv, environment_hash, load_level_config, load_scenario_set,
+)
+from robot_expedition.envs.planetary_exploration import (  # noqa: E402
+    OBSERVATION_SIZE,
+    PLANETARY_ENVIRONMENT_VERSION,
+    PlanetaryExplorationEnv,
+    planetary_environment_hash,
 )
 from pipelines.evaluate import evaluate  # noqa: E402
+from pipelines.planetary_evaluate import evaluate_planetary  # noqa: E402
 from pipelines.policies import PPOPolicy, QTablePolicy  # noqa: E402
 
 N_ENVS = 4
 
 
-def evaluation_suite(level_id: str) -> str:
+def _require_training_stack() -> None:
+    if any(item is None for item in (mlflow, torch, PPO, Monitor, DummyVecEnv, VecNormalize)):
+        raise RuntimeError(
+            "Falta la pila de entrenamiento. Usa Python 3.12 e instala requirements.txt "
+            "antes de ejecutar pipelines/train.py."
+        )
+
+
+def evaluation_suite(level_id: str, configured: str | None = None) -> str:
     """Suite fija del paso 2 para el nivel (configs/suites)."""
-    return f"suite-{level_id}-v1"
+    return configured or f"suite-{level_id}-v1"
+
+
+def is_planetary(config: dict[str, Any]) -> bool:
+    return config.get("environment", {}).get("kind") == "planetary"
+
+
+def config_environment_version(config: dict[str, Any]) -> str:
+    return PLANETARY_ENVIRONMENT_VERSION if is_planetary(config) else ENVIRONMENT_VERSION
 
 
 def sha256_file(path: Path) -> str:
@@ -72,7 +106,7 @@ def save_json(path: Path, data: Any) -> None:
 
 def read_config(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as stream:
-        config = yaml.safe_load(stream)
+        config = json.load(stream) if path.suffix.lower() == ".json" else yaml.safe_load(stream)
     if not isinstance(config, dict):
         raise TypeError(f"La configuración debe ser un mapa YAML: {path}")
     required = ("experiment_id", "hypothesis", "level_id", "algorithm", "budget_timesteps", "seeds")
@@ -98,18 +132,31 @@ def read_config(path: Path) -> dict[str, Any]:
     config.setdefault("environment", {})
     if not isinstance(config["environment"], dict):
         raise TypeError("environment debe ser un mapa")
-    # El ruido de rayos, rocas, dunas y bloqueo salen del nivel (configs/levels/<nivel>.yaml);
-    # environment solo puede sobrescribirlos de forma explicita.
-    config["environment"] = {
-        "max_steps": 400,
-        "rock_jitter": 0.0,
-        **config["environment"],
-    }
+    if config["environment"].get("kind") == "planetary":
+        if config["algorithm"] != "ppo":
+            raise ValueError("el ambiente planetario usa PPO; Q-learning conserva el contrato Box(20)/Discrete(5)")
+        level = int(config["environment"].get("difficulty_level", 1))
+        if not 1 <= level <= 10:
+            raise ValueError("environment.difficulty_level debe estar entre 1 y 10")
+    else:
+        # El ruido de rayos, rocas, dunas y bloqueo salen del nivel; environment
+        # solo puede sobrescribirlos de forma explícita.
+        config["environment"] = {
+            "max_steps": 400,
+            "rock_jitter": 0.0,
+            **config["environment"],
+        }
+        if config["environment"].get("scenario_set") is not None:
+            load_scenario_set(config["environment"]["scenario_set"])
     return config
 
 
-def build_env(config: dict[str, Any]) -> BeaconExpeditionEnv:
-    return BeaconExpeditionEnv(level=config["level_id"], **config["environment"])
+def build_env(config: dict[str, Any]):
+    options = dict(config["environment"])
+    kind = options.pop("kind", "beacon")
+    if kind == "planetary":
+        return PlanetaryExplorationEnv(**options)
+    return BeaconExpeditionEnv(level=config["level_id"], **options)
 
 
 def _git_value(*args: str) -> str:
@@ -117,6 +164,9 @@ def _git_value(*args: str) -> str:
 
 
 def configure_tracking() -> tuple[str, str]:
+    _require_training_stack()
+    from dotenv import load_dotenv
+
     load_dotenv(ROOT / ".env")
     tracking_uri = os.environ.get(
         "MLFLOW_TRACKING_URI",
@@ -160,10 +210,12 @@ def _flatten_params(value: dict[str, Any], prefix: str = "") -> dict[str, str]:
 
 
 def _make_env(config: dict[str, Any], seed: int | None = None) -> Monitor:
+    _require_training_stack()
     env = build_env(config)
     if seed is not None:
         env.reset(seed=seed)
-    return Monitor(env, info_keywords=("success",))
+    info_keywords = ("success", "samples_collected", "difficulty_level", "explored_cells", "no_progress_steps", "training_stage") if is_planetary(config) else ("success",)
+    return Monitor(env, info_keywords=info_keywords)
 
 
 class TrainingMetricsCallback(BaseCallback):
@@ -178,10 +230,271 @@ class TrainingMetricsCallback(BaseCallback):
             if episode is not None:
                 mlflow.log_metric("training/reward", float(episode["r"]), step=step)
                 mlflow.log_metric(
-                    "training/success_rate",
+                    "training/stage_success_rate" if episode.get("training_stage") else "training/success_rate",
                     float(bool(episode.get("success", False))),
                     step=step,
                 )
+                if "samples_collected" in episode:
+                    mlflow.log_metric(
+                        "training/samples_collected", float(episode["samples_collected"]), step=step
+                    )
+                if "difficulty_level" in episode:
+                    mlflow.log_metric(
+                        "training/difficulty_level", float(episode["difficulty_level"]), step=step
+                    )
+                for key in ("explored_cells", "no_progress_steps"):
+                    if key in episode:
+                        mlflow.log_metric(f"training/{key}", float(episode[key]), step=step)
+        return True
+
+
+def prune_intermediate_checkpoints(model_dir, prefix, keep):
+    """Keep recent recovery points; never prune root, mastery or retention-safe weights."""
+    if keep is None:
+        return
+    keep = max(1, int(keep))
+    candidates = sorted((p for p in model_dir.glob(f"{prefix}-*")
+                         if p.is_dir() and not p.is_symlink()
+                         and p.name.removeprefix(prefix + "-").isdigit()),
+                        key=lambda p: int(p.name.rsplit("-", 1)[1]))
+    for path in candidates[:-keep]:
+        if path.resolve().parent != model_dir.resolve():
+            raise ValueError("Checkpoint outside model directory")
+        shutil.rmtree(path)
+
+
+class PersistentTrainingCallback(BaseCallback):
+    """Progress and immutable checkpoints after optimizer updates, including stop requests."""
+
+    def __init__(self, model_dir, config):
+        super().__init__()
+        self.model_dir = model_dir
+        self.config = config
+        self.last_report = 0.0
+        self.last_checkpoint = 0
+
+    def _on_step(self):
+        if time.monotonic() - self.last_report > 2:
+            save_json(self.model_dir / "progress.json", {
+                "total_timesteps": int(self.model.num_timesteps),
+                "updates": int(self.model._n_updates),
+            })
+            self.last_report = time.monotonic()
+        return True
+
+    def _on_rollout_start(self):
+        step = int(self.model.num_timesteps)
+        stop_path = os.environ.get("EXPEDITION_STOP_FILE")
+        stopping = bool(stop_path and Path(stop_path).exists())
+        if step and (step - self.last_checkpoint >= int(self.config.get("checkpoint_freq", 8192)) or stopping):
+            checkpoint = self.model_dir / f"checkpoint-{step:09d}"
+            checkpoint.mkdir(exist_ok=True)
+            self.model.save(checkpoint / "ppo_model.zip")
+            self.training_env.save(checkpoint / "vecnormalize.pkl")
+            torch.save(self.model.policy.optimizer.state_dict(), checkpoint / "optimizer.pt")
+            save_json(checkpoint / "checkpoint_state.json", {"total_timesteps": step})
+            curriculum = self.model_dir / "curriculum_state.json"
+            if curriculum.exists():
+                shutil.copy2(curriculum, checkpoint / curriculum.name)
+            save_json(checkpoint / "sha256.json", {
+                p.name: sha256_file(p) for p in checkpoint.iterdir() if p.is_file() and p.name != "sha256.json"
+            })
+            self.last_checkpoint = step
+            prune_intermediate_checkpoints(self.model_dir, "checkpoint", self.config.get("checkpoint_keep"))
+        if stopping:
+            raise KeyboardInterrupt("Detención solicitada; actualización PPO completada y pesos guardados")
+
+
+class _LivePPOPolicy:
+    """Vista determinista de la política actual con la normalización congelada."""
+
+    def __init__(self, model, normalizer):
+        self.model = model
+        self.normalizer = normalizer
+
+    def __call__(self, observation) -> int:
+        observation = np.asarray(observation, dtype=np.float32)
+        if self.normalizer is not None:
+            observation = self.normalizer.normalize_obs(observation)
+        action, _ = self.model.predict(observation, deterministic=True)
+        return int(np.asarray(action).item())
+
+
+class RetentionGuardCallback(BaseCallback):
+    """Keep a last-known-good policy when updates forget previously mastered missions."""
+
+    def __init__(self, config, model_dir, parent_checkpoint):
+        super().__init__()
+        self.config, self.model_dir = config, model_dir
+        state = parent_checkpoint / "curriculum_state.json" if parent_checkpoint else None
+        self.levels = json.loads(state.read_text()).get("mastered", []) if state and state.exists() else []
+        self.safe = model_dir / "retention-safe"
+        self.checked_step = 0
+        self.safe_step = 0
+
+    def _save_safe(self):
+        self.safe.mkdir(exist_ok=True)
+        self.model.save(self.safe / "ppo_model.zip")
+        self.training_env.save(self.safe / "vecnormalize.pkl")
+        self.safe_step = int(self.model.num_timesteps)
+        curriculum = Path(self.config["environment"].get("curriculum_state", ""))
+        if curriculum.is_file():
+            shutil.copy2(curriculum, self.safe / "curriculum_state.json")
+
+    def restore(self):
+        if not self.levels or not (self.safe / "ppo_model.zip").exists():
+            return
+        self.model.set_parameters(self.safe / "ppo_model.zip", device=self.model.device)
+        with (self.safe / "vecnormalize.pkl").open("rb") as stream:
+            normalizer = pickle.load(stream)
+        self.training_env.obs_rms = copy.deepcopy(normalizer.obs_rms)
+        self.training_env.ret_rms = copy.deepcopy(normalizer.ret_rms)
+        self.model._last_obs = self.training_env.normalize_obs(self.training_env.get_original_obs())
+        curriculum = self.config["environment"].get("curriculum_state")
+        if curriculum and (self.safe / "curriculum_state.json").exists():
+            shutil.copy2(self.safe / "curriculum_state.json", curriculum)
+
+    def _on_training_start(self):
+        self.checked_step = int(self.model.num_timesteps)
+        if self.levels:
+            self._save_safe()
+
+    def _on_step(self):
+        return True
+
+    def protect_mastery(self, levels):
+        from pipelines.specialist_policy import freeze_mastered
+        freeze_mastered(self.model, levels)
+        self.levels = list(levels)
+        self._save_safe()
+        self.checked_step = int(self.model.num_timesteps)
+
+    def verify(self):
+        step = int(self.model.num_timesteps)
+        if not self.levels or step == self.checked_step:
+            return
+        policy = _LivePPOPolicy(self.model, self.training_env)
+        evaluations = [evaluate_planetary(
+            policy, {**self.config["environment"], "record_episodes": False},
+            episodes=8, seed_start=820000, scenario_level=level,
+        ) for level in self.levels]
+        passed = all(e["metrics"]["success_rate"] >= 0.875
+                     and e["metrics"]["collisions_per_episode"] <= 2 for e in evaluations)
+        if passed:
+            self._save_safe()
+        else:
+            rejected = self.model_dir / f"rejected-{step}"
+            rejected.mkdir(exist_ok=True)
+            self.model.save(rejected / "ppo_model.zip")
+            self.training_env.save(rejected / "vecnormalize.pkl")
+            prune_intermediate_checkpoints(self.model_dir, "rejected", self.config.get("rejected_checkpoint_keep"))
+            self.restore()
+        record = {"step": step, "passed": passed, "safe_step": self.safe_step,
+                  "protected_levels": self.levels, "evaluations": evaluations,
+                  "purpose": "regression guard, not mastery certification"}
+        save_json(self.model_dir / f"retention-guard-{step}.json", record)
+        save_json(self.model_dir / "retention_guard.json", {k:v for k,v in record.items() if k != "evaluations"})
+        mlflow.log_metric("retention_guard/accepted", int(passed), step=step)
+        self.checked_step = step
+
+    def _on_rollout_start(self):
+        if int(self.model.num_timesteps) - self.checked_step >= int(self.config.get("retention_guard_freq", 4096)):
+            self.verify()
+
+    def _on_training_end(self):
+        self.verify()
+
+
+class PeriodicPlanetaryEvaluationCallback(BaseCallback):
+    """Evalúa snapshots en un holdout fijo sin modificar entorno ni currículo de training."""
+
+    def __init__(
+        self,
+        config: dict[str, Any],
+        model_dir: Path,
+        *,
+        frequency: int,
+        episodes: int,
+        seed_start: int,
+        step_offset: int = 0,
+        retention_guard=None,
+    ):
+        super().__init__()
+        self.config = config
+        self.model_dir = model_dir
+        self.frequency = max(1, int(frequency))
+        self.episodes = max(1, int(episodes))
+        self.seed_start = int(seed_start)
+        self.next_step = int(step_offset) + self.frequency
+        self.retention_guard = retention_guard
+
+    def _on_rollout_start(self):
+        version=f"{self.config['environment'].get('run_id','run')}:{self.model.num_timesteps}"
+        self.model.get_env().set_attr('policy_version',version)
+
+    def _on_step(self) -> bool:
+        step = int(self.model.num_timesteps)
+        if step < self.next_step:
+            return True
+        training_env = self.model.get_env()
+        policy = _LivePPOPolicy(self.model, training_env)
+        campaign=self.config['environment'].get('campaign',True)
+        manager=None
+        if campaign:
+            from robot_expedition.planetary.campaign_curriculum import CampaignCurriculum
+            manager=CampaignCurriculum(self.config['environment'].get('curriculum_state'), **self.config['environment'].get('curriculum_settings',{}))
+            manager._load()
+        evaluation_environment={**self.config["environment"],"policy_version":f"{self.config['environment'].get('run_id','run')}:{step}"}
+        result = evaluate_planetary(
+            policy,
+            evaluation_environment,
+            episodes=max(50,self.episodes,manager.minimum_episodes) if manager else self.episodes,
+            scenario_level=manager.current_level if manager else None,
+            abort_below_success_rate=manager.success_threshold if manager else None,
+            seed_start=self.seed_start,
+            max_level=int(self.config.get("evaluation_max_level", 10)),
+        )
+        result["suite_id"] = "planetary-periodic-holdout-v1"
+        result["training_step"] = step
+        result["policy_version"] = f"{self.config['environment'].get('run_id','run')}:{step}"
+        if manager and manager.evaluate_scenario_mastery(result):
+            level=manager.current_level
+            # Test retention before promotion; a failed previous mission triggers rehearsal.
+            retained=True
+            for previous in manager.mastered:
+                retention=evaluate_planetary(policy,evaluation_environment,episodes=max(50,manager.minimum_episodes),
+                    seed_start=self.seed_start+10000,scenario_level=previous,
+                    abort_below_success_rate=manager.success_threshold)
+                retention['training_step']=step;retention['policy_version']=result['policy_version']
+                save_json(self.model_dir/f"retention-{previous}-{step}.json",retention)
+                if not manager.evaluate_scenario_mastery(retention):
+                    manager.return_to_previous_scenario(previous);retained=False;break
+            if retained:
+                manager.advance_scenario()
+                if self.retention_guard is not None:
+                    self.retention_guard.protect_mastery(manager.mastered)
+                checkpoint=self.model_dir/f"mastered-scenario-{level:02d}-{step}"
+                checkpoint.mkdir(exist_ok=True)
+                self.model.save(checkpoint/'ppo_model.zip')
+                training_env.save(checkpoint/'vecnormalize.pkl')
+                torch.save(self.model.policy.optimizer.state_dict(),checkpoint/'optimizer.pt')
+                save_json(checkpoint/'checkpoint_state.json',{'total_timesteps':step})
+                save_json(checkpoint/'curriculum_state.json',manager.snapshot())
+        # Evaluation has its own environments and never updates normalization statistics.
+
+        save_json(self.model_dir / f"periodic-evaluation-{step}.json", result)
+        for key in (
+            "success_rate",
+            "return_mean",
+            "collisions_per_episode",
+            "samples_collected_mean",
+            "mission_completion",
+        ):
+            value = result["metrics"].get(key)
+            if value is not None:
+                mlflow.log_metric(f"periodic_evaluation/{key}", float(value), step=step)
+        while self.next_step <= step:
+            self.next_step += self.frequency
         return True
 
 
@@ -245,6 +558,12 @@ def _train_qlearning(
 
 
 def _download_checkpoint(parent_run_id: str) -> Path:
+    if parent_run_id.startswith("local:"):
+        directory=Path(parent_run_id.removeprefix("local:")).expanduser().resolve()
+        required=("checkpoint_state.json","ppo_model.zip","vecnormalize.pkl","optimizer.pt")
+        if not all((directory/name).is_file() for name in required):
+            raise FileNotFoundError(f"Incomplete local PPO checkpoint: {directory}")
+        return directory
     checkpoint_dir = Path(
         mlflow.artifacts.download_artifacts(run_id=parent_run_id, artifact_path="checkpoint")
     )
@@ -252,6 +571,49 @@ def _download_checkpoint(parent_run_id: str) -> Path:
     if not state_path.is_file():
         raise FileNotFoundError(f"El run padre {parent_run_id} no tiene checkpoint_state.json")
     return checkpoint_dir
+
+
+def _restore_curriculum_checkpoint(parent_checkpoint: Path, config: dict[str, Any]) -> Path | None:
+    if not is_planetary(config):
+        return None
+    saved = parent_checkpoint / "curriculum_state.json"
+    target_value = config["environment"].get("curriculum_state")
+    if not saved.is_file() or not target_value:
+        return None
+    target = Path(target_value)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(saved, target)
+    return target
+
+
+def _select_resume_checkpoint(config, parent, model_dir):
+    """Recover a proven mastery checkpoint if the last saved policy forgot a level."""
+    if not config.get("resume_best_mastery"):
+        return parent
+    state = json.loads((parent / "curriculum_state.json").read_text())
+    levels = state.get("mastered", [])
+    if not levels:
+        return parent
+    candidates = [parent, *sorted(parent.glob("mastered-scenario-*"),
+                                 key=lambda p: int(p.name.rsplit('-', 1)[1]), reverse=True)]
+    evidence = []
+    for candidate in candidates:
+        candidate_state = json.loads((candidate / "curriculum_state.json").read_text())
+        if not set(levels).issubset(candidate_state.get("mastered", [])):
+            continue
+        policy = PPOPolicy(candidate / "ppo_model.zip", candidate / "vecnormalize.pkl")
+        checks = [evaluate_planetary(policy, {**config["environment"], "record_episodes": False},
+                    episodes=8, scenario_level=level, seed_start=820000,
+                    abort_below_success_rate=.875) for level in levels]
+        passed = all(e["metrics"]["success_rate"] >= .875
+                     and e["metrics"]["collisions_per_episode"] <= 2 for e in checks)
+        evidence.append({"checkpoint": str(candidate), "passed": passed, "checks": checks,
+                         "model_sha256": sha256_file(candidate / "ppo_model.zip")})
+        save_json(model_dir / "resume-selection.json", {"candidates": evidence,
+                  "selected": str(candidate) if passed else None})
+        if passed:
+            return candidate
+    raise RuntimeError("No saved checkpoint retains the declared mastered scenarios; see resume-selection.json")
 
 
 def _train_ppo(
@@ -263,26 +625,38 @@ def _train_ppo(
     n_steps_override: int | None,
     batch_size_override: int | None,
 ) -> tuple[Path, int, Path]:
+    _require_training_stack()
+    # Evaluation computes and caches reference routes for the scenarios it uses.
+    # Avoid computing all ten route planners before the first training step.
     if not config["normalize_obs"]:
         raise ValueError("PPO requiere normalize_obs: true")
     set_random_seed(seed)
+    parent_checkpoint = _download_checkpoint(parent_run_id) if parent_run_id else None
+    if parent_checkpoint:
+        parent_checkpoint = _select_resume_checkpoint(config, parent_checkpoint, model_dir)
+        _restore_curriculum_checkpoint(parent_checkpoint, config)
     factories = [
         lambda cfg=config: _make_env(cfg)
         for _ in range(N_ENVS)
     ]
-    base_env = DummyVecEnv(factories)
+    backend = config.get("vector_backend", "dummy")
+    if backend not in ("dummy", "subproc"):
+        raise ValueError(f"Unsupported vector_backend: {backend}")
+    base_env = SubprocVecEnv(factories, start_method="spawn") if backend == "subproc" else DummyVecEnv(factories)
     base_env.seed(seed)
 
     parent_steps = 0
-    parent_checkpoint = _download_checkpoint(parent_run_id) if parent_run_id else None
+    hyperparams = dict(config["hyperparams"])
+    hyperparams["n_steps"] = n_steps_override or int(hyperparams.get("n_steps", 2048))
+    hyperparams["batch_size"] = batch_size_override or int(hyperparams.get("batch_size", 64))
     if parent_checkpoint:
         parent_steps = int(
             json.loads((parent_checkpoint / "checkpoint_state.json").read_text())["total_timesteps"]
         )
         vec_env = VecNormalize.load(parent_checkpoint / "vecnormalize.pkl", base_env)
-        vec_env.training = True
+        vec_env.training = not config.get("freeze_normalization", False)
         vec_env.norm_reward = False
-        model = PPO.load(parent_checkpoint / "ppo_model.zip", env=vec_env, device="auto")
+        model = PPO.load(parent_checkpoint / "ppo_model.zip", env=vec_env, device="auto", **hyperparams)
         optimizer_state = torch.load(
             parent_checkpoint / "optimizer.pt",
             map_location=model.device,
@@ -293,9 +667,6 @@ def _train_ppo(
             raise ValueError("El contador de pasos PPO no coincide con checkpoint_state.json")
     else:
         vec_env = VecNormalize(base_env, norm_obs=True, norm_reward=False, clip_obs=10.0)
-        hyperparams = dict(config["hyperparams"])
-        hyperparams["n_steps"] = n_steps_override or int(hyperparams.get("n_steps", 2048))
-        hyperparams["batch_size"] = batch_size_override or int(hyperparams.get("batch_size", 64))
         model = PPO(
             "MlpPolicy",
             vec_env,
@@ -304,20 +675,62 @@ def _train_ppo(
             **hyperparams,
         )
 
-    model.learn(
-        total_timesteps=budget,
-        callback=TrainingMetricsCallback(parent_steps),
-        reset_num_timesteps=parent_run_id is None,
-        progress_bar=False,
-    )
-    total_steps = int(model.num_timesteps)
-    steps_trained = total_steps - parent_steps
-    model_path = model_dir / "ppo_model.zip"
-    model.save(model_path)
-    vecnormalize_path = model_dir / "vecnormalize.pkl"
-    vec_env.save(vecnormalize_path)
-    torch.save(model.policy.optimizer.state_dict(), model_dir / "optimizer.pt")
-    save_json(model_dir / "checkpoint_state.json", {"total_timesteps": total_steps})
+    if config.get("specialist_actor") and parent_checkpoint:
+        mastered = json.loads((parent_checkpoint / "curriculum_state.json").read_text()).get("mastered", [])
+        if set(range(1, 6)).issubset(mastered):
+            from pipelines.specialist_policy import specialize_by_scenario, freeze_mastered
+            specialize_by_scenario(model, vec_env)
+            freeze_mastered(model, mastered)
+
+    callbacks = [TrainingMetricsCallback(parent_steps), PersistentTrainingCallback(model_dir, config)]
+    retention_guard = None
+    if is_planetary(config) and config.get("retention_guard_freq"):
+        retention_guard = RetentionGuardCallback(config, model_dir, parent_checkpoint)
+        callbacks.insert(0, retention_guard)
+    if config.get("accelerated_curriculum"):
+        from pipelines.accelerated_curriculum import AcceleratedCurriculumCallback
+        if parent_checkpoint and (parent_checkpoint / "practice").exists():
+            shutil.copytree(parent_checkpoint / "practice", model_dir / "practice", dirs_exist_ok=True)
+        callbacks.append(AcceleratedCurriculumCallback(config, model_dir, parent_checkpoint, retention_guard))
+    periodic_frequency = int(config.get("periodic_evaluation_freq", 0))
+    if is_planetary(config) and periodic_frequency > 0:
+        callbacks.append(
+            PeriodicPlanetaryEvaluationCallback(
+                config,
+                model_dir,
+                frequency=periodic_frequency,
+                episodes=int(config.get("periodic_evaluation_episodes", 8)),
+                seed_start=int(config.get("periodic_evaluation_seed_start", 910_000)),
+                step_offset=parent_steps,
+                retention_guard=retention_guard,
+            )
+        )
+    training_completed = False
+    try:
+        model.learn(
+            total_timesteps=budget,
+            callback=callbacks,
+            reset_num_timesteps=parent_run_id is None,
+            progress_bar=False,
+        )
+        training_completed = True
+    finally:
+        if retention_guard and not training_completed:
+            retention_guard.restore()
+        total_steps = int(model.num_timesteps)
+        steps_trained = total_steps - parent_steps
+        model_path = model_dir / "ppo_model.zip"
+        model.save(model_path)
+        vecnormalize_path = model_dir / "vecnormalize.pkl"
+        vec_env.save(vecnormalize_path)
+        torch.save(model.policy.optimizer.state_dict(), model_dir / "optimizer.pt")
+        save_json(model_dir / "checkpoint_state.json", {"total_timesteps": total_steps})
+        save_json(model_dir / "progress.json", {"total_timesteps": total_steps, "updates": int(model._n_updates)})
+        save_json(model_dir / "sha256.json", {
+            name: sha256_file(model_dir / name)
+            for name in ("ppo_model.zip", "vecnormalize.pkl", "optimizer.pt", "checkpoint_state.json")
+        })
+        vec_env.close()
     return model_path, steps_trained, vecnormalize_path
 
 
@@ -332,7 +745,15 @@ def _evaluate(
         policy = QTablePolicy(model_path)
     else:
         policy = PPOPolicy(model_path, normalization_path)
-    return evaluate(policy, config["level_id"], evaluation_suite(config["level_id"]), episodes=episodes)
+    if is_planetary(config):
+        return evaluate_planetary(
+            policy,
+            config["environment"],
+            episodes=episodes or 24,
+            max_level=int(config.get("evaluation_max_level", 10)),
+        )
+    suite_id = evaluation_suite(config["level_id"], config.get("evaluation_suite_id"))
+    return evaluate(policy, config["level_id"], suite_id, episodes=episodes)
 
 
 def _register_dvc_model(model_dir: Path, run_id: str) -> str:
@@ -383,12 +804,19 @@ def _manifest(
     metrics: dict[str, float],
     checkpoint_uri: str | None,
 ) -> dict[str, Any]:
+    planetary = is_planetary(config)
+    env_hash = (
+        planetary_environment_hash(config.get("environment"))
+        if planetary
+        else environment_hash(config["level_id"], config.get("environment"))
+    )
     return {
         "run_id": run_id,
         "experiment_id": config["experiment_id"],
         "level_id": config["level_id"],
         "algorithm": config["algorithm"],
-        "environment_version": ENVIRONMENT_VERSION,
+        "environment_version": config_environment_version(config),
+        "environment_kind": "planetary" if planetary else "beacon",
         "git_commit": git_commit,
         "origin": {
             "type": "experiment_config",
@@ -402,11 +830,19 @@ def _manifest(
         "model_uri": model_uri,
         "model_sha256": model_hash,
         "normalization_uri": normalization_uri,
-        "environment_hash": environment_hash(config["level_id"]),
-        "obs_spec": "20 floats, ver docs/contratos.md",
-        "action_spec": "Discrete(5)",
+        "environment_hash": env_hash,
+        "obs_spec": (
+            f"{OBSERVATION_SIZE * config.get('environment',{}).get('history_steps',1)} floats, ver docs/contratos-planetario.md"
+            if planetary
+            else "20 floats, ver docs/contratos.md"
+        ),
+        "action_spec": "Discrete(7)" if planetary else "Discrete(5)",
         "runtime_ref": f"requirements.txt + python {platform.python_version()}",
-        "evaluation_suite_id": evaluation_suite(config["level_id"]),
+        "evaluation_suite_id": (
+            ("campaign-mastery-v1" if config["environment"].get("campaign", True) else "planetary-holdout-v1")
+            if planetary
+            else evaluation_suite(config["level_id"], config.get("evaluation_suite_id"))
+        ),
         "seed": seed,
         "budget_timesteps": budget,
         "effective_budget_timesteps": effective_budget,
@@ -428,6 +864,7 @@ def train_seed(
     n_steps_override: int | None = None,
     batch_size_override: int | None = None,
     max_episode_steps: int | None = None,
+    on_started=None,
 ) -> str:
     run_id = uuid.uuid4().hex
     status = "failed"
@@ -459,7 +896,7 @@ def train_seed(
 
     tags = {
         "git_commit": _git_value("rev-parse", "HEAD"),
-        "environment_version": ENVIRONMENT_VERSION,
+        "environment_version": config_environment_version(config),
         "level_id": str(config["level_id"]),
         "experiment_id": str(config["experiment_id"]),
         "hypothesis": str(config["hypothesis"]),
@@ -504,6 +941,19 @@ def train_seed(
             raise
         run_id = run.info.run_id
         model_dir = ROOT / "models" / run_id
+        runtime_config = config
+        if is_planetary(config):
+            # Cada intento persistido identifica el run que realmente produjo sus
+            # acciones, aunque el YAML use un nombre descriptivo estable.
+            runtime_config = {
+                **config,
+                "environment": {
+                    **config["environment"],
+                    "run_id": run_id,
+                    "policy_version": run_id,
+                    "curriculum_state": str(model_dir / "curriculum_state.json"),
+                },
+            }
 
         def handle_interrupt(received: int, _frame: Any) -> None:
             raise KeyboardInterrupt(f"Señal {received} recibida")
@@ -514,6 +964,8 @@ def train_seed(
             mlflow.log_params(params)
             model_dir.mkdir(parents=True, exist_ok=True)
             save_json(model_dir / "config.json", resolved)
+            if on_started is not None:
+                on_started(run_id)
             mlflow.log_artifact(str(model_dir / "config.json"))
 
             if config["algorithm"] == "qlearning":
@@ -525,7 +977,7 @@ def train_seed(
                     pickle.dump(None, stream)
             else:
                 model_path, effective_budget, normalization_path = _train_ppo(
-                    config,
+                    runtime_config,
                     seed,
                     budget,
                     model_dir,
@@ -535,7 +987,7 @@ def train_seed(
                 )
 
             evaluation = _evaluate(
-                config,
+                runtime_config,
                 model_path,
                 normalization_path if config["algorithm"] == "ppo" else None,
                 eval_episodes,
@@ -556,6 +1008,11 @@ def train_seed(
                 if suite_metrics.get(key) is not None:
                     mlflow.log_metric(f"evaluation/{key}", float(suite_metrics[key]), step=effective_budget)
             model_hash = sha256_file(model_path)
+            curriculum_value = runtime_config.get("environment", {}).get("curriculum_state")
+            if is_planetary(config) and curriculum_value:
+                curriculum_path = Path(curriculum_value)
+                if curriculum_path.exists() and curriculum_path.resolve() != (model_dir / "curriculum_state.json").resolve():
+                    shutil.copy2(curriculum_path, model_dir / "curriculum_state.json")
             normalization_uri = (
                 f"runs:/{run_id}/vecnormalize.pkl"
                 if config["algorithm"] == "ppo"
@@ -575,7 +1032,7 @@ def train_seed(
                     "config": str(model_dir / "config.json"),
                 },
                 code_paths=[str(ROOT / "robot_expedition")],
-                input_example=[[0.0] * 20],
+                input_example=[[0.0] * (OBSERVATION_SIZE * config.get("environment",{}).get("history_steps",1) if is_planetary(config) else 20)],
             )
             model_uri = _register_dvc_model(model_dir, run_id)
             mlflow.register_model(
@@ -586,18 +1043,35 @@ def train_seed(
         except KeyboardInterrupt as exc:
             status = "interrupted"
             diagnosis = f"{type(exc).__name__}: {exc}"
-            if checkpoint_uri is None:
+            if (model_dir / "checkpoint_state.json").exists():
+                checkpoint_uri = f"local:{model_dir}"
+                diagnosis += f"; checkpoint recuperable en {model_dir}"
+            elif checkpoint_uri is None:
                 diagnosis += "; sin checkpoint disponible"
             raise
         except Exception as exc:
             status = "failed"
             diagnosis = f"{type(exc).__name__}: {exc}"
-            if checkpoint_uri is None:
+            if (model_dir / "checkpoint_state.json").exists():
+                checkpoint_uri = f"local:{model_dir}"
+                diagnosis += f"; checkpoint recuperable en {model_dir}"
+            elif checkpoint_uri is None:
                 diagnosis += "; sin checkpoint disponible"
             raise
         finally:
             for signum, handler in previous_handlers.items():
                 signal.signal(signum, handler)
+            # Interrupted runs still identify the saved weights and actual work.
+            state_path = model_dir / "checkpoint_state.json"
+            if state_path.exists() and (model_dir / "ppo_model.zip").exists():
+                model_hash = sha256_file(model_dir / "ppo_model.zip")
+                total = int(json.loads(state_path.read_text())["total_timesteps"])
+                parent = config.get("parent_run_id") or ""
+                parent_steps = 0
+                if parent.startswith("local:"):
+                    parent_state = Path(parent.removeprefix("local:")) / "checkpoint_state.json"
+                    parent_steps = int(json.loads(parent_state.read_text())["total_timesteps"])
+                effective_budget = total - parent_steps
             manifest_path = write_manifest()
             mlflow.set_tag("status", status)
             mlflow.log_artifact(str(manifest_path))

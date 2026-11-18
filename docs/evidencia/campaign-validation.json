@@ -1,0 +1,339 @@
+{
+  "command": "python scripts/campaign.py validate --physical --output logs/campaign-validation.json",
+  "purpose": "Map feasibility with a validation-only waypoint follower; not learned PPO performance",
+  "scenario_file_sha256": {
+    "scenario_01.json": "30eb33cbf1b5ecfb63a067e78ed794873be8f69f82887840c1b15515d710c0d2",
+    "scenario_02.json": "37ed2e568457f8bd55879a6e238a8a78013c76a5cf21f1ee1a8bb37a9a681658",
+    "scenario_03.json": "107246b1582f63c6dfd8088f61531a5f4d5f160a40cdbe936180cb99a57acc12",
+    "scenario_04.json": "52c4ef83c351c1c6ab39ad3b2d314378e61756b7e78245aa9930717b5e3198a0",
+    "scenario_05.json": "4ba5f81e08c52efef27b7fc958eb9e6f14a6f259d28ffce36937a8ed82af7fcc",
+    "scenario_06.json": "864f9c87b2424aa3fdce213db48b73985b7f130e91a6c2482dda0a311443cdb7",
+    "scenario_07.json": "ad0c9790ab69aadedf4c9254f6f1e8a6377844caee2a1ec978deea8f8f664ab2",
+    "scenario_08.json": "b8204a199af496f77bc0e3b27c27732c3db111c040beed45ff44e9a9745ca54f",
+    "scenario_09.json": "ded38c5cbc4a97259c76f536fc2d704cba55eb44a68a5bd4ad990f8d276316c6",
+    "scenario_10.json": "2e5c308bc7e5ee9fc8157f8afc699dcb057a8f58eaa8fee64c939d97399741a2"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "scenario_01",
+      "reference_path_cost": 4.494701294725885,
+      "shortest_feasible_path_length": 3.7455844122715702,
+      "route_detour_ratio": 1.0388382042325999,
+      "dead_end_count": 0,
+      "relevant_branch_count": 4,
+      "terrain_risk_score": 0.2032862466297667,
+      "multi_target_route_cost": 4.494701294725885,
+      "estimated_steps": 53.0253836921435,
+      "estimated_energy": 31.594291116568836,
+      "target_order": [
+        "S1"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_01",
+        "success": true,
+        "end": "exito",
+        "steps": 23,
+        "collisions": 0,
+        "battery": 92.73111823392884,
+        "samples_collected": 1,
+        "path_length": 2.3430647332824175,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_02",
+      "reference_path_cost": 23.795760510141733,
+      "shortest_feasible_path_length": 19.782337649086287,
+      "route_detour_ratio": 1.1154163860927717,
+      "dead_end_count": 0,
+      "relevant_branch_count": 4,
+      "terrain_risk_score": 0.20330162658533313,
+      "multi_target_route_cost": 23.795760510141733,
+      "estimated_steps": 137.91971658675584,
+      "estimated_energy": 82.17716446627536,
+      "target_order": [
+        "S1",
+        "S2"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_02",
+        "success": true,
+        "end": "exito",
+        "steps": 124,
+        "collisions": 0,
+        "battery": 53.81841003774236,
+        "samples_collected": 2,
+        "path_length": 18.969076059482582,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_03",
+      "reference_path_cost": 43.13725894437053,
+      "shortest_feasible_path_length": 35.86431816442575,
+      "route_detour_ratio": 1.6173738564099873,
+      "dead_end_count": 1,
+      "relevant_branch_count": 7,
+      "terrain_risk_score": 0.21011343337937038,
+      "multi_target_route_cost": 43.13725894437053,
+      "estimated_steps": 223.01962802011704,
+      "estimated_energy": 79.72951701719184,
+      "target_order": [
+        "S1",
+        "S3",
+        "S2"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_03",
+        "success": true,
+        "end": "exito",
+        "steps": 251,
+        "collisions": 0,
+        "battery": 44.9863803923922,
+        "samples_collected": 3,
+        "path_length": 36.88882734618028,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_04",
+      "reference_path_cost": 26.69914909717406,
+      "shortest_feasible_path_length": 21.806958851545033,
+      "route_detour_ratio": 1.0445498732349614,
+      "dead_end_count": 0,
+      "relevant_branch_count": 5,
+      "terrain_risk_score": 0.24131569617602144,
+      "multi_target_route_cost": 26.69914909717406,
+      "estimated_steps": 159.12254023429563,
+      "estimated_energy": 56.88630813376068,
+      "target_order": [
+        "S2",
+        "S1",
+        "S3"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_04",
+        "success": true,
+        "end": "exito",
+        "steps": 118,
+        "collisions": 0,
+        "battery": 72.0100763544651,
+        "samples_collected": 3,
+        "path_length": 20.71413174932927,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_05",
+      "reference_path_cost": 34.24956105893193,
+      "shortest_feasible_path_length": 28.00035713374682,
+      "route_detour_ratio": 1.0675577942877876,
+      "dead_end_count": 0,
+      "relevant_branch_count": 5,
+      "terrain_risk_score": 0.2424468390771628,
+      "multi_target_route_cost": 34.24956105893193,
+      "estimated_steps": 199.2743506079401,
+      "estimated_energy": 71.24058034233859,
+      "target_order": [
+        "S3",
+        "S1",
+        "S2",
+        "S4"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_05",
+        "success": true,
+        "end": "exito",
+        "steps": 176,
+        "collisions": 0,
+        "battery": 60.95930411474658,
+        "samples_collected": 4,
+        "path_length": 27.54777999351319,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_06",
+      "reference_path_cost": 63.7835421354153,
+      "shortest_feasible_path_length": 49.619090885900995,
+      "route_detour_ratio": 1.7796603169858478,
+      "dead_end_count": 2,
+      "relevant_branch_count": 5,
+      "terrain_risk_score": 0.26280802587589336,
+      "multi_target_route_cost": 63.7835421354153,
+      "estimated_steps": 297.54132220864085,
+      "estimated_energy": 56.731212101114195,
+      "target_order": [
+        "S1",
+        "S4",
+        "S2",
+        "S3"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_06",
+        "success": true,
+        "end": "exito",
+        "steps": 369,
+        "collisions": 0,
+        "battery": 59.36716502999868,
+        "samples_collected": 4,
+        "path_length": 51.14076361894529,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_07",
+      "reference_path_cost": 67.53382718054644,
+      "shortest_feasible_path_length": 51.36761902332485,
+      "route_detour_ratio": 1.702717303870362,
+      "dead_end_count": 4,
+      "relevant_branch_count": 5,
+      "terrain_risk_score": 0.26339912271972854,
+      "multi_target_route_cost": 67.53382718054644,
+      "estimated_steps": 317.48917737874933,
+      "estimated_energy": 60.534603153548204,
+      "target_order": [
+        "S4",
+        "S1",
+        "S2",
+        "S3",
+        "S5"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_07",
+        "success": true,
+        "end": "exito",
+        "steps": 371,
+        "collisions": 0,
+        "battery": 58.435151029242455,
+        "samples_collected": 5,
+        "path_length": 50.77680852484919,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_08",
+      "reference_path_cost": 109.67473175016114,
+      "shortest_feasible_path_length": 87.64005409571382,
+      "route_detour_ratio": 2.9634685667001412,
+      "dead_end_count": 2,
+      "relevant_branch_count": 4,
+      "terrain_risk_score": 0.2683209244432634,
+      "multi_target_route_cost": 109.67473175016114,
+      "estimated_steps": 482.36388225324464,
+      "estimated_energy": 91.97071354961867,
+      "target_order": [
+        "S5",
+        "S4",
+        "S3",
+        "S2",
+        "S1"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_08",
+        "success": true,
+        "end": "exito",
+        "steps": 606,
+        "collisions": 0,
+        "battery": 28.630062757772844,
+        "samples_collected": 5,
+        "path_length": 90.6273522152635,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_09",
+      "reference_path_cost": 109.92741979529919,
+      "shortest_feasible_path_length": 87.88858223313768,
+      "route_detour_ratio": 2.892187906813174,
+      "dead_end_count": 2,
+      "relevant_branch_count": 5,
+      "terrain_risk_score": 0.2690964546330026,
+      "multi_target_route_cost": 109.92741979529919,
+      "estimated_steps": 495.4935556051713,
+      "estimated_energy": 94.47410460205266,
+      "target_order": [
+        "S2",
+        "S3",
+        "S5",
+        "S4",
+        "S1",
+        "S6"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_09",
+        "success": true,
+        "end": "exito",
+        "steps": 623,
+        "collisions": 0,
+        "battery": 27.85278318927153,
+        "samples_collected": 6,
+        "path_length": 90.32932243110103,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    },
+    {
+      "scenario_id": "scenario_10",
+      "reference_path_cost": 110.62941694338119,
+      "shortest_feasible_path_length": 88.38563850798539,
+      "route_detour_ratio": 2.706346797519586,
+      "dead_end_count": 2,
+      "relevant_branch_count": 7,
+      "terrain_risk_score": 0.2714938882258644,
+      "multi_target_route_cost": 110.62941694338119,
+      "estimated_steps": 521.7529023090244,
+      "estimated_energy": 87.0457758685556,
+      "target_order": [
+        "S5",
+        "S4",
+        "S3",
+        "S8",
+        "S2",
+        "S7",
+        "S1",
+        "S6"
+      ],
+      "method": "Dijkstra + exact subset tour on clearance grid; kinematic budget estimate",
+      "resolution": 0.15,
+      "physical_validation": {
+        "scenario_id": "scenario_10",
+        "success": true,
+        "end": "exito",
+        "steps": 618,
+        "collisions": 0,
+        "battery": 36.2678645109664,
+        "samples_collected": 8,
+        "path_length": 91.14640893797467,
+        "controller": "validation-only waypoint follower, NOT learned policy",
+        "seed": 700001
+      }
+    }
+  ]
+}

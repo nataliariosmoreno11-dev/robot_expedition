@@ -1,0 +1,51 @@
+scenario_set_id: varied-v1
+version: 1
+description: "Seis mapas reproducibles para aprender rutas y evitar memorizar una sola disposición"
+scenarios:
+  - scenario_id: easy-open-north
+    difficulty: easy
+    description: "Objetivos cercanos por el corredor norte y una sola roca"
+    beacons: [[4.0, -0.8], [6.5, 2.8]]
+    active_rocks: 1
+    rock_jitter: 0.15
+    blocking: false
+
+  - scenario_id: easy-open-south
+    difficulty: easy
+    description: "Ruta corta por el sur con dos obstáculos separados"
+    beacons: [[4.0, -1.4], [6.8, -3.6]]
+    active_rocks: 2
+    rock_jitter: 0.20
+    blocking: false
+
+  - scenario_id: medium-zigzag
+    difficulty: medium
+    description: "Cruce norte-sur con cuatro rocas desplazadas"
+    beacons: [[7.2, 3.8], [8.7, -3.5]]
+    active_rocks: 4
+    rock_jitter: 0.50
+    blocking: false
+
+  - scenario_id: medium-reverse
+    difficulty: medium
+    description: "Mismo cruce en orden inverso para evitar memorizar el giro inicial"
+    beacons: [[8.8, -3.8], [7.2, 3.6]]
+    active_rocks: 4
+    rock_jitter: 0.60
+    blocking: false
+
+  - scenario_id: hard-long-route
+    difficulty: hard
+    description: "Objetivos lejanos, cinco rocas y posiciones perturbadas"
+    beacons: [[9.5, 3.5], [9.5, -3.5]]
+    active_rocks: 5
+    rock_jitter: 0.80
+    blocking: false
+
+  - scenario_id: hard-blocked-return
+    difficulty: hard
+    description: "Ruta larga sur-norte; aparece un bloqueo después de visitar B1"
+    beacons: [[10.5, -4.2], [10.5, 3.2]]
+    active_rocks: 5
+    rock_jitter: 1.00
+    blocking: true

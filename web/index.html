@@ -22,9 +22,11 @@
         </a>
         <nav class="topnav" aria-label="Secciones">
           <a href="#mission">Simulación</a>
+          <a href="#planetaryMission">Exploración</a>
           <a href="#catalogo">Catálogo</a>
           <a href="#comparar">Comparar</a>
           <a href="#monitoreo">Monitoreo</a>
+          <a href="#aprendizaje">Aprendizaje</a>
         </nav>
         <div class="topbar-status">
           <span class="eyebrow">Estado de enlace</span>
@@ -35,15 +37,41 @@
         </div>
       </header>
 
+      <aside class="training-strip" aria-label="Estado del entrenamiento">
+        <p id="trainingOverview" role="status">Consultando el entrenamiento en segundo plano…</p>
+        <a href="#agentTraining">Ver avance y modelos</a>
+      </aside>
+      <section class="progress-preview" aria-label="Avances guardados">
+        <strong>Ver avances · escenarios 1–5</strong>
+        <p>Recorridos exitosos registrados durante el entrenamiento. Son ejemplos seleccionados, no una garantía de éxito en todos los intentos.</p>
+        <div class="replay-actions" id="progressScenarios">
+          <button class="secondary-button" data-progress-level="1">Escenario 1</button>
+          <button class="secondary-button" data-progress-level="2">Escenario 2</button>
+          <button class="secondary-button" data-progress-level="3">Escenario 3</button>
+          <button class="secondary-button" data-progress-level="4">Escenario 4</button>
+          <button class="secondary-button" data-progress-level="5">Escenario 5</button>
+        </div>
+        <p id="progressReplayStatus" role="status">Cargando recorrido guardado…</p>
+      </section>
       <main id="mission" class="workspace">
         <section class="viewport-panel" aria-label="Simulación tridimensional">
           <div id="scene" class="scene"></div>
+          <details class="viewer-history">
+            <summary>Comparar versiones del modelo</summary>
+            <label>Modelo guardado<select id="historyModel"><option>Cargando versiones…</option></select></label>
+            <label>Escenario<select id="historyScenario"></select></label>
+            <button id="historyLoad" class="secondary-button" type="button">Buscar intentos</button>
+            <label>Intento registrado<select id="historyEpisode"><option>Selecciona una versión y escenario</option></select></label>
+            <button id="historyPlay" class="primary-button" type="button" disabled>Reproducir intento</button>
+            <p id="historyStatus" role="status">Replays de entrenamiento: cada intento conserva sus resultados, incluidos los fallos. No equivalen a una evaluación de los pesos finales.</p>
+          </details>
+          <button id="fullscreenButton" class="secondary-button viewer-fullscreen" type="button" aria-pressed="false">Pantalla completa</button>
 
           <div class="scene-heading">
             <span id="modeBadge" class="mode-badge">SIN DATOS</span>
             <div>
               <span class="eyebrow">Objetivo activo</span>
-              <h1 id="objectiveValue">Esperando telemetría</h1>
+              <h1 id="objectiveValue">Visor sin reproducción</h1>
             </div>
           </div>
 
@@ -58,6 +86,7 @@
             <div class="telemetry-secondary">
               <span>Acción <b id="actionValue">—</b></span>
               <span>Choques <b id="collisionsValue">—</b></span>
+              <span>Evento <b id="eventValue">—</b></span>
               <span>Fin <b id="endValue">—</b></span>
             </div>
           </section>
@@ -95,6 +124,70 @@
         </section>
 
         <aside class="control-panel">
+          <section class="panel-section">
+            <details id="batteryAudit">
+              <summary>¿Alcanza la batería? · Ver prueba de los 8 escenarios</summary>
+              <p class="section-copy">Prueba física con rutas de referencia, independiente del PPO. Comprueba que la misión es realizable con la batería actual; no acredita aprendizaje del modelo. Un intento por escenario, semilla 700001.</p>
+              <p id="batteryAuditStatus" class="section-copy" role="status">Cargando resultados…</p>
+              <table class="battery-audit-table"><thead><tr><th>Escenario</th><th>Batería restante</th><th>Resultado</th></tr></thead><tbody id="batteryAuditRows"></tbody></table>
+            </details>
+          </section>
+          <section id="planetaryMission" class="panel-section planetary-launcher">
+            <div class="section-heading">
+              <div><span class="eyebrow">Campaña de mapas fijos</span><h2>Diez misiones marcianas</h2></div>
+              <span class="planet-chip">MARTE</span>
+            </div>
+            <p class="section-copy">Cada escenario conserva mapa, muestras y clima. Un episodio es un nuevo intento sobre la misma misión.</p>
+
+            <div class="planet-level-grid" role="list" aria-label="Niveles planetarios">
+              <button type="button" data-planet-level="1"><b>01</b><span>Primeros movimientos</span></button>
+              <button type="button" data-planet-level="2"><b>02</b><span>El primer desvío</span></button>
+              <button type="button" data-planet-level="3"><b>03</b><span>El laberinto rocoso</span></button>
+              <button type="button" data-planet-level="4"><b>04</b><span>El cráter central</span></button>
+              <button type="button" data-planet-level="5"><b>05</b><span>El valle de decisiones</span></button>
+              <button type="button" data-planet-level="6"><b>06</b><span>El laberinto de los cráteres</span></button>
+              <button type="button" data-planet-level="7"><b>07</b><span>La tormenta marciana</span></button>
+              <button type="button" data-planet-level="8"><b>08</b><span>La ruta imposible a simple vista</span></button>
+            </div>
+
+            <div class="level-preview" aria-live="polite">
+              <strong id="difficultyTitle">L1 · Llanura inicial</strong>
+              <p id="difficultyDescription">Mapa pequeño, una muestra objetivo, una roca y clima suave.</p>
+              <div class="level-facts" id="difficultyFacts"></div>
+            </div>
+
+            <select id="difficultySelect" class="sr-only" aria-label="Escenario"><option value="1">01 · Primeros movimientos</option><option value="2">02 · El primer desvío</option><option value="3">03 · El laberinto rocoso</option><option value="4">04 · El cráter central</option><option value="5">05 · El valle de decisiones</option><option value="6">06 · El laberinto de los cráteres</option><option value="7">07 · La tormenta marciana</option><option value="8">08 · La ruta imposible a simple vista</option></select>
+            <button id="manualButton" class="mission-start-button" type="button" disabled>Iniciar escenario 01</button>
+            <p class="mission-seed">Semilla de sensores: <b id="missionSeedValue">se elige al iniciar</b></p>
+
+            <div class="sample-legend" aria-label="Leyenda de muestras">
+              <span><i class="sample-target"></i>Muestra objetivo</span>
+              <span><i class="sample-distractor"></i>Distractor</span>
+            </div>
+            <p class="section-copy mission-instruction">Conduce con las flechas, acércate a la muestra correcta y pulsa <b>Recolectar muestra</b>. Después vuelve a BASE.</p>
+            <div class="keypad" aria-label="Controles del rover">
+              <button type="button" data-action="1" aria-label="Avanzar y girar a la izquierda">↖</button>
+              <button type="button" data-action="0" aria-label="Avanzar">↑</button>
+              <button type="button" data-action="2" aria-label="Avanzar y girar a la derecha">↗</button>
+              <button type="button" data-action="3" aria-label="Girar a la izquierda">←</button>
+              <span class="keypad-core">ROVER</span>
+              <button type="button" data-action="4" aria-label="Girar a la derecha">→</button>
+            </div>
+            <button type="button" data-action="6" class="secondary-button">↓ Retroceder</button>
+            <button type="button" data-action="5" class="collect-button" aria-label="Recolectar muestra">◇ Recolectar muestra</button>
+
+            <details class="legacy-mode">
+              <summary>Simulación anterior de balizas</summary>
+              <label class="field">
+                <span>Ambiente</span>
+                <select id="manualEnvironment">
+                  <option value="planetary" selected>Exploración planetaria</option>
+                  <option value="beacon">Balizas heredado</option>
+                </select>
+              </label>
+            </details>
+          </section>
+
           <section class="identity-card">
             <div class="section-heading">
               <div><span class="eyebrow">Identidad activa</span><h2>Modelo y ambiente</h2></div>
@@ -107,6 +200,10 @@
               <div><dt>Nivel</dt><dd id="levelValue">—</dd></div>
               <div><dt>Entrenado en</dt><dd id="trainedValue">—</dd></div>
               <div><dt>Configuración</dt><dd id="configValue">—</dd></div>
+              <div><dt>Planeta</dt><dd id="planetValue">—</dd></div>
+              <div><dt>Escenario</dt><dd id="scenarioValue">—</dd></div>
+              <div><dt>Misión</dt><dd id="missionValue">—</dd></div>
+              <div><dt>Condiciones</dt><dd id="conditionsValue">—</dd></div>
             </dl>
           </section>
 
@@ -142,7 +239,7 @@
             <div class="result-grid">
               <article><span>Éxito</span><strong id="successValue">—</strong></article>
               <article><span>Recorrido</span><strong id="pathValue">—</strong></article>
-              <article><span>Balizas</span><strong id="visitedValue">—</strong></article>
+              <article><span>Objetivos</span><strong id="visitedValue">—</strong></article>
               <article><span>Latencia</span><strong id="latencyValue">—</strong></article>
             </div>
             <canvas id="curve" class="curve" aria-label="Curva de recompensa y éxito"></canvas>
@@ -153,20 +250,26 @@
             </div>
           </section>
 
-          <section class="panel-section manual-section">
+          <section class="panel-section episode-section">
             <div class="section-heading">
-              <div><span class="eyebrow">Control manual</span><h2>Conducir el rover</h2></div>
-              <button id="manualButton" class="secondary-button" type="button" disabled>Iniciar</button>
+              <div><span class="eyebrow">Historial completo</span><h2>Todos los intentos</h2></div>
+              <button id="refreshEpisodesButton" class="secondary-button" type="button" disabled>Actualizar</button>
             </div>
-            <p class="section-copy">Usa las flechas del teclado o los controles. Cada orden se envía a <code>/sim/step</code>.</p>
-            <div class="keypad" aria-label="Controles del rover">
-              <button type="button" data-action="1" aria-label="Avanzar y girar a la izquierda">↖</button>
-              <button type="button" data-action="0" aria-label="Avanzar">↑</button>
-              <button type="button" data-action="2" aria-label="Avanzar y girar a la derecha">↗</button>
-              <button type="button" data-action="3" aria-label="Girar a la izquierda">←</button>
-              <span class="keypad-core">ROVER</span>
-              <button type="button" data-action="4" aria-label="Girar a la derecha">→</button>
+            <label class="field"><span>Tipo de intentos</span><select id="episodeMode"><option value="entrenamiento">Entrenamiento</option><option value="evaluación">Dominio</option><option value="robustez">Robustez</option><option value="manual">Manual</option></select></label>
+            <label><input id="showTrail" type="checkbox" checked> Trayectoria del rover</label>
+            <label><input id="showReference" type="checkbox"> Referencia (solo replay)</label>
+            <label class="field"><span>Comparar episodios</span><input id="compareNumbers" placeholder="100, 500, 1000"></label>
+
+            <button id="compareAttempts" class="secondary-button" type="button">Comparar intentos</button>
+            <button id="scenarioProgress" class="secondary-button" type="button">Primeros, intermedios, recientes y mejor</button>
+            <div id="campaignProgress" aria-live="polite"></div>
+            <div id="comparisonResult" style="max-height:24rem;overflow:auto;white-space:normal"></div>
+            <p id="experimentStorageMeta" class="section-copy">Se conserva cada intento completo, incluidos los fallidos.</p>
+            <div class="episode-loader">
+              <label class="field"><span>Número de episodio</span><input id="episodeNumberInput" type="number" min="1" placeholder="Ej. 12" /></label>
+              <button id="loadEpisodeButton" class="secondary-button" type="button" disabled>Cargar REPLAY</button>
             </div>
+            <div id="episodeList" class="episode-list"><p class="section-copy">Conecta la API para consultar el historial.</p></div>
           </section>
 
           <section class="panel-section replay-section">
@@ -271,6 +374,17 @@
           <button id="refreshMonitor" class="secondary-button" type="button">Actualizar</button>
         </div>
         <div id="monitorView"><p class="section-copy">Conecta la API para ver el monitoreo.</p></div>
+      </section>
+
+      <section id="aprendizaje" class="registry" aria-labelledby="learningTitle">
+        <div class="registry-head">
+          <div>
+            <span class="eyebrow">Episodios persistidos</span>
+            <h2 id="learningTitle">Evolución del aprendizaje</h2>
+            <p id="learningMeta" class="section-copy">Sin episodios registrados.</p>
+          </div>
+        </div>
+        <canvas id="trainingDashboardCanvas" class="training-dashboard" aria-label="Ocho gráficas de entrenamiento"></canvas>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>
