@@ -485,7 +485,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.collisions += int(collision)
 
         progress = distance_before - self._distance_to_target()
-        reward = 0.8 * progress - 0.015 - 0.025 * energy - 0.6 * collision
+        reward = 1.15 * progress - 0.02 - 0.025 * energy - 3.0 * collision
         event = None
         if action == COLLECT_ACTION:
             collect_reward, event = self._collect()
@@ -496,7 +496,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         else:
             self._stuck_steps = max(0, self._stuck_steps - 1)
         if self._stuck_steps >= 12:
-            reward -= 0.12
+            reward -= 0.8
             event = event or "rover atascado"
 
         enough_samples = len(self.inventory) >= self.requested_samples

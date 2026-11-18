@@ -45,13 +45,13 @@ class PlanetaryQLearningAgent:
         self,
         *,
         seed: int = 7,
-        alpha: float = 0.18,
-        gamma: float = 0.96,
+        alpha: float = 0.14,
+        gamma: float = 0.98,
         epsilon: float = 0.75,
         epsilon_min: float = 0.06,
         epsilon_decay: float = 0.992,
-        guide_probability: float = 0.80,
-        warmup_visits: int = 3,
+        guide_probability: float = 0.95,
+        warmup_visits: int = 6,
     ):
         self.rng = np.random.default_rng(seed)
         self.alpha = float(alpha)
@@ -83,11 +83,19 @@ class PlanetaryQLearningAgent:
         state = discretize_planetary(observation)
         values = self.values(state)
         visits = self.visit_counts(state)
+        obs = np.asarray(observation, dtype=np.float32)
+        front_blocked = float(np.min(obs[3:6])) < 0.9
+        barely_moving = abs(float(obs[12])) < 0.035
 
         # Recolectar es una acción escasa y de alta recompensa. Cuando el
         # controlador sensorial confirma que procede, no se desperdicia ese
         # instante con una acción aleatoria.
         if int(guide_action) == ACTION_COUNT - 1:
+            action = int(guide_action)
+            self.guided_decisions += 1
+        elif front_blocked or barely_moving:
+            # Escudo de seguridad: la exploracion no puede ordenar avanzar
+            # contra una roca ni anular una maniobra de desatasco.
             action = int(guide_action)
             self.guided_decisions += 1
         elif self.rng.random() < self.epsilon:
@@ -170,7 +178,9 @@ class PlanetaryQLearningAgent:
         self.epsilon = float(metadata.get("epsilon", self.epsilon))
         self.alpha = float(metadata.get("alpha", self.alpha))
         self.gamma = float(metadata.get("gamma", self.gamma))
-        self.guide_probability = float(metadata.get("guide_probability", self.guide_probability))
+        # Los checkpoints antiguos conservan la tabla aprendida, pero adoptan
+        # el escudo y la exploracion guiada actuales.
+        self.guide_probability = max(self.guide_probability, float(metadata.get("guide_probability", 0.0)))
         self.guided_decisions = int(metadata.get("guided_decisions", 0))
         self.random_decisions = int(metadata.get("random_decisions", 0))
         self.greedy_decisions = int(metadata.get("greedy_decisions", 0))

@@ -30,6 +30,6 @@ def test_planetary_qlearning_updates_and_restores_memory(tmp_path):
 
 
 def test_planetary_qlearning_explores_all_valid_actions():
-    agent = PlanetaryQLearningAgent(seed=2, epsilon=1.0)
+    agent = PlanetaryQLearningAgent(seed=2, epsilon=1.0, guide_probability=0.0)
     actions = {agent.choose(observation(), guide_action=0)[1] for _ in range(100)}
     assert actions == set(range(6))

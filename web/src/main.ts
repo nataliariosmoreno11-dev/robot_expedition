@@ -1019,7 +1019,7 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
   }
 })
 
-difficultySelect.value = '7'
+difficultySelect.value = '1'
 updatePlanetaryLevel()
 void connectApi().then(() => {
   if (apiOnline) {

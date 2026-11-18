@@ -492,8 +492,10 @@ class Session:
             # Mantiene un final obligatorio, pero da a los mapas grandes un
             # presupuesto compatible con las rutas observadas en la campana
             # PPO (L8 promedia ~606 pasos en la evidencia aprobada).
-            step_budget = (350 + difficulty_level * 55) if policy_id == "planetary-qlearning" else (140 + difficulty_level * 30)
-            self.env.max_steps = min(self.env.max_steps, step_budget)
+            if policy_id == "planetary-qlearning":
+                self.env.max_steps = 350 + difficulty_level * 55
+            else:
+                self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
         self.done, self.total, self.touched = False, 0.0, time.time()
 
 
