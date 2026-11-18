@@ -65,6 +65,14 @@ export class ExpeditionApi {
     return this.request('/monitor')
   }
 
+  async ppoCampaign(): Promise<unknown> {
+    return this.request('/training/ppo/campaign')
+  }
+
+  async ppoReplay(level: number): Promise<unknown> {
+    return this.request(`/training/ppo/campaign/${level}/replay`)
+  }
+
   async evaluate(runId: string, levelId: string, seeds: number[]): Promise<unknown> {
     return this.request('/evaluate', {
       method: 'POST',

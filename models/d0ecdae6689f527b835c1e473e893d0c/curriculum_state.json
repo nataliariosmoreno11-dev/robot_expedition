@@ -1,0 +1,54 @@
+{
+  "current_level": 3,
+  "current_scenario": "scenario_03",
+  "evaluations": {
+    "1": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "a25e4a0a6f164b4c88aafc976be827f6:2214912",
+      "success_rate": 1.0,
+      "training_step": 2214912
+    },
+    "2": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "a25e4a0a6f164b4c88aafc976be827f6:2214912",
+      "success_rate": 1.0,
+      "training_step": 2214912
+    },
+    "3": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "a25e4a0a6f164b4c88aafc976be827f6:2182144",
+      "success_rate": 1.0,
+      "training_step": 2182144
+    },
+    "4": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "a25e4a0a6f164b4c88aafc976be827f6:2198528",
+      "success_rate": 1.0,
+      "training_step": 2198528
+    }
+  },
+  "mastered": [
+    1,
+    2
+  ],
+  "pending": [
+    "scenario_03",
+    "scenario_04",
+    "scenario_05",
+    "scenario_06",
+    "scenario_07",
+    "scenario_08",
+    "scenario_09",
+    "scenario_10"
+  ],
+  "schema": "fixed-campaign-curriculum/v1",
+  "settings": {
+    "max_collisions": 2.0,
+    "minimum_episodes": 50,
+    "success_threshold": 0.85
+  }
+}

@@ -55,6 +55,9 @@ const trainedValue = required<HTMLElement>('#trainedValue')
 const configValue = required<HTMLElement>('#configValue')
 const missionMinimap = required<HTMLCanvasElement>('#missionMinimap')
 const elevationMap = required<HTMLCanvasElement>('#elevationMap')
+const ppoCampaignMeta = required<HTMLElement>('#ppoCampaignMeta')
+const ppoCampaignLevels = required<HTMLElement>('#ppoCampaignLevels')
+const ppoEvidenceDetail = required<HTMLElement>('#ppoEvidenceDetail')
 
 const scene = new ExpeditionScene(required<HTMLElement>('#scene'), {
   onFrame: (snapshot) => {
@@ -791,6 +794,67 @@ function setManualControls(enabled: boolean) {
   })
 }
 
+function metricNumber(record: UnknownRecord | undefined, key: string): number {
+  return record && typeof record[key] === 'number' ? Number(record[key]) : 0
+}
+
+function showPpoEvidence(item: UnknownRecord) {
+  const scenario = isRecord(item.scenario) ? item.scenario : {}
+  const model = isRecord(item.model) ? item.model : {}
+  const evidence = isRecord(item.evidence) ? item.evidence : {}
+  const metrics = isRecord(evidence.metrics) ? evidence.metrics : {}
+  const samples = Array.isArray(scenario.samples) ? scenario.samples : []
+  const targets = samples.filter((sample) => isRecord(sample) && sample.target === true).length
+  const distractors = Math.max(0, samples.length - targets)
+  const success = metricNumber(metrics, 'success_rate') * 100
+  const collisions = metricNumber(metrics, 'collisions_per_episode')
+  const reward = metricNumber(metrics, 'return_mean')
+  ppoEvidenceDetail.innerHTML = `
+    <div><span class="eyebrow">Escenario fijo</span><strong>L${Number(item.level)} · ${String(scenario.name ?? 'Sin nombre')}</strong></div>
+    <dl>
+      <div><dt>Checkpoint PPO</dt><dd>${String(model.run_id ?? '').slice(0, 10)}</dd></div>
+      <div><dt>Entrenamiento</dt><dd>${Number(model.total_timesteps ?? 0).toLocaleString('es-CO')} pasos</dd></div>
+      <div><dt>Evaluación</dt><dd>${Number(evidence.cases ?? 0)} episodios · ${success.toFixed(0)}% éxito</dd></div>
+      <div><dt>Resultado medio</dt><dd>${reward.toFixed(1)} recompensa · ${collisions.toFixed(2)} choques</dd></div>
+      <div><dt>Misión</dt><dd>${targets} objetivos · ${distractors} distractores · ${String(scenario.target_type ?? 'muestra')}</dd></div>
+      <div><dt>Complejidad</dt><dd>${Array.isArray(scenario.rocks) ? scenario.rocks.length : 0} rocas · ${Array.isArray(scenario.craters) ? scenario.craters.length : 0} cráteres · viento ${Number(scenario.wind_speed_m_s ?? 0)} m/s</dd></div>
+    </dl>`
+}
+
+async function loadPpoCampaign() {
+  if (!api) return
+  try {
+    const payload = await api.ppoCampaign()
+    if (!isRecord(payload) || !Array.isArray(payload.levels)) throw new Error('La API no devolvió la campaña PPO.')
+    const levels = payload.levels.filter(isRecord)
+    ppoCampaignMeta.textContent = `${levels.length} checkpoints aprobados · ${Number(payload.latest_total_timesteps ?? 0).toLocaleString('es-CO')} pasos acumulados en el hito final · producción en modo evidencia e inferencia`
+    ppoCampaignLevels.replaceChildren()
+    for (const item of levels) {
+      const model = isRecord(item.model) ? item.model : {}
+      const scenario = isRecord(item.scenario) ? item.scenario : {}
+      const evidence = isRecord(item.evidence) ? item.evidence : {}
+      const metrics = isRecord(evidence.metrics) ? evidence.metrics : {}
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'ppo-level-card'
+      button.innerHTML = `<span>L${Number(item.level)}</span><strong>${String(scenario.name ?? 'Escenario')}</strong><small>${Number(model.total_timesteps ?? 0).toLocaleString('es-CO')} pasos</small><i>${(metricNumber(metrics, 'success_rate') * 100).toFixed(0)}% éxito</i>`
+      button.addEventListener('click', () => {
+        ppoCampaignLevels.querySelectorAll('button').forEach((node) => node.classList.remove('selected'))
+        button.classList.add('selected')
+        showPpoEvidence(item)
+      })
+      ppoCampaignLevels.append(button)
+    }
+    const first = levels[0]
+    if (first) {
+      ppoCampaignLevels.querySelector('button')?.classList.add('selected')
+      showPpoEvidence(first)
+    }
+  } catch (error) {
+    ppoCampaignMeta.textContent = `No se pudo cargar el modelado PPO: ${errorMessage(error)}`
+  }
+}
+
 playButton.addEventListener('click', () => scene.togglePlayback())
 timeline.addEventListener('input', () => {
   scene.setPlaying(false)
@@ -942,5 +1006,8 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
 difficultySelect.value = '7'
 updatePlanetaryLevel()
 void connectApi().then(() => {
-  if (apiOnline && !manualSessionId) void startManualMode()
+  if (apiOnline) {
+    void loadPpoCampaign()
+    if (!manualSessionId) void startManualMode()
+  }
 })

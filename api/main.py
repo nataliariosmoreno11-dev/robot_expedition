@@ -61,6 +61,35 @@ PLANETARY_Q_CHECKPOINT_DIR = Path(os.environ.get(
 PLANETARY_Q_SELECTION = PLANETARY_Q_CHECKPOINT_DIR / "planetary_qlearning_active.json"
 q_checkpoint_lock = threading.Lock()
 
+# Hitos PPO aprobados en la campana fija de Tomas. Se publican como evidencia
+# de entrenamiento y no reemplazan el Q-learning interactivo de esta rama.
+PPO_CAMPAIGN_MODELS = (
+    "f7c104a304f25b458721258b540a337e",
+    "d0ecdae6689f527b835c1e473e893d0c",
+    "d0c438b791c156688c71cf58c69fceb5",
+    "bdbc0d04fffe5c37a5a5ac5a05013889",
+    "646fbc70700f5ab8b2363524540fddca",
+    "156aaf20543e523eb1fa4594547d956e",
+    "6109346a105e5f3e82134dc9cafbbcb9",
+    "4bcfd8f641df50b9b5460d76b8c56482",
+)
+
+
+def _json_file(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _campaign_evidence(model_dir: Path, level: int) -> dict | None:
+    evidence_files = sorted((model_dir / "evidence").glob("*.json"))
+    preferred = [path for path in evidence_files if f"-{level}" in path.stem]
+    for path in reversed(preferred or evidence_files):
+        payload = _json_file(path)
+        metrics = payload.get("metrics")
+        if isinstance(metrics, dict):
+            return {"file": path.name, "metrics": metrics,
+                    "cases": len(payload.get("cases", []))}
+    return None
+
 
 def _relative_path(path: Path) -> str:
     try:
@@ -554,6 +583,62 @@ def qlearning_training_status():
         "checkpoint_name": checkpoint_path.name,
         "persistent_data_dir": str(DATA_DIR),
     }
+
+
+@app.get("/training/ppo/campaign")
+def ppo_campaign_catalog():
+    """Ocho niveles fijos y sus checkpoints PPO aprobados, listos para la defensa."""
+    levels = []
+    for level, run_id in enumerate(PPO_CAMPAIGN_MODELS, start=1):
+        scenario_path = ROOT / "configs" / "campaign" / f"scenario_{level:02d}.json"
+        model_dir = ROOT / "models" / run_id
+        if not scenario_path.is_file() or not (model_dir / "approved-version.json").is_file():
+            continue
+        scenario = _json_file(scenario_path)
+        approved = _json_file(model_dir / "approved-version.json")
+        evidence = _campaign_evidence(model_dir, level)
+        levels.append({
+            "level": level,
+            "scenario": scenario,
+            "model": {
+                "run_id": run_id,
+                "algorithm": "PPO",
+                "total_timesteps": approved.get("total_timesteps", 0),
+                "completed_scenarios": approved.get("completed_scenarios", []),
+                "weights_sha256": approved.get("weights_sha256"),
+                "checkpoint_complete": all((model_dir / name).is_file() for name in (
+                    "ppo_model.zip", "vecnormalize.pkl", "optimizer.pt", "checkpoint_state.json"
+                )),
+            },
+            "evidence": evidence,
+        })
+    return {
+        "schema": "ppo-fixed-campaign/v1",
+        "algorithm": "PPO",
+        "levels": levels,
+        "latest_run_id": PPO_CAMPAIGN_MODELS[-1],
+        "latest_total_timesteps": levels[-1]["model"]["total_timesteps"] if levels else 0,
+        "training_available": os.environ.get("ENABLE_LOCAL_TRAINING") == "1",
+        "deployment_mode": "inference-and-evidence",
+    }
+
+
+@app.get("/training/ppo/campaign/{level}/replay")
+def ppo_campaign_replay(level: int):
+    """Caso real de evaluacion que permite inspeccionar la ruta aprendida."""
+    if level < 1 or level > len(PPO_CAMPAIGN_MODELS):
+        fail(404, "nivel PPO desconocido")
+    model_dir = ROOT / "models" / PPO_CAMPAIGN_MODELS[level - 1]
+    evidence_files = sorted((model_dir / "evidence").glob("*.json"))
+    preferred = [path for path in evidence_files if f"-{level}" in path.stem]
+    for path in reversed(preferred or evidence_files):
+        payload = _json_file(path)
+        cases = payload.get("cases", [])
+        matching = [case for case in cases if int(case.get("difficulty_level", 0)) == level]
+        if matching:
+            return {"level": level, "run_id": PPO_CAMPAIGN_MODELS[level - 1],
+                    "source": path.name, "case": matching[0], "metrics": payload.get("metrics", {})}
+    fail(404, "el checkpoint no contiene un caso reproducible para este nivel")
 
 
 @app.get("/training/qlearning/checkpoints")

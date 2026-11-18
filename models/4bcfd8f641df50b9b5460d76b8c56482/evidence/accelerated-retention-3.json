@@ -1,0 +1,2159 @@
+{
+  "cases": [
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6345,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920000,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6413,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920001,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6306,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920002,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6721,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920003,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.699,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920004,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6495,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920005,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.7268,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920006,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6762,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920007,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 53.242,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 46.75753247514871,
+      "final_position": [
+        1.592285102237311,
+        -0.8598365639662013
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6436,
+      "path_efficiency": 0.8102233788849137,
+      "path_length": 44.367,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 302.1385,
+      "route_cost": 53.40372026020312,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920008,
+      "steps": 179,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6528,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920009,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.639,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920010,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6489,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920011,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6245,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920012,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6312,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920013,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6355,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920014,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6291,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920015,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.7622,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920016,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 53.242,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 46.75753247514871,
+      "final_position": [
+        1.592285102237311,
+        -0.8598365639662013
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6043,
+      "path_efficiency": 0.8102233788849137,
+      "path_length": 44.367,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 302.1385,
+      "route_cost": 53.40372026020312,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920017,
+      "steps": 179,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.5886,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920018,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 53.242,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 46.75753247514871,
+      "final_position": [
+        1.592285102237311,
+        -0.8598365639662013
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6032,
+      "path_efficiency": 0.8102233788849137,
+      "path_length": 44.367,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 302.1385,
+      "route_cost": 53.40372026020312,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920019,
+      "steps": 179,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6177,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920020,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.5923,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920021,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6232,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920022,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6318,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920023,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.7135,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920024,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6417,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920025,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.75,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920026,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6588,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920027,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6394,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920028,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6534,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920029,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6272,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920030,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6406,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920031,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6337,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920032,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6509,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920033,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6361,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920034,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6412,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920035,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.7524,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920036,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6328,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920037,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.629,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920038,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6265,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920039,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.624,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920040,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.636,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920041,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6391,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920042,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6363,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920043,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6365,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920044,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6266,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920045,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.7217,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920046,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6276,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920047,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6279,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920048,
+      "steps": 180,
+      "success": true
+    },
+    {
+      "battery": 52.941,
+      "collection_positions": [
+        [
+          5.7044772165292486,
+          0.09744715356133547
+        ],
+        [
+          10.358970765799542,
+          -0.8994013776846915
+        ],
+        [
+          8.793923167319145,
+          3.4717566577866816
+        ]
+      ],
+      "collisions": 1,
+      "difficulty": "L3 \u00b7 El laberinto rocoso",
+      "difficulty_level": 3,
+      "end": "exito",
+      "energy_consumed": 47.05904791353708,
+      "final_position": [
+        1.5911635751902728,
+        -0.8199633394428262
+      ],
+      "initial_position": [
+        1.4998842767311984,
+        2.1822218530047363e-10
+      ],
+      "latency_ms_mean": 0.6343,
+      "path_efficiency": 0.804911252431352,
+      "path_length": 44.662,
+      "reference_path_cost": 43.268942674246496,
+      "requested_samples": 3,
+      "return": 301.4682,
+      "route_cost": 53.75616571832775,
+      "samples_collected": 3,
+      "scenario_id": "scenario_03",
+      "seed": 920049,
+      "steps": 180,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/f59726370d0d471a9790482135f4e3e2/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "f59726370d0d471a9790482135f4e3e2",
+    "record_episodes": false,
+    "run_id": "f59726370d0d471a9790482135f4e3e2",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "models/{run_id}/practice/scenario_{level:02d}.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 1.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 0.6479,
+    "mission_completion": 1.0,
+    "path_length_mean": 44.6443,
+    "return_mean": 301.5084,
+    "return_std": 0.1592,
+    "samples_collected_mean": 3.0,
+    "steps_mean": 179.94,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "3": 1.0
+    }
+  },
+  "partial": false,
+  "policy_version": "f59726370d0d471a9790482135f4e3e2:imitation:1000",
+  "requested_episodes": 50,
+  "scenario_level": 3,
+  "suite_id": "campaign-mastery-v1",
+  "training_step": 7455260,
+  "wall_time_s": 27.329
+}

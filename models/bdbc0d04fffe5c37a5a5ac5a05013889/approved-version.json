@@ -1,0 +1,13 @@
+{
+  "run_id": "bdbc0d04fffe5c37a5a5ac5a05013889",
+  "job_id": "bdbc0d04fffe5c37a5a5ac5a05013889",
+  "completed_scenarios": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "source": "models/12e968e7e89048b3b5609aac9301d855/mastered-scenario-04-2329600",
+  "total_timesteps": 2329600,
+  "weights_sha256": "64d56b423c2422078b7ae63b44cc6609809f3b962afda74feca47d4ea3257432"
+}

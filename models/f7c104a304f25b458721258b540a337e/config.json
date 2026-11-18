@@ -1,0 +1,51 @@
+{
+  "algorithm": "ppo",
+  "budget_timesteps": 32768,
+  "change": "diez mapas fijos, navegaci\u00f3n con memoria de cuatro observaciones, historial completo y curr\u00edculo evaluado",
+  "checkpoint_freq": 8192,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.2,
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "logs/campaign_curriculum.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "ppo-exp-007",
+    "record_episodes": true,
+    "run_id": "exp-007-planetary"
+  },
+  "eval_episodes": null,
+  "evaluation_max_level": 10,
+  "experiment_id": "exp-007-planetary",
+  "hyperparams": {
+    "batch_size": 64,
+    "ent_coef": 0.015,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "learning_rate": 0.0003,
+    "n_steps": 256
+  },
+  "hypothesis": "PPO con recolecci\u00f3n expl\u00edcita y curr\u00edculo por desempe\u00f1o aprende misiones sin memorizar mapas",
+  "level_id": "n2",
+  "n_envs": 4,
+  "normalize_obs": true,
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/2f625e552ad746b9a6f58293311bef39",
+  "periodic_evaluation_episodes": 50,
+  "periodic_evaluation_freq": 25000,
+  "periodic_evaluation_seed_start": 910000,
+  "reference": "exp-006",
+  "seed": 1,
+  "seeds": [
+    1
+  ]
+}

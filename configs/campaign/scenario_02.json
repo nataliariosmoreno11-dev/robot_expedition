@@ -1,0 +1,61 @@
+{
+  "scenario_id": "scenario_02",
+  "name": "El primer desvío",
+  "start": [
+    1.5,
+    0,
+    0
+  ],
+  "terrain_seed": 41002,
+  "dimensions": [
+    12,
+    12
+  ],
+  "target_type": "basalto",
+  "requested_samples": 2,
+  "capacity": 2,
+  "rocks": [
+    [
+      5,
+      0,
+      0.25,
+      2,
+      0.9
+    ]
+  ],
+  "samples": [
+    {
+      "sample_id": "S1",
+      "sample_type": "basalto",
+      "x": 8,
+      "y": 1,
+      "target": true
+    },
+    {
+      "sample_id": "S2",
+      "sample_type": "basalto",
+      "x": 8,
+      "y": -3,
+      "target": true
+    },
+    {
+      "sample_id": "D1",
+      "sample_type": "sulfato",
+      "x": 2,
+      "y": -3.5,
+      "target": false
+    }
+  ],
+  "dunes": [],
+  "craters": [],
+  "traction_zones": [],
+  "relief_m": 0.02,
+  "traction": 0.9,
+  "wind_speed_m_s": 0,
+  "dust_opacity": 0,
+  "wind_direction_rad": 0.5,
+  "temperature_c": -55,
+  "battery_budget": 100,
+  "max_steps": 800,
+  "energy_scale": 1
+}

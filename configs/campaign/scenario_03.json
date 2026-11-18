@@ -1,0 +1,90 @@
+{
+  "scenario_id": "scenario_03",
+  "name": "El laberinto rocoso",
+  "start": [
+    1.5,
+    0,
+    0
+  ],
+  "terrain_seed": 41003,
+  "dimensions": [
+    12,
+    12
+  ],
+  "target_type": "basalto",
+  "requested_samples": 3,
+  "capacity": 3,
+  "rocks": [
+    [
+      4,
+      -1,
+      0.22,
+      3.4,
+      0.9
+    ],
+    [
+      7,
+      1.5,
+      0.22,
+      3.1,
+      0.9
+    ],
+    [
+      9,
+      -3,
+      1.2,
+      0.22,
+      0.9
+    ]
+  ],
+  "samples": [
+    {
+      "sample_id": "S1",
+      "sample_type": "basalto",
+      "x": 5.3,
+      "y": 0,
+      "target": true
+    },
+    {
+      "sample_id": "S2",
+      "sample_type": "basalto",
+      "x": 8.3,
+      "y": 3.6,
+      "target": true
+    },
+    {
+      "sample_id": "S3",
+      "sample_type": "basalto",
+      "x": 10.7,
+      "y": -1,
+      "target": true
+    },
+    {
+      "sample_id": "D1",
+      "sample_type": "sulfato",
+      "x": 2,
+      "y": -3.5,
+      "target": false
+    }
+  ],
+  "dunes": [],
+  "craters": [],
+  "traction_zones": [
+    [
+      4.6,
+      -1,
+      0.6,
+      0.6,
+      0.5
+    ]
+  ],
+  "relief_m": 0.02,
+  "traction": 0.9,
+  "wind_speed_m_s": 0,
+  "dust_opacity": 0,
+  "wind_direction_rad": 0.5,
+  "temperature_c": -55,
+  "battery_budget": 100,
+  "max_steps": 950,
+  "energy_scale": 0.6
+}

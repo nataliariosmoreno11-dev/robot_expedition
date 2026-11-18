@@ -1,0 +1,14 @@
+{
+  "run_id": "646fbc70700f5ab8b2363524540fddca",
+  "job_id": "646fbc70700f5ab8b2363524540fddca",
+  "completed_scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "source": "models/12e968e7e89048b3b5609aac9301d855/mastered-scenario-05-2345984",
+  "total_timesteps": 2345984,
+  "weights_sha256": "2f194ba2baa556474c48015168777c53199a782138435ec7dd8750c86d80be1b"
+}

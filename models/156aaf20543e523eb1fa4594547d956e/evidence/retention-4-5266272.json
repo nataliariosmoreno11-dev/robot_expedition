@@ -1,0 +1,2159 @@
+{
+  "cases": [
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.6392,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940000,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.7052,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940001,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 2.245,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940002,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.633,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940003,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.253,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940004,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.981,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940005,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.4878,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940006,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.2383,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940007,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.46,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940008,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.1643,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940009,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.34,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940010,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.4488,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940011,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.2967,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940012,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.2142,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940013,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.1777,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940014,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.2634,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940015,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.1079,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940016,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.2846,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940017,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.1567,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940018,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.1164,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940019,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.4959,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940020,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.5493,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940021,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.9697,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940022,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.9649,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940023,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.3755,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940024,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 1.0795,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940025,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.8477,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940026,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9733,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940027,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9465,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940028,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9397,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940029,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9022,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940030,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.8981,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940031,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9172,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940032,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.8307,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940033,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.7075,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940034,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6602,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940035,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.7845,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940036,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9454,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940037,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.9385,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940038,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.7519,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940039,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6689,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940040,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.7232,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940041,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.656,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940042,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6634,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940043,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6078,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940044,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.611,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940045,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6438,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940046,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6804,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940047,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6759,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940048,
+      "steps": 91,
+      "success": true
+    },
+    {
+      "battery": 74.715,
+      "collection_positions": [
+        [
+          6.106014035231014,
+          -4.136251732470401
+        ],
+        [
+          9.113346821964981,
+          -0.20527810221613826
+        ],
+        [
+          5.8274179392087335,
+          3.7799068178365127
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L4 \u00b7 El cr\u00e1ter central",
+      "difficulty_level": 4,
+      "end": "exito",
+      "energy_consumed": 25.284657820521275,
+      "final_position": [
+        2.4560783164604967,
+        0.12439841686922505
+      ],
+      "initial_position": [
+        1.4998842767741896,
+        2.1823179540251406e-10
+      ],
+      "latency_ms_mean": 0.6609,
+      "path_efficiency": 0.9305056101511815,
+      "path_length": 23.823,
+      "reference_path_cost": 27.077045357069938,
+      "requested_samples": 3,
+      "return": 303.9531,
+      "route_cost": 29.09928221998647,
+      "samples_collected": 3,
+      "scenario_id": "scenario_04",
+      "seed": 940049,
+      "steps": 91,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/0af314b98d1c4513a53087da8199f4ab/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "0af314b98d1c4513a53087da8199f4ab",
+    "record_episodes": false,
+    "run_id": "0af314b98d1c4513a53087da8199f4ab",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "configs/training/level6-stages.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 1.1257,
+    "mission_completion": 1.0,
+    "path_length_mean": 23.823,
+    "return_mean": 303.9531,
+    "return_std": 0.0,
+    "samples_collected_mean": 3.0,
+    "steps_mean": 91.0,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "4": 1.0
+    }
+  },
+  "partial": false,
+  "policy_version": "0af314b98d1c4513a53087da8199f4ab",
+  "requested_episodes": 50,
+  "scenario_level": 4,
+  "suite_id": "campaign-mastery-v1",
+  "training_step": 5266272,
+  "wall_time_s": 26.052
+}

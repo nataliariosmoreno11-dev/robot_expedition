@@ -1,0 +1,2557 @@
+{
+  "cases": [
+    {
+      "battery": 59.423,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3396683786813757,
+          3.8130996007900646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.57662248119764,
+      "final_position": [
+        1.6686639888723578,
+        0.8760599116766252
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.5857,
+      "path_efficiency": 0.9449164496197535,
+      "path_length": 50.149,
+      "reference_path_cost": 63.24428312888082,
+      "requested_samples": 5,
+      "return": 327.8647,
+      "route_cost": 66.93108491690575,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910000,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.6339,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910001,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 59.052,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.0906838853821013,
+          3.969600367573959
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.94837765785081,
+      "final_position": [
+        1.6114365367342354,
+        0.98241224045272
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.5962,
+      "path_efficiency": 0.9406930483936512,
+      "path_length": 50.492,
+      "reference_path_cost": 63.349993623877445,
+      "requested_samples": 5,
+      "return": 327.3803,
+      "route_cost": 67.3439585123493,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910002,
+      "steps": 363,
+      "success": true
+    },
+    {
+      "battery": 58.394,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.60614338084436,
+      "final_position": [
+        1.4775939856198965,
+        0.812261090243635
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.5758,
+      "path_efficiency": 0.9326930594764665,
+      "path_length": 51.013,
+      "reference_path_cost": 63.39365429767287,
+      "requested_samples": 5,
+      "return": 326.0988,
+      "route_cost": 67.96839930733118,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910003,
+      "steps": 370,
+      "success": true
+    },
+    {
+      "battery": 59.052,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.0906838853821013,
+          3.969600367573959
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.94837765785081,
+      "final_position": [
+        1.6114365367342354,
+        0.98241224045272
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.6197,
+      "path_efficiency": 0.9406930483936512,
+      "path_length": 50.492,
+      "reference_path_cost": 63.349993623877445,
+      "requested_samples": 5,
+      "return": 327.3803,
+      "route_cost": 67.3439585123493,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910004,
+      "steps": 363,
+      "success": true
+    },
+    {
+      "battery": 59.556,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3320228893818067,
+          3.7328554109605676
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.44374072399972,
+      "final_position": [
+        1.88047777969046,
+        0.9801471138087243
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.577,
+      "path_efficiency": 0.9372305825074899,
+      "path_length": 50.382,
+      "reference_path_cost": 62.98972468765366,
+      "requested_samples": 5,
+      "return": 328.4013,
+      "route_cost": 67.20835391343013,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910005,
+      "steps": 355,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.5705,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910006,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.435,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.314991066681598,
+          3.8988142797185863
+        ],
+        [
+          2.2550853864610927,
+          3.8153310008765544
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.564848970757545,
+      "final_position": [
+        1.848457073315093,
+        0.8838261231228849
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.6115,
+      "path_efficiency": 0.9385651711874142,
+      "path_length": 50.777,
+      "reference_path_cost": 63.548097356580385,
+      "requested_samples": 5,
+      "return": 327.657,
+      "route_cost": 67.70770885966638,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910007,
+      "steps": 371,
+      "success": true
+    },
+    {
+      "battery": 58.919,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9531529993564851,
+          3.4010269238472217
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.08112933601189,
+      "final_position": [
+        1.6992449352332588,
+        0.9320836324220693
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.7004,
+      "path_efficiency": 0.9366353945414387,
+      "path_length": 50.481,
+      "reference_path_cost": 63.06437248261112,
+      "requested_samples": 5,
+      "return": 327.3338,
+      "route_cost": 67.33075949311781,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910008,
+      "steps": 365,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9434,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910009,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 60.254,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.562106189032447,
+          3.8668376063670693
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 39.745957390879646,
+      "final_position": [
+        2.172778479901638,
+        0.9486712634489729
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.4625,
+      "path_efficiency": null,
+      "path_length": 49.52,
+      "reference_path_cost": 67.53382718054644,
+      "requested_samples": 5,
+      "return": 328.0008,
+      "route_cost": 66.17992194424079,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910010,
+      "steps": 349,
+      "success": true
+    },
+    {
+      "battery": 58.435,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.314991066681598,
+          3.8988142797185863
+        ],
+        [
+          2.2550853864610927,
+          3.8153310008765544
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.564848970757545,
+      "final_position": [
+        1.848457073315093,
+        0.8838261231228849
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2045,
+      "path_efficiency": 0.9385651711874142,
+      "path_length": 50.777,
+      "reference_path_cost": 63.548097356580385,
+      "requested_samples": 5,
+      "return": 327.657,
+      "route_cost": 67.70770885966638,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910011,
+      "steps": 371,
+      "success": true
+    },
+    {
+      "battery": 59.423,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3396683786813757,
+          3.8130996007900646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.57662248119764,
+      "final_position": [
+        1.6686639888723578,
+        0.8760599116766252
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.384,
+      "path_efficiency": 0.9449164496197535,
+      "path_length": 50.149,
+      "reference_path_cost": 63.24428312888082,
+      "requested_samples": 5,
+      "return": 327.8647,
+      "route_cost": 66.93108491690575,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910012,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 58.435,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.314991066681598,
+          3.8988142797185863
+        ],
+        [
+          2.2550853864610927,
+          3.8153310008765544
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.564848970757545,
+      "final_position": [
+        1.848457073315093,
+        0.8838261231228849
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2349,
+      "path_efficiency": 0.9385651711874142,
+      "path_length": 50.777,
+      "reference_path_cost": 63.548097356580385,
+      "requested_samples": 5,
+      "return": 327.657,
+      "route_cost": 67.70770885966638,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910013,
+      "steps": 371,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9111,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910014,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 59.423,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3396683786813757,
+          3.8130996007900646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.57662248119764,
+      "final_position": [
+        1.6686639888723578,
+        0.8760599116766252
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.0081,
+      "path_efficiency": 0.9449164496197535,
+      "path_length": 50.149,
+      "reference_path_cost": 63.24428312888082,
+      "requested_samples": 5,
+      "return": 327.8647,
+      "route_cost": 66.93108491690575,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910015,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 59.579,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.380207008531226,
+          3.573111612779646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.421260144943645,
+      "final_position": [
+        1.9990861627914758,
+        0.9806583668688941
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9865,
+      "path_efficiency": 0.9389902426218619,
+      "path_length": 50.208,
+      "reference_path_cost": 62.9151662464265,
+      "requested_samples": 5,
+      "return": 328.2757,
+      "route_cost": 67.00300321625694,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910016,
+      "steps": 356,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.3638,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910017,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2747,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910018,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 58.875,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.12469461852597,
+      "final_position": [
+        1.8658814480754624,
+        0.9187758669659437
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.0036,
+      "path_efficiency": 0.931691065668776,
+      "path_length": 50.713,
+      "reference_path_cost": 62.98976711848468,
+      "requested_samples": 5,
+      "return": 327.0951,
+      "route_cost": 67.60799737117804,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910019,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 58.435,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.314991066681598,
+          3.8988142797185863
+        ],
+        [
+          2.2550853864610927,
+          3.8153310008765544
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.564848970757545,
+      "final_position": [
+        1.848457073315093,
+        0.8838261231228849
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9358,
+      "path_efficiency": 0.9385651711874142,
+      "path_length": 50.777,
+      "reference_path_cost": 63.548097356580385,
+      "requested_samples": 5,
+      "return": 327.657,
+      "route_cost": 67.70770885966638,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910020,
+      "steps": 371,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9753,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910021,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.765,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.235349124928014,
+      "final_position": [
+        1.5061047364182603,
+        0.9169929018578408
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.1372,
+      "path_efficiency": 0.9326603221841154,
+      "path_length": 50.787,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9329,
+      "route_cost": 67.69784706674966,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910022,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.435,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.314991066681598,
+          3.8988142797185863
+        ],
+        [
+          2.2550853864610927,
+          3.8153310008765544
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.564848970757545,
+      "final_position": [
+        1.848457073315093,
+        0.8838261231228849
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2984,
+      "path_efficiency": 0.9385651711874142,
+      "path_length": 50.777,
+      "reference_path_cost": 63.548097356580385,
+      "requested_samples": 5,
+      "return": 327.657,
+      "route_cost": 67.70770885966638,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910023,
+      "steps": 371,
+      "success": true
+    },
+    {
+      "battery": 59.579,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.380207008531226,
+          3.573111612779646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.421260144943645,
+      "final_position": [
+        1.9990861627914758,
+        0.9806583668688941
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.0577,
+      "path_efficiency": 0.9389902426218619,
+      "path_length": 50.208,
+      "reference_path_cost": 62.9151662464265,
+      "requested_samples": 5,
+      "return": 328.2757,
+      "route_cost": 67.00300321625694,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910024,
+      "steps": 356,
+      "success": true
+    },
+    {
+      "battery": 59.423,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3396683786813757,
+          3.8130996007900646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.57662248119764,
+      "final_position": [
+        1.6686639888723578,
+        0.8760599116766252
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.4503,
+      "path_efficiency": 0.9449164496197535,
+      "path_length": 50.149,
+      "reference_path_cost": 63.24428312888082,
+      "requested_samples": 5,
+      "return": 327.8647,
+      "route_cost": 66.93108491690575,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910025,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 59.323,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.676811405724685,
+      "final_position": [
+        1.5766660043957181,
+        0.9422099590412419
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9934,
+      "path_efficiency": 0.9349487674431606,
+      "path_length": 50.651,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 327.1246,
+      "route_cost": 67.53462915879044,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910026,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.967,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910027,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 59.052,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.0906838853821013,
+          3.969600367573959
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.94837765785081,
+      "final_position": [
+        1.6114365367342354,
+        0.98241224045272
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.0252,
+      "path_efficiency": 0.9406930483936512,
+      "path_length": 50.492,
+      "reference_path_cost": 63.349993623877445,
+      "requested_samples": 5,
+      "return": 327.3803,
+      "route_cost": 67.3439585123493,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910028,
+      "steps": 363,
+      "success": true
+    },
+    {
+      "battery": 58.435,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.314991066681598,
+          3.8988142797185863
+        ],
+        [
+          2.2550853864610927,
+          3.8153310008765544
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.564848970757545,
+      "final_position": [
+        1.848457073315093,
+        0.8838261231228849
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2565,
+      "path_efficiency": 0.9385651711874142,
+      "path_length": 50.777,
+      "reference_path_cost": 63.548097356580385,
+      "requested_samples": 5,
+      "return": 327.657,
+      "route_cost": 67.70770885966638,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910029,
+      "steps": 371,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2748,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910030,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 58.919,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9531529993564851,
+          3.4010269238472217
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.08112933601189,
+      "final_position": [
+        1.6992449352332588,
+        0.9320836324220693
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.0218,
+      "path_efficiency": 0.9366353945414387,
+      "path_length": 50.481,
+      "reference_path_cost": 63.06437248261112,
+      "requested_samples": 5,
+      "return": 327.3338,
+      "route_cost": 67.33075949311781,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910031,
+      "steps": 365,
+      "success": true
+    },
+    {
+      "battery": 59.052,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.0906838853821013,
+          3.969600367573959
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.94837765785081,
+      "final_position": [
+        1.6114365367342354,
+        0.98241224045272
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9244,
+      "path_efficiency": 0.9406930483936512,
+      "path_length": 50.492,
+      "reference_path_cost": 63.349993623877445,
+      "requested_samples": 5,
+      "return": 327.3803,
+      "route_cost": 67.3439585123493,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910032,
+      "steps": 363,
+      "success": true
+    },
+    {
+      "battery": 59.423,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3396683786813757,
+          3.8130996007900646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.57662248119764,
+      "final_position": [
+        1.6686639888723578,
+        0.8760599116766252
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.929,
+      "path_efficiency": 0.9449164496197535,
+      "path_length": 50.149,
+      "reference_path_cost": 63.24428312888082,
+      "requested_samples": 5,
+      "return": 327.8647,
+      "route_cost": 66.93108491690575,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910033,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 58.919,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9531529993564851,
+          3.4010269238472217
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.08112933601189,
+      "final_position": [
+        1.6992449352332588,
+        0.9320836324220693
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.1895,
+      "path_efficiency": 0.9366353945414387,
+      "path_length": 50.481,
+      "reference_path_cost": 63.06437248261112,
+      "requested_samples": 5,
+      "return": 327.3338,
+      "route_cost": 67.33075949311781,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910034,
+      "steps": 365,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.3192,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910035,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2237,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910036,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9025,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910037,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 59.052,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.0906838853821013,
+          3.969600367573959
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.94837765785081,
+      "final_position": [
+        1.6114365367342354,
+        0.98241224045272
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9006,
+      "path_efficiency": 0.9406930483936512,
+      "path_length": 50.492,
+      "reference_path_cost": 63.349993623877445,
+      "requested_samples": 5,
+      "return": 327.3803,
+      "route_cost": 67.3439585123493,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910038,
+      "steps": 363,
+      "success": true
+    },
+    {
+      "battery": 58.765,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.235349124928014,
+      "final_position": [
+        1.5061047364182603,
+        0.9169929018578408
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9929,
+      "path_efficiency": 0.9326603221841154,
+      "path_length": 50.787,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9329,
+      "route_cost": 67.69784706674966,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910039,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.3789,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910040,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.531,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9234163662468167,
+          3.818887097067369
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.469220307610954,
+      "final_position": [
+        1.4901435122469402,
+        0.8226606477209097
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2552,
+      "path_efficiency": 0.9357997097943934,
+      "path_length": 51.012,
+      "reference_path_cost": 63.605053895513095,
+      "requested_samples": 5,
+      "return": 326.7462,
+      "route_cost": 67.96866170164543,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910041,
+      "steps": 368,
+      "success": true
+    },
+    {
+      "battery": 58.741,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.9784134527962023,
+          3.5978897352796624
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25942669204801,
+      "final_position": [
+        1.6475970309585741,
+        0.9687624529888803
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9863,
+      "path_efficiency": 0.9337809447390492,
+      "path_length": 50.719,
+      "reference_path_cost": 63.139095856445714,
+      "requested_samples": 5,
+      "return": 326.9281,
+      "route_cost": 67.61660345734548,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910042,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 58.883,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          1.7676354235869955,
+          3.390561515110025
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.1166547821797,
+      "final_position": [
+        1.638371655651458,
+        0.9824672329229428
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9414,
+      "path_efficiency": 0.9340051538518833,
+      "path_length": 50.707,
+      "reference_path_cost": 63.14141829174205,
+      "requested_samples": 5,
+      "return": 326.9767,
+      "route_cost": 67.60285854028078,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910043,
+      "steps": 364,
+      "success": true
+    },
+    {
+      "battery": 20.266,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "tiempo",
+      "energy_consumed": 79.73364003327711,
+      "final_position": [
+        2.841248510025134,
+        3.723977743365251
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.169,
+      "path_efficiency": null,
+      "path_length": 48.008,
+      "reference_path_cost": 67.53382718054644,
+      "requested_samples": 5,
+      "return": -109.8467,
+      "route_cost": 64.35663878377194,
+      "samples_collected": 4,
+      "scenario_id": "scenario_07",
+      "seed": 910044,
+      "steps": 1550,
+      "success": false
+    },
+    {
+      "battery": 59.423,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.3396683786813757,
+          3.8130996007900646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.57662248119764,
+      "final_position": [
+        1.6686639888723578,
+        0.8760599116766252
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9542,
+      "path_efficiency": 0.9449164496197535,
+      "path_length": 50.149,
+      "reference_path_cost": 63.24428312888082,
+      "requested_samples": 5,
+      "return": 327.8647,
+      "route_cost": 66.93108491690575,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910045,
+      "steps": 358,
+      "success": true
+    },
+    {
+      "battery": 59.579,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.380207008531226,
+          3.573111612779646
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.421260144943645,
+      "final_position": [
+        1.9990861627914758,
+        0.9806583668688941
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 0.9603,
+      "path_efficiency": 0.9389902426218619,
+      "path_length": 50.208,
+      "reference_path_cost": 62.9151662464265,
+      "requested_samples": 5,
+      "return": 328.2757,
+      "route_cost": 67.00300321625694,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910046,
+      "steps": 356,
+      "success": true
+    },
+    {
+      "battery": 59.872,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.1817153842534016,
+          3.7267381519977345
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 40.1275724161316,
+      "final_position": [
+        1.8221162093868988,
+        0.9482241254565987
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2711,
+      "path_efficiency": 0.9423823974015295,
+      "path_length": 50.077,
+      "reference_path_cost": 62.98972468765366,
+      "requested_samples": 5,
+      "return": 328.1345,
+      "route_cost": 66.84093936955728,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910047,
+      "steps": 352,
+      "success": true
+    },
+    {
+      "battery": 58.747,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.0906838853821013,
+          3.969600367573959
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 41.25335569125451,
+      "final_position": [
+        1.4822385083578877,
+        0.9293624255892239
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.2335,
+      "path_efficiency": 0.9380211487001414,
+      "path_length": 50.719,
+      "reference_path_cost": 63.42489757517776,
+      "requested_samples": 5,
+      "return": 327.2893,
+      "route_cost": 67.6156370920512,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910048,
+      "steps": 366,
+      "success": true
+    },
+    {
+      "battery": 60.254,
+      "collection_positions": [
+        [
+          10.446597157400825,
+          -4.060577442305913
+        ],
+        [
+          5.0606569211623915,
+          -0.288476525185222
+        ],
+        [
+          7.096266475893747,
+          -2.365911920232122
+        ],
+        [
+          10.195461184617779,
+          3.987368472707555
+        ],
+        [
+          2.562106189032447,
+          3.8668376063670693
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L7 \u00b7 La tormenta marciana",
+      "difficulty_level": 7,
+      "end": "exito",
+      "energy_consumed": 39.745957390879646,
+      "final_position": [
+        2.172778479901638,
+        0.9486712634489729
+      ],
+      "initial_position": [
+        1.4998842767347544,
+        2.1822297856830405e-10
+      ],
+      "latency_ms_mean": 1.238,
+      "path_efficiency": null,
+      "path_length": 49.52,
+      "reference_path_cost": 67.53382718054644,
+      "requested_samples": 5,
+      "return": 328.0008,
+      "route_cost": 66.17992194424079,
+      "samples_collected": 5,
+      "scenario_id": "scenario_07",
+      "seed": 910049,
+      "steps": 349,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/951c605b179b47c38264af6474b45274/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+    "record_episodes": true,
+    "run_id": "951c605b179b47c38264af6474b45274",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "models/{run_id}/practice/scenario_{level:02d}.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {
+      "tiempo": 1
+    },
+    "latency_ms_mean": 1.0282,
+    "mission_completion": 0.996,
+    "path_length_mean": 50.4795,
+    "return_mean": 318.6406,
+    "return_std": 61.2144,
+    "samples_collected_mean": 4.98,
+    "steps_mean": 386.82,
+    "success_rate": 0.98,
+    "success_rate_by_difficulty": {
+      "7": 0.98
+    }
+  },
+  "partial": false,
+  "policy_version": "951c605b179b47c38264af6474b45274:7084896",
+  "requested_episodes": 50,
+  "scenario_level": 7,
+  "suite_id": "planetary-periodic-holdout-v1",
+  "training_step": 7084896,
+  "wall_time_s": 135.683
+}

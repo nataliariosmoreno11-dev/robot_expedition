@@ -1,0 +1,131 @@
+{
+  "scenario_id": "scenario_08",
+  "name": "La ruta imposible a simple vista",
+  "start": [
+    1.5,
+    0,
+    0
+  ],
+  "terrain_seed": 41008,
+  "dimensions": [
+    12,
+    12
+  ],
+  "target_type": "mixta",
+  "requested_samples": 5,
+  "capacity": 5,
+  "rocks": [
+    [
+      3.4,
+      -1,
+      0.22,
+      4.5,
+      0.9
+    ],
+    [
+      5.6,
+      1,
+      0.22,
+      4.5,
+      0.9
+    ],
+    [
+      7.8,
+      -1,
+      0.22,
+      4.5,
+      0.9
+    ],
+    [
+      10,
+      1,
+      0.22,
+      4.5,
+      0.9
+    ]
+  ],
+  "samples": [
+    {
+      "sample_id": "S1",
+      "sample_type": "basalto",
+      "x": 4.5,
+      "y": 0,
+      "target": true
+    },
+    {
+      "sample_id": "S2",
+      "sample_type": "hematita",
+      "x": 6.7,
+      "y": 0,
+      "target": true
+    },
+    {
+      "sample_id": "S3",
+      "sample_type": "basalto",
+      "x": 8.9,
+      "y": 0,
+      "target": true
+    },
+    {
+      "sample_id": "S4",
+      "sample_type": "hematita",
+      "x": 11,
+      "y": 3.8,
+      "target": true
+    },
+    {
+      "sample_id": "S5",
+      "sample_type": "basalto",
+      "x": 11,
+      "y": -3.8,
+      "target": true
+    },
+    {
+      "sample_id": "D1",
+      "sample_type": "sulfato",
+      "x": 2,
+      "y": -3.5,
+      "target": false
+    }
+  ],
+  "dunes": [
+    [
+      9,
+      4,
+      0.04,
+      1.3
+    ]
+  ],
+  "craters": [
+    [
+      2,
+      -4.5,
+      -0.2,
+      0.65
+    ],
+    [
+      9,
+      -4.5,
+      -0.18,
+      0.65
+    ]
+  ],
+  "traction_zones": [
+    [
+      4.6,
+      -1,
+      0.6,
+      0.6,
+      0.5
+    ]
+  ],
+  "relief_m": 0.025,
+  "traction": 0.9,
+  "wind_speed_m_s": 12,
+  "dust_opacity": 0.45,
+  "wind_direction_rad": 0.5,
+  "temperature_c": -55,
+  "battery_budget": 100,
+  "max_steps": 1700,
+  "energy_scale": 0.32
+}

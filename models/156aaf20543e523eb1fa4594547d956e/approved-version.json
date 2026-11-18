@@ -1,0 +1,15 @@
+{
+  "run_id": "156aaf20543e523eb1fa4594547d956e",
+  "job_id": "156aaf20543e523eb1fa4594547d956e",
+  "completed_scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "source": "models/0af314b98d1c4513a53087da8199f4ab",
+  "total_timesteps": 5266272,
+  "weights_sha256": "3079df71dca8d9310fc48a52e08e1ce0f90731cf32ccde77c7dd78729c830c66"
+}
