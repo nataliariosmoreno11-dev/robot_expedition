@@ -199,6 +199,9 @@ def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monk
     assert step["training"]["updates"] == 1
     with api_main.sessions_lock:
         session = api_main.sessions[sid]
+        assert session.env.training_reward_limit == 20.0
+        assert session.env.training_no_progress_limit == 35
+        assert session.env.training_collision_penalty == 4.0
         session.policy.agent.finish_episode()
         session.policy.agent.save(checkpoint)
         api_main.sessions.pop(sid)

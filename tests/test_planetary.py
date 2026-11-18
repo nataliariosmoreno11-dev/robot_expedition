@@ -51,6 +51,23 @@ def test_collection_is_explicit_not_repeatable_and_wrong_type_does_not_complete(
     assert reward > 0 and info["samples_collected"] == 1
     _, duplicate_reward, _, _, duplicate = env.step(COLLECT_ACTION)
     assert duplicate_reward < 0 and duplicate["samples_collected"] == 1
+
+
+def test_training_reward_limit_truncates_episode_for_next_scenario():
+    env = PlanetaryExplorationEnv(
+        curriculum=False,
+        difficulty_level=1,
+        mode="entrenamiento",
+        training_reward_limit=20.0,
+    )
+    env.reset(seed=707)
+    env.total_reward = 20.0
+    _, _, terminated, truncated, info = env.step(1)
+    assert not terminated
+    assert truncated
+    assert info["end"] == "objetivo_recompensa"
+    assert "recompensa objetivo" in info["event"]
+    env.close()
     env.close()
 
 

@@ -779,7 +779,13 @@ async function sendAutomaticAction() {
     scene.seek(frames.length - 1)
     if (finished) {
       manualSessionId = undefined
-      hud.showNotice('Episodio automático finalizado', `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`)
+      const reachedRewardGoal = response.end === 'objetivo_recompensa'
+      hud.showNotice(
+        reachedRewardGoal ? 'Meta de +20 alcanzada' : 'Episodio automático finalizado',
+        reachedRewardGoal
+          ? 'El checkpoint fue actualizado. El agente iniciará otro escenario para seguir aprendiendo.'
+          : `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`,
+      )
       void refreshEpisodes()
       if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, 1200)
     }

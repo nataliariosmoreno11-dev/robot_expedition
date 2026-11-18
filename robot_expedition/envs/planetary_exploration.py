@@ -114,6 +114,11 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         render_mode: str | None = None,
         update_curriculum: bool = True,
         training_no_progress_limit: int = 0,
+        training_reward_limit: float = 0.0,
+        training_step_penalty: float = 0.01,
+        training_collision_penalty: float = 0.6,
+        training_stuck_penalty: float = 0.12,
+        training_no_progress_penalty: float = 2.0,
         training_navigation_shaping: float = 0.0,
         training_shaping_gamma: float = 0.995,
         training_shaping_min_level: int = 6,
@@ -139,6 +144,11 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         )
         self.update_curriculum = bool(update_curriculum)
         self.training_no_progress_limit = int(training_no_progress_limit)
+        self.training_reward_limit = float(training_reward_limit)
+        self.training_step_penalty = float(training_step_penalty)
+        self.training_collision_penalty = float(training_collision_penalty)
+        self.training_stuck_penalty = float(training_stuck_penalty)
+        self.training_no_progress_penalty = float(training_no_progress_penalty)
         self.training_navigation_shaping = float(training_navigation_shaping)
         self.training_shaping_gamma = float(training_shaping_gamma)
         self.training_shaping_min_level = int(training_shaping_min_level)
@@ -154,6 +164,15 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             raise ValueError("training_shaping_gamma must be in (0, 1]")
         if self.training_no_progress_limit < 0:
             raise ValueError("training_no_progress_limit must be nonnegative")
+        if self.training_reward_limit < 0:
+            raise ValueError("training_reward_limit must be nonnegative")
+        if min(
+            self.training_step_penalty,
+            self.training_collision_penalty,
+            self.training_stuck_penalty,
+            self.training_no_progress_penalty,
+        ) < 0:
+            raise ValueError("training penalties must be nonnegative")
         self.configured_max_steps = max_steps
         self.run_id = str(run_id)
         self.policy_version = str(policy_version)
@@ -748,7 +767,12 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.explored_cells.add(cell)
         # No hidden-target distance shaping: a necessary detour costs no extra
         # directional penalty. One-time coverage cannot be farmed by loops.
-        reward = 0.12 * discovery - 0.01 - 0.05 * drain - 0.6 * collision
+        reward = (
+            0.12 * discovery
+            - self.training_step_penalty
+            - 0.05 * drain
+            - self.training_collision_penalty * collision
+        )
         event = None
         collected_before = len(self.inventory)
         if action == COLLECT_ACTION:
@@ -767,7 +791,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         else:
             self._stuck_steps = max(0, self._stuck_steps - 1)
         if self._stuck_steps >= 12:
-            reward -= 0.12
+            reward -= self.training_stuck_penalty
             event = event or "rover atascado"
 
         enough_samples = len(self.inventory) >= self.requested_samples
@@ -805,7 +829,23 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             truncated = True
             end = "sin_progreso"
             event = "reinicio de entrenamiento: sin explorar ni recolectar"
-            reward -= 2.0
+            reward -= self.training_no_progress_penalty
+
+        # Q-learning interactivo trabaja en episodios cortos. Al alcanzar la
+        # recompensa objetivo se cierra el episodio, se actualiza la última
+        # transición como terminal y el checkpoint queda listo para el mapa
+        # siguiente. Los entrenamientos PPO conservan el valor predeterminado 0.
+        projected_total = self.total_reward + float(reward)
+        if (
+            not terminated
+            and not truncated
+            and self.mode == "entrenamiento"
+            and self.training_reward_limit
+            and projected_total >= self.training_reward_limit
+        ):
+            truncated = True
+            end = "objetivo_recompensa"
+            event = "reinicio de entrenamiento: recompensa objetivo alcanzada"
 
         # Discounted potential differences cannot reward repeated back-and-forth
         # motion. True terminals have zero potential; time limits bootstrap.

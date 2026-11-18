@@ -471,6 +471,7 @@ class Session:
     def __init__(self, level_id: str, policy, policy_id: str, seed: int,
                  environment_kind: str = "beacon", difficulty_level: int = 1):
         if environment_kind == "planetary":
+            qlearning = policy_id == "planetary-qlearning"
             self.env = PlanetaryExplorationEnv(
                 difficulty_level=difficulty_level,
                 history_steps=4 if policy is not None else 1,
@@ -481,6 +482,12 @@ class Session:
                 policy_version=policy_id,
                 mode="manual" if policy is None else ("entrenamiento" if policy_id == "planetary-qlearning" else "evaluación"),
                 update_curriculum=False,
+                training_no_progress_limit=35 if qlearning else 0,
+                training_reward_limit=20.0 if qlearning else 0.0,
+                training_step_penalty=0.04 if qlearning else 0.01,
+                training_collision_penalty=4.0 if qlearning else 0.6,
+                training_stuck_penalty=1.0 if qlearning else 0.12,
+                training_no_progress_penalty=12.0 if qlearning else 2.0,
             )
             self.action_names = [item[0] for item in PLANETARY_ACTIONS]
         else:
@@ -596,6 +603,7 @@ def sim_step(req: StepRequest):
             "target_type": info.get("target_type"),
             "requested_samples": info.get("requested_samples"),
             "samples_collected": info.get("samples_collected"),
+            "reward_limit": session.env.training_reward_limit if session.environment_kind == "planetary" else None,
             "storm_intensity": info.get("storm_intensity", 0.0),
             "inventory": info.get("inventory"), "training": training}
 
