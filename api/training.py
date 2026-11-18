@@ -38,7 +38,11 @@ def job_path(job_id):
         raise HTTPException(404, "Entrenamiento desconocido")
     path = JOBS / job_id
     if not (path / "state.json").exists():
-        raise HTTPException(404, "Entrenamiento desconocido")
+        approved = read(ROOT / "models" / job_id / "approved-version.json", {})
+        if approved.get("run_id") != job_id:
+            raise HTTPException(404, "Entrenamiento desconocido")
+        write(path / "state.json", {"job_id": job_id, "run_id": job_id,
+              "status": "completed", "algorithm": "PPO", "budget": 0, "parent_job_id": None})
     return path
 
 
@@ -73,7 +77,14 @@ def describe(path):
     directory = ROOT / "models" / (state.get("run_id") or "unavailable")
     if (path / "stop").exists() and state["status"] in ("starting", "running"):
         state = {**state, "status": "stopping"}
-    return {**state, "acceleration": read(directory / "acceleration.json"),
+    approved = read(directory / "approved-version.json", {})
+    hashes = read(directory / "sha256.json", {})
+    approved_ok = bool(approved) and all(
+        (directory / name).is_file() and hashlib.sha256((directory / name).read_bytes()).hexdigest() == hashes.get(name)
+        for name in ("ppo_model.zip", "vecnormalize.pkl", "optimizer.pt", "checkpoint_state.json"))
+    return {**state, "completed_scenarios": approved.get("completed_scenarios", []) if approved_ok else [],
+            "source_run_id": Path(approved.get("source", "")).parts[1] if approved.get("source") else None,
+            "approved_version": approved_ok, "acceleration": read(directory / "acceleration.json"),
             "progress": read(directory / "progress.json", {}),
             "checkpoint": read(directory / "checkpoint_state.json"),
             "evaluation": read(directory / "evaluacion.json", {}).get("metrics"),
@@ -94,6 +105,8 @@ def worker_alive(state):
 
 @router.get("/jobs")
 def jobs():
+    for approved in (ROOT / "models").glob("*/approved-version.json"):
+        job_path(approved.parent.name)
     return {"enabled": os.environ.get("ENABLE_LOCAL_TRAINING") == "1",
             "jobs": [describe(p.parent) for p in sorted(JOBS.glob("*/state.json"), key=lambda p: p.stat().st_mtime, reverse=True)]}
 

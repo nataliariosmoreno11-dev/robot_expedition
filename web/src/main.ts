@@ -140,24 +140,6 @@ const PLANETARY_LEVELS: Record<number, { title: string; description: string; fac
       "mapa fijo",
       "semilla de sensores independiente"
     ]
-  },
-  "9": {
-    "title": "09 · La expedición crítica",
-    "description": "Seis objetivos, callejones y un presupuesto limitado.",
-    "facts": [
-      "scenario_09",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
-  },
-  "10": {
-    "title": "10 · La gran misión marciana",
-    "description": "Ocho objetivos y más bifurcaciones: integrar navegación y recursos.",
-    "facts": [
-      "scenario_10",
-      "mapa fijo",
-      "semilla de sensores independiente"
-    ]
   }
 }
 
@@ -382,7 +364,7 @@ async function refreshEpisodes() {
     const progress=await api.campaignProgress()
     if (isRecord(progress)) {
       const mastered=Array.isArray(progress.mastered) ? progress.mastered.length : 0
-      required<HTMLElement>('#campaignProgress').textContent = `Currículo: escenario ${Number(progress.current_level ?? 1)} · ${mastered}/10 superados · ${10-mastered} pendientes${progress.run_id ? '' : ' · sin evaluación registrada'}`
+      required<HTMLElement>('#campaignProgress').textContent = `Currículo: escenario ${Number(progress.current_level ?? 1)} · ${mastered}/8 superados · ${8-mastered} pendientes${progress.run_id ? '' : ' · sin evaluación registrada'}`
     }
     const payload = await api.episodes(100, `scenario_${difficultySelect.value.padStart(2,'0')}`, required<HTMLSelectElement>('#episodeMode').value)
     const episodes = isRecord(payload) && Array.isArray(payload.episodes) ? payload.episodes.filter(isRecord) : []

@@ -1,0 +1,76 @@
+{
+  "accelerated_curriculum": {
+    "demonstrations": 4,
+    "diagnostic_every": 500,
+    "learning_rate": 0.001,
+    "max_attempts_per_level": 2,
+    "max_updates": 2000
+  },
+  "algorithm": "ppo",
+  "budget_timesteps": 32768,
+  "change": "Per-scenario actors, supervised initialization and frozen normalization; evaluation criteria unchanged",
+  "checkpoint_freq": 8192,
+  "checkpoint_keep": 2,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "logs/campaign_curriculum.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "ppo-exp-014",
+    "record_episodes": true,
+    "run_id": "exp-015-accelerated",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "models/{run_id}/practice/scenario_{level:02d}.json",
+    "training_stage_probability": 0.5
+  },
+  "eval_episodes": null,
+  "evaluation_max_level": 10,
+  "experiment_id": "exp-015-accelerated",
+  "freeze_normalization": true,
+  "hyperparams": {
+    "batch_size": 128,
+    "clip_range": 0.1,
+    "ent_coef": 0.01,
+    "gae_lambda": 0.95,
+    "gamma": 0.995,
+    "learning_rate": 0.0001,
+    "n_steps": 512,
+    "target_kl": 0.01
+  },
+  "hypothesis": "Independent scenario actors preserve mastered decisions while PPO learns pending scenarios",
+  "level_id": "n2",
+  "n_envs": 4,
+  "normalize_obs": true,
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/09d04985556545ab8a88acb72cd5e255",
+  "periodic_evaluation_episodes": 50,
+  "periodic_evaluation_freq": 16384,
+  "periodic_evaluation_seed_start": 910000,
+  "reference": "exp-014-specialist",
+  "rejected_checkpoint_keep": 1,
+  "resume_best_mastery": true,
+  "retention_guard_freq": 16384,
+  "seed": 112,
+  "seeds": [
+    112
+  ],
+  "specialist_actor": true,
+  "vector_backend": "subproc"
+}

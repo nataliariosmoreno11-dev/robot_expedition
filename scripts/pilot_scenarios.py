@@ -81,7 +81,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--parent", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--levels", type=int, nargs="+", default=[2,6], choices=range(1,11))
+    parser.add_argument("--levels", type=int, nargs="+", default=[2,6], choices=range(1,9))
     parser.add_argument("--candidate", type=Path)
     args = parser.parse_args()
     run(args.parent, args.output, args.levels, args.candidate)

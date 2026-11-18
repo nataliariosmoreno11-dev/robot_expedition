@@ -302,7 +302,7 @@ class ResetRequest(BaseModel):
     seed: int = 0
     policy: str = Field(default="manual", description="manual, baseline-rule, baseline-random o un run_id")
     environment: Literal["beacon", "planetary"] = "beacon"
-    difficulty_level: int = Field(default=1, ge=1, le=10)
+    difficulty_level: int = Field(default=1, ge=1, le=8)
     previous_session_id: str | None = None
 
 

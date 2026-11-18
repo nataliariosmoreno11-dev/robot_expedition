@@ -18,7 +18,7 @@ def evaluate_planetary(
     *,
     episodes: int = 24,
     seed_start: int = 900_000,
-    max_level: int = 10,
+    max_level: int = 8,
     scenario_level: int | None = None,
     evaluation_kind: str = "mastery",
     abort_below_success_rate: float | None = None,
@@ -47,7 +47,7 @@ def evaluate_planetary(
     for index in range(int(episodes)):
         seed = int(seed_start + index)
         level = scenario_level or 1 + index % max(
-            1, min(10 if options.get("campaign", True) else 8, int(max_level))
+            1, min(8, int(max_level))
         )
         if hasattr(policy, "reset"):
             policy.reset(seed)
@@ -188,7 +188,7 @@ def evaluate_planetary(
         "requested_episodes": int(episodes),
         "early_rejection": len(cases) < int(episodes),
         "partial": (
-            len(cases) < 50 * (1 if scenario_level else max(1, min(10, int(max_level))))
+            len(cases) < 50 * (1 if scenario_level else max(1, min(8, int(max_level))))
             if options.get("campaign", True)
             else len(cases) < 24
         ),

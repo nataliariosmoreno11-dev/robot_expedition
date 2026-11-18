@@ -1,0 +1,33 @@
+{
+  "current_level": 2,
+  "current_scenario": "scenario_02",
+  "evaluations": {
+    "1": {
+      "episodes": 50,
+      "passed": true,
+      "policy_version": "cfc7a1fb63ef4c91a1afb1e0e6828e3a:28072",
+      "success_rate": 1.0,
+      "training_step": 28072
+    }
+  },
+  "mastered": [
+    1
+  ],
+  "pending": [
+    "scenario_02",
+    "scenario_03",
+    "scenario_04",
+    "scenario_05",
+    "scenario_06",
+    "scenario_07",
+    "scenario_08",
+    "scenario_09",
+    "scenario_10"
+  ],
+  "schema": "fixed-campaign-curriculum/v1",
+  "settings": {
+    "max_collisions": 2.0,
+    "minimum_episodes": 50,
+    "success_threshold": 0.85
+  }
+}

@@ -12,12 +12,13 @@ import time
 from pathlib import Path
 
 from api import training as jobs
+from robot_expedition.planetary.campaign import SCENARIO_IDS
 
 
 def qualifies(report):
     """Require actual distinct cases for every level, not aggregate success."""
     cases = report.get("cases", [])
-    for level in range(1, 11):
+    for level in range(1, len(SCENARIO_IDS) + 1):
         rows = [row for row in cases if row.get("difficulty_level") == level]
         if len({row["seed"] for row in rows}) < 50:
             return False
@@ -40,8 +41,8 @@ def certify(job_id):
         **config["environment"], "curriculum": False,
         "run_id": model_dir.name, "policy_version": f"final-candidate:{model_dir.name}",
         "episode_db": str(jobs.ROOT / "logs/planetary_episodes.sqlite"), "record_episodes": True,
-    }, episodes=500, seed_start=2_100_000, max_level=10)
-    report.update(purpose="final publication gate: one frozen policy, all ten scenarios",
+    }, episodes=50 * len(SCENARIO_IDS), seed_start=2_100_000, max_level=len(SCENARIO_IDS))
+    report.update(purpose="final publication gate: one frozen policy, all eight scenarios",
                   job_id=job_id, hashes=jobs.read(model_dir / "sha256.json"))
     jobs.write(model_dir / "public-evaluation.json", report)
     # Include the final evaluation's recorded steps in the versioned snapshot.
@@ -52,7 +53,7 @@ def certify(job_id):
     if not qualifies(report):
         return None
     release = {"job_id": job_id, "run_id": model_dir.name, "published_at": time.time(),
-               "scenario_count": 10, "episodes_per_scenario": 50,
+               "scenario_count": len(SCENARIO_IDS), "episodes_per_scenario": 50,
                "evaluation": report["metrics"], "hashes": report["hashes"],
                "report": str((model_dir / "public-evaluation.json").relative_to(jobs.ROOT)),
                "dvc_pointer": f"models/{model_dir.name}.dvc"}
@@ -123,7 +124,7 @@ def run(parent_job, budget, resume=False):
                 if process is not None and process.poll() is None:
                     time.sleep(1)
                     continue
-                if set(curriculum.get("mastered", [])) == set(range(1, 11)):
+                if set(curriculum.get("mastered", [])) == set(range(1, len(SCENARIO_IDS) + 1)):
                     state["status"] = "validating"
                     save()
                     release = certify(job_id)

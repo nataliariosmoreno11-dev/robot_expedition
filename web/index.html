@@ -126,7 +126,7 @@
         <aside class="control-panel">
           <section class="panel-section">
             <details id="batteryAudit">
-              <summary>¿Alcanza la batería? · Ver prueba de los 10 escenarios</summary>
+              <summary>¿Alcanza la batería? · Ver prueba de los 8 escenarios</summary>
               <p class="section-copy">Prueba física con rutas de referencia, independiente del PPO. Comprueba que la misión es realizable con la batería actual; no acredita aprendizaje del modelo. Un intento por escenario, semilla 700001.</p>
               <p id="batteryAuditStatus" class="section-copy" role="status">Cargando resultados…</p>
               <table class="battery-audit-table"><thead><tr><th>Escenario</th><th>Batería restante</th><th>Resultado</th></tr></thead><tbody id="batteryAuditRows"></tbody></table>
@@ -148,8 +148,6 @@
               <button type="button" data-planet-level="6"><b>06</b><span>El laberinto de los cráteres</span></button>
               <button type="button" data-planet-level="7"><b>07</b><span>La tormenta marciana</span></button>
               <button type="button" data-planet-level="8"><b>08</b><span>La ruta imposible a simple vista</span></button>
-              <button type="button" data-planet-level="9"><b>09</b><span>La expedición crítica</span></button>
-              <button type="button" data-planet-level="10"><b>10</b><span>La gran misión marciana</span></button>
             </div>
 
             <div class="level-preview" aria-live="polite">
@@ -158,7 +156,7 @@
               <div class="level-facts" id="difficultyFacts"></div>
             </div>
 
-            <select id="difficultySelect" class="sr-only" aria-label="Escenario"><option value="1">01 · Primeros movimientos</option><option value="2">02 · El primer desvío</option><option value="3">03 · El laberinto rocoso</option><option value="4">04 · El cráter central</option><option value="5">05 · El valle de decisiones</option><option value="6">06 · El laberinto de los cráteres</option><option value="7">07 · La tormenta marciana</option><option value="8">08 · La ruta imposible a simple vista</option><option value="9">09 · La expedición crítica</option><option value="10">10 · La gran misión marciana</option></select>
+            <select id="difficultySelect" class="sr-only" aria-label="Escenario"><option value="1">01 · Primeros movimientos</option><option value="2">02 · El primer desvío</option><option value="3">03 · El laberinto rocoso</option><option value="4">04 · El cráter central</option><option value="5">05 · El valle de decisiones</option><option value="6">06 · El laberinto de los cráteres</option><option value="7">07 · La tormenta marciana</option><option value="8">08 · La ruta imposible a simple vista</option></select>
             <button id="manualButton" class="mission-start-button" type="button" disabled>Iniciar escenario 01</button>
             <p class="mission-seed">Semilla de sensores: <b id="missionSeedValue">se elige al iniciar</b></p>
 

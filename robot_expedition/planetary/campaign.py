@@ -1,4 +1,4 @@
-"""Ten immutable, editable missions. Sensor seeds never select map geometry."""
+"""Eight immutable, editable missions. Sensor seeds never select map geometry."""
 
 import hashlib
 import json
@@ -10,7 +10,7 @@ from .profiles import get_planet
 from .scenario import PlanetaryScenario, SampleSpec, ScenarioGenerator
 
 CATALOG = Path(__file__).resolve().parents[2] / "configs" / "campaign"
-SCENARIO_IDS = tuple(f"scenario_{i:02d}" for i in range(1, 11))
+SCENARIO_IDS = tuple(f"scenario_{i:02d}" for i in range(1, 9))
 
 
 def load_scenario(scenario_id: str) -> PlanetaryScenario:

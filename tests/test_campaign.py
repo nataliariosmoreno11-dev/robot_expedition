@@ -13,10 +13,10 @@ from robot_expedition.planetary.episode_store import EpisodeStore
 from robot_expedition.planetary.reference import ReferencePlanner, campaign_reference
 
 
-def test_exactly_ten_independent_fixed_maps_and_no_sensor_seed_leak():
+def test_exactly_eight_independent_fixed_maps_and_no_sensor_seed_leak():
     assert sorted(p.stem for p in CATALOG.glob("*.json")) == list(SCENARIO_IDS)
     env = PlanetaryExplorationEnv(curriculum=False)
-    for level in range(1, 11):
+    for level in range(1, 9):
         env.reset(seed=1, options={"difficulty_level": level})
         first = env.scenario.to_dict()
         env.reset(seed=777, options={"difficulty_level": level})
@@ -37,10 +37,10 @@ def test_campaign_api_lists_all_maps_and_preserves_restarted_attempt(
     monkeypatch.setattr(main, "EPISODE_DB", tmp_path / "api.sqlite")
     client = TestClient(main.app)
     response = client.get("/scenarios")
-    assert response.status_code == 200 and len(response.json()["scenarios"]) == 10
+    assert response.status_code == 200 and len(response.json()["scenarios"]) == 8
     assert client.get("/campaign/progress").status_code == 200
     first = client.post(
-        "/sim/reset", json={"environment": "planetary", "difficulty_level": 10}
+        "/sim/reset", json={"environment": "planetary", "difficulty_level": 8}
     ).json()
     step = client.post(
         "/sim/step", json={"session_id": first["session_id"], "action": 6}
@@ -50,15 +50,15 @@ def test_campaign_api_lists_all_maps_and_preserves_restarted_attempt(
         "/sim/reset",
         json={
             "environment": "planetary",
-            "difficulty_level": 10,
+            "difficulty_level": 8,
             "previous_session_id": first["session_id"],
         },
     )
     assert second.status_code == 200
-    history = client.get("/scenarios/scenario_10/history?mode=manual").json()
+    history = client.get("/scenarios/scenario_08/history?mode=manual").json()
     assert len(history) == 2 and history[-1]["end"] == "reinicio"
     assert (
-        client.get("/scenarios/scenario_10/progress?mode=manual").json()["episodes"]
+        client.get("/scenarios/scenario_08/progress?mode=manual").json()["episodes"]
         == 1
     )
     assert (
@@ -79,9 +79,6 @@ def test_all_reference_routes_have_clearance_and_sufficient_budget():
             and r["estimated_energy"] < s.battery_budget
         )
         assert len(r["target_order"]) == s.requested_samples
-    nine, ten = campaign_reference("scenario_09"), campaign_reference("scenario_10")
-    assert ten["relevant_branch_count"] > nine["relevant_branch_count"]
-    assert ten["multi_target_route_cost"] > nine["multi_target_route_cost"]
     assert campaign_reference("scenario_08")["route_detour_ratio"] > 2
 
 
@@ -155,7 +152,7 @@ def test_all_attempts_survive_reopen_and_replay_is_immutable(tmp_path):
 
 
 def test_mixed_samples_and_reset_restore_mission():
-    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=10)
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=8)
     env.reset(seed=1)
     assert len({s["sample_type"] for s in env.samples if s["target"]}) >= 2
     wrong = next(s for s in env.samples if not s["target"])
@@ -198,11 +195,11 @@ def test_reward_does_not_use_hidden_target_distance():
     b.close()
 
 
-def test_physical_contacts_for_more_than_five_rocks():
-    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=10)
+def test_physical_contacts_for_catalog_walls():
+    env = PlanetaryExplorationEnv(curriculum=False, difficulty_level=7)
     env.reset(seed=3)
-    assert len(env.rocks) > 5
-    cx, cy, hx, _, _ = env.rocks[6]
+    assert len(env.rocks) >= 5
+    cx, cy, hx, _, _ = env.rocks[4]
     env.set_pose(cx - hx - 0.38, cy, 0.0)
     collision = False
     for _ in range(12):
@@ -283,3 +280,16 @@ def test_real_ppo_updates_and_resumes_optimizer_and_replay(tmp_path, monkeypatch
     store = EpisodeStore(tmp_path / "episodes.sqlite")
     assert len(store.list_episodes()) >= 16
     store.close()
+
+
+def test_removed_scenarios_are_rejected_and_eight_is_terminal(tmp_path):
+    from fastapi.testclient import TestClient
+    from api.main import app
+    for level in (9, 10):
+        with pytest.raises(ValueError):
+            load_scenario(f"scenario_{level:02d}")
+        assert TestClient(app).post("/sim/reset", json={"environment": "planetary", "difficulty_level": level}).status_code == 422
+    curriculum = CampaignCurriculum(tmp_path / "state.json", initial_level=8)
+    assert curriculum.evaluate_scenario_mastery(mastery(8))
+    curriculum.advance_scenario()
+    assert curriculum.current_level == 8

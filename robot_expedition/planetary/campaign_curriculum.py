@@ -24,8 +24,8 @@ class CampaignCurriculum:
         self.max_collisions = max_collisions
         self.rehearsal_probability = rehearsal_probability
         self.rehearsal_weights = {int(k): float(v) for k, v in (rehearsal_weights or {}).items()}
-        if any(not 1 <= k <= 10 or not 0 < v < float('inf') for k, v in self.rehearsal_weights.items()):
-            raise ValueError("rehearsal weights must be finite positive values for levels 1-10")
+        if any(not 1 <= k <= len(SCENARIO_IDS) or not 0 < v < float('inf') for k, v in self.rehearsal_weights.items()):
+            raise ValueError("rehearsal weights must be finite positive values for levels 1-8")
         self.mastered = []
         self.evaluations = {}
         self._load()
@@ -39,8 +39,8 @@ class CampaignCurriculum:
                 raise ValueError(
                     "use a separate campaign curriculum state; legacy state is incompatible"
                 )
-            self.current_level = d["current_level"]
-            self.mastered = d["mastered"]
+            self.current_level = min(d["current_level"], len(SCENARIO_IDS))
+            self.mastered = [level for level in d["mastered"] if 1 <= level <= len(SCENARIO_IDS)]
             self.evaluations = d["evaluations"]
 
     def _save(self):
@@ -105,7 +105,7 @@ class CampaignCurriculum:
             return False
         if self.current_level not in self.mastered:
             self.mastered.append(self.current_level)
-        if self.current_level < 10:
+        if self.current_level < len(SCENARIO_IDS):
             self.current_level += 1
         self._save()
         return True

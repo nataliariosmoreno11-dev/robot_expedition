@@ -5,6 +5,7 @@ type Acceleration = {
 }
 
 type Job = {
+  approved_version?: boolean; completed_scenarios?: number[]
   job_id: string; status: string; run_id?: string; budget: number; parent_job_id?: string
   progress: { total_timesteps?: number; updates?: number }
   checkpoint?: { total_timesteps: number }; error?: string; versioning_error?: string
@@ -132,33 +133,29 @@ export function mountAgentTraining(options: {
       const automated = ['running', 'validating', 'stopping'].includes(campaign.status)
       const overview = document.querySelector<HTMLElement>('#trainingOverview')!
       overview.textContent = releaseJob
-        ? 'Modelo final disponible: validado en los 10 escenarios. Abre «Ver avance y modelos» para reproducirlo.'
+        ? 'Modelo final disponible: validado en los 8 escenarios. Abre «Ver avance y modelos» para reproducirlo.'
         : automated
-          ? `Entrenamiento en segundo plano · ${(campaign.progress?.total_timesteps ?? 0).toLocaleString('es-CO')} pasos · ${campaign.mastered?.length ?? 0}/10 escenarios superados en el currículo · escenario actual: ${campaign.current_level ?? 1}. La reproducción está desactivada por defecto; no necesitas mantener esta página abierta.`
+          ? `Entrenamiento en segundo plano · ${(campaign.progress?.total_timesteps ?? 0).toLocaleString('es-CO')} pasos · ${campaign.mastered?.length ?? 0}/8 escenarios superados en el currículo · escenario actual: ${campaign.current_level ?? 1}. La reproducción está desactivada por defecto; no necesitas mantener esta página abierta.`
           : `Campaña: ${campaign.status}. Todavía no hay modelo final validado. Consulta el avance y los registros.`
       el('agentCampaign').textContent = releaseJob
-        ? `Modelo final ${campaign.release!.run_id.slice(0, 10)} · validado en los 10 escenarios. Pesos y pasos registrados.`
-        : `Todavía no hay modelo final. Campaña: ${campaign.status}. ${campaign.mastered?.length ?? 0}/10 escenarios superados durante el currículo. ${campaign.error ?? ''} El entrenamiento funciona en segundo plano; no necesitas mirar los intentos.`
+        ? `Modelo final ${campaign.release!.run_id.slice(0, 10)} · validado en los 8 escenarios. Pesos y pasos registrados.`
+        : `Todavía no hay modelo final. Campaña: ${campaign.status}. ${campaign.mastered?.length ?? 0}/8 escenarios superados durante el currículo. ${campaign.error ?? ''} El entrenamiento funciona en segundo plano; no necesitas mirar los intentos.`
       el<HTMLButtonElement>('agentFinal').disabled = !releaseJob
       el<HTMLButtonElement>('agentCampaignStop').hidden = !automated || !result.enabled
       const select = el<HTMLSelectElement>('agentVersions')
       const previous = select.value
       select.replaceChildren(new Option('Nueva política desde cero', ''))
-      for (const job of jobs) select.add(new Option(`${job.run_id?.slice(0, 10) ?? job.job_id.slice(0, 10)} · ${job.status} · ${job.progress?.total_timesteps ?? 0} pasos`, job.job_id))
+      const versions = jobs.filter(j => j.approved_version && j.checkpoint && j.status === 'completed')
+        .sort((a, b) => (a.completed_scenarios?.length ?? 0) - (b.completed_scenarios?.length ?? 0))
+      for (const job of versions) select.add(new Option(`${job.run_id?.slice(0, 10)} | Escenarios ${job.completed_scenarios!.join(', ')} aprobados`, job.job_id))
       const current = active()
-      const valid = jobs.filter(j => j.checkpoint && j.status !== 'failed')
-      const evaluated = valid.filter(j => j.status === 'completed' && j.evaluation)
-      const latest = evaluated.sort((a,b) => (b.evaluation?.success_rate ?? 0) - (a.evaluation?.success_rate ?? 0)
-        || (b.checkpoint?.total_timesteps ?? 0) - (a.checkpoint?.total_timesteps ?? 0))[0]
-        ?? valid.sort((a,b) => (b.checkpoint?.total_timesteps ?? 0) - (a.checkpoint?.total_timesteps ?? 0))[0]
-      select.value = followLatest ? (releaseJob || latest?.job_id || jobs[0]?.job_id || '') : previous
+      const latest = versions.at(-1)
+      select.value = followLatest ? (latest?.job_id || '') : previous
       const chosen = selected()
       const job = current || chosen
-      const behind = chosen && latest && chosen.job_id !== latest.job_id
-        && (chosen.checkpoint?.total_timesteps ?? 0) < (latest.checkpoint?.total_timesteps ?? 0)
-      el('agentVersionNotice').textContent = behind
-        ? `Estás viendo una versión anterior de ${chosen.progress?.total_timesteps ?? 0} pasos. La última tiene ${latest.checkpoint?.total_timesteps} pasos.`
-        : `Versión seleccionada: ${chosen?.run_id?.slice(0, 10) ?? 'pendiente'}${followLatest ? ' · entrenamiento activo o mejor versión evaluada' : ''}`
+      el('agentVersionNotice').textContent = chosen
+        ? `Completa los escenarios ${chosen.completed_scenarios!.join(', ')}. Aprobados con al menos 50 evaluaciones por escenario y retención de los anteriores. Los demás no están certificados para esta versión.`
+        : 'Selecciona una versión aprobada. El entrenamiento activo se muestra por separado.'
       el<HTMLButtonElement>('agentStart').disabled = automated || busy || Boolean(current) || !result.enabled
       el<HTMLButtonElement>('agentResume').disabled = automated || busy || Boolean(current) || !chosen?.checkpoint || !result.enabled
       el<HTMLButtonElement>('agentStop').disabled = !current || busy

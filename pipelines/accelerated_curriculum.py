@@ -13,7 +13,7 @@ import torch
 from stable_baselines3.common.callbacks import BaseCallback
 from pipelines.specialist_policy import ScenarioPolicy
 from robot_expedition.planetary.campaign_curriculum import CampaignCurriculum
-from robot_expedition.planetary.campaign import catalog_hash
+from robot_expedition.planetary.campaign import catalog_hash, SCENARIO_IDS
 
 
 def stage_indices(stages, rng, size=128):
@@ -86,7 +86,7 @@ class AcceleratedCurriculumCallback(BaseCallback):
         history = json.loads(old_history.read_text()) if old_history and old_history.exists() else {}
         manager = CampaignCurriculum(self.config["environment"]["curriculum_state"],
                                      **self.config["environment"].get("curriculum_settings",{}))
-        while len(manager.mastered) < 10:
+        while len(manager.mastered) < len(SCENARIO_IDS):
             level = manager.current_level
             entry = history.get(str(level), {"attempts":0})
             if entry["attempts"] >= int(self.settings.get("max_attempts_per_level",2)):
@@ -175,7 +175,7 @@ class AcceleratedCurriculumCallback(BaseCallback):
                 save_json(self.directory / f"accelerated-replay-{level}.json",replay)
             self.publish(phase="approved", mastered=manager.mastered, level=level)
         save_json(history_path,history)
-        self.finished=len(manager.mastered)==10
+        self.finished=len(manager.mastered)==len(SCENARIO_IDS)
         if self.finished:
             self.publish(phase="all_scenarios_passed",mastered=manager.mastered)
 

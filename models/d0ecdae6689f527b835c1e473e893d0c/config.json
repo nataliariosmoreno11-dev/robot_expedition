@@ -1,0 +1,57 @@
+{
+  "algorithm": "ppo",
+  "budget_timesteps": 262144,
+  "change": "Four subprocess environments; reject mathematically failing periodic evaluations early",
+  "checkpoint_freq": 4096,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.5,
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "logs/campaign_curriculum.json",
+    "difficulty_level": 1,
+    "episode_db": "/home/tom/code/robot_expedition/logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "ppo-exp-009",
+    "record_episodes": true,
+    "run_id": "exp-009-retention",
+    "training_no_progress_limit": 80
+  },
+  "eval_episodes": null,
+  "evaluation_max_level": 10,
+  "experiment_id": "exp-010-parallel",
+  "hyperparams": {
+    "batch_size": 64,
+    "clip_range": 0.1,
+    "ent_coef": 0.02,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "learning_rate": 5e-05,
+    "n_steps": 256,
+    "target_kl": 0.015
+  },
+  "hypothesis": "Parallel simulation and early rejection reduce wall time without relaxing mastery",
+  "level_id": "n2",
+  "n_envs": 4,
+  "normalize_obs": true,
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/6a7190d0286842e9bea203e07d31a5ce",
+  "periodic_evaluation_episodes": 50,
+  "periodic_evaluation_freq": 16384,
+  "periodic_evaluation_seed_start": 910000,
+  "reference": "exp-009-retention",
+  "resume_best_mastery": true,
+  "retention_guard_freq": 4096,
+  "seed": 10,
+  "seeds": [
+    10
+  ],
+  "vector_backend": "subproc"
+}

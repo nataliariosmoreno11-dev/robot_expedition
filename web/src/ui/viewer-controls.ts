@@ -1,5 +1,5 @@
 type SavedJob = {
-  run_id?: string; status: string
+  run_id?: string; status: string; approved_version?: boolean; completed_scenarios?: number[]; source_run_id?: string
   checkpoint?: { total_timesteps: number }
   progress?: { total_timesteps?: number }
 }
@@ -19,7 +19,7 @@ export function mountViewerControls(options: {
   let selection = 0
   let loadingModels = false
   let loadedModels = false
-  for (let level = 1; level <= 10; level++) scenario.add(new Option(`Escenario ${level}`, `scenario_${String(level).padStart(2, '0')}`))
+  for (let level = 1; level <= 8; level++) scenario.add(new Option(`Escenario ${level}`, `scenario_${String(level).padStart(2, '0')}`))
   const syncFullscreen = () => {
     const expanded = document.fullscreenElement === viewer || viewer.classList.contains('viewer-expanded')
     fullscreen.textContent = expanded ? 'Salir de pantalla completa' : 'Pantalla completa'
@@ -52,11 +52,11 @@ export function mountViewerControls(options: {
     try {
       const result = await request('/training/jobs') as { jobs: SavedJob[] }
       const previous = model.value
-      const jobs = result.jobs.filter(job => job.run_id && job.checkpoint)
+      const jobs = result.jobs.filter(job => job.run_id && job.checkpoint && job.approved_version)
         .sort((a, b) => (b.checkpoint?.total_timesteps ?? 0) - (a.checkpoint?.total_timesteps ?? 0))
       model.replaceChildren(...jobs.map(job => new Option(
-        `${(job.checkpoint?.total_timesteps ?? 0).toLocaleString('es-CO')} pasos · ${job.run_id!.slice(0, 8)} · ${job.status}`, job.run_id)))
-      if (jobs.some(job => job.run_id === previous)) model.value = previous
+        `${(job.checkpoint?.total_timesteps ?? 0).toLocaleString('es-CO')} pasos · ${job.run_id!.slice(0, 8)} · Escenarios ${job.completed_scenarios!.join(', ')} aprobados`, job.source_run_id || job.run_id)))
+      if (jobs.some(job => (job.source_run_id || job.run_id) === previous)) model.value = previous
       if (!jobs.length) model.add(new Option('Todavía no hay versiones guardadas', ''))
       loadedModels = true
     } catch (error) { notice.textContent = String(error) }
@@ -109,7 +109,7 @@ export function mountViewerControls(options: {
       const response = await fetch('/demo/battery-audit.json')
       if (!response.ok) throw new Error('No se pudo cargar la prueba de batería.')
       const report = await response.json() as { generated_at: string; scenarios: { scenario: number; success: boolean; remaining_battery: number }[] }
-      for (const result of report.scenarios) {
+      for (const result of report.scenarios.filter(row => row.scenario <= 8)) {
         const row = document.createElement('tr')
         for (const value of [String(result.scenario), `${result.remaining_battery.toFixed(1)} %`, result.success ? 'Completado' : 'Sin completar']) {
           const cell = document.createElement('td'); cell.textContent = value; row.append(cell)

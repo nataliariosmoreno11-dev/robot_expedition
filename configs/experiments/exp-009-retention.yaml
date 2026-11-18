@@ -6,7 +6,7 @@ level_id: n2
 algorithm: ppo
 budget_timesteps: 65536
 seeds: [1]
-evaluation_max_level: 10
+evaluation_max_level: 8
 periodic_evaluation_freq: 16384
 periodic_evaluation_episodes: 50
 periodic_evaluation_seed_start: 910000

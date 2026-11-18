@@ -9,13 +9,13 @@ from api import training
 def report():
     return {"cases": [{"difficulty_level": level, "seed": seed,
                         "success": seed < 43, "collisions": 2}
-                       for level in range(1, 11) for seed in range(50)]}
+                       for level in range(1, 9) for seed in range(50)]}
 
 
 def test_publication_requires_every_level_and_distinct_evaluations():
     evidence = report()
     assert campaign.qualifies(evidence)
-    evidence["cases"] = [case for case in evidence["cases"] if case["difficulty_level"] != 10]
+    evidence["cases"] = [case for case in evidence["cases"] if case["difficulty_level"] != 8]
     assert not campaign.qualifies(evidence)
     evidence = report()
     for case in evidence["cases"]:
@@ -27,7 +27,7 @@ def test_publication_requires_every_level_and_distinct_evaluations():
 def test_global_score_cannot_hide_a_failing_scenario(field, value):
     evidence = report()
     for case in evidence["cases"]:
-        if case["difficulty_level"] == 10:
+        if case["difficulty_level"] == 8:
             case[field] = value
     evidence["metrics"] = {"success_rate": 1.0}
     assert not campaign.qualifies(evidence)
@@ -43,7 +43,7 @@ def test_supervisor_continues_saved_weights_until_all_levels_validate(tmp_path, 
         job_id = str(len(parents)) * 32
         training.write(training.JOBS / job_id / "state.json", {"job_id": job_id})
         training.write(tmp_path / "models" / job_id / "curriculum_state.json",
-                       {"mastered": list(range(1, 11)) if len(parents) == 2 else [1], "current_level": 2})
+                       {"mastered": list(range(1, 9)) if len(parents) == 2 else [1], "current_level": 2})
         return {"job_id": job_id}
     monkeypatch.setattr(training, "start", start)
     monkeypatch.setattr(training, "describe", lambda path: {

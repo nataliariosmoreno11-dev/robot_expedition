@@ -1,0 +1,97 @@
+{
+  "algorithm": "ppo",
+  "budget_timesteps": 32768,
+  "change": "Per-scenario actors, supervised initialization and frozen normalization; evaluation criteria unchanged",
+  "checkpoint_freq": 8192,
+  "checkpoint_keep": 2,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/0af314b98d1c4513a53087da8199f4ab/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "0af314b98d1c4513a53087da8199f4ab",
+    "record_episodes": false,
+    "run_id": "0af314b98d1c4513a53087da8199f4ab",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "configs/training/level6-stages.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_max_level": 10,
+  "experiment_id": "exp-014-specialist",
+  "freeze_normalization": true,
+  "hyperparams": {
+    "batch_size": 128,
+    "clip_range": 0.1,
+    "ent_coef": 0.01,
+    "gae_lambda": 0.95,
+    "gamma": 0.995,
+    "learning_rate": 0.0001,
+    "n_steps": 512,
+    "target_kl": 0.01
+  },
+  "hypothesis": "Independent scenario actors preserve mastered decisions while PPO learns pending scenarios",
+  "level_id": "n2",
+  "normalize_obs": true,
+  "parent_run_id": "local:/home/tom/code/robot_expedition/models/70d953f89deb419a9f142f51375d5dc7",
+  "periodic_evaluation_episodes": 50,
+  "periodic_evaluation_freq": 16384,
+  "periodic_evaluation_seed_start": 910000,
+  "reference": "exp-013-stage-practice",
+  "rejected_checkpoint_keep": 1,
+  "resume_best_mastery": true,
+  "retention_guard_freq": 16384,
+  "seeds": [
+    1
+  ],
+  "specialist_actor": true,
+  "supervised_initialization": {
+    "candidate_sha256": "5ac91214df1b7c2e986ec68b444738fe71857f61875e7b26650bf04092b2bb57",
+    "dataset_sha256": "0ef96de0e90e9207b67a975747d780a8b4c88fe43b4e77c06e844c4e30070fdc",
+    "pilot_report_sha256": "be835e866836b84b3f6a005304457a1afebe95957a5d228361933b97a6d18c23",
+    "selection": "best bounded scenario pilot; development seeds 740000-740002 and regression 920047; final evaluation seeds disjoint",
+    "selection_details": {
+      "levels": {
+        "2": {
+          "score": [
+            1.0,
+            2.0,
+            -0.0,
+            -124.0
+          ],
+          "seed": 41,
+          "updates": 500
+        },
+        "6": {
+          "score": [
+            1.0,
+            4.0,
+            -0.0,
+            -369.0
+          ],
+          "seed": 41,
+          "updates": 500
+        }
+      },
+      "parent": "models/70d953f89deb419a9f142f51375d5dc7"
+    }
+  },
+  "vector_backend": "subproc"
+}

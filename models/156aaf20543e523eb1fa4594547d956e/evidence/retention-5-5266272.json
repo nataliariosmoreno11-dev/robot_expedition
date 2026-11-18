@@ -1,0 +1,2359 @@
+{
+  "cases": [
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.3051,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940000,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.841,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940001,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.712,
+      "collection_positions": [
+        [
+          9.021496469673298,
+          -3.6624522177663428
+        ],
+        [
+          9.32098524419476,
+          0.04563894463980544
+        ],
+        [
+          8.65149345855294,
+          3.8355569609511164
+        ],
+        [
+          1.8557331630167186,
+          3.7594628585784857
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.28763041776904,
+      "final_position": [
+        1.997014836538495,
+        0.7693151442813784
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7014,
+      "path_efficiency": 0.904443123549551,
+      "path_length": 30.555,
+      "reference_path_cost": 33.87279310756049,
+      "requested_samples": 4,
+      "return": 317.1725,
+      "route_cost": 37.451545846934316,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940002,
+      "steps": 117,
+      "success": true
+    },
+    {
+      "battery": 67.556,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.673815509426928,
+          3.771926791720478
+        ],
+        [
+          1.8200842200178604,
+          3.6032442646363663
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.44362128583465,
+      "final_position": [
+        2.326310057174092,
+        0.8265325523653119
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6994,
+      "path_efficiency": 0.9194081476309584,
+      "path_length": 30.378,
+      "reference_path_cost": 34.22313432442062,
+      "requested_samples": 4,
+      "return": 317.7413,
+      "route_cost": 37.223005269861346,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940003,
+      "steps": 117,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6808,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940004,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6698,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940005,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6889,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940006,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6274,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940007,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6196,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940008,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6244,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940009,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6988,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940010,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6981,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940011,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7475,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940012,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7269,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940013,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7831,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940014,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.0761,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940015,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.8376,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940016,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.8374,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940017,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.8473,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940018,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.8374,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940019,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.8278,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940020,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.9141,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940021,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.3542,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940022,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.4114,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940023,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.3402,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940024,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.1214,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940025,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.554,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.673815509426928,
+          3.771926791720478
+        ],
+        [
+          1.8103574371026503,
+          3.6249949497743468
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.44620520625051,
+      "final_position": [
+        1.8310757028230717,
+        0.8014998381214445
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.895,
+      "path_efficiency": 0.9125945988379142,
+      "path_length": 30.411,
+      "reference_path_cost": 33.9994091317226,
+      "requested_samples": 4,
+      "return": 317.6208,
+      "route_cost": 37.25576414216893,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940026,
+      "steps": 117,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.9493,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940027,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.858,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940028,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7142,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940029,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6778,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940030,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6766,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940031,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6464,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940032,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6524,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940033,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6878,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940034,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.556,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.673815509426928,
+          3.771926791720478
+        ],
+        [
+          1.8200842200178604,
+          3.6032442646363663
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.44362128583465,
+      "final_position": [
+        2.326310057174092,
+        0.8265325523653119
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7005,
+      "path_efficiency": 0.9194081476309584,
+      "path_length": 30.378,
+      "reference_path_cost": 34.22313432442062,
+      "requested_samples": 4,
+      "return": 317.7413,
+      "route_cost": 37.223005269861346,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940035,
+      "steps": 117,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.6555,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940036,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7408,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940037,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7249,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940038,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7336,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940039,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7321,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940040,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.777,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940041,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7233,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940042,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.9526,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940043,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.554,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.673815509426928,
+          3.771926791720478
+        ],
+        [
+          1.8103574371026503,
+          3.6249949497743468
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.44620520625051,
+      "final_position": [
+        1.8310757028230717,
+        0.8014998381214445
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.0255,
+      "path_efficiency": 0.9125945988379142,
+      "path_length": 30.411,
+      "reference_path_cost": 33.9994091317226,
+      "requested_samples": 4,
+      "return": 317.6208,
+      "route_cost": 37.25576414216893,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940044,
+      "steps": 117,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7841,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940045,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7709,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940046,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.7997,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940047,
+      "steps": 120,
+      "success": true
+    },
+    {
+      "battery": 68.185,
+      "collection_positions": [
+        [
+          8.97336282068827,
+          -3.6397655403919926
+        ],
+        [
+          9.134052212109324,
+          0.01099406987413579
+        ],
+        [
+          8.641086328132086,
+          3.8690243420427106
+        ],
+        [
+          1.9323187078470971,
+          3.5952650387090492
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 31.814855862568592,
+      "final_position": [
+        1.6889747632577736,
+        0.9088113520941205
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 0.8762,
+      "path_efficiency": 0.9008682288849083,
+      "path_length": 30.072,
+      "reference_path_cost": 33.1820606079745,
+      "requested_samples": 4,
+      "return": 317.637,
+      "route_cost": 36.83342307348006,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940048,
+      "steps": 116,
+      "success": true
+    },
+    {
+      "battery": 67.482,
+      "collection_positions": [
+        [
+          8.997620402351231,
+          -3.710227769051552
+        ],
+        [
+          9.626228628054198,
+          -0.1581614835105193
+        ],
+        [
+          8.690377042224931,
+          3.819847494109934
+        ],
+        [
+          1.8492933382284396,
+          3.5678894934157963
+        ]
+      ],
+      "collisions": 0,
+      "difficulty": "L5 \u00b7 El valle de decisiones",
+      "difficulty_level": 5,
+      "end": "exito",
+      "energy_consumed": 32.51750276016634,
+      "final_position": [
+        2.4136802144560336,
+        0.8405945478141055
+      ],
+      "initial_position": [
+        1.4998842767728793,
+        2.1823150073153164e-10
+      ],
+      "latency_ms_mean": 1.0161,
+      "path_efficiency": 0.9118081950040403,
+      "path_length": 30.516,
+      "reference_path_cost": 34.11685236650067,
+      "requested_samples": 4,
+      "return": 317.4565,
+      "route_cost": 37.41669854848091,
+      "samples_collected": 4,
+      "scenario_id": "scenario_05",
+      "seed": 940049,
+      "steps": 120,
+      "success": true
+    }
+  ],
+  "early_rejection": false,
+  "environment": {
+    "campaign": true,
+    "curriculum": true,
+    "curriculum_settings": {
+      "max_collisions": 2.0,
+      "minimum_episodes": 50,
+      "rehearsal_probability": 0.1,
+      "rehearsal_weights": {
+        "3": 4.0
+      },
+      "success_threshold": 0.85
+    },
+    "curriculum_state": "/home/tom/code/robot_expedition/models/0af314b98d1c4513a53087da8199f4ab/curriculum_state.json",
+    "difficulty_level": 1,
+    "episode_db": "logs/planetary_episodes.sqlite",
+    "history_steps": 4,
+    "kind": "planetary",
+    "max_experiments": null,
+    "mode": "entrenamiento",
+    "planet": "mars",
+    "policy_version": "0af314b98d1c4513a53087da8199f4ab",
+    "record_episodes": false,
+    "run_id": "0af314b98d1c4513a53087da8199f4ab",
+    "training_navigation_shaping": 8.0,
+    "training_no_progress_limit": 120,
+    "training_shaping_gamma": 0.995,
+    "training_shaping_min_level": 6,
+    "training_stage_bank": "configs/training/level6-stages.json",
+    "training_stage_probability": 0.5
+  },
+  "evaluation_kind": "mastery",
+  "metrics": {
+    "collisions_per_episode": 0.0,
+    "episodes": 50,
+    "failures_by_cause": {},
+    "latency_ms_mean": 0.8257,
+    "mission_completion": 1.0,
+    "path_length_mean": 30.4982,
+    "return_mean": 317.4724,
+    "return_std": 0.0796,
+    "samples_collected_mean": 4.0,
+    "steps_mean": 119.62,
+    "success_rate": 1.0,
+    "success_rate_by_difficulty": {
+      "5": 1.0
+    }
+  },
+  "partial": false,
+  "policy_version": "0af314b98d1c4513a53087da8199f4ab",
+  "requested_episodes": 50,
+  "scenario_level": 5,
+  "suite_id": "campaign-mastery-v1",
+  "training_step": 5266272,
+  "wall_time_s": 28.197
+}

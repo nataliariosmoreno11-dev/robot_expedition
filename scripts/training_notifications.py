@@ -61,7 +61,7 @@ def deliver(config, event, recipient):
         f"Éxito: {evidence.get('success_rate', 'sin dato')}\n"
         f"Episodios evaluados: {evidence.get('episodes', 'sin dato')}\n"
         f"Checkpoint local: {event['checkpoint']}\n\n"
-        "Esta aprobación no equivale a la certificación final de los 10 escenarios.\n"
+        "Esta aprobación no equivale a la certificación final de los 8 escenarios.\n"
         "El entrenamiento puede reforzar escenarios anteriores si detecta regresiones.\n"
     )
     context = ssl.create_default_context()

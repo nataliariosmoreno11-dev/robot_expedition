@@ -80,7 +80,7 @@ La web local incluye **Agente automático · PPO** para entrenar, guardar,
 continuar pesos y ejecutar versiones aprendidas. Inicia la API con
 `ENABLE_LOCAL_TRAINING=1` y consulta [política, controles y versionado](docs/agente-automatico.md).
 
-La ampliación planetaria usa **diez mapas fijos** (`scenario_01`…`scenario_10`),
+La ampliación planetaria usa **ocho mapas fijos** (`scenario_01`…`scenario_08`),
 misiones de recolección explícita, PPO con cuatro observaciones de historial y un
 currículo que solo avanza mediante evaluaciones independientes. Conserva todos
 los intentos completos en SQLite y permite reproducirlos y comparar rutas.
@@ -225,7 +225,7 @@ cd web && echo "VITE_API_BASE_URL=http://127.0.0.1:8000" > .env.local && npm ci 
 
 La web tiene estas secciones:
 - **Simulación:** escena 3D, evaluación y control manual con las flechas.
-- **Exploración planetaria:** escenarios 01–10, muestras objetivo y distractoras,
+- **Exploración planetaria:** escenarios 01–08, muestras objetivo y distractoras,
   recolección explícita e historial/replay de episodios persistidos.
 - **Catálogo:** filtros por nivel y estado. Cada run muestra hipótesis,
   cambio, semilla, pasos, tiempo, métricas por nivel, commit, MLflow y
