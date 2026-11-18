@@ -81,6 +81,7 @@ let manualBusy = false
 let automaticRunning = false
 let automaticTimer: number | undefined
 let automaticEpisodeCount = 0
+let automaticNetworkRetries = 0
 let lastVersion: Record<string, unknown> | undefined
 
 function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
@@ -705,6 +706,7 @@ const startManualMode = async () => {
     required<HTMLElement>('#readoutTraction').textContent = Number(conditions?.traction ?? 0).toFixed(2)
     required<HTMLElement>('#readoutSamples').textContent = `${map.mission?.requested_samples ?? 0} × ${map.mission?.target_type ?? '—'}`
     setProvenance('planetary-qlearning', environment === 'planetary' ? `memoria persistente · escenario procedural · L${difficulty}` : 'baseline autónomo')
+    automaticNetworkRetries = 0
     automaticRunning = true
     setManualControls(false)
     manualButton.textContent = 'Pausar entrenamiento'
@@ -724,9 +726,11 @@ const startManualMode = async () => {
 async function sendAutomaticAction() {
   if (!api || !manualSessionId || !manualEpisode || manualBusy) return
   manualBusy = true
+  let retryDelay: number | undefined
   setManualControls(false)
   try {
     const response = await api.step(manualSessionId)
+    automaticNetworkRetries = 0
     const frame = frameFromResponse(response)
     if (!frame) throw new Error('/sim/step no devolvió un cuadro compatible.')
     const frames = [...manualEpisode.frames, frame]
@@ -780,12 +784,23 @@ async function sendAutomaticAction() {
       if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, 1200)
     }
   } catch (error) {
-    automaticRunning = false
-    hud.showNotice('El entrenamiento Q-learning se detuvo', errorMessage(error))
+    const transientNetworkFailure = error instanceof ApiError && error.status === undefined
+    if (transientNetworkFailure && automaticRunning && automaticNetworkRetries < 6) {
+      automaticNetworkRetries += 1
+      retryDelay = Math.min(5000, 500 * 2 ** (automaticNetworkRetries - 1))
+      hud.showNotice(
+        'Reconectando el entrenamiento',
+        `La API no respondió. Reintento ${automaticNetworkRetries}/6 en ${(retryDelay / 1000).toFixed(1)} s; el checkpoint ya guardado se conserva.`,
+      )
+    } else {
+      automaticRunning = false
+      automaticNetworkRetries = 0
+      hud.showNotice('El entrenamiento Q-learning se detuvo', errorMessage(error))
+    }
   } finally {
     manualBusy = false
     setManualControls(false)
-    if (manualSessionId) scheduleAutomaticStep()
+    if (manualSessionId && automaticRunning) scheduleAutomaticStep(retryDelay ?? 150)
   }
 }
 
