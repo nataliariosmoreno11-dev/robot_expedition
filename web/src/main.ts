@@ -989,7 +989,9 @@ async function startPpoEpisode() {
   ppoStart.disabled = true
   ppoStart.textContent = 'Cargando checkpoint…'
   try {
-    const seed = 910000 + selectedPpoLevel
+    // El checkpoint final de la campaña de Tomás fue validado de forma
+    // determinista con esta semilla para los ocho escenarios fijos.
+    const seed = 910000
     const response = await api.reset('n2', 'planetary', selectedPpoLevel, seed, `trained:${selectedPpoRun}`, ppoSessionId)
     const frame = frameFromResponse(response)
     if (!response.session_id || !frame || !response.map) throw new Error('La API PPO no devolvió sesión, mapa y frame inicial.')
