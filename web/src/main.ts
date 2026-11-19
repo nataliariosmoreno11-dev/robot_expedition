@@ -982,6 +982,10 @@ const schedulePpoStep = () => {
   }
 }
 
+// Render tarda alrededor de medio segundo por petición. Conservamos todos los
+// cuadros del recorrido, pero calculamos varios pasos PPO en cada viaje de red.
+const PPO_BATCH_STEPS = 16
+
 async function startPpoEpisode() {
   if (!api || !selectedPpoRun) return
   window.clearTimeout(ppoTimer)
@@ -1027,10 +1031,13 @@ async function startPpoEpisode() {
 async function stepPpoEpisode() {
   if (!api || !ppoSessionId || !ppoEpisode || !ppoMap || !ppoRunning) return
   try {
-    const response = await api.step(ppoSessionId)
+    const response = await api.step(ppoSessionId, undefined, PPO_BATCH_STEPS)
     const frame = frameFromResponse(response)
     if (!frame) throw new Error('La inferencia PPO no devolvió un frame válido.')
-    const frames = [...ppoEpisode.frames, frame]
+    const batch = Array.isArray(response.frames)
+      ? response.frames.map((item) => normalizeFrame(item)).filter((item): item is ReplayFrame => Boolean(item))
+      : []
+    const frames = [...ppoEpisode.frames, ...(batch.length ? batch : [frame])]
     ppoEpisode = { ...ppoEpisode, frames, steps: frames.length - 1, reward: Number(response.return ?? ppoEpisode.reward),
       battery: frame[FRAME_INDEX.battery], success: Boolean(response.success), end: String(response.end ?? 'running'),
       samplesCollected: Number(response.samples_collected ?? ppoEpisode.samplesCollected ?? 0),
