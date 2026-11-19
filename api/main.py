@@ -914,10 +914,21 @@ def scenario_progress(scenario_id: str, mode: str="entrenamiento"):
 
 @app.get("/campaign/progress")
 def campaign_progress():
-    paths=sorted((ROOT/"models").glob("*/curriculum_state.json"),key=lambda p:p.stat().st_mtime,reverse=True)
-    for path in paths:
-        state=json.loads(path.read_text())
-        if state.get("schema")=="fixed-campaign-curriculum/v1":
-            return {"run_id":path.parent.name,**state}
+    # El run mas avanzado: mas niveles aprobados y, a igualdad, mas pasos. No se usa la fecha
+    # del archivo: en un despliegue todos los archivos se escriben a la vez y el orden es arbitrario.
+    def progress(item):
+        evaluations = item[1].get("evaluations") or {}
+        passed = sum(bool(v.get("passed")) for v in evaluations.values())
+        steps = max([int(v.get("training_step") or 0) for v in evaluations.values()] or [0])
+        return passed, steps, item[0]
+
+    states = []
+    for path in (ROOT/"models").glob("*/curriculum_state.json"):
+        state = json.loads(path.read_text())
+        if state.get("schema") == "fixed-campaign-curriculum/v1":
+            states.append((path.parent.name, state))
+    if states:
+        run_id, state = max(states, key=progress)
+        return {"run_id": run_id, **state}
     from robot_expedition.planetary.campaign_curriculum import CampaignCurriculum
     return {"run_id":None,**CampaignCurriculum().snapshot()}
