@@ -64,6 +64,7 @@ const configValue = required<HTMLElement>('#configValue')
 const missionMinimap = required<HTMLCanvasElement>('#missionMinimap')
 const elevationMap = required<HTMLCanvasElement>('#elevationMap')
 const ppoCampaignMeta = required<HTMLElement>('#ppoCampaignMeta')
+const ppoModelSwitch = required<HTMLElement>('#ppoModelSwitch')
 const ppoCampaignLevels = required<HTMLElement>('#ppoCampaignLevels')
 const ppoEvidenceDetail = required<HTMLElement>('#ppoEvidenceDetail')
 const ppoStart = required<HTMLButtonElement>('#ppoStart')
@@ -110,6 +111,8 @@ let ppoMap: ExpeditionMap | undefined
 let ppoRunning = false
 let ppoTimer: number | undefined
 let ppoDecisionRows: UnknownRecord[] = []
+let ppoCampaignModels: Array<{ level: number; runId: string }> = []
+let ppoTriedRuns = new Set<string>()
 
 function mapPoint(map: ExpeditionMap, canvas: HTMLCanvasElement, x: number, y: number): [number, number] {
   const width = map.active_extent?.[0] ?? map.size[0]
@@ -893,11 +896,13 @@ function selectPpoLevel(item: UnknownRecord) {
   selectedPpoLevel = Number(item.level ?? 1)
   const model = isRecord(item.model) ? item.model : {}
   selectedPpoRun = String(model.run_id ?? '')
+  ppoTriedRuns = new Set(selectedPpoRun ? [selectedPpoRun] : [])
   ppoText('#ppoMode', 'CHECKPOINT SELECCIONADO · SIN EJECUTAR')
   ppoText('#ppoAction', '—')
   ppoText('#ppoValue', '—')
   ppoText('#ppoSceneLevel', `L${selectedPpoLevel}`)
   ppoText('#ppoCheckpoint', selectedPpoRun.slice(0, 12) || '—')
+  ppoModelSwitch.textContent = `L${selectedPpoLevel} usa el checkpoint ${selectedPpoRun.slice(0, 12) || 'no disponible'}. Si falla y hay alternativa, el visor lo indicará antes de reintentar.`
   ppoStart.disabled = !apiOnline || !selectedPpoRun
   ppoRestart.disabled = !selectedPpoRun
   showPpoEvidence(item)
@@ -1020,6 +1025,22 @@ async function stepPpoEpisode() {
     updatePpoLive(response, frame, ppoMap)
     if (response.terminated || response.truncated) {
       ppoRunning = false; ppoPause.disabled = true; ppoText('#ppoEnd', String(response.end ?? 'finalizado'))
+      const alternatives = ppoCampaignModels
+        .filter((candidate) => candidate.level >= 6 && candidate.runId !== selectedPpoRun && !ppoTriedRuns.has(candidate.runId))
+        .sort((a, b) => b.level - a.level)
+      const next = !response.success && selectedPpoLevel >= 6 ? alternatives[0] : undefined
+      if (next) {
+        const previousRun = selectedPpoRun
+        selectedPpoRun = next.runId
+        ppoTriedRuns.add(next.runId)
+        ppoText('#ppoCheckpoint', selectedPpoRun.slice(0, 12))
+        ppoText('#ppoMode', `CAMBIO AUTOMÁTICO · PPO L${selectedPpoLevel}`)
+        ppoText('#ppoObjective', `El checkpoint anterior terminó sin éxito; se reintenta L${selectedPpoLevel} con otro modelo.`)
+        ppoModelSwitch.textContent = `Cambio automático en L${selectedPpoLevel}: ${previousRun.slice(0, 12)} no llegó a la meta (${String(response.end ?? 'sin éxito')}). Se prueba ${selectedPpoRun.slice(0, 12)}. Es un reintento alternativo, no una validación.`
+        window.setTimeout(() => { void startPpoEpisode() }, 700)
+      } else if (!response.success && selectedPpoLevel >= 6) {
+        ppoModelSwitch.textContent = `L${selectedPpoLevel}: se agotaron los checkpoints alternativos disponibles sin éxito. El resultado se mantiene como fallo; no se presenta como misión superada.`
+      }
     } else schedulePpoStep()
   } catch (error) {
     ppoRunning = false; ppoText('#ppoEnd', 'Detenido'); ppoText('#ppoObjective', errorMessage(error))
@@ -1061,7 +1082,11 @@ async function loadPpoCampaign() {
       const bModel = isRecord(b.model) ? b.model : {}
       return Number(aModel.total_timesteps ?? 0) - Number(bModel.total_timesteps ?? 0)
     })
-    ppoCampaignMeta.textContent = `${levels.length} checkpoints aprobados · ${Number(payload.latest_total_timesteps ?? 0).toLocaleString('es-CO')} pasos acumulados en el hito final · producción en modo evidencia e inferencia`
+    ppoCampaignModels = levels.map((item) => {
+      const model = isRecord(item.model) ? item.model : {}
+      return { level: Number(item.level ?? 0), runId: String(model.run_id ?? '') }
+    }).filter((candidate) => candidate.level >= 1 && Boolean(candidate.runId))
+    ppoCampaignMeta.textContent = `${levels.length} checkpoints registrados · ${Number(payload.latest_total_timesteps ?? 0).toLocaleString('es-CO')} pasos acumulados en el hito final · la evidencia histórica se distingue de la inferencia en vivo`
     ppoCampaignLevels.replaceChildren()
     for (const item of levels) {
       const model = isRecord(item.model) ? item.model : {}
@@ -1071,7 +1096,7 @@ async function loadPpoCampaign() {
       const button = document.createElement('button')
       button.type = 'button'
       button.className = 'ppo-level-card'
-      button.innerHTML = `<span>L${Number(item.level)}</span><strong>${String(scenario.name ?? 'Escenario')}</strong><small>${Number(model.total_timesteps ?? 0).toLocaleString('es-CO')} pasos</small><i>${(metricNumber(metrics, 'success_rate') * 100).toFixed(0)}% éxito</i>`
+      button.innerHTML = `<span>L${Number(item.level)}</span><strong>${String(scenario.name ?? 'Escenario')}</strong><small>${Number(model.total_timesteps ?? 0).toLocaleString('es-CO')} pasos</small><i>${(metricNumber(metrics, 'success_rate') * 100).toFixed(0)}% histórico</i>`
       button.addEventListener('click', () => {
         ppoCampaignLevels.querySelectorAll('button').forEach((node) => node.classList.remove('selected'))
         button.classList.add('selected')
