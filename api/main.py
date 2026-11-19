@@ -44,6 +44,7 @@ from robot_expedition.envs.planetary_exploration import (  # noqa: E402
 )
 from robot_expedition.planetary.episode_store import EpisodeStore  # noqa: E402
 from robot_expedition.planetary.qlearning import PlanetaryQLearningAgent  # noqa: E402
+from robot_expedition.planetary.planner import PlanetaryMissionPlanner  # noqa: E402
 from pipelines.policies import CampaignNumpyPPOPolicy  # noqa: E402
 
 API_VERSION = "1.1.0"
@@ -61,6 +62,7 @@ PLANETARY_Q_CHECKPOINT_DIR = Path(os.environ.get(
 ))
 PLANETARY_Q_SELECTION = PLANETARY_Q_CHECKPOINT_DIR / "planetary_qlearning_active.json"
 q_checkpoint_lock = threading.Lock()
+QLEARNING_NO_PROGRESS_LIMIT = 120
 # Checkpoint base entrenado offline (scripts/train_planetary_qlearning.py). Sin disco
 # persistente, Render borra models/ en cada redeploy o reposo; al arrancar se descarga
 # esta tabla solo si el checkpoint activo no existe, asi nunca se pisa lo aprendido.
@@ -68,11 +70,31 @@ q_checkpoint_lock = threading.Lock()
 PLANETARY_Q_SEED_URL = os.environ.get(
     "PLANETARY_Q_SEED_URL",
     "https://github.com/nataliariosmoreno11-dev/robot_expedition/releases/download/"
-    "qlearning-seed-v1/planetary_qlearning.npz",
+    "qlearning-seed-v2/planetary_qlearning.npz",
 ).strip()
 
 
+def _retire_incompatible_checkpoint(path: Path) -> Path | None:
+    """Renombra (sin borrar) un checkpoint de otra versión del estado Q para no perderlo."""
+    try:
+        PlanetaryQLearningAgent().load(path)
+        return None
+    except (ValueError, KeyError, OSError, json.JSONDecodeError):
+        backup = path.with_name(f"{path.stem}-estado-anterior.npz")
+        suffix = 1
+        while backup.exists():
+            suffix += 1
+            backup = path.with_name(f"{path.stem}-estado-anterior-{suffix}.npz")
+        path.replace(backup)
+        print(f"[qlearning] checkpoint incompatible conservado como {backup.name}", flush=True)
+        return backup
+
+
 def _seed_q_checkpoint() -> str:
+    if PLANETARY_Q_CHECKPOINT.exists():
+        # Un checkpoint de una versión anterior del estado Q se conserva renombrado
+        # y se reemplaza por el base actual; uno compatible nunca se toca.
+        _retire_incompatible_checkpoint(PLANETARY_Q_CHECKPOINT)
     if not PLANETARY_Q_SEED_URL or PLANETARY_Q_CHECKPOINT.exists():
         return "existing" if PLANETARY_Q_CHECKPOINT.exists() else "disabled"
     temporary = PLANETARY_Q_CHECKPOINT.with_name(PLANETARY_Q_CHECKPOINT.name + ".seed.tmp")
@@ -377,130 +399,71 @@ def evaluate(req: EvaluateRequest):
 
 
 # ------------------------------------------------------- control manual
-class PlanetaryRulePolicy:
-    """Política reactiva autónoma que navega solo con la observación pública."""
+class PlanetaryRulePolicy(PlanetaryMissionPlanner):
+    """Guía planificadora: mapa de misión estático + cámara; nunca ve las muestras de antemano.
 
-    def __init__(self):
-        self.steps = 0
-        self.search_direction = 1
-        self.stalled_steps = 0
-        self.recovery_steps = 0
-
-    def __call__(self, observation) -> int:
-        self.steps += 1
-        rays = observation[:9]
-        relative_sin = float(observation[10])
-        relative_cos = float(observation[11])
-        collected_fraction = float(observation[15])
-        visible_distance = float(observation[22])
-        target_type = max(range(3), key=lambda index: float(observation[18 + index]))
-        visible_type = max(range(3), key=lambda index: float(observation[23 + index]))
-        correct_sample_visible = bool(observation[21] > 0.5 and target_type == visible_type)
-        returning_to_base = collected_fraction >= 0.999
-
-        speed = abs(float(observation[12]))
-        if speed < 0.045:
-            self.stalled_steps += 1
-        else:
-            self.stalled_steps = max(0, self.stalled_steps - 2)
-        if self.stalled_steps >= 7 and self.recovery_steps == 0:
-            self.recovery_steps = 18
-            self.stalled_steps = 0
-            self.search_direction *= -1
-
-        # Maniobra finita de escape: gira para salir de la cara del obstáculo y
-        # después avanza en arco. Evita repetir eternamente la misma decisión.
-        if self.recovery_steps > 0:
-            phase = self.recovery_steps
-            self.recovery_steps -= 1
-            if phase > 9:
-                return 3 if self.search_direction > 0 else 4
-            return 1 if self.search_direction > 0 else 2
-
-        if correct_sample_visible and visible_distance <= 0.62:
-            return 5
-
-        # La dirección de una muestra visible o de la base está codificada en
-        # sin/cos relativos. El controlador corrige rumbo antes de avanzar.
-        has_navigation_target = returning_to_base or correct_sample_visible
-        if has_navigation_target:
-            if relative_cos < -0.2:
-                return 3 if relative_sin >= 0 else 4
-            if relative_sin > 0.22:
-                return 1
-            if relative_sin < -0.22:
-                return 2
-
-        # Los nueve rayos van de izquierda a derecha. Si el frente está
-        # bloqueado, gira hacia el lado con más espacio medido por el LIDAR.
-        front = min(float(value) for value in rays[3:6])
-        left_clearance = sum(float(value) for value in rays[:4])
-        right_clearance = sum(float(value) for value in rays[5:])
-        if front < 0.72:
-            self.search_direction = 1 if left_clearance >= right_clearance else -1
-            return 3 if self.search_direction > 0 else 4
-
-        if has_navigation_target:
-            return 0
-
-        # Exploración sin mapa privilegiado: arcos largos alternados barren el
-        # terreno hasta que cámara/sensores detectan la muestra correcta.
-        phase = self.steps % 72
-        if phase == 0:
-            self.search_direction *= -1
-        if phase < 12:
-            return 1 if self.search_direction > 0 else 2
-        if phase in range(46, 52):
-            return 3 if self.search_direction > 0 else 4
-        return 0
+    Reemplaza a la política reactiva anterior, que exploraba con arcos de 270°
+    contra la pared y no completaba los niveles 2-8 (docs/auditoria-qlearning-planetario.md).
+    """
 
 
 class PlanetaryQLearningPolicy:
-    """Q-learning persistente con la política reactiva como guía inicial."""
+    """Q-learning persistente sobre la sugerencia del guía planificador.
+
+    El estado incluye la acción sugerida por el guía, de modo que la tabla aprende
+    en qué contexto sensorial seguirla o corregirla. Como la sugerencia del paso
+    siguiente solo existe al consultarlo, cada actualización Q se completa un paso
+    después (o al terminar el episodio, con valor futuro 0).
+    """
 
     def __init__(self, seed: int, checkpoint: Path | None = None):
         self.guide = PlanetaryRulePolicy()
         self.checkpoint = Path(checkpoint or _active_checkpoint())
         self.agent = PlanetaryQLearningAgent(seed=seed)
         with q_checkpoint_lock:
+            if self.checkpoint.exists() and _retire_incompatible_checkpoint(self.checkpoint):
+                self.checkpoint = PLANETARY_Q_CHECKPOINT
             self.agent.load(self.checkpoint)
         self.last_state = None
         self.last_action = None
-        self.recent_states: deque[tuple[int, ...]] = deque(maxlen=18)
-        self.loop_escapes = 0
-        self.escape_direction = 1
+        self.pending = None
+        self.shielded = 0
+
+    def bind(self, env) -> "PlanetaryQLearningPolicy":
+        self.guide.bind(env)
+        return self
+
+    def describe(self) -> dict:
+        return {"algorithm": "qlearning", "guide": self.guide.name, "checkpoint": self.checkpoint.name}
 
     def __call__(self, observation) -> int:
         guide_action = self.guide(observation)
-        self.last_state, self.last_action = self.agent.choose(observation, guide_action=guide_action)
-        repetitions = sum(state == self.last_state for state in self.recent_states)
-        self.recent_states.append(self.last_state)
-        # Un estado sensorial repetido muchas veces suele ser un giro circular
-        # o una cara de obstaculo. Fuerza una maniobra corta distinta y deja
-        # que la recompensa negativa actualice precisamente esa accion.
-        if repetitions >= 5 and self.last_action != len(PLANETARY_ACTIONS) - 1:
-            visits = self.agent.visit_counts(self.last_state)
-            candidates = (3, 4, 1, 2, 0)
-            self.last_action = min(candidates, key=lambda action: int(visits[action]))
-            if self.last_action in (3, 4):
-                self.last_action = 3 if self.escape_direction > 0 else 4
-                self.escape_direction *= -1
-            self.loop_escapes += 1
-            self.recent_states.clear()
-        return self.last_action
+        state, action = self.agent.choose(observation, guide_action=guide_action)
+        if self.guide.caution and action != guide_action:
+            # Escudo de seguridad: junto a la grieta o un cráter no se explora; una
+            # desviación ahí termina la misión. La tabla registra la acción ejecutada.
+            action = guide_action
+            self.shielded += 1
+        if self.pending is not None:
+            previous_state, previous_action, reward = self.pending
+            self.agent.update(previous_state, previous_action, reward, state, False)
+            self.pending = None
+        self.last_state, self.last_action = state, action
+        return action
 
     def learn(self, reward: float, next_observation, done: bool) -> None:
         if self.last_state is None or self.last_action is None:
             return
-        self.agent.learn(self.last_state, self.last_action, reward, next_observation, done)
-        if done:
-            self.agent.finish_episode()
-            with q_checkpoint_lock:
-                self.agent.save(self.checkpoint)
+        if not done:
+            self.pending = (self.last_state, self.last_action, float(reward))
+            return
+        self.agent.update(self.last_state, self.last_action, float(reward), None, True)
+        self.agent.finish_episode()
+        with q_checkpoint_lock:
+            self.agent.save(self.checkpoint)
 
     def snapshot(self) -> dict:
-        return {**self.agent.snapshot(), "loop_escapes": self.loop_escapes}
-
+        return {**self.agent.snapshot(), "shielded_decisions": self.shielded}
 
 
 class Session:
@@ -518,11 +481,15 @@ class Session:
                 policy_version=policy_id,
                 mode="manual" if policy is None else ("entrenamiento" if policy_id == "planetary-qlearning" else "evaluación"),
                 update_curriculum=False,
-                training_no_progress_limit=35 if qlearning else 0,
+                # Volver a la base cruza terreno ya explorado: con 35 pasos el regreso
+                # se cortaba como "sin progreso". 120 sigue cortando ciclos reales.
+                training_no_progress_limit=QLEARNING_NO_PROGRESS_LIMIT if qlearning else 0,
                 # El episodio solo tiene éxito cuando la misión real termina.
-                # La recompensa acumulada nunca sustituye esa condición.
+                # La recompensa acumulada nunca sustituye esa condición. Sin piso de
+                # recompensa: la batería ya limita el episodio y -20 cortaba misiones
+                # válidas de ~300 pasos solo por la penalización por paso.
                 training_reward_limit=0.0,
-                training_reward_floor=-20.0 if qlearning else 0.0,
+                training_reward_floor=0.0,
                 training_step_penalty=0.04 if qlearning else 0.01,
                 training_collision_penalty=4.0 if qlearning else 0.6,
                 training_stuck_penalty=1.0 if qlearning else 0.12,
@@ -535,15 +502,11 @@ class Session:
         self.policy, self.policy_id, self.level_id = policy, policy_id, level_id
         self.environment_kind = environment_kind
         self.obs, _ = self.env.reset(seed=seed)
-        if environment_kind == "planetary" and policy_id in {"planetary-rule", "planetary-qlearning"}:
-            if policy_id == "planetary-qlearning":
-                # Los niveles introductorios deben resolver una misión corta; los
-                # avanzados reciben más margen por sus mapas y objetivos mayores.
-                # El entorno usa este valor para truncar el episodio y guardar el
-                # checkpoint antes de iniciar el siguiente escenario.
-                self.env.max_steps = 50 if difficulty_level <= 4 else 100
-            else:
-                self.env.max_steps = min(self.env.max_steps, 140 + difficulty_level * 30)
+        # Se conserva el límite de pasos de cada escenario (650-1700): la batería es el
+        # límite real. Los recortes anteriores (50/100 pasos) hacían imposibles los
+        # niveles 2-8, que necesitan 90-450 pasos incluso con una ruta eficiente.
+        if environment_kind == "planetary" and hasattr(policy, "bind"):
+            policy.bind(self.env)       # mapa de misión estático y pose de aterrizaje
         self.done, self.total, self.touched = False, 0.0, time.time()
 
 
@@ -674,12 +637,18 @@ def _with_episode_store(callback):
 def qlearning_training_status():
     checkpoint_path = _active_checkpoint()
     agent = PlanetaryQLearningAgent()
+    compatible = True
     with q_checkpoint_lock:
-        agent.load(checkpoint_path)
+        try:
+            agent.load(checkpoint_path)
+        except (ValueError, KeyError, json.JSONDecodeError):
+            compatible = False      # el próximo episodio lo conserva renombrado y empieza de cero
     return {
         **agent.snapshot(),
         "checkpoint": _relative_path(checkpoint_path),
         "checkpoint_name": checkpoint_path.name,
+        "checkpoint_compatible": compatible,
+        "guide": PlanetaryRulePolicy.name,
         "persistent_data_dir": str(DATA_DIR),
         "seed": PLANETARY_Q_SEED_STATUS,
     }

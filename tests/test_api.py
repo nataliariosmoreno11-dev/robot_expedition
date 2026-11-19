@@ -162,7 +162,10 @@ def test_planetary_rule_session_advances_without_manual_actions(tmp_path, monkey
     assert body["mode"] == "política"
     assert body["policy"] == "planetary-rule"
     with api_main.sessions_lock:
-        assert api_main.sessions[body["session_id"]].env.max_steps == 230
+        # Se respeta el límite de diseño del escenario; la batería es el límite real.
+        session = api_main.sessions[body["session_id"]]
+        assert session.env.max_steps == session.env.scenario.max_steps
+        assert session.policy.map is not None          # el guía recibió el mapa de misión
 
     step = client.post("/sim/step", json={"session_id": body["session_id"]})
     assert step.status_code == 200, step.text
@@ -178,11 +181,39 @@ def test_planetary_rule_session_advances_without_manual_actions(tmp_path, monkey
 def test_planetary_rule_escapes_when_rover_stays_stalled():
     policy = api_main.PlanetaryRulePolicy()
     observation = np.ones(33, dtype=np.float32)
-    observation[12] = 0.0
-    observation[21] = 0.0
-    actions = [policy(observation) for _ in range(12)]
+    observation[10:14] = 0.0            # sin objetivo visible, sin velocidad ni giro
+    observation[15] = 0.0
+    actions = [policy(observation) for _ in range(6)]
+    assert 6 in actions                 # retrocede para despegarse
     assert any(action in {3, 4} for action in actions)
-    assert policy.recovery_steps > 0
+
+
+def test_planetary_rule_guide_never_receives_sample_positions(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "guide-episodes.sqlite")
+    reset = client.post("/sim/reset", json={"environment": "planetary", "difficulty_level": 2,
+                                           "seed": 3, "policy": "planetary-rule"}).json()
+    with api_main.sessions_lock:
+        session = api_main.sessions.pop(reset["session_id"])
+    mission = session.policy.map
+    sample_points = {(s["x"], s["y"]) for s in session.env.samples}
+    assert not any(hasattr(mission, name) for name in ("samples", "targets"))
+    assert not sample_points & set(map(tuple, mission.rocks))
+    assert session.policy.targets == []                 # las muestras se descubren con la cámara
+    session.env.close()
+
+
+def test_planetary_rule_guide_completes_a_multi_sample_mission(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "mission-episodes.sqlite")
+    sid = client.post("/sim/reset", json={"environment": "planetary", "difficulty_level": 2,
+                                         "seed": 5, "policy": "planetary-rule"}).json()["session_id"]
+    for _ in range(400):
+        step = client.post("/sim/step", json={"session_id": sid}).json()
+        if step["terminated"] or step["truncated"]:
+            break
+    assert step["end"] == "exito", step
+    assert step["samples_collected"] == step["requested_samples"] == 2
+    with api_main.sessions_lock:
+        api_main.sessions.pop(sid).env.close()
 
 
 def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monkeypatch):
@@ -195,15 +226,18 @@ def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monk
     })
     assert reset.status_code == 200, reset.text
     sid = reset.json()["session_id"]
+    client.post("/sim/step", json={"session_id": sid})
     step = client.post("/sim/step", json={"session_id": sid}).json()
+    # La actualización Q se completa un paso después, cuando existe la sugerencia
+    # del guía para el estado siguiente.
     assert step["training"]["updates"] == 1
     with api_main.sessions_lock:
         session = api_main.sessions[sid]
         assert session.env.training_reward_limit == 0.0
-        assert session.env.training_reward_floor == -20.0
-        assert session.env.training_no_progress_limit == 35
+        assert session.env.training_reward_floor == 0.0
+        assert session.env.training_no_progress_limit == api_main.QLEARNING_NO_PROGRESS_LIMIT
         assert session.env.training_collision_penalty == 4.0
-        assert session.env.max_steps == 50
+        assert session.env.max_steps == session.env.scenario.max_steps
         session.policy.agent.finish_episode()
         session.policy.agent.save(checkpoint)
         api_main.sessions.pop(sid)
@@ -214,21 +248,21 @@ def test_planetary_qlearning_session_updates_and_saves_checkpoint(tmp_path, monk
     assert status.json()["updates"] == 1
 
 
-def test_planetary_qlearning_uses_short_and_advanced_step_limits(tmp_path, monkeypatch):
+def test_planetary_qlearning_keeps_scenario_step_limits(tmp_path, monkeypatch):
     monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", tmp_path / "planetary-qlearning.npz")
     monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "q-episodes.sqlite")
-    for level, expected in ((1, 50), (4, 50), (5, 100), (8, 100)):
+    for level in (1, 4, 5, 8):
         reset = client.post("/sim/reset", json={
             "environment": "planetary", "difficulty_level": level,
             "seed": 700 + level, "policy": "planetary-qlearning",
         })
         assert reset.status_code == 200, reset.text
         payload = reset.json()
-        assert payload["max_steps"] == expected
         with api_main.sessions_lock:
             session = api_main.sessions.pop(payload["session_id"])
-        assert session.env.max_steps == expected
-        assert session.env.training_reward_floor == -20.0
+        # Antes 50/100 pasos: imposible para los niveles 2-8 (necesitan 90-450).
+        assert payload["max_steps"] == session.env.scenario.max_steps >= 650
+        assert session.env.training_reward_floor == 0.0
         session.env.close()
 
 
@@ -241,11 +275,12 @@ def test_failed_episode_is_saved_and_loaded_by_the_next_scenario(tmp_path, monke
         "seed": 801, "policy": "planetary-qlearning",
     }).json()
     with api_main.sessions_lock:
-        api_main.sessions[reset["session_id"]].env.total_reward = -25.0
+        session = api_main.sessions[reset["session_id"]]
+        session.env.max_steps = session.env.steps + 2      # fuerza el corte por tiempo
+    client.post("/sim/step", json={"session_id": reset["session_id"]})
     failed = client.post("/sim/step", json={"session_id": reset["session_id"]}).json()
     assert failed["truncated"] is True
-    assert failed["end"] == "limite_recompensa"
-    assert failed["reward_floor"] == -20.0
+    assert failed["end"] == "tiempo"
     assert checkpoint.exists()
 
     resumed = client.post("/sim/reset", json={
@@ -372,3 +407,23 @@ def test_qlearning_seed_failure_keeps_api_usable(tmp_path, monkeypatch):
 
     assert api_main._seed_q_checkpoint() == "failed"
     assert not checkpoint.exists() and not list(checkpoint.parent.glob("*.tmp"))
+
+
+def test_incompatible_q_checkpoint_is_kept_renamed_and_api_keeps_working(tmp_path, monkeypatch):
+    old = tmp_path / "planetary_qlearning.npz"
+    np.savez_compressed(old, states=np.zeros((1, 11), dtype=np.int16), q=np.zeros((1, 7), np.float32),
+                        visits=np.zeros((1, 7), np.int32), metadata=np.asarray('{"episodes": 9}'))
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", old)
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT_DIR", tmp_path)
+    monkeypatch.setattr(api_main, "PLANETARY_Q_SELECTION", tmp_path / "active.json")
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "q-episodes.sqlite")
+    assert client.get("/training/qlearning").json()["checkpoint_compatible"] is False
+    reset = client.post("/sim/reset", json={"environment": "planetary", "difficulty_level": 1,
+                                           "seed": 1, "policy": "planetary-qlearning"})
+    assert reset.status_code == 200, reset.text
+    backups = list(tmp_path.glob("planetary_qlearning-estado-anterior*.npz"))
+    assert len(backups) == 1 and not old.exists()                 # conservado, nunca borrado
+    listing = client.get("/training/qlearning/checkpoints").json()
+    assert backups[0].name in {item["name"] for item in listing["incompatible"]}
+    with api_main.sessions_lock:
+        api_main.sessions.pop(reset.json()["session_id"]).env.close()

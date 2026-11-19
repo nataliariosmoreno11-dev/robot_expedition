@@ -8,18 +8,26 @@ from pathlib import Path
 import numpy as np
 
 
-STATE_SIZE = 11
+# v2: el estado incluye la acción que sugiere el guía planificador (12 componentes).
+STATE_SIZE = 12
 ACTION_COUNT = 7
 COLLECT_ACTION = 5
+NO_GUIDE = ACTION_COUNT        # valor del componente cuando no hay sugerencia
+OBSERVATION_SIZE = 33
 
 
 def _bin(value: float, edges: tuple[float, ...]) -> int:
     return int(np.digitize(float(value), edges))
 
 
-def discretize_planetary(observation) -> tuple[int, ...]:
-    """Reduce sensores continuos a un estado compacto y generalizable."""
-    obs = np.asarray(observation, dtype=np.float32)
+def discretize_planetary(observation, guide_action: int | None = None) -> tuple[int, ...]:
+    """Reduce sensores continuos a un estado compacto y generalizable.
+
+    La API apila 4 observaciones (la más reciente al final); se usa siempre la
+    última. El último componente es la sugerencia del guía: así la tabla aprende
+    cuándo seguirla o corregirla en cada contexto sensorial.
+    """
+    obs = np.asarray(observation, dtype=np.float32)[-OBSERVATION_SIZE:]
     rays = obs[:9]
     angle = float(np.arctan2(obs[10], obs[11]))
     target_type = int(np.argmax(obs[18:21]))
@@ -36,6 +44,7 @@ def discretize_planetary(observation) -> tuple[int, ...]:
         int(target_type == visible_type),
         _bin(obs[27], (0.55, 0.72, 0.9)),
         _bin(obs[32], (0.25, 0.5, 0.75)),
+        NO_GUIDE if guide_action is None else int(guide_action),
     )
 
 
@@ -81,10 +90,10 @@ class PlanetaryQLearningAgent:
         return self.visits[state]
 
     def choose(self, observation, *, guide_action: int) -> tuple[tuple[int, ...], int]:
-        state = discretize_planetary(observation)
+        state = discretize_planetary(observation, guide_action)
         values = self.values(state)
         visits = self.visit_counts(state)
-        obs = np.asarray(observation, dtype=np.float32)
+        obs = np.asarray(observation, dtype=np.float32)[-OBSERVATION_SIZE:]
         front_blocked = float(np.min(obs[3:6])) < 0.9
         barely_moving = abs(float(obs[12])) < 0.035
 
@@ -118,11 +127,16 @@ class PlanetaryQLearningAgent:
             self.greedy_decisions += 1
         return state, action
 
-    def learn(self, state, action: int, reward: float, next_observation, done: bool) -> None:
+    def learn(self, state, action: int, reward: float, next_observation, done: bool,
+              next_guide_action: int | None = None) -> None:
+        next_state = discretize_planetary(next_observation, next_guide_action)
+        self.update(state, action, reward, next_state, done)
+
+    def update(self, state, action: int, reward: float, next_state, done: bool) -> None:
+        """Actualización Q con el estado siguiente ya discretizado."""
         current = self.values(state)
         self.visit_counts(state)[action] += 1
-        next_state = discretize_planetary(next_observation)
-        future = 0.0 if done else float(np.max(self.values(next_state)))
+        future = 0.0 if done or next_state is None else float(np.max(self.values(next_state)))
         target = float(reward) + self.gamma * future
         current[action] += self.alpha * (target - float(current[action]))
         self.updates += 1
