@@ -111,6 +111,7 @@ let ppoEpisode: EpisodeData | undefined
 let ppoMap: ExpeditionMap | undefined
 let ppoRunning = false
 let ppoTimer: number | undefined
+let ppoNetworkRetries = 0
 let ppoDecisionRows: UnknownRecord[] = []
 let ppoCampaignModels: Array<{ level: number; runId: string }> = []
 let ppoTriedRuns = new Set<string>()
@@ -997,6 +998,7 @@ async function startPpoEpisode() {
     // determinista con esta semilla para los ocho escenarios fijos.
     const seed = 910000
     const response = await api.reset('n2', 'planetary', selectedPpoLevel, seed, `trained:${selectedPpoRun}`, ppoSessionId)
+    ppoNetworkRetries = 0
     const frame = frameFromResponse(response)
     if (!response.session_id || !frame || !response.map) throw new Error('La API PPO no devolvió sesión, mapa y frame inicial.')
     ppoSessionId = response.session_id
@@ -1032,6 +1034,7 @@ async function stepPpoEpisode() {
   if (!api || !ppoSessionId || !ppoEpisode || !ppoMap || !ppoRunning) return
   try {
     const response = await api.step(ppoSessionId, undefined, PPO_BATCH_STEPS)
+    ppoNetworkRetries = 0
     const frame = frameFromResponse(response)
     if (!frame) throw new Error('La inferencia PPO no devolvió un frame válido.')
     const batch = Array.isArray(response.frames)
@@ -1067,7 +1070,23 @@ async function stepPpoEpisode() {
       }
     } else schedulePpoStep()
   } catch (error) {
-    ppoRunning = false; ppoText('#ppoEnd', 'Detenido'); ppoText('#ppoObjective', errorMessage(error))
+    const transient = error instanceof ApiError && error.status === undefined
+    if (transient && ppoNetworkRetries < 6) {
+      ppoNetworkRetries += 1
+      const delay = Math.min(5000, 500 * 2 ** (ppoNetworkRetries - 1))
+      ppoText('#ppoEnd', 'Reconectando')
+      ppoText('#ppoObjective', `La API no respondió. Reintento ${ppoNetworkRetries}/6 sin perder el recorrido.`)
+      ppoTimer = window.setTimeout(() => { void stepPpoEpisode() }, delay)
+    } else if (error instanceof ApiError && error.status === 404) {
+      ppoSessionId = undefined
+      ppoText('#ppoEnd', 'Reiniciando')
+      ppoText('#ppoObjective', 'Render reinició la API; se crea una sesión nueva con el mismo checkpoint.')
+      window.setTimeout(() => { void startPpoEpisode() }, 700)
+    } else {
+      ppoRunning = false
+      ppoText('#ppoEnd', 'Detenido')
+      ppoText('#ppoObjective', errorMessage(error))
+    }
   }
 }
 
