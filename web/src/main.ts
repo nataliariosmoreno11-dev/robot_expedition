@@ -14,6 +14,7 @@ import { FRAME_INDEX } from './types'
 import { LearningCurve } from './ui/curve'
 import { MissionHud, required } from './ui/hud'
 import { RegistryView } from './ui/registry'
+import { mountAgentTraining } from './ui/agent-training'
 import { TrainingDashboard } from './ui/training-dashboard'
 
 type UnknownRecord = Record<string, unknown>
@@ -1277,6 +1278,23 @@ required<HTMLInputElement>('#replayInput').addEventListener('change', async (eve
 
 difficultySelect.value = '1'
 updatePlanetaryLevel()
+mountAgentTraining({
+  baseUrl: () => api?.baseUrl,
+  level: () => Number(difficultySelect.value),
+  replay: (payload, label) => loadReplay(payload, label),
+  frame: (payload, label) => {
+    if (!isRecord(payload)) throw new Error('La API no devolvió una evaluación PPO compatible.')
+    const map = normalizeMap(payload.map)
+    const episode = normalizeEpisode(payload, {
+      mode: 'evaluación PPO',
+      runId: String(payload.run_id ?? 'sin-run'),
+      modelName: 'PPO',
+      levelId: `l${difficultySelect.value}`,
+    })
+    loadEpisode(episode, map, 'api', label)
+    setProvenance('PPO', 'evaluación de versión guardada')
+  },
+})
 void connectApi().then(() => {
   if (apiOnline) {
     void loadPpoCampaign()

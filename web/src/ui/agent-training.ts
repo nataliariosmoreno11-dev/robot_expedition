@@ -24,7 +24,7 @@ export function mountAgentTraining(options: {
   panel.innerHTML = `
     <span class="eyebrow">Aprendizaje por refuerzo</span><h2>Agente automático · PPO</h2>
     <p id="agentCampaign" role="status" class="section-copy">Consultando modelo final…</p>
-    <button id="agentFinal" class="primary-button" disabled>Ver modelo final validado</button>
+    <button id="agentFinal" class="primary-button" disabled>Ver modelo final registrado</button>
     <button id="agentCampaignStop" class="secondary-button" hidden>Detener campaña automática y guardar</button>
     <p class="section-copy">La red decide entre 7 acciones usando sensores, batería e historial de 4 observaciones. Aprende al recolectar, regresar y explorar; recibe penalizaciones por choques y consumo. Puede practicar con demostraciones durante el entrenamiento; al evaluar decide solo con sus sensores. Cada escenario aprobado conserva su propia pol?tica.</p>
     <p class="section-copy">Los intentos de entrenamiento sin explorar ni recolectar se reinician según la configuración de su versión. Las evaluaciones conservan las reglas originales.</p>
@@ -133,12 +133,12 @@ export function mountAgentTraining(options: {
       const automated = ['running', 'validating', 'stopping'].includes(campaign.status)
       const overview = document.querySelector<HTMLElement>('#trainingOverview')!
       overview.textContent = releaseJob
-        ? 'Modelo final disponible: validado en los 8 escenarios. Abre «Ver avance y modelos» para reproducirlo.'
+        ? 'Modelo final registrado por la campaña. Su evidencia histórica está disponible; la validación independiente del escenario seleccionado se muestra por separado.'
         : automated
           ? `Entrenamiento en segundo plano · ${(campaign.progress?.total_timesteps ?? 0).toLocaleString('es-CO')} pasos · ${campaign.mastered?.length ?? 0}/8 escenarios superados en el currículo · escenario actual: ${campaign.current_level ?? 1}. La reproducción está desactivada por defecto; no necesitas mantener esta página abierta.`
           : `Campaña: ${campaign.status}. Todavía no hay modelo final validado. Consulta el avance y los registros.`
       el('agentCampaign').textContent = releaseJob
-        ? `Modelo final ${campaign.release!.run_id.slice(0, 10)} · validado en los 8 escenarios. Pesos y pasos registrados.`
+        ? `Modelo final ${campaign.release!.run_id.slice(0, 10)} · registrado por la campaña. Pesos y pasos disponibles; revisa la evaluación independiente por escenario.`
         : `Todavía no hay modelo final. Campaña: ${campaign.status}. ${campaign.mastered?.length ?? 0}/8 escenarios superados durante el currículo. ${campaign.error ?? ''} El entrenamiento funciona en segundo plano; no necesitas mirar los intentos.`
       el<HTMLButtonElement>('agentFinal').disabled = !releaseJob
       el<HTMLButtonElement>('agentCampaignStop').hidden = !automated || !result.enabled
@@ -149,14 +149,14 @@ export function mountAgentTraining(options: {
         .sort((a, b) =>
           (a.completed_scenarios?.length ?? 0) - (b.completed_scenarios?.length ?? 0)
           || (a.checkpoint?.total_timesteps ?? 0) - (b.checkpoint?.total_timesteps ?? 0))
-      for (const job of versions) select.add(new Option(`${job.run_id?.slice(0, 10)} | Escenarios ${job.completed_scenarios!.join(', ')} aprobados`, job.job_id))
+      for (const job of versions) select.add(new Option(`${job.run_id?.slice(0, 10)} | Escenarios ${job.completed_scenarios!.join(', ')} marcados por la campaña`, job.job_id))
       const current = active()
       const latest = versions.at(-1)
       select.value = followLatest ? (latest?.job_id || '') : previous
       const chosen = selected()
       const job = current || chosen
       el('agentVersionNotice').textContent = chosen
-        ? `Completa los escenarios ${chosen.completed_scenarios!.join(', ')}. Aprobados con al menos 50 evaluaciones por escenario y retención de los anteriores. Los demás no están certificados para esta versión.`
+        ? `La campaña registró los escenarios ${chosen.completed_scenarios!.join(', ')}. Esto no sustituye la evaluación independiente en mapas reales; los demás no están certificados para esta versión.`
         : 'Selecciona una versión aprobada. El entrenamiento activo se muestra por separado.'
       el<HTMLButtonElement>('agentStart').disabled = automated || busy || Boolean(current) || !result.enabled
       el<HTMLButtonElement>('agentResume').disabled = automated || busy || Boolean(current) || !chosen?.checkpoint || !result.enabled
