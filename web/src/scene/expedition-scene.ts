@@ -112,8 +112,11 @@ export class ExpeditionScene {
     const extentY = map.active_extent?.[1] ?? map.size[1]
     const center = this.terrain.position(extentX * 0.52, 0, 0.18 + level * 0.035)
     const visualExtent = Math.max(extentX, extentY) * this.terrain.worldScale
-    const horizontalDistance = visualExtent * 0.82
-    const cameraHeight = 2.7 + visualExtent * 0.18
+    // Start close enough to read the rover's route and physical hazards, as in
+    // the validated local PPO viewer. OrbitControls still allows zooming out to
+    // inspect the complete high-level map.
+    const horizontalDistance = visualExtent * 0.56
+    const cameraHeight = 2.4 + visualExtent * 0.14
     this.controls.target.copy(center)
     this.camera.position.set(
       center.x - horizontalDistance * 0.72,
