@@ -54,6 +54,7 @@ export function mountAgentTraining(options: {
   let evaluating = false
   let releaseJob: string | undefined
   let previewToken = 0
+  let initialModelStarted = false
   document.addEventListener('historical-replay-selected', () => {
     previewToken++; viewToken++; evaluating = false
     el<HTMLInputElement>('agentFollow').checked = false
@@ -80,7 +81,6 @@ export function mountAgentTraining(options: {
   document.querySelectorAll<HTMLButtonElement>('[data-progress-level]').forEach(button => {
     button.onclick = () => { void preview(Number(button.dataset.progressLevel)) }
   })
-  void preview(1)
   const active = () => jobs.find(j => ['starting', 'running', 'stopping'].includes(j.status))
   const selected = () => jobs.find(j => j.job_id === el<HTMLSelectElement>('agentVersions').value)
   const request = async (path: string, payload?: unknown) => {
@@ -146,7 +146,9 @@ export function mountAgentTraining(options: {
       const previous = select.value
       select.replaceChildren(new Option('Nueva política desde cero', ''))
       const versions = jobs.filter(j => j.approved_version && j.checkpoint && j.status === 'completed')
-        .sort((a, b) => (a.completed_scenarios?.length ?? 0) - (b.completed_scenarios?.length ?? 0))
+        .sort((a, b) =>
+          (a.completed_scenarios?.length ?? 0) - (b.completed_scenarios?.length ?? 0)
+          || (a.checkpoint?.total_timesteps ?? 0) - (b.checkpoint?.total_timesteps ?? 0))
       for (const job of versions) select.add(new Option(`${job.run_id?.slice(0, 10)} | Escenarios ${job.completed_scenarios!.join(', ')} aprobados`, job.job_id))
       const current = active()
       const latest = versions.at(-1)
@@ -160,6 +162,10 @@ export function mountAgentTraining(options: {
       el<HTMLButtonElement>('agentResume').disabled = automated || busy || Boolean(current) || !chosen?.checkpoint || !result.enabled
       el<HTMLButtonElement>('agentStop').disabled = !current || busy
       el<HTMLButtonElement>('agentEvaluate').disabled = !chosen?.checkpoint || chosen.job_id === current?.job_id
+      if (!initialModelStarted && latest?.checkpoint && !current) {
+        initialModelStarted = true
+        window.setTimeout(() => el<HTMLButtonElement>('agentEvaluate').click(), 0)
+      }
       if (job && !busy && !evaluating) {
         const parent = jobs.find(j => j.job_id === job.parent_job_id)
         const additional = Math.max(0, (job.progress?.total_timesteps ?? 0) - (parent?.checkpoint?.total_timesteps ?? 0))
@@ -213,7 +219,7 @@ export function mountAgentTraining(options: {
     } catch (error) { status(String(error)) }
   }
   el('agentPauseView').onclick = () => { viewToken++; evaluating = false; el<HTMLInputElement>('agentFollow').checked = false }
-  el('agentEvaluate').onclick = async () => {
+  const evaluateSelected = async (retryExpiredSession = true) => {
     const job = selected()
     if (!job) return
     const token = ++viewToken
@@ -229,9 +235,22 @@ export function mountAgentTraining(options: {
         if (step.terminated || step.truncated) { status(`Evaluación terminada: ${step.end}. Pesos sin modificar.`); break }
         await new Promise(resolve => window.setTimeout(resolve, 150))
       }
-    } catch (error) { status(String(error)) } finally { if (token === viewToken) evaluating = false }
+    } catch (error) {
+      const message = String(error)
+      if (retryExpiredSession && (message.includes('404') || message.includes('expir'))) {
+        if (token === viewToken) evaluating = false
+        status('La sesión expiró; reiniciando el modelo seleccionado…')
+        await evaluateSelected(false)
+        return
+      }
+      status(message)
+    } finally { if (token === viewToken) evaluating = false }
   }
-  el('agentVersions').onchange = () => { viewToken++; evaluating = false; followLatest = false; lastEpisode = 0; void refresh() }
+  el('agentEvaluate').onclick = () => { void evaluateSelected() }
+  el('agentVersions').onchange = () => {
+    viewToken++; evaluating = false; followLatest = false; lastEpisode = 0
+    void refresh().then(() => evaluateSelected())
+  }
   el('agentFinal').onclick = () => {
     if (!releaseJob) return
     el<HTMLSelectElement>('agentVersions').value = releaseJob
