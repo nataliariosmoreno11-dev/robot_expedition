@@ -127,6 +127,7 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         training_shaping_min_level: int = 6,
         training_stage_bank: str | None = None,
         training_stage_probability: float = 0.0,
+        campaign_training_compatibility: bool = False,
     ):
         self.campaign = campaign
         if campaign and planet != "mars":
@@ -156,6 +157,10 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
         self.training_navigation_shaping = float(training_navigation_shaping)
         self.training_shaping_gamma = float(training_shaping_gamma)
         self.training_shaping_min_level = int(training_shaping_min_level)
+        # Los pesos PPO de la campaña f597… se entrenaron antes de introducir
+        # tormentas dinámicas. Mantener este modo solo para esa campaña evita
+        # evaluar esos pesos contra una física distinta a la de su entrenamiento.
+        self.campaign_training_compatibility = bool(campaign_training_compatibility)
         self.training_stage_bank = training_stage_bank
         self.training_stage_probability = float(training_stage_probability)
         self._stage_bank = None
@@ -673,6 +678,9 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
     def _update_storm(self) -> None:
         """Tormentas reproducibles que escalan con la dificultad del escenario."""
         scenario = self.scenario
+        if self.campaign_training_compatibility:
+            self.storm_intensity = 0.0
+            return
         if scenario is None or scenario.difficulty_level < 3:
             self.storm_intensity = 0.0
             base_opacity = 0.0 if scenario is None else scenario.dust_opacity

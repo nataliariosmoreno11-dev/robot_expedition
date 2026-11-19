@@ -1,0 +1,9 @@
+{
+  "run_id": "f59726370d0d471a9790482135f4e3e2",
+  "completed_scenarios": [1, 2, 3, 4, 5, 6, 7, 8],
+  "source": "mlruns/f59726370d0d471a9790482135f4e3e2/artifacts/checkpoint",
+  "total_timesteps": 7488028,
+  "weights_sha256": "144113a8fe523a7c046c71aa975393c3756a31cd27767170b3955cfba3d39af7",
+  "environment_contract": "campaign-training-compatibility/no-dynamic-storms",
+  "validation": "scenario_01..scenario_08, seed 910000, deterministic PPO"
+}

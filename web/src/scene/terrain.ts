@@ -261,40 +261,10 @@ export class TerrainWorld {
   }
 
   private addGeology(map: ExpeditionMap) {
-    const rock = material(0x512e22, { roughness: 1 })
-    const ridge = new THREE.Group()
-    const seed = [...(map.scenario_id ?? 'mars')].reduce((value, char) => value + char.charCodeAt(0), 0)
-    const level = THREE.MathUtils.clamp(map.difficulty_level ?? 1, 1, 8)
-    const peakCount = 8 + level * 3
-    const worldRadius = 10.5 + level * 1.3
-    for (let index = 0; index < peakCount; index += 1) {
-      const angle = (index / peakCount) * Math.PI * 2
-      const radius = worldRadius + ((seed * (index + 7)) % 11) * 0.36
-      const peakHeight = 2.2 + level * 0.38 + (index % 6) * 0.62
-      const peak = new THREE.Mesh(new THREE.ConeGeometry(2.1 + level * 0.22 + (index % 4), peakHeight, 7), rock)
-      peak.position.set(Math.cos(angle) * radius, peakHeight * 0.36, Math.sin(angle) * radius)
-      peak.rotation.y = angle * 1.7
-      peak.scale.z = 0.55 + (index % 3) * 0.18
-      peak.castShadow = true
-      peak.receiveShadow = true
-      ridge.add(peak)
-    }
-    this.group.add(ridge)
-
-    // Las dunas tienen una masa visual propia además del heightfield. En los
-    // niveles altos forman corredores evidentes en vez de parecer una textura.
-    for (const [x, y, amplitude, sigma] of map.environment?.dunes ?? []) {
-      const dune = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 28, 12, 0, Math.PI * 2, 0, Math.PI / 2),
-        material(0xc96f3d, { roughness: 1 }),
-      )
-      dune.scale.set(sigma * this.worldScale * 1.25, Math.max(0.10, Math.abs(amplitude) * 1.65), sigma * this.worldScale * 0.72)
-      dune.position.copy(this.position(x, y, -0.01))
-      dune.rotation.y = (x * 0.43 + y * 0.29) % Math.PI
-      dune.receiveShadow = true
-      dune.castShadow = true
-      this.group.add(dune)
-    }
+    // El relieve ya se dibuja a partir de map.terrain.heights, el mismo
+    // heightfield que MuJoCo usa en la simulación. No añadimos montículos
+    // decorativos: si una duna no existe físicamente, el rover no debe verla.
+    // Esto evita que en L6–L8 parezca atravesar arena o montañas falsas.
 
     for (const [x, y, amplitude, sigma] of map.environment?.craters ?? []) {
       const basin = new THREE.Mesh(
