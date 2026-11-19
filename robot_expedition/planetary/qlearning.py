@@ -96,11 +96,19 @@ class PlanetaryQLearningAgent:
         obs = np.asarray(observation, dtype=np.float32)[-OBSERVATION_SIZE:]
         front_blocked = float(np.min(obs[3:6])) < 0.9
         barely_moving = abs(float(obs[12])) < 0.035
+        returning_to_base = float(obs[15]) >= 0.999
 
         # Recolectar es una acción escasa y de alta recompensa. Cuando el
         # controlador sensorial confirma que procede, no se desperdicia ese
         # instante con una acción aleatoria.
-        if int(guide_action) == COLLECT_ACTION:
+        if returning_to_base:
+            # La misión ya está recolectada: explorar o reutilizar valores Q de
+            # otra etapa solo crea bucles y consume batería. El planificador A*
+            # conserva la ruta segura de vuelta y la transición ejecutada sigue
+            # actualizando la tabla.
+            action = int(guide_action)
+            self.guided_decisions += 1
+        elif int(guide_action) == COLLECT_ACTION:
             action = int(guide_action)
             self.guided_decisions += 1
         elif front_blocked or barely_moving:

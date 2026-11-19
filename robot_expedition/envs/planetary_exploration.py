@@ -829,9 +829,15 @@ class PlanetaryExplorationEnv(BeaconExpeditionEnv):
             reward += collect_reward
 
         # All actions count, including collecting in place and reversing in a loop.
-        # Only observed exploration/recollection resets this clock; no hidden target.
+        # Durante exploración solo cuentan cobertura y recolección. Cuando ya se
+        # completó la carga, acercarse a BASE también es progreso observable; de
+        # otro modo una vuelta válida por terreno conocido termina falsamente como
+        # ``sin_progreso`` antes de llegar.
+        returning_progress = (
+            len(self.inventory) >= self.requested_samples and progress > 0.005
+        )
         self._no_progress_steps = (
-            0 if discovery or len(self.inventory) > collected_before
+            0 if discovery or len(self.inventory) > collected_before or returning_progress
             else self._no_progress_steps + 1
         )
 
