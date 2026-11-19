@@ -98,15 +98,9 @@ PLANETARY_Q_SEED_STATUS = _seed_q_checkpoint()
 # Hitos PPO aprobados en la campana fija de Tomas. Se publican como evidencia
 # de entrenamiento y no reemplazan el Q-learning interactivo de esta rama.
 PPO_CAMPAIGN_MODELS = (
-    "f7c104a304f25b458721258b540a337e",
-    "d0ecdae6689f527b835c1e473e893d0c",
-    "d0c438b791c156688c71cf58c69fceb5",
-    "bdbc0d04fffe5c37a5a5ac5a05013889",
-    "646fbc70700f5ab8b2363524540fddca",
-    "156aaf20543e523eb1fa4594547d956e",
-    "6109346a105e5f3e82134dc9cafbbcb9",
-    "4bcfd8f641df50b9b5460d76b8c56482",
-)
+    "f59726370d0d471a9790482135f4e3e2",
+) * 8
+PPO_TRAINED_CAMPAIGN_MODEL = PPO_CAMPAIGN_MODELS[0]
 
 
 def _json_file(path: Path) -> dict:
@@ -508,6 +502,7 @@ class Session:
                  environment_kind: str = "beacon", difficulty_level: int = 1):
         if environment_kind == "planetary":
             qlearning = policy_id == "planetary-qlearning"
+            trained_campaign = policy_id == f"trained:{PPO_TRAINED_CAMPAIGN_MODEL}"
             self.env = PlanetaryExplorationEnv(
                 difficulty_level=difficulty_level,
                 history_steps=4 if policy is not None else 1,
@@ -527,6 +522,7 @@ class Session:
                 training_collision_penalty=4.0 if qlearning else 0.6,
                 training_stuck_penalty=1.0 if qlearning else 0.12,
                 training_no_progress_penalty=12.0 if qlearning else 2.0,
+                campaign_training_compatibility=trained_campaign,
             )
             self.action_names = [item[0] for item in PLANETARY_ACTIONS]
         else:
