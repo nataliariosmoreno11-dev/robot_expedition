@@ -10,15 +10,15 @@ poder responder las preguntas de la sección final.
 2. Abrir la web en Vercel y comprobar que la insignia dice *API disponible*.
 3. Comprobar en `/version` que `release` y `git_commit` son los del correo de entrega.
 
-## Presentación final v1.2 · 10 minutos (lineamientos de Teams)
+## Presentación final v1.3 · 10 minutos (lineamientos de Teams)
 
 | Min | Bloque (lineamiento) | Quién | Qué mostrar |
 |---|---|---|---|
 | 0-2 | 1. Problema y contexto de negocio | Suleily | Exploración autónoma: un rover debe traer muestras sin teleoperación (retardo de comunicación) ni gastar de más la batería. Valor: misiones más cortas y seguras. Fase 1: ir a balizas; fase 2: recolectar muestras |
 | 2-4 | 2. Modelamiento del ambiente | Natalia | Contrato planetario: 132 observaciones, 7 acciones, 0,5 s por decisión; éxito, fallos y truncamiento ([informe §8](informe.md)); los 8 escenarios |
 | 4-5 | 3. Recompensas y penalizaciones | Natalia | Qué premia y castiga. Verificación: el retorno no equivale al éxito, porque un candidato con más retorno puede no completar la misión ([experimentos](experimentos.md)) |
-| 5-7 | 4. Modelo y experimentación | Tomás y Nicol | Baselines (aleatorio 0 %, regla). PPO de campaña: exp-008 a exp-013 no aprobaron L6 (empeoró o se estancó); exp-014/015 aprobaron L1-L8. Q-learning: v1 solo L1 → diagnóstico → v2 75/80. Fase 1: finalistas con 3 semillas |
-| 7-8 | 5. Versionamiento y trazabilidad | Nicol | Tag `v1.2` y SHA en `/version`; manifiesto de un modelo (`manifests/planetary/`); recuperar una versión anterior (rollback del catálogo y `qlearning-seed-v1` conservado) |
+| 5-7 | 4. Modelo y experimentación | Tomás y Nicol | Baselines (aleatorio 0 %, regla). PPO de campaña: exp-008 a exp-013 no aprobaron L6 (empeoró o se estancó); exp-014/015 aprobaron L1-L8. Q-learning: v1 solo L1 → diagnóstico → v2 77/80. Fase 1: finalistas con 3 semillas |
+| 7-8 | 5. Versionamiento y trazabilidad | Nicol | Tag `v1.3` y SHA en `/version`; manifiesto de un modelo (`manifests/planetary/`); recuperar una versión anterior (rollback del catálogo y `qlearning-seed-v1` conservado) |
 | 8-10 | 6. Demostración y conclusiones | Natalia y Suleily | Web: un modelo histórico y el recomendado; Q-learning en L5-L7; limitaciones (PPO memoriza mapas, guía con mapa estático, Render sin disco) y siguiente hipótesis (PPO procedural) |
 
 ### Preguntas probables sobre la fase 2

@@ -114,7 +114,7 @@ Se compararía contra exp-002 (N2) y exp-005 (N3), con 300k pasos y 3 semillas.
 Si falla, la alternativa es dar a la observación un "obstáculo en el camino al
 objetivo" (un rayo dirigido al objetivo) en lugar de solo los 9 rayos fijos.
 
-## 8. Segunda fase: exploración planetaria (release `v1.2`)
+## 8. Segunda fase: exploración planetaria (releases `v1.2` y `v1.3`)
 
 Las secciones 1 a 7 describen la entrega `v1.0` (ambiente de balizas, N1-N3), que
 sigue disponible en el catálogo con sus contratos originales. La segunda fase
@@ -170,7 +170,7 @@ Ver [auditoria-qlearning-planetario.md](auditoria-qlearning-planetario.md).
 | Guía reactivo anterior | 3/24 (solo L1) | auditoría Q-learning |
 | **Guía planificador (regla)** | **79/80** | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
 | Q-learning `seed-v1` | L1 ~70 %, L2-L8 0 % | auditoría Q-learning |
-| **Q-learning `seed-v2` (recomendado)** | **75/80** | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
+| **Q-learning `seed-v2` (recomendado)** | **77/80** (75/80 antes del regreso guiado) | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
 | PPO de campaña `4bcfd8f6` / `f5972637` | 8/8 escenarios aprobados (≥ 50 misiones c/u) | `models/<run>/evidence/` |
 
 **Límites de esta fase.**
@@ -191,21 +191,21 @@ memorización.
 
 ## 9. Contribuciones
 
-| Integrante | Aportes (según el historial de Git y los PR) |
+| Integrante | Aportes |
 |---|---|
 | **Suleily Moreno** | Base del repositorio y primer ambiente (bípedo y terreno marciano); paso 1: niveles N1, N2 y N3 en YAML, `environment_hash`, contratos (`docs/contratos.md`) y dependencias fijadas (PR #2) |
 | **Tomás González** | Paso 3: pipeline de entrenamiento trazable (`pipelines/train.py`: MLflow, manifiestos, checkpoints y continuación con `parent_run_id`); remoto DVC en DagsHub; release pública `models-v1` (PR #3) |
 | **Natalia Ríos** | Paso 5: web Vite + TypeScript + Three.js (escena 3D, HUD, control manual y replay rotulado) y despliegue en Vercel (PR #4 y #5) |
 | **Nicol Cerinza** | Ambiente 3D del rover en MuJoCo y ficha v0.1; integración de las ramas; paso 2 (suite fija y baselines); paso 4 (API); pasos 6–11 (experimentos, ficha v1, Prefect, catálogo y selección, vista del docente, incidente y rollback); documentación final |
 
-**Segunda fase (`v1.0` → `v1.2`):**
+**Segunda fase (`v1.0` → `v1.3`):**
 
 | Integrante | Aportes |
 |---|---|
-| **Natalia Ríos** | Simulador planetario y escenarios variados; Q-learning planetario persistente con checkpoints reanudables; progresión por nivel, campaña PPO y visor PPO en la web; despliegue en Vercel y Render |
+| **Natalia Ríos** | Simulador planetario y escenarios variados; Q-learning planetario persistente con checkpoints reanudables y regreso guiado a la base; progresión por nivel, campaña PPO y visor PPO en la web; despliegue en Vercel y Render |
 | **Tomás González** | Campaña fija de escenarios; entrenamiento PPO versionado (exp-007 a exp-015), actores por escenario e imitación acotada; hitos aprobados L1-L8 y modelo final `f5972637`; panel de entrenamiento PPO en la web |
-| **Nicol Cerinza** | Auditoría y rediseño del Q-learning planetario (guía planificador, estado v2, `qlearning-seed-v1/v2`); progreso de campaña en la API; pasos por lotes; manifiestos planetarios; release `v1.2` y documentación |
-| **Suleily Moreno** | Sin commits en esta fase según el historial de Git |
+| **Nicol Cerinza** | Auditoría y rediseño del Q-learning planetario (guía planificador, estado v2, `qlearning-seed-v1/v2`); progreso de campaña en la API; pasos por lotes; manifiestos planetarios; releases `v1.2` y `v1.3` y documentación |
+| **Suleily Moreno** | Revisión de la entrega con el enunciado; preparación y presentación de la sustentación: problema y contexto de negocio, costo, limitaciones y siguiente hipótesis, y demostración ([guion-defensa.md](guion-defensa.md)) |
 
 **Uso de asistentes:** parte del código y de los documentos se escribió con
 asistentes de código (Copilot y Claude Code). Cada afirmación de este informe
