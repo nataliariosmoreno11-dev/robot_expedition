@@ -12,10 +12,12 @@ from __future__ import annotations
 import math
 import json
 import os
+import shutil
 import subprocess
 import sys
 import threading
 import time
+import urllib.request
 import uuid
 from collections import OrderedDict, defaultdict, deque
 from datetime import datetime, timezone
@@ -59,6 +61,39 @@ PLANETARY_Q_CHECKPOINT_DIR = Path(os.environ.get(
 ))
 PLANETARY_Q_SELECTION = PLANETARY_Q_CHECKPOINT_DIR / "planetary_qlearning_active.json"
 q_checkpoint_lock = threading.Lock()
+# Checkpoint base entrenado offline (scripts/train_planetary_qlearning.py). Sin disco
+# persistente, Render borra models/ en cada redeploy o reposo; al arrancar se descarga
+# esta tabla solo si el checkpoint activo no existe, asi nunca se pisa lo aprendido.
+# Una cadena vacia desactiva la descarga.
+PLANETARY_Q_SEED_URL = os.environ.get(
+    "PLANETARY_Q_SEED_URL",
+    "https://github.com/nataliariosmoreno11-dev/robot_expedition/releases/download/"
+    "qlearning-seed-v1/planetary_qlearning.npz",
+).strip()
+
+
+def _seed_q_checkpoint() -> str:
+    if not PLANETARY_Q_SEED_URL or PLANETARY_Q_CHECKPOINT.exists():
+        return "existing" if PLANETARY_Q_CHECKPOINT.exists() else "disabled"
+    temporary = PLANETARY_Q_CHECKPOINT.with_name(PLANETARY_Q_CHECKPOINT.name + ".seed.tmp")
+    try:
+        PLANETARY_Q_CHECKPOINT.parent.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(PLANETARY_Q_SEED_URL, timeout=30) as response, temporary.open("wb") as fh:
+            shutil.copyfileobj(response, fh)
+        PlanetaryQLearningAgent().load(temporary)          # valida el formato antes de activarlo
+        with q_checkpoint_lock:
+            if PLANETARY_Q_CHECKPOINT.exists():
+                return "existing"
+            temporary.replace(PLANETARY_Q_CHECKPOINT)
+        return "seeded"
+    except Exception as exc:  # la API debe arrancar aunque GitHub no responda
+        print(f"[qlearning] no se pudo descargar el checkpoint base: {type(exc).__name__}: {exc}", flush=True)
+        return "failed"
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+PLANETARY_Q_SEED_STATUS = _seed_q_checkpoint()
 
 # Hitos PPO aprobados en la campana fija de Tomas. Se publican como evidencia
 # de entrenamiento y no reemplazan el Q-learning interactivo de esta rama.
@@ -646,6 +681,7 @@ def qlearning_training_status():
         "checkpoint": _relative_path(checkpoint_path),
         "checkpoint_name": checkpoint_path.name,
         "persistent_data_dir": str(DATA_DIR),
+        "seed": PLANETARY_Q_SEED_STATUS,
     }
 
 

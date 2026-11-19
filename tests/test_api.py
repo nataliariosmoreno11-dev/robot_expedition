@@ -341,3 +341,34 @@ def test_campaign_progress_picks_most_advanced_run_not_newest_file(tmp_path, mon
         _os.utime(path, (mtime, mtime))                      # el menos avanzado es el mas reciente
     monkeypatch.setattr(api_main, "ROOT", tmp_path)
     assert client.get("/campaign/progress").json()["run_id"] == "a" * 32
+
+
+def test_qlearning_seed_downloads_only_when_checkpoint_is_missing(tmp_path, monkeypatch):
+    from robot_expedition.planetary.qlearning import PlanetaryQLearningAgent
+
+    seed = PlanetaryQLearningAgent()
+    seed.episodes = 42
+    seed_file = seed.save(tmp_path / "seed.npz")
+    checkpoint = tmp_path / "data" / "models" / "planetary_qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "PLANETARY_Q_SEED_URL", seed_file.as_uri())
+
+    assert api_main._seed_q_checkpoint() == "seeded"
+    assert PlanetaryQLearningAgent().load(checkpoint).episodes == 42
+
+    learned = PlanetaryQLearningAgent()
+    learned.episodes = 7
+    learned.save(checkpoint)
+    assert api_main._seed_q_checkpoint() == "existing"
+    assert PlanetaryQLearningAgent().load(checkpoint).episodes == 7     # nunca pisa lo aprendido
+
+
+def test_qlearning_seed_failure_keeps_api_usable(tmp_path, monkeypatch):
+    bad = tmp_path / "bad.npz"
+    bad.write_bytes(b"no es un npz")
+    checkpoint = tmp_path / "models" / "planetary_qlearning.npz"
+    monkeypatch.setattr(api_main, "PLANETARY_Q_CHECKPOINT", checkpoint)
+    monkeypatch.setattr(api_main, "PLANETARY_Q_SEED_URL", bad.as_uri())
+
+    assert api_main._seed_q_checkpoint() == "failed"
+    assert not checkpoint.exists() and not list(checkpoint.parent.glob("*.tmp"))

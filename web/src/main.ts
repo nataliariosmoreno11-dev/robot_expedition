@@ -1053,7 +1053,13 @@ async function loadPpoCampaign() {
   try {
     const payload = await api.ppoCampaign()
     if (!isRecord(payload) || !Array.isArray(payload.levels)) throw new Error('La API no devolvió la campaña PPO.')
-    const levels = payload.levels.filter(isRecord)
+    const levels = payload.levels.filter(isRecord).sort((a, b) => {
+      const levelDifference = Number(a.level ?? 0) - Number(b.level ?? 0)
+      if (levelDifference !== 0) return levelDifference
+      const aModel = isRecord(a.model) ? a.model : {}
+      const bModel = isRecord(b.model) ? b.model : {}
+      return Number(aModel.total_timesteps ?? 0) - Number(bModel.total_timesteps ?? 0)
+    })
     ppoCampaignMeta.textContent = `${levels.length} checkpoints aprobados · ${Number(payload.latest_total_timesteps ?? 0).toLocaleString('es-CO')} pasos acumulados en el hito final · producción en modo evidencia e inferencia`
     ppoCampaignLevels.replaceChildren()
     for (const item of levels) {
@@ -1069,13 +1075,15 @@ async function loadPpoCampaign() {
         ppoCampaignLevels.querySelectorAll('button').forEach((node) => node.classList.remove('selected'))
         button.classList.add('selected')
         selectPpoLevel(item)
+        void startPpoEpisode()
       })
       ppoCampaignLevels.append(button)
     }
-    const first = levels[0]
-    if (first) {
-      ppoCampaignLevels.querySelector('button')?.classList.add('selected')
-      selectPpoLevel(first)
+    const best = levels.at(-1)
+    if (best) {
+      ppoCampaignLevels.querySelector('button:last-child')?.classList.add('selected')
+      selectPpoLevel(best)
+      await startPpoEpisode()
     }
   } catch (error) {
     ppoCampaignMeta.textContent = `No se pudo cargar el modelado PPO: ${errorMessage(error)}`
