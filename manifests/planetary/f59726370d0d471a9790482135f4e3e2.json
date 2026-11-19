@@ -20,6 +20,7 @@
   "environment_version": "planetary-exploration/2.0.0",
   "environment_contract": "campaign-training-compatibility/no-dynamic-storms",
   "environment_hash": null,
+  "environment_hash_source": null,
   "git_commit": "54d4b076dcb60f1ba80dbdc1d612e6a3b111755f",
   "config_uri": null,
   "config_sha256": null,

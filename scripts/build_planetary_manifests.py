@@ -7,7 +7,10 @@ run, presupuesto, semillas, origen, optimizador, evaluación y URI inmutable.
 Los hashes se calculan de los archivos reales y se contrastan con los que registró
 el entrenamiento (sha256.json / approved-version.json): si no coinciden, el script
 falla en vez de escribir un manifiesto incorrecto. Las URI apuntan al archivo dentro
-del commit exacto en que entró al repositorio, así que no cambian.
+del commit exacto en que entró al repositorio, así que no cambian. El
+``environment_hash`` se calcula con el código del ambiente de ese mismo commit
+(no con el de HEAD): un cambio posterior del ambiente no reescribe la procedencia
+del modelo, y la API puede detectar que el ambiente actual ya no es el de entrenamiento.
 
 Uso:
     python scripts/build_planetary_manifests.py            # escribe manifests/planetary/*.json
@@ -16,11 +19,15 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import atexit
 import hashlib
 import json
 from pathlib import Path
 import subprocess
 import sys
+import shutil
+import tarfile
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -92,6 +99,33 @@ def full_sha(ref: str) -> str:
                           text=True, check=True).stdout.strip()
 
 
+_SNAPSHOTS: dict[str, Path] = {}
+_HASH_AT = """
+import json, sys
+sys.path.insert(0, sys.argv[1])
+from robot_expedition.envs.planetary_exploration import planetary_environment_hash
+print(planetary_environment_hash(json.loads(sys.stdin.read())))
+"""
+
+
+def environment_hash_at(commit: str, environment: dict | None) -> str:
+    """Hash del ambiente planetario según el código versionado en ``commit``."""
+    if commit not in _SNAPSHOTS:
+        folder = Path(tempfile.mkdtemp(prefix=f"env-{commit[:8]}-"))
+        archive = subprocess.run(["git", "archive", "--format=tar", commit],
+                                 cwd=ROOT, capture_output=True, check=True).stdout
+        tar_path = folder / "src.tar"
+        tar_path.write_bytes(archive)
+        with tarfile.open(tar_path) as tar:
+            tar.extractall(folder, filter="data")
+        _SNAPSHOTS[commit] = folder
+        atexit.register(shutil.rmtree, folder, ignore_errors=True)
+    result = subprocess.run([sys.executable, "-c", _HASH_AT, str(_SNAPSHOTS[commit])],
+                            cwd=_SNAPSHOTS[commit], input=json.dumps(environment or {}),
+                            capture_output=True, text=True, check=True)
+    return result.stdout.strip().splitlines()[-1]
+
+
 def artifact(path: Path) -> dict:
     commit = introduced_in(path)
     return {"uri": f"{REPO}/raw/{commit}/{path.relative_to(ROOT).as_posix()}",
@@ -118,7 +152,7 @@ def action_spec() -> dict:
 
 def campaign_manifest(run_id: str) -> dict:
     from robot_expedition.envs.planetary_exploration import (
-        PLANETARY_ENVIRONMENT_VERSION, planetary_environment_hash)
+        PLANETARY_ENVIRONMENT_VERSION)
     folder = ROOT / "models" / run_id
     approved = json.loads((folder / "approved-version.json").read_text())
     config_path = folder / "config.json"
@@ -151,7 +185,10 @@ def campaign_manifest(run_id: str) -> dict:
         "change": config.get("change"),
         "environment_version": PLANETARY_ENVIRONMENT_VERSION,
         "environment_contract": contract,
-        "environment_hash": planetary_environment_hash(config.get("environment")) if config else None,
+        "environment_hash": environment_hash_at(weights["git_commit"], config.get("environment"))
+                            if config else None,
+        "environment_hash_source": f"código del ambiente en {weights['git_commit'][:7]} (commit que versionó el modelo)"
+                                   if config else None,
         "git_commit": weights["git_commit"],
         "config_uri": artifact(config_path)["uri"] if config else None,
         "config_sha256": sha256(config_path) if config else None,
