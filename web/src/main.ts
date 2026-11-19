@@ -788,17 +788,26 @@ const startManualMode = async () => {
   }
 }
 
+// Cada petición cruza la red (~0,45 s con Render); pedir un lote de pasos y
+// animarlo mientras llega el siguiente evita que el rover avance a saltos lentos.
+const AUTOMATIC_BATCH = 16
+
 async function sendAutomaticAction() {
   if (!api || !manualSessionId || !manualEpisode || manualBusy) return
   manualBusy = true
   let retryDelay: number | undefined
+  let nextDelay = 0
   setManualControls(false)
   try {
-    const response = await api.step(manualSessionId)
+    const shownPosition = scene.position
+    const response = await api.step(manualSessionId, undefined, AUTOMATIC_BATCH)
     automaticNetworkRetries = 0
     const frame = frameFromResponse(response)
     if (!frame) throw new Error('/sim/step no devolvió un cuadro compatible.')
-    const frames = [...manualEpisode.frames, frame]
+    const batch = Array.isArray(response.frames)
+      ? response.frames.map((item) => normalizeFrame(item)).filter((item): item is ReplayFrame => Boolean(item))
+      : []
+    const frames = [...manualEpisode.frames, ...(batch.length ? batch : [frame])]
     if (typeof response.storm_intensity === 'number') {
       required<HTMLElement>('#readoutStorm').textContent = response.storm_intensity > 0.05
         ? `${Math.round(response.storm_intensity * 100)}% · ACTIVA`
@@ -842,7 +851,12 @@ async function sendAutomaticAction() {
       ],
     }
     loadEpisode(manualEpisode, map, 'api', 'API · Q-LEARNING')
-    scene.seek(frames.length - 1)
+    // Continúa la animación desde donde iba (loadEpisode la reinicia) hasta el último cuadro.
+    scene.seek(Math.min(shownPosition, frames.length - 1))
+    scene.setPlaying(true)
+    const backlogSeconds = (frames.length - 1 - scene.position) / scene.framesPerSecond
+    // Pide el siguiente lote cuando quede medio lote por animar: llega justo a tiempo.
+    nextDelay = Math.max(0, (backlogSeconds - AUTOMATIC_BATCH / 2 / scene.framesPerSecond) * 1000)
     if (finished) {
       manualSessionId = undefined
       const reachedRewardFloor = response.end === 'limite_recompensa'
@@ -855,7 +869,7 @@ async function sendAutomaticAction() {
             : `Causa: ${manualEpisode.end}. El agente generará un escenario nuevo.`,
       )
       void refreshEpisodes()
-      if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, 1200)
+      if (automaticRunning) automaticTimer = window.setTimeout(() => { void startManualMode() }, backlogSeconds * 1000 + 1200)
     }
   } catch (error) {
     const transientNetworkFailure = error instanceof ApiError && error.status === undefined
@@ -874,7 +888,7 @@ async function sendAutomaticAction() {
   } finally {
     manualBusy = false
     setManualControls(false)
-    if (manualSessionId && automaticRunning) scheduleAutomaticStep(retryDelay ?? 150)
+    if (manualSessionId && automaticRunning) scheduleAutomaticStep(retryDelay ?? nextDelay)
   }
 }
 
