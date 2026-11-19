@@ -184,6 +184,16 @@ export class ExpeditionScene {
     this.speed = Math.max(0.25, speed)
   }
 
+  /** Cuadro (fraccionario) que muestra la animación en este momento. */
+  get position(): number {
+    return this.framePosition
+  }
+
+  /** Cuadros por segundo que avanza la reproducción a la velocidad actual. */
+  get framesPerSecond(): number {
+    return this.speed / (this.map?.dt ?? 0.5)
+  }
+
   setFollow(follow: boolean) {
     this.follow = follow
   }

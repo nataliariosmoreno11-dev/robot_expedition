@@ -427,3 +427,41 @@ def test_incompatible_q_checkpoint_is_kept_renamed_and_api_keeps_working(tmp_pat
     assert backups[0].name in {item["name"] for item in listing["incompatible"]}
     with api_main.sessions_lock:
         api_main.sessions.pop(reset.json()["session_id"]).env.close()
+
+
+def test_batched_steps_match_single_steps_and_stop_at_episode_end(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "batch-episodes.sqlite")
+    body = {"environment": "planetary", "difficulty_level": 1, "seed": 11, "policy": "planetary-rule"}
+    single = client.post("/sim/reset", json=body).json()["session_id"]
+    batched = client.post("/sim/reset", json=body).json()["session_id"]
+    single_frames = []
+    while True:
+        step = client.post("/sim/step", json={"session_id": single}).json()
+        single_frames.append(step["frame"])
+        if step["terminated"] or step["truncated"]:
+            break
+    batched_frames, requests = [], 0
+    while True:
+        step = client.post("/sim/step", json={"session_id": batched, "steps": 8}).json()
+        requests += 1
+        assert step["frame"] == step["frames"][-1]
+        batched_frames += step["frames"]
+        if step["terminated"] or step["truncated"]:
+            break
+    assert batched_frames == single_frames              # mismo episodio, menos viajes de red
+    assert step["steps"] == len(single_frames) and requests == -(-len(single_frames) // 8)
+    assert client.post("/sim/step", json={"session_id": batched, "steps": 8}).status_code == 409
+    for sid in (single, batched):
+        with api_main.sessions_lock:
+            api_main.sessions.pop(sid).env.close()
+
+
+def test_manual_action_ignores_batch_size(tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "EPISODE_DB", tmp_path / "manual-batch.sqlite")
+    sid = client.post("/sim/reset", json={"environment": "planetary", "difficulty_level": 1,
+                                         "seed": 2, "policy": "manual"}).json()["session_id"]
+    step = client.post("/sim/step", json={"session_id": sid, "action": 0, "steps": 20}).json()
+    assert step["steps"] == 1 and len(step["frames"]) == 1
+    assert client.post("/sim/step", json={"session_id": sid, "steps": 41}).status_code == 422
+    with api_main.sessions_lock:
+        api_main.sessions.pop(sid).env.close()

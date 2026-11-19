@@ -50,6 +50,7 @@ from pipelines.policies import CampaignNumpyPPOPolicy  # noqa: E402
 API_VERSION = "1.1.0"
 MAX_SEEDS = 20                 # la web corta las solicitudes a los 12 s
 MAX_SESSIONS = 50
+MAX_BATCH_STEPS = 40         # cada petición cruza la red (~0,45 s en Render): se agrupan pasos
 SESSION_TTL_S = 15 * 60
 STARTED = time.time()
 DATA_DIR = Path(os.environ.get("EXPEDITION_DATA_DIR", ROOT))
@@ -531,6 +532,9 @@ class StepRequest(BaseModel):
     session_id: str
     action: int | None = Field(default=None, ge=0, le=len(PLANETARY_ACTIONS) - 1,
                                description="acción manual; vacía = decide la política de la sesión")
+    steps: int = Field(default=1, ge=1, le=MAX_BATCH_STEPS,
+                       description="pasos de la política en una sola petición (solo sin action); "
+                                   "se detiene antes si el episodio termina")
 
 
 @app.post("/sim/reset")
@@ -593,17 +597,27 @@ def sim_step(req: StepRequest):
         fail(409, "el episodio de esta sesión ya terminó; inicia otro con /sim/reset")
     if req.action is None and session.policy is None:
         fail(422, f"sesión manual: envía action (0-{len(session.action_names) - 1})")
-    action = req.action if req.action is not None else int(session.policy(session.obs))
-    if not session.env.action_space.contains(action):
-        fail(422, f"acción inválida para {session.environment_kind}: {action}")
-    session.obs, reward, terminated, truncated, info = session.env.step(action)
-    session.total += reward
-    session.done = terminated or truncated
-    if hasattr(session.policy, "learn"):
-        session.policy.learn(float(reward), session.obs, session.done)
+    batch = 1 if req.action is not None else req.steps
+    frames, events = [], []
+    for _ in range(batch):
+        action = req.action if req.action is not None else int(session.policy(session.obs))
+        if not session.env.action_space.contains(action):
+            fail(422, f"acción inválida para {session.environment_kind}: {action}")
+        session.obs, reward, terminated, truncated, info = session.env.step(action)
+        session.total += reward
+        session.done = terminated or truncated
+        if hasattr(session.policy, "learn"):
+            session.policy.learn(float(reward), session.obs, session.done)
+        frames.append(frame(session.env, action, reward, info["collision"]))
+        if info["event"]:
+            events.append({"step": session.env.steps, "event": info["event"]})
+        if session.done:
+            break
     session.touched = time.time()
     training = session.policy.snapshot() if hasattr(session.policy, "snapshot") else None
-    return {"session_id": req.session_id, "frame": frame(session.env, action, reward, info["collision"]),
+    # Los campos de nivel superior describen el último paso (compatibles con steps=1);
+    # `frames` trae todos los cuadros del lote, en orden, y `events` sus eventos.
+    return {"session_id": req.session_id, "frame": frames[-1], "frames": frames, "events": events,
             "action": action, "action_name": session.action_names[action], "reward": round(float(reward), 4),
             "return": round(session.total, 4), "terminated": terminated, "truncated": truncated,
             "end": info["end"] or "running", "event": info["event"], "stage": info["stage"],

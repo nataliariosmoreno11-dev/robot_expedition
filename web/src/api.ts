@@ -94,10 +94,14 @@ export class ExpeditionApi {
     }) as Promise<SimulationResponse>
   }
 
-  async step(sessionId: string, action?: number): Promise<SimulationResponse> {
+  /** Un paso manual (con action) o `steps` pasos de la política en una sola petición. */
+  async step(sessionId: string, action?: number, steps = 1): Promise<SimulationResponse> {
+    const body = action === undefined
+      ? { session_id: sessionId, ...(steps > 1 ? { steps } : {}) }
+      : { session_id: sessionId, action }
     return this.request('/sim/step', {
       method: 'POST',
-      body: JSON.stringify(action === undefined ? { session_id: sessionId } : { session_id: sessionId, action }),
+      body: JSON.stringify(body),
     }) as Promise<SimulationResponse>
   }
 
