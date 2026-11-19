@@ -6,7 +6,7 @@ formato y recompensas al que produce produccion. Sirve para publicar un
 checkpoint base que la API descarga al arrancar (PLANETARY_Q_SEED_URL).
 
 Uso:
-    python scripts/train_planetary_qlearning.py --out dist/planetary_qlearning.npz --rounds 6
+    python scripts/train_planetary_qlearning.py --out dist/planetary_qlearning.npz --rounds 12 --seeds-per-level 5
 """
 import argparse
 import json

@@ -52,11 +52,19 @@ class FrozenGreedyQPolicy:
 
     def __init__(self, checkpoint: Path):
         self.agent = PlanetaryQLearningAgent(epsilon=0.0).load(checkpoint)
+        # Estado v2: el último componente es la sugerencia del guía. Sin guía, se
+        # promedian los valores de todas las sugerencias vistas en ese contexto sensorial.
+        self.sensory: dict[tuple[int, ...], list[np.ndarray]] = {}
+        for state, values in self.agent.q.items():
+            self.sensory.setdefault(tuple(state[:-1]), []).append(values)
 
     def __call__(self, observation) -> int:
         state = discretize_planetary(observation)
-        values = self.agent.q.get(state)
-        return int(np.argmax(values)) if values is not None and np.any(values) else 6
+        values = self.sensory.get(tuple(state[:-1]))
+        if not values:
+            return 6
+        mean = np.mean(values, axis=0)
+        return int(np.argmax(mean)) if np.any(mean) else 6
 
 
 def environment() -> dict:

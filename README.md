@@ -254,12 +254,20 @@ al reiniciar. El catálogo y los modelos versionados de Tomás siguen separados 
 reescriben desde la web.
 
 Para que producción nunca arranque con el Q-learning vacío, la API descarga al iniciar un
-checkpoint base entrenado offline (release `qlearning-seed-v1`, variable
+checkpoint base entrenado offline (release `qlearning-seed-v2`, variable
 `PLANETARY_Q_SEED_URL`; vacía la desactiva). Solo se descarga si el checkpoint activo no
-existe, así que nunca reemplaza lo aprendido. `/training/qlearning` indica en `seed` si se
-usó (`seeded`), si ya había uno (`existing`) o si falló la descarga (`failed`). Para
-regenerarlo: `python scripts/train_planetary_qlearning.py --out planetary_qlearning.npz --rounds 30`
+existe, así que nunca reemplaza lo aprendido. Un checkpoint de una versión anterior del
+estado Q se conserva renombrado (`*-estado-anterior.npz`) en vez de borrarse.
+`/training/qlearning` indica en `seed` si se usó (`seeded`), si ya había uno (`existing`)
+o si falló la descarga (`failed`). Para regenerarlo:
+`python scripts/train_planetary_qlearning.py --out planetary_qlearning.npz --rounds 12 --seeds-per-level 5`
 y subir el archivo como asset de una release nueva.
+
+El Q-learning aprende sobre un **guía planificador**
+([robot_expedition/planetary/planner.py](robot_expedition/planetary/planner.py)) que conoce el
+mapa estático de la misión pero nunca la posición de las muestras. Diagnóstico, cambios y
+resultados por nivel: [docs/auditoria-qlearning-planetario.md](docs/auditoria-qlearning-planetario.md).
+Para medirlo: `python scripts/evaluate_planetary_policies.py --episodes 10`.
 
 La sección **Memoria del agente** permite consultar checkpoints Q-learning planetarios,
 activar uno para continuar sus episodios y crear una copia antes de experimentar. Los

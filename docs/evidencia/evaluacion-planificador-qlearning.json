@@ -1,0 +1,182 @@
+{
+  "episodes_per_level": 10,
+  "seed_start": 6000,
+  "q_seed": "existing",
+  "policies": {
+    "planetary-rule": {
+      "levels": {
+        "L1": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 15.1,
+          "mean_battery_left": 94.9,
+          "mean_collisions": 0.0
+        },
+        "L2": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 92.9,
+          "mean_battery_left": 61.5,
+          "mean_collisions": 0.0
+        },
+        "L3": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 198.4,
+          "mean_battery_left": 48.4,
+          "mean_collisions": 0.4
+        },
+        "L4": {
+          "success": 9,
+          "episodes": 10,
+          "ends": {
+            "exito": 9,
+            "bateria": 1
+          },
+          "mean_steps": 190.9,
+          "mean_battery_left": 53.0,
+          "mean_collisions": 5.9
+        },
+        "L5": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 151.8,
+          "mean_battery_left": 61.7,
+          "mean_collisions": 0.0
+        },
+        "L6": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 297.2,
+          "mean_battery_left": 58.5,
+          "mean_collisions": 0.0
+        },
+        "L7": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 312.3,
+          "mean_battery_left": 56.0,
+          "mean_collisions": 0.0
+        },
+        "L8": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 435.8,
+          "mean_battery_left": 37.8,
+          "mean_collisions": 3.2
+        }
+      },
+      "success": 79,
+      "episodes": 80
+    },
+    "planetary-qlearning": {
+      "levels": {
+        "L1": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 15.1,
+          "mean_battery_left": 94.9,
+          "mean_collisions": 0.0
+        },
+        "L2": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 99.3,
+          "mean_battery_left": 59.0,
+          "mean_collisions": 0.0
+        },
+        "L3": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 235.4,
+          "mean_battery_left": 42.4,
+          "mean_collisions": 0.0
+        },
+        "L4": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 161.2,
+          "mean_battery_left": 59.1,
+          "mean_collisions": 0.1
+        },
+        "L5": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 173.3,
+          "mean_battery_left": 57.0,
+          "mean_collisions": 0.1
+        },
+        "L6": {
+          "success": 7,
+          "episodes": 10,
+          "ends": {
+            "exito": 7,
+            "sin_progreso": 3
+          },
+          "mean_steps": 429.1,
+          "mean_battery_left": 47.6,
+          "mean_collisions": 1.7
+        },
+        "L7": {
+          "success": 10,
+          "episodes": 10,
+          "ends": {
+            "exito": 10
+          },
+          "mean_steps": 417.8,
+          "mean_battery_left": 44.9,
+          "mean_collisions": 3.2
+        },
+        "L8": {
+          "success": 8,
+          "episodes": 10,
+          "ends": {
+            "exito": 8,
+            "sin_progreso": 2
+          },
+          "mean_steps": 664.1,
+          "mean_battery_left": 19.5,
+          "mean_collisions": 8.8
+        }
+      },
+      "success": 75,
+      "episodes": 80
+    }
+  }
+}
