@@ -1,0 +1,378 @@
+{
+  "run_id": "f59726370d0d471a9790482135f4e3e2",
+  "algorithm": "ppo",
+  "model_family": "planetary-campaign-ppo",
+  "level_id": "campaña L1-L8",
+  "status": "approved",
+  "completed_scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "experiment_id": null,
+  "hypothesis": null,
+  "change": null,
+  "environment_version": "planetary-exploration/2.0.0",
+  "environment_contract": "campaign-training-compatibility/no-dynamic-storms",
+  "environment_hash": null,
+  "git_commit": "54d4b076dcb60f1ba80dbdc1d612e6a3b111755f",
+  "config_uri": null,
+  "config_sha256": null,
+  "model_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/54d4b076dcb60f1ba80dbdc1d612e6a3b111755f/models/f59726370d0d471a9790482135f4e3e2/ppo_model.zip",
+  "model_sha256": "144113a8fe523a7c046c71aa975393c3756a31cd27767170b3955cfba3d39af7",
+  "normalization_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/54d4b076dcb60f1ba80dbdc1d612e6a3b111755f/models/f59726370d0d471a9790482135f4e3e2/vecnormalize.pkl",
+  "normalization_sha256": "07e61c444388b3d37494597b97e245209c5ed671ed3ce35e6235292bbb50c5c6",
+  "serving_adapter_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/4431f72f3546657269d0ae0be27a7a5e4a385045/catalog/campaign_adapters/f59726370d0d471a9790482135f4e3e2.npz",
+  "serving_adapter_sha256": "bd7198a81c1491ae7cc5dfd586cb86247733db17774c9a662e129ed42a5d5356",
+  "optimizer_uri": null,
+  "optimizer_sha256": null,
+  "runtime_ref": "Python 3.12.8 · requirements.txt (SB3/PyTorch para continuar) · api/requirements-lite.txt con POLICY_BACKEND=numpy para servir",
+  "hyperparams": null,
+  "seed": null,
+  "seeds": null,
+  "budget_timesteps": null,
+  "effective_timesteps": 7488028,
+  "origin": "no registrado: el config.json de este run no está en el repositorio",
+  "parent_run_id": null,
+  "evaluation_suite_id": "scenario_01..scenario_08, seed 910000, deterministic PPO",
+  "evaluation_evidence": [],
+  "obs_spec": {
+    "shape": [
+      132
+    ],
+    "layout": "4 lecturas apiladas de 33 componentes; la más reciente al final",
+    "components": [
+      {
+        "name": "lidar_0",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_1",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_2",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_3",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_4",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_5",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_6",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_7",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_8",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "navigation_distance",
+        "unit": "m",
+        "range": [
+          0.0,
+          17.0
+        ],
+        "note": "a la muestra objetivo visible o a la base si ya se recolectó todo; 5.0 si no hay"
+      },
+      {
+        "name": "relative_sin",
+        "unit": "1",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "note": "0 si no hay objetivo visible"
+      },
+      {
+        "name": "relative_cos",
+        "unit": "1",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "note": "0 si no hay objetivo visible"
+      },
+      {
+        "name": "forward_speed",
+        "unit": "fracción de 0.6 m/s",
+        "range": [
+          -1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "turn_rate",
+        "unit": "fracción de 1.2 rad/s",
+        "range": [
+          -1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "battery",
+        "unit": "fracción de 100 %",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "collected_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "remaining_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "inventory_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_basalto",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_hematita",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_sulfato",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "sample_visible",
+        "unit": "booleano",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_distance",
+        "unit": "m",
+        "range": [
+          0.0,
+          17.0
+        ]
+      },
+      {
+        "name": "visible_basalto",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_hematita",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_sulfato",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "gravity",
+        "unit": "fracción de 9.81 m/s²",
+        "range": [
+          0.0,
+          1.5
+        ]
+      },
+      {
+        "name": "local_traction",
+        "unit": "coeficiente",
+        "range": [
+          0.0,
+          1.5
+        ]
+      },
+      {
+        "name": "visibility",
+        "unit": "fracción de 5 m",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "wind",
+        "unit": "fracción de 30 m/s",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "pitch",
+        "unit": "rad",
+        "range": [
+          -3.1416,
+          3.1416
+        ]
+      },
+      {
+        "name": "roll",
+        "unit": "rad",
+        "range": [
+          -3.1416,
+          3.1416
+        ]
+      },
+      {
+        "name": "difficulty_level",
+        "unit": "fracción de 8 (10 en campaña)",
+        "range": [
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "scaling": "VecNormalize (media/varianza congeladas) antes de la red; clip ±10"
+  },
+  "action_spec": {
+    "type": "Discrete",
+    "n": 7,
+    "actions": [
+      {
+        "id": 0,
+        "name": "avanzar",
+        "linear_m_s": 0.6,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 1,
+        "name": "avanzar + izq",
+        "linear_m_s": 0.4,
+        "angular_rad_s": 0.8
+      },
+      {
+        "id": 2,
+        "name": "avanzar + der",
+        "linear_m_s": 0.4,
+        "angular_rad_s": -0.8
+      },
+      {
+        "id": 3,
+        "name": "girar izq",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 1.2
+      },
+      {
+        "id": 4,
+        "name": "girar der",
+        "linear_m_s": 0.0,
+        "angular_rad_s": -1.2
+      },
+      {
+        "id": 5,
+        "name": "recolectar",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 6,
+        "name": "retroceder",
+        "linear_m_s": -0.35,
+        "angular_rad_s": 0.0
+      }
+    ],
+    "decision_dt_s": 0.5
+  }
+}

@@ -1,0 +1,398 @@
+{
+  "run_id": "4bcfd8f641df50b9b5460d76b8c56482",
+  "algorithm": "ppo",
+  "model_family": "planetary-campaign-ppo",
+  "level_id": "campaña L1-L8",
+  "status": "approved",
+  "completed_scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "experiment_id": "exp-015-accelerated",
+  "hypothesis": "Independent scenario actors preserve mastered decisions while PPO learns pending scenarios",
+  "change": "Per-scenario actors, supervised initialization and frozen normalization; evaluation criteria unchanged",
+  "environment_version": "planetary-exploration/2.0.0",
+  "environment_contract": "campaign/dynamic-storms",
+  "environment_hash": "ac480bdeee89597afcb7d78c420436a8e2f2c55d6fb6719e83492a3488c6c0a0",
+  "git_commit": "d16799b42c64550821839ba0608fe52b2256a808",
+  "config_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/4bcfd8f641df50b9b5460d76b8c56482/config.json",
+  "config_sha256": "d65b75e49a9bd474fa81f9e25e7de77ee84aa93343765b7c3249591ca2a90fda",
+  "model_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/4bcfd8f641df50b9b5460d76b8c56482/ppo_model.zip",
+  "model_sha256": "a98e302c44f1d9532aa3cc8a0bea21fbbcd217447f6a62c295b92c64057c3722",
+  "normalization_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/4bcfd8f641df50b9b5460d76b8c56482/vecnormalize.pkl",
+  "normalization_sha256": "742f9a8dd76589b4afd5cd422d3b62ccd4577fda1fa5a834b0e84219159017bb",
+  "serving_adapter_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/767526b685701c746646a687095d973efc2e7ba2/catalog/campaign_adapters/4bcfd8f641df50b9b5460d76b8c56482.npz",
+  "serving_adapter_sha256": "f760b15cece13b897c6d652aed3e62140ba6c0779ed3102017fe8639db1eb05e",
+  "optimizer_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/4bcfd8f641df50b9b5460d76b8c56482/optimizer.pt",
+  "optimizer_sha256": "74608317a2edc07b2b9ea9cd8cedbc84bba463e1427275eb30bf68df0144baa3",
+  "runtime_ref": "Python 3.12.8 · requirements.txt (SB3/PyTorch para continuar) · api/requirements-lite.txt con POLICY_BACKEND=numpy para servir",
+  "hyperparams": {
+    "batch_size": 128,
+    "clip_range": 0.1,
+    "ent_coef": 0.01,
+    "gae_lambda": 0.95,
+    "gamma": 0.995,
+    "learning_rate": 0.0001,
+    "n_steps": 512,
+    "target_kl": 0.01
+  },
+  "seed": 125,
+  "seeds": [
+    125
+  ],
+  "budget_timesteps": 32768,
+  "effective_timesteps": 7455260,
+  "origin": "continuación de checkpoint",
+  "parent_run_id": "9d8401898fdb4bb79a11ae68e4f384f5",
+  "evaluation_suite_id": "campaign scenario_01..08 · seed 910000",
+  "evaluation_evidence": [
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-mastery-8.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-1.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-2.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-3.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-4.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-5.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-6.json",
+    "models/4bcfd8f641df50b9b5460d76b8c56482/evidence/accelerated-retention-7.json"
+  ],
+  "obs_spec": {
+    "shape": [
+      132
+    ],
+    "layout": "4 lecturas apiladas de 33 componentes; la más reciente al final",
+    "components": [
+      {
+        "name": "lidar_0",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_1",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_2",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_3",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_4",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_5",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_6",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_7",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_8",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "navigation_distance",
+        "unit": "m",
+        "range": [
+          0.0,
+          17.0
+        ],
+        "note": "a la muestra objetivo visible o a la base si ya se recolectó todo; 5.0 si no hay"
+      },
+      {
+        "name": "relative_sin",
+        "unit": "1",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "note": "0 si no hay objetivo visible"
+      },
+      {
+        "name": "relative_cos",
+        "unit": "1",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "note": "0 si no hay objetivo visible"
+      },
+      {
+        "name": "forward_speed",
+        "unit": "fracción de 0.6 m/s",
+        "range": [
+          -1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "turn_rate",
+        "unit": "fracción de 1.2 rad/s",
+        "range": [
+          -1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "battery",
+        "unit": "fracción de 100 %",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "collected_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "remaining_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "inventory_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_basalto",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_hematita",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_sulfato",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "sample_visible",
+        "unit": "booleano",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_distance",
+        "unit": "m",
+        "range": [
+          0.0,
+          17.0
+        ]
+      },
+      {
+        "name": "visible_basalto",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_hematita",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_sulfato",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "gravity",
+        "unit": "fracción de 9.81 m/s²",
+        "range": [
+          0.0,
+          1.5
+        ]
+      },
+      {
+        "name": "local_traction",
+        "unit": "coeficiente",
+        "range": [
+          0.0,
+          1.5
+        ]
+      },
+      {
+        "name": "visibility",
+        "unit": "fracción de 5 m",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "wind",
+        "unit": "fracción de 30 m/s",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "pitch",
+        "unit": "rad",
+        "range": [
+          -3.1416,
+          3.1416
+        ]
+      },
+      {
+        "name": "roll",
+        "unit": "rad",
+        "range": [
+          -3.1416,
+          3.1416
+        ]
+      },
+      {
+        "name": "difficulty_level",
+        "unit": "fracción de 8 (10 en campaña)",
+        "range": [
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "scaling": "VecNormalize (media/varianza congeladas) antes de la red; clip ±10"
+  },
+  "action_spec": {
+    "type": "Discrete",
+    "n": 7,
+    "actions": [
+      {
+        "id": 0,
+        "name": "avanzar",
+        "linear_m_s": 0.6,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 1,
+        "name": "avanzar + izq",
+        "linear_m_s": 0.4,
+        "angular_rad_s": 0.8
+      },
+      {
+        "id": 2,
+        "name": "avanzar + der",
+        "linear_m_s": 0.4,
+        "angular_rad_s": -0.8
+      },
+      {
+        "id": 3,
+        "name": "girar izq",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 1.2
+      },
+      {
+        "id": 4,
+        "name": "girar der",
+        "linear_m_s": 0.0,
+        "angular_rad_s": -1.2
+      },
+      {
+        "id": 5,
+        "name": "recolectar",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 6,
+        "name": "retroceder",
+        "linear_m_s": -0.35,
+        "angular_rad_s": 0.0
+      }
+    ],
+    "decision_dt_s": 0.5
+  }
+}

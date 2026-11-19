@@ -115,6 +115,20 @@ python pipelines/evaluate.py --policy ppo --level n3 \
 Los casos coinciden uno a uno con `catalog/results/<run_id>/<nivel>.json`
 ([prueba](docs/evidencia/rollback.md#3-reconstrucción-desde-un-clon-limpio)).
 
+**Modelos planetarios (fase 2).** Los PPO de la campaña (hitos `f7c104a3` → `4bcfd8f6`
+y el final `f5972637`) están versionados en Git, con pesos, normalización,
+optimizador, configuración y adaptador numpy. Los Q-learning están en las releases
+`qlearning-seed-v1` y `qlearning-seed-v2`. Cada uno tiene su manifiesto en
+[`manifests/planetary/`](manifests/planetary), con la URI inmutable (archivo dentro del
+commit exacto), SHA-256, contrato de observación y acción, ambiente compatible, semillas,
+presupuesto y origen:
+
+```bash
+python scripts/build_planetary_manifests.py --check     # recalcula los SHA-256 de cada artefacto
+python scripts/evaluate_planetary_policies.py --episodes 10 \
+  --q-checkpoint planetary_qlearning.npz              # guía y Q-learning en L1-L8 (copia, no lo modifica)
+```
+
 **Con DVC** (el remoto de DagsHub de Tomás pide credenciales):
 
 ```bash

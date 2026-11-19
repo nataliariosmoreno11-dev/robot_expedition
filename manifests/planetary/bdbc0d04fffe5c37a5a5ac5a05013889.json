@@ -1,0 +1,390 @@
+{
+  "run_id": "bdbc0d04fffe5c37a5a5ac5a05013889",
+  "algorithm": "ppo",
+  "model_family": "planetary-campaign-ppo",
+  "level_id": "campaña L1-L4",
+  "status": "approved",
+  "completed_scenarios": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "experiment_id": "exp-010-parallel",
+  "hypothesis": "Parallel simulation and early rejection reduce wall time without relaxing mastery",
+  "change": "Four subprocess environments; reject mathematically failing periodic evaluations early",
+  "environment_version": "planetary-exploration/2.0.0",
+  "environment_contract": "campaign/dynamic-storms",
+  "environment_hash": "60cb00335ba5af19cfc769373026ea9ed4fc54b8ed5ce52796d8751fb223a0a6",
+  "git_commit": "d16799b42c64550821839ba0608fe52b2256a808",
+  "config_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/bdbc0d04fffe5c37a5a5ac5a05013889/config.json",
+  "config_sha256": "e050322453e19b666d288f0b1e3f6505173c0b0d4c694c5c43eb7d0ed93ee9aa",
+  "model_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/bdbc0d04fffe5c37a5a5ac5a05013889/ppo_model.zip",
+  "model_sha256": "64d56b423c2422078b7ae63b44cc6609809f3b962afda74feca47d4ea3257432",
+  "normalization_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/bdbc0d04fffe5c37a5a5ac5a05013889/vecnormalize.pkl",
+  "normalization_sha256": "30d8fa1cc2f9382c071a4eed676040e4bf0c0c70fdf189e125cb9bb635e36092",
+  "serving_adapter_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/767526b685701c746646a687095d973efc2e7ba2/catalog/campaign_adapters/bdbc0d04fffe5c37a5a5ac5a05013889.npz",
+  "serving_adapter_sha256": "34f5531491d9ee1fb494a0162e79da163d3391dfdcf63701a96f6e9ba76055e5",
+  "optimizer_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/raw/d16799b42c64550821839ba0608fe52b2256a808/models/bdbc0d04fffe5c37a5a5ac5a05013889/optimizer.pt",
+  "optimizer_sha256": "04e808f7c44720448de421b87e3f95a2a0fdf4abaf77b2af647b2c661316f55a",
+  "runtime_ref": "Python 3.12.8 · requirements.txt (SB3/PyTorch para continuar) · api/requirements-lite.txt con POLICY_BACKEND=numpy para servir",
+  "hyperparams": {
+    "batch_size": 64,
+    "clip_range": 0.1,
+    "ent_coef": 0.02,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "learning_rate": 5e-05,
+    "n_steps": 256,
+    "target_kl": 0.015
+  },
+  "seed": 11,
+  "seeds": [
+    11
+  ],
+  "budget_timesteps": 262144,
+  "effective_timesteps": 2329600,
+  "origin": "continuación de checkpoint",
+  "parent_run_id": "a25e4a0a6f164b4c88aafc976be827f6",
+  "evaluation_suite_id": "campaign scenario_01..08 · seed 910000",
+  "evaluation_evidence": [
+    "models/bdbc0d04fffe5c37a5a5ac5a05013889/evidence/periodic-evaluation-2329600.json",
+    "models/bdbc0d04fffe5c37a5a5ac5a05013889/evidence/retention-1-2329600.json",
+    "models/bdbc0d04fffe5c37a5a5ac5a05013889/evidence/retention-2-2329600.json",
+    "models/bdbc0d04fffe5c37a5a5ac5a05013889/evidence/retention-3-2329600.json"
+  ],
+  "obs_spec": {
+    "shape": [
+      132
+    ],
+    "layout": "4 lecturas apiladas de 33 componentes; la más reciente al final",
+    "components": [
+      {
+        "name": "lidar_0",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_1",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_2",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_3",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_4",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_5",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_6",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_7",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "lidar_8",
+        "unit": "m",
+        "range": [
+          0.0,
+          5.0
+        ],
+        "note": "rayo horizontal a 0.3 m; ángulos de -90° a +90° (izquierda a derecha)"
+      },
+      {
+        "name": "navigation_distance",
+        "unit": "m",
+        "range": [
+          0.0,
+          17.0
+        ],
+        "note": "a la muestra objetivo visible o a la base si ya se recolectó todo; 5.0 si no hay"
+      },
+      {
+        "name": "relative_sin",
+        "unit": "1",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "note": "0 si no hay objetivo visible"
+      },
+      {
+        "name": "relative_cos",
+        "unit": "1",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "note": "0 si no hay objetivo visible"
+      },
+      {
+        "name": "forward_speed",
+        "unit": "fracción de 0.6 m/s",
+        "range": [
+          -1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "turn_rate",
+        "unit": "fracción de 1.2 rad/s",
+        "range": [
+          -1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "battery",
+        "unit": "fracción de 100 %",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "collected_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "remaining_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "inventory_fraction",
+        "unit": "1",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_basalto",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_hematita",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "target_sulfato",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "sample_visible",
+        "unit": "booleano",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_distance",
+        "unit": "m",
+        "range": [
+          0.0,
+          17.0
+        ]
+      },
+      {
+        "name": "visible_basalto",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_hematita",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "visible_sulfato",
+        "unit": "one-hot",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "gravity",
+        "unit": "fracción de 9.81 m/s²",
+        "range": [
+          0.0,
+          1.5
+        ]
+      },
+      {
+        "name": "local_traction",
+        "unit": "coeficiente",
+        "range": [
+          0.0,
+          1.5
+        ]
+      },
+      {
+        "name": "visibility",
+        "unit": "fracción de 5 m",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "wind",
+        "unit": "fracción de 30 m/s",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "pitch",
+        "unit": "rad",
+        "range": [
+          -3.1416,
+          3.1416
+        ]
+      },
+      {
+        "name": "roll",
+        "unit": "rad",
+        "range": [
+          -3.1416,
+          3.1416
+        ]
+      },
+      {
+        "name": "difficulty_level",
+        "unit": "fracción de 8 (10 en campaña)",
+        "range": [
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "scaling": "VecNormalize (media/varianza congeladas) antes de la red; clip ±10"
+  },
+  "action_spec": {
+    "type": "Discrete",
+    "n": 7,
+    "actions": [
+      {
+        "id": 0,
+        "name": "avanzar",
+        "linear_m_s": 0.6,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 1,
+        "name": "avanzar + izq",
+        "linear_m_s": 0.4,
+        "angular_rad_s": 0.8
+      },
+      {
+        "id": 2,
+        "name": "avanzar + der",
+        "linear_m_s": 0.4,
+        "angular_rad_s": -0.8
+      },
+      {
+        "id": 3,
+        "name": "girar izq",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 1.2
+      },
+      {
+        "id": 4,
+        "name": "girar der",
+        "linear_m_s": 0.0,
+        "angular_rad_s": -1.2
+      },
+      {
+        "id": 5,
+        "name": "recolectar",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 6,
+        "name": "retroceder",
+        "linear_m_s": -0.35,
+        "angular_rad_s": 0.0
+      }
+    ],
+    "decision_dt_s": 0.5
+  }
+}

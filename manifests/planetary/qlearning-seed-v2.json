@@ -1,0 +1,94 @@
+{
+  "algorithm": "qlearning",
+  "model_family": "planetary-qlearning-tabular",
+  "environment_version": "planetary-exploration/2.0.0",
+  "runtime_ref": "Python 3.12.8 · api/requirements-lite.txt (NumPy)",
+  "action_spec": {
+    "type": "Discrete",
+    "n": 7,
+    "actions": [
+      {
+        "id": 0,
+        "name": "avanzar",
+        "linear_m_s": 0.6,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 1,
+        "name": "avanzar + izq",
+        "linear_m_s": 0.4,
+        "angular_rad_s": 0.8
+      },
+      {
+        "id": 2,
+        "name": "avanzar + der",
+        "linear_m_s": 0.4,
+        "angular_rad_s": -0.8
+      },
+      {
+        "id": 3,
+        "name": "girar izq",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 1.2
+      },
+      {
+        "id": 4,
+        "name": "girar der",
+        "linear_m_s": 0.0,
+        "angular_rad_s": -1.2
+      },
+      {
+        "id": 5,
+        "name": "recolectar",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 6,
+        "name": "retroceder",
+        "linear_m_s": -0.35,
+        "angular_rad_s": 0.0
+      }
+    ],
+    "decision_dt_s": 0.5
+  },
+  "hyperparams": {
+    "alpha": 0.14,
+    "gamma": 0.98,
+    "epsilon_start": 0.75,
+    "epsilon_min": 0.06,
+    "epsilon_decay": 0.992,
+    "guide_probability": 0.95,
+    "warmup_visits": 6
+  },
+  "run_id": "qlearning-seed-v2",
+  "status": "recommended",
+  "level_id": "planetario L1-L8",
+  "hypothesis": "Si la tabla Q aprende sobre la sugerencia de un guía planificador (estado + acción sugerida), resuelve L2-L8, que el guía reactivo no resolvía.",
+  "change": "Estado v2 con la acción del guía; límites de pasos del escenario; sin piso de recompensa; observación más reciente; escudo de seguridad junto a peligros.",
+  "git_commit": "ce0779e85c07538768d0faf46ee292f984be7695",
+  "model_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/releases/download/qlearning-seed-v2/planetary_qlearning.npz",
+  "model_sha256": "1e203e0d39cde8c5f4ca2291af5e9cbcf8b5b0bb0d92ad96e2c0d4d64f99ac5c",
+  "normalization_uri": null,
+  "state_spec": {
+    "size": 12,
+    "discretization": "robot_expedition/planetary/qlearning.py:discretize_planetary",
+    "note": "11 componentes discretizados de la observación más reciente + acción sugerida por el guía; ver docs/auditoria-qlearning-planetario.md#discretización"
+  },
+  "effective_episodes": 480,
+  "effective_updates": 124299,
+  "states": 8294,
+  "seed": 1001,
+  "seeds": "1001-1480 (una por episodio de entrenamiento)",
+  "origin": "desde cero",
+  "parent_run_id": null,
+  "training_command": "python scripts/train_planetary_qlearning.py --rounds 12 --seeds-per-level 5",
+  "evaluation_suite_id": "planetario L1-L8 · semillas 6000-6009 · límites de diseño",
+  "evaluation_evidence": [
+    "docs/evidencia/evaluacion-planificador-qlearning.json"
+  ],
+  "evaluation_summary": {
+    "success": 75,
+    "episodes": 80
+  }
+}

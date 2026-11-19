@@ -114,7 +114,82 @@ Se compararía contra exp-002 (N2) y exp-005 (N3), con 300k pasos y 3 semillas.
 Si falla, la alternativa es dar a la observación un "obstáculo en el camino al
 objetivo" (un rayo dirigido al objetivo) en lugar de solo los 9 rayos fijos.
 
-## 8. Contribuciones
+## 8. Segunda fase: exploración planetaria (release `v1.2`)
+
+Las secciones 1 a 7 describen la entrega `v1.0` (ambiente de balizas, N1-N3), que
+sigue disponible en el catálogo con sus contratos originales. La segunda fase
+agrega un ambiente nuevo y, por tanto, una **familia de modelos nueva**: las
+observaciones y las acciones cambian de tamaño y significado.
+
+**Misión.** El rover sale de la base, encuentra con su cámara las muestras del tipo
+pedido, evita señuelos, recolecta y vuelve a la base antes de agotar la batería.
+Hay 8 escenarios fijos de dificultad creciente (`configs/campaign/`), con rocas que
+forman corredores, cráteres, dunas, zonas de baja tracción, viento, polvo y tormentas.
+
+| Contrato | Valor |
+|---|---|
+| Observación | 33 componentes × 4 lecturas apiladas = 132 (LIDAR 9 rayos 0-5 m, rumbo y distancia al objetivo visible, velocidad, giro, batería, inventario, tipo pedido y visto, gravedad, tracción, visibilidad, viento, cabeceo, alabeo, nivel) |
+| Acciones | `Discrete(7)`: avanzar, dos arcos, girar a cada lado, recolectar, retroceder; decisión cada 0,5 s |
+| Éxito (`terminated`) | Todas las muestras pedidas en la base con batería > 0 |
+| Fallo (`terminated`) | Grieta o cráter (`z < −0,15 m`), vuelco, batería agotada, salida del área |
+| Truncamiento | Límite de pasos del escenario (650-1.700); en entrenamiento, además, 120 pasos sin explorar ni recolectar |
+| Recompensa | +0,12 por celda nueva explorada, +recolección correcta, −10,2 y −6 % de batería por señuelo, −penalización por paso, choque y atasco, +250 por misión completa (+15 × batería restante), −50 por grieta, vuelco o batería agotada, −35 por salir del área |
+
+Manifiestos de todos los modelos de esta familia: [`manifests/planetary/`](../manifests/planetary)
+(generados y verificados con `scripts/build_planetary_manifests.py`).
+
+**PPO de campaña (exp-007 a exp-015).** Un escenario solo se aprueba con ≥ 50
+misiones evaluadas, ≥ 85 % de éxito, ≤ 2 choques de media y retención de los
+anteriores.
+
+- **No mejoraron lo suficiente:** exp-008 a exp-013 (más exploración, retención,
+  normalización fija, potencial observable, práctica por etapas). Ninguno aprobó el
+  escenario 6: tras 5,27 M de pasos, 0/8 éxitos y 218 choques de media
+  ([specialist-training.md](specialist-training.md)).
+- **Mejoró:** exp-014/015 (un actor por escenario más imitación acotada). Aprobó
+  los 8 escenarios con 7,46 M de pasos. Los hitos son `f7c104a3` (L1) a `4bcfd8f6`
+  (L1-L8), y el modelo final servido es `f5972637` (7,49 M de pasos, física sin
+  tormentas dinámicas, la de su entrenamiento).
+
+**Q-learning planetario.** Q-learning tabular con un guía.
+
+- **`seed-v1`:** solo resolvía L1 (~70 %).
+- **Diagnóstico:** el guía tampoco resolvía L2-L8, los límites de 50/100 pasos
+  hacían imposibles las misiones, los sensores llegaban con 1,5 s de atraso y había
+  peligros invisibles.
+- **`seed-v2`:** guía planificador (mapa de misión estático, sin muestras) y la
+  acción del guía como parte del estado. La discretización pierde posición y
+  memoria: el 32 % de las decisiones del guía eran indistinguibles con el estado
+  v1.
+
+Ver [auditoria-qlearning-planetario.md](auditoria-qlearning-planetario.md).
+
+| Política (8 niveles, límites de diseño) | Éxito | Fuente |
+|---|---|---|
+| Aleatoria | 0 % | [auditoria-aprendizaje-2026-11-18.md](auditoria-aprendizaje-2026-11-18.md) |
+| Guía reactivo anterior | 3/24 (solo L1) | auditoría Q-learning |
+| **Guía planificador (regla)** | **79/80** | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
+| Q-learning `seed-v1` | L1 ~70 %, L2-L8 0 % | auditoría Q-learning |
+| **Q-learning `seed-v2` (recomendado)** | **75/80** | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
+| PPO de campaña `4bcfd8f6` / `f5972637` | 8/8 escenarios aprobados (≥ 50 misiones c/u) | `models/<run>/evidence/` |
+
+**Límites de esta fase.**
+
+- **Mapas memorizados:** el PPO aprueba los 8 mapas fijos, pero en mapas
+  procedurales logró 50 % en L2 y 0 % en el resto (prueba pequeña), es decir,
+  memoriza los mapas.
+- **Guía con mapa:** el Q-learning depende de un guía que conoce el mapa estático,
+  el equivalente a imágenes orbitales.
+- **Aprendizaje en vivo no persistente:** Render gratuito no conserva lo aprendido
+  en vivo; la API vuelve al checkpoint base en cada reinicio.
+- **Rendimiento:** en la web cada petición cuesta unos 0,47 s de red. Por eso la API
+  avanza hasta 40 pasos por petición.
+
+**Siguiente hipótesis.** Entrenar el PPO en mapas procedurales (exp-016 a
+exp-018), con la misma suite reservada, para medir generalización en vez de
+memorización.
+
+## 9. Contribuciones
 
 | Integrante | Aportes (según el historial de Git y los PR) |
 |---|---|
@@ -122,6 +197,15 @@ objetivo" (un rayo dirigido al objetivo) en lugar de solo los 9 rayos fijos.
 | **Tomás González** | Paso 3: pipeline de entrenamiento trazable (`pipelines/train.py`: MLflow, manifiestos, checkpoints y continuación con `parent_run_id`); remoto DVC en DagsHub; release pública `models-v1` (PR #3) |
 | **Natalia Ríos** | Paso 5: web Vite + TypeScript + Three.js (escena 3D, HUD, control manual y replay rotulado) y despliegue en Vercel (PR #4 y #5) |
 | **Nicol Cerinza** | Ambiente 3D del rover en MuJoCo y ficha v0.1; integración de las ramas; paso 2 (suite fija y baselines); paso 4 (API); pasos 6–11 (experimentos, ficha v1, Prefect, catálogo y selección, vista del docente, incidente y rollback); documentación final |
+
+**Segunda fase (`v1.0` → `v1.2`):**
+
+| Integrante | Aportes |
+|---|---|
+| **Natalia Ríos** | Simulador planetario y escenarios variados; Q-learning planetario persistente con checkpoints reanudables; progresión por nivel, campaña PPO y visor PPO en la web; despliegue en Vercel y Render |
+| **Tomás González** | Campaña fija de escenarios; entrenamiento PPO versionado (exp-007 a exp-015), actores por escenario e imitación acotada; hitos aprobados L1-L8 y modelo final `f5972637`; panel de entrenamiento PPO en la web |
+| **Nicol Cerinza** | Auditoría y rediseño del Q-learning planetario (guía planificador, estado v2, `qlearning-seed-v1/v2`); progreso de campaña en la API; pasos por lotes; manifiestos planetarios; release `v1.2` y documentación |
+| **Suleily Moreno** | Sin commits en esta fase según el historial de Git |
 
 **Uso de asistentes:** parte del código y de los documentos se escribió con
 asistentes de código (Copilot y Claude Code). Cada afirmación de este informe
