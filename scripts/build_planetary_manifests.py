@@ -253,7 +253,7 @@ def qlearning_manifests() -> list[dict]:
          "training_command": "python scripts/train_planetary_qlearning.py --rounds 12 --seeds-per-level 5",
          "evaluation_suite_id": "planetario L1-L8 · semillas 6000-6009 · límites de diseño",
          "evaluation_evidence": ["docs/evidencia/evaluacion-planificador-qlearning.json"],
-         "evaluation_summary": {"success": 75, "episodes": 80}},
+         "evaluation_summary": {"success": 77, "episodes": 80, "code_commit": full_sha("e355343")}},
         {**common,
          "run_id": "qlearning-seed-v1",
          "status": "historical · incompatible con el estado v2",

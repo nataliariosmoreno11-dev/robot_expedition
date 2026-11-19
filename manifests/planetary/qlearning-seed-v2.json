@@ -88,7 +88,8 @@
     "docs/evidencia/evaluacion-planificador-qlearning.json"
   ],
   "evaluation_summary": {
-    "success": 75,
-    "episodes": 80
+    "success": 77,
+    "episodes": 80,
+    "code_commit": "e3553439c8a57fb4fbbca3bd0e053b44bc3eb5c7"
   }
 }

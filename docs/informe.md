@@ -170,7 +170,7 @@ Ver [auditoria-qlearning-planetario.md](auditoria-qlearning-planetario.md).
 | Guía reactivo anterior | 3/24 (solo L1) | auditoría Q-learning |
 | **Guía planificador (regla)** | **79/80** | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
 | Q-learning `seed-v1` | L1 ~70 %, L2-L8 0 % | auditoría Q-learning |
-| **Q-learning `seed-v2` (recomendado)** | **75/80** | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
+| **Q-learning `seed-v2` (recomendado)** | **77/80** (75/80 antes del regreso guiado) | [evidencia](evidencia/evaluacion-planificador-qlearning.json) |
 | PPO de campaña `4bcfd8f6` / `f5972637` | 8/8 escenarios aprobados (≥ 50 misiones c/u) | `models/<run>/evidence/` |
 
 **Límites de esta fase.**

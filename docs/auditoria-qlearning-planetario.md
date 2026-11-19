@@ -103,7 +103,8 @@ entrenamiento:
 | Guía anterior | 3/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 3/24 |
 | Guía planificador | 10/10 | 10/10 | 10/10 | 9/10 | 10/10 | 10/10 | 10/10 | 10/10 | **79/80** |
 | Q-learning `seed-v1` (50/100 pasos) | ~7/10 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | — |
-| Q-learning `seed-v2` | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 7/10 | 10/10 | 8/10 | **75/80** |
+| Q-learning `seed-v2` (código de `ce0779e`) | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 7/10 | 10/10 | 8/10 | 75/80 |
+| Q-learning `seed-v2` + regreso guiado (`e355343`) | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 7/10 | 10/10 | 10/10 | **77/80** |
 
 El planificador completa las misiones con 0-2 choques y le queda entre 35 % y 95 %
 de batería. El Q-learning `seed-v2` se entrenó con 480 episodios (12 rondas por los 8
@@ -113,8 +114,11 @@ niveles; 90 % de éxito durante el entrenamiento) y se evaluó con semillas dist
 
 **Escudo de seguridad:** junto a la grieta o un cráter, el Q-learning siempre ejecuta
 la acción del guía. Sin escudo hubo 5 caídas en 80 episodios (73/80); con escudo,
-ninguna. Los 5 fallos restantes son cortes `sin_progreso` (120 pasos sin explorar
-celdas nuevas) cuando las acciones aprendidas forman un ciclo en L6 y L8.
+ninguna. Con el código de `ce0779e`, los 5 fallos restantes eran cortes `sin_progreso`
+(120 pasos sin explorar celdas nuevas) en L6 y L8, varios durante el regreso a la base
+por terreno ya explorado. En `e355343` (Natalia), acercarse a la base con la carga
+completa cuenta como progreso y el regreso sigue la ruta A\* del guía: L8 pasa a 10/10
+y quedan 3 fallos `sin_progreso` en L6 (77/80, mismo checkpoint y mismas semillas).
 
 Evidencia completa por nivel (pasos, batería, choques y causa de fin):
 [evidencia/evaluacion-planificador-qlearning.json](evidencia/evaluacion-planificador-qlearning.json).

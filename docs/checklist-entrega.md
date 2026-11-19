@@ -14,13 +14,13 @@
 | 4 | Los modelos y escenarios se recuperan sin depender de carpetas personales | ✅ | Release `models-v2` (ZIP público con `SHA256SUMS.txt`), DVC (DagsHub) y la API los descarga de la release y verifica su SHA-256. Prueba de reconstrucción en un clon limpio: [rollback.md §3](evidencia/rollback.md#3-reconstrucción-desde-un-clon-limpio) |
 | 5 | Se puede evaluar un modelo antiguo y el recomendado, con sus contratos correctos | ✅ | La API verifica el SHA-256 de cada modelo contra su manifiesto (409 si no coincide) y la versión del ambiente. La web avisa cuando un modelo se evalúa en un nivel distinto al de entrenamiento. Probado con `4d91d98f` (Q-learning, primer run) y `92cdc692` (recomendado de N2) |
 | 6 | Un error de servicio se muestra como error; un replay se identifica como replay | ✅ | Avisos de la web para `ApiError` (404, 409, 422 y 503, y más de 12 s). El modo `REPLAY` se rotula en la insignia y en el aviso. Pruebas `test_evaluate_errors`, `test_tampered_model_is_rejected` y `test_missing_weights_is_a_clear_error` |
-| 7 | La release y el deployment identifican el código entregado | ✅ | Producción informa `release=v1.0`, `git_commit=a7e2c9c6` y `served_version=catalog-v6`; el commit coincide con el merge más reciente de `main`. [Evidencia](evidencia/produccion-v1.json) |
+| 7 | La release y el deployment identifican el código entregado | ✅ | Tag `v1.3`: `/version` de producción informa `release=v1.3` y el mismo `git_commit` del tag. [Evidencia](evidencia/produccion-v1.json) |
 
 ## Paquete final (sección 17)
 
 | Entregable | Estado | Dónde |
 |---|---|---|
-| URL de Vercel y repositorio con release o tag identificable | ✅ | Web: `https://web-five-gules-83.vercel.app`. API: `https://robot-expedition-api.onrender.com`. Tag `v1.0` |
+| URL de Vercel y repositorio con release o tag identificable | ✅ | Web: `https://web-five-gules-83.vercel.app`. API: `https://robot-expedition-api.onrender.com`. Tag final `v1.3` (fase 1: `v1.0`) |
 | README con instalación, ejecución, variables, arquitectura y reproducción | ✅ | [README.md](../README.md) |
 | Ficha del ambiente y tres niveles documentados | ✅ | [ambiente-v1.md](ambiente-v1.md) y [mapas/](mapas) |
 | Cuatro configuraciones con hipótesis y sus runs y estados en MLflow | ✅ | 5 configuraciones en `configs/experiments/`, 12 runs `completed` y 16 de humo (3 `failed`). MLflow: `mlflow.db` en la release `models-v2`. **Pendiente opcional:** copiarlo al MLflow de DagsHub con `scripts/mlflow_sync.py` (Tomás) para tener el enlace en la web |
@@ -32,6 +32,7 @@
 ## Antes de la sustentación
 
 - [x] Merge de la entrega y tag `v1.0`.
+- [x] Segunda fase: tag `v1.3`, `RELEASE=v1.3` en Render y `/version` con el commit del tag.
 - [x] Crear el servicio en Render y comprobar `/health` y `/version` por HTTPS.
 - [x] `VITE_API_BASE_URL` en Vercel y redeploy; comprobar portada, catálogo,
       evaluación, control manual y enlace directo con
