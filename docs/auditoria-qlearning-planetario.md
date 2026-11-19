@@ -51,6 +51,48 @@ cambiaba el resultado.
    conserva renombrado como `*-estado-anterior.npz`, aparece en la lista de
    incompatibles y la API arranca con el checkpoint base `qlearning-seed-v2`.
 
+## Discretización
+
+El ambiente es continuo: la observación tiene 33 componentes reales (132 con el
+historial). Q-learning tabular necesita estados discretos, así que
+`discretize_planetary` los reduce a 12 enteros. La discretización usa **solo la
+lectura más reciente**; el historial apilado se descarta.
+
+| # | Componente | Origen | Cortes (intervalos) |
+|---|---|---|---|
+| 1 | Distancia libre al frente | mínimo de los rayos 4-6 | 0,45 · 0,8 · 1,5 · 3,0 m (5) |
+| 2 | Espacio a la izquierda | media de los rayos 1-4 | 0,7 · 1,5 · 3,0 m (4) |
+| 3 | Espacio a la derecha | media de los rayos 6-9 | 0,7 · 1,5 · 3,0 m (4) |
+| 4 | Rumbo al objetivo | `atan2(sin, cos)` | ±0,22 · ±0,8 · ±2,35 rad (7) |
+| 5 | Distancia al objetivo | `navigation_distance` | 0,62 · 1,4 · 3,0 · 5,0 m (5) |
+| 6 | Batería | fracción | 0,2 · 0,45 · 0,7 (4) |
+| 7 | Avance de la misión | fracción recolectada | 0,01 · 0,5 · 0,99 (4) |
+| 8 | ¿Muestra visible? | booleano | 2 |
+| 9 | ¿Es del tipo pedido? | one-hot | 2 |
+| 10 | Tracción local | coeficiente | 0,55 · 0,72 · 0,9 (4) |
+| 11 | Nivel | fracción | 0,25 · 0,5 · 0,75 (4) |
+| 12 | Acción sugerida por el guía | 0-6 o "sin guía" | 8 |
+
+**Qué se pierde:**
+
+- **Posición y memoria.** Ningún componente dice dónde está el rover ni qué zonas
+  ya exploró. Dos situaciones con los mismos sensores pero en partes distintas del
+  mapa son el mismo estado.
+- **Detalle del LIDAR.** 9 distancias se resumen en 3 intervalos (frente,
+  izquierda, derecha): se pierde la forma del obstáculo.
+- **Velocidad, giro, viento, inclinación y tipo de muestra** no entran en el estado.
+
+**Cuánto se pierde (medido).** En 24 misiones del guía planificador (L1-L8, 3
+semillas, 5.450 pasos), cada observación continua fue distinta, pero cayeron en
+1.073 estados de 11 componentes, unas 5 observaciones por estado. En 458 de esos
+estados el guía tomó más de una acción distinta. **En el 32 % de los pasos, la
+acción correcta difería de la acción mayoritaria de su estado**: la tabla v1 no
+podía representar esa decisión con ningún valor Q. Al agregar la acción del guía
+(componente 12), ese aliasing desaparece por construcción: la planificación que
+requiere posición y memoria la resuelve el guía, y la tabla aprende cuándo
+seguirlo. Lo sigue o corrige según el contexto sensorial, en 1.770 estados para
+esas mismas misiones.
+
 ## Resultados
 
 Con los límites de diseño de cada escenario y semillas distintas de las de

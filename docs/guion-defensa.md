@@ -8,6 +8,38 @@ poder responder las preguntas de la sección final.
 1. Abrir `https://robot-expedition-api.onrender.com/health`. Si el servicio
    está dormido (plan gratuito de Render), despierta en cerca de 1 min.
 2. Abrir la web en Vercel y comprobar que la insignia dice *API disponible*.
+3. Comprobar en `/version` que `release` y `git_commit` son los del correo de entrega.
+
+## Presentación final v1.2 · 10 minutos (lineamientos de Teams)
+
+| Min | Bloque (lineamiento) | Quién | Qué mostrar |
+|---|---|---|---|
+| 0-2 | 1. Problema y contexto de negocio | Suleily | Exploración autónoma: un rover debe traer muestras sin teleoperación (retardo de comunicación) ni gastar de más la batería. Valor: misiones más cortas y seguras. Fase 1: ir a balizas; fase 2: recolectar muestras |
+| 2-4 | 2. Modelamiento del ambiente | Natalia | Contrato planetario: 132 observaciones, 7 acciones, 0,5 s por decisión; éxito, fallos y truncamiento ([informe §8](informe.md)); los 8 escenarios |
+| 4-5 | 3. Recompensas y penalizaciones | Natalia | Qué premia y castiga. Verificación: el retorno no equivale al éxito, porque un candidato con más retorno puede no completar la misión ([experimentos](experimentos.md)) |
+| 5-7 | 4. Modelo y experimentación | Tomás y Nicol | Baselines (aleatorio 0 %, regla). PPO de campaña: exp-008 a exp-013 no aprobaron L6 (empeoró o se estancó); exp-014/015 aprobaron L1-L8. Q-learning: v1 solo L1 → diagnóstico → v2 75/80. Fase 1: finalistas con 3 semillas |
+| 7-8 | 5. Versionamiento y trazabilidad | Nicol | Tag `v1.2` y SHA en `/version`; manifiesto de un modelo (`manifests/planetary/`); recuperar una versión anterior (rollback del catálogo y `qlearning-seed-v1` conservado) |
+| 8-10 | 6. Demostración y conclusiones | Natalia y Suleily | Web: un modelo histórico y el recomendado; Q-learning en L5-L7; limitaciones (PPO memoriza mapas, guía con mapa estático, Render sin disco) y siguiente hipótesis (PPO procedural) |
+
+### Preguntas probables sobre la fase 2
+
+- **¿Por qué el Q-learning necesita un guía?** El estado discreto no tiene posición
+  ni memoria: el 32 % de las decisiones correctas eran indistinguibles con el
+  estado v1. El guía aporta la planificación y la tabla aprende cuándo seguirlo
+  ([auditoría](auditoria-qlearning-planetario.md#discretización)).
+- **¿El guía hace trampa?** Conoce el mapa estático (rocas, grieta, cráteres), pero
+  **nunca** la posición de las muestras: las descubre con la cámara. Un test lo
+  verifica.
+- **¿Por qué el PPO saca 100 % y aun así hay un límite?** Porque son 8 mapas fijos.
+  En mapas procedurales cae a 50 % en L2 y 0 % en el resto: memoriza los mapas.
+- **¿Cómo se recupera un modelo planetario?** El manifiesto da la URI dentro del
+  commit exacto, su SHA-256, la normalización y el ambiente compatible.
+  `python scripts/build_planetary_manifests.py --check` recalcula los hashes.
+- **¿Qué pasa con lo aprendido en vivo?** Render gratuito no tiene disco persistente.
+  La API arranca desde `qlearning-seed-v2`, y un checkpoint de una versión anterior
+  se conserva renombrado, nunca se borra.
+
+## Defensa de la entrega v1.0 (referencia)
 
 ## 1. Problema, misión, decisiones y límites del ambiente · Suleily
 

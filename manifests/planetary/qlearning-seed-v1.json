@@ -1,0 +1,89 @@
+{
+  "algorithm": "qlearning",
+  "model_family": "planetary-qlearning-tabular",
+  "environment_version": "planetary-exploration/2.0.0",
+  "runtime_ref": "Python 3.12.8 · api/requirements-lite.txt (NumPy)",
+  "action_spec": {
+    "type": "Discrete",
+    "n": 7,
+    "actions": [
+      {
+        "id": 0,
+        "name": "avanzar",
+        "linear_m_s": 0.6,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 1,
+        "name": "avanzar + izq",
+        "linear_m_s": 0.4,
+        "angular_rad_s": 0.8
+      },
+      {
+        "id": 2,
+        "name": "avanzar + der",
+        "linear_m_s": 0.4,
+        "angular_rad_s": -0.8
+      },
+      {
+        "id": 3,
+        "name": "girar izq",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 1.2
+      },
+      {
+        "id": 4,
+        "name": "girar der",
+        "linear_m_s": 0.0,
+        "angular_rad_s": -1.2
+      },
+      {
+        "id": 5,
+        "name": "recolectar",
+        "linear_m_s": 0.0,
+        "angular_rad_s": 0.0
+      },
+      {
+        "id": 6,
+        "name": "retroceder",
+        "linear_m_s": -0.35,
+        "angular_rad_s": 0.0
+      }
+    ],
+    "decision_dt_s": 0.5
+  },
+  "hyperparams": {
+    "alpha": 0.14,
+    "gamma": 0.98,
+    "epsilon_start": 0.75,
+    "epsilon_min": 0.06,
+    "epsilon_decay": 0.992,
+    "guide_probability": 0.95,
+    "warmup_visits": 6
+  },
+  "run_id": "qlearning-seed-v1",
+  "status": "historical · incompatible con el estado v2",
+  "level_id": "planetario L1-L8",
+  "hypothesis": "Un checkpoint base entrenado offline evita que producción arranque con la tabla vacía.",
+  "change": "Primer checkpoint base (estado v1 de 11 componentes, guía reactivo, 50/100 pasos).",
+  "git_commit": "f558fbb35337960d127dc8d3a84902c4ab368c75",
+  "model_uri": "https://github.com/nataliariosmoreno11-dev/robot_expedition/releases/download/qlearning-seed-v1/planetary_qlearning.npz",
+  "model_sha256": "7adb5883f3734a20829f515f591b2484e214c7831e0c298f83e8be7814d26af9",
+  "normalization_uri": null,
+  "state_spec": {
+    "size": 11,
+    "note": "estado v1 sin acción del guía; la API lo conserva renombrado"
+  },
+  "effective_episodes": 2400,
+  "effective_updates": 112970,
+  "states": 1309,
+  "seed": 1001,
+  "seeds": "1001-3400",
+  "origin": "desde cero",
+  "parent_run_id": null,
+  "training_command": "python scripts/train_planetary_qlearning.py --rounds 30 --seeds-per-level 10",
+  "evaluation_suite_id": "planetario L1-L8 · semillas 5000+",
+  "evaluation_summary": {
+    "note": "L1 ~70 %; L2-L8 0 % (docs/auditoria-qlearning-planetario.md)"
+  }
+}
