@@ -70,6 +70,7 @@ const ppoEvidenceDetail = required<HTMLElement>('#ppoEvidenceDetail')
 const ppoStart = required<HTMLButtonElement>('#ppoStart')
 const ppoPause = required<HTMLButtonElement>('#ppoPause')
 const ppoRestart = required<HTMLButtonElement>('#ppoRestart')
+const ppoFullscreen = required<HTMLButtonElement>('#ppoFullscreen')
 const ppoDecisionHistory = required<HTMLElement>('#ppoDecisionHistory')
 const ppoActionProbabilities = required<HTMLElement>('#ppoActionProbabilities')
 
@@ -1123,6 +1124,23 @@ ppoPause.addEventListener('click', () => {
   ppoPause.textContent = ppoRunning ? 'Pausar' : 'Reanudar'
   if (ppoRunning) schedulePpoStep()
   else window.clearTimeout(ppoTimer)
+})
+const ppoViewport = required<HTMLElement>('.ppo-viewport-wrap')
+ppoFullscreen.addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement === ppoViewport) await document.exitFullscreen()
+    else await ppoViewport.requestFullscreen()
+  } catch {
+    ppoViewport.classList.toggle('ppo-expanded')
+    const active = ppoViewport.classList.contains('ppo-expanded')
+    ppoFullscreen.setAttribute('aria-pressed', String(active))
+    ppoFullscreen.textContent = active ? 'Salir de pantalla completa' : 'Pantalla completa'
+  }
+})
+document.addEventListener('fullscreenchange', () => {
+  const active = document.fullscreenElement === ppoViewport
+  ppoFullscreen.setAttribute('aria-pressed', String(active))
+  ppoFullscreen.textContent = active ? 'Salir de pantalla completa' : 'Pantalla completa'
 })
 required<HTMLButtonElement>('#ppoFollow').addEventListener('click', (event) => {
   const button = event.currentTarget as HTMLButtonElement

@@ -540,6 +540,9 @@ input[type='range'] { width: 100%; accent-color: var(--rust); cursor: pointer; }
 .ppo-scene-badge { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid rgba(97,213,210,.32); border-radius: 6px; background: rgba(8,9,8,.86); font: 600 9px var(--mono); }
 .ppo-scene-badge span { color: var(--cyan); }
 .ppo-scene-badge b { color: var(--rust); }
+.ppo-fullscreen { position: absolute; top: 14px; right: 14px; z-index: 6; background: rgba(8,9,8,.88); backdrop-filter: blur(8px); }
+.ppo-viewport-wrap:fullscreen, .ppo-viewport-wrap.ppo-expanded { position: fixed; inset: 0; z-index: 1100; width: 100vw; height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
+.ppo-viewport-wrap:fullscreen .ppo-fullscreen, .ppo-viewport-wrap.ppo-expanded .ppo-fullscreen { top: 18px; right: 18px; }
 .ppo-scene-status { position: absolute; left: 14px; right: 14px; bottom: 14px; display: grid; grid-template-columns: repeat(4, 1fr); padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(14,10,8,.9); backdrop-filter: blur(8px); }
 .ppo-scene-status span { padding: 0 12px; border-left: 1px solid var(--line); }
 .ppo-scene-status span:first-child { border-left: 0; }
